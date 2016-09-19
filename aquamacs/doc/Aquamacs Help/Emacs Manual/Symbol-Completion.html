@@ -1,76 +1,116 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Symbol Completion - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Symbol Completion</title>
+
+<meta name="description" content="GNU Emacs Manual: Symbol Completion">
+<meta name="keywords" content="GNU Emacs Manual: Symbol Completion">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Programs.html#Programs" title="Programs">
-<link rel="prev" href="Hideshow.html#Hideshow" title="Hideshow">
-<link rel="next" href="MixedCase-Words.html#MixedCase-Words" title="MixedCase Words">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Programs.html#Programs" rel="up" title="Programs">
+<link href="MixedCase-Words.html#MixedCase-Words" rel="next" title="MixedCase Words">
+<link href="Hideshow.html#Hideshow" rel="prev" title="Hideshow">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Symbol-Completion"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="MixedCase-Words.html#MixedCase-Words">MixedCase Words</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Hideshow.html#Hideshow">Hideshow</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Programs.html#Programs">Programs</a>
-<hr>
+Next: <a href="MixedCase-Words.html#MixedCase-Words" accesskey="n" rel="next">MixedCase Words</a>, Previous: <a href="Hideshow.html#Hideshow" accesskey="p" rel="prev">Hideshow</a>, Up: <a href="Programs.html#Programs" accesskey="u" rel="up">Programs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Completion-for-Symbol-Names"></a>
 <h3 class="section">26.8 Completion for Symbol Names</h3>
+<a name="index-completion-_0028symbol-names_0029"></a>
 
-<p><a name="index-completion-_0028symbol-names_0029-2523"></a>
-  Completion is normally done in the minibuffer (see <a href="Completion.html#Completion">Completion</a>),
+<p>Completion is normally done in the minibuffer (see <a href="Completion.html#Completion">Completion</a>),
 but you can also complete symbol names in ordinary Emacs buffers.
-
-   <p><a name="index-M_002dTAB-2524"></a><a name="index-C_002dM_002di-2525"></a>  In programming language modes, type <kbd>C-M-i</kbd> or <kbd>M-&lt;TAB&gt;</kbd>
+</p>
+<a name="index-M_002dTAB"></a>
+<a name="index-C_002dM_002di"></a>
+<p>In programming language modes, type <kbd>C-M-i</kbd> or <kbd>M-<span class="key">TAB</span></kbd>
 to complete the partial symbol before point.  On graphical displays,
-the <kbd>M-&lt;TAB&gt;</kbd> key is usually reserved by the window manager
+the <kbd>M-<span class="key">TAB</span></kbd> key is usually reserved by the window manager
 for switching graphical windows, so you should type <kbd>C-M-i</kbd> or
-<kbd>&lt;ESC&gt; &lt;TAB&gt;</kbd> instead.
-
-   <p><a name="index-tags_002dbased-completion-2526"></a><a name="index-completion_002dat_002dpoint-2527"></a><a name="index-Lisp-symbol-completion-2528"></a><a name="index-completion-_0028Lisp-symbols_0029-2529"></a>  In most programming language modes, <kbd>C-M-i</kbd> (or
-<kbd>M-&lt;TAB&gt;</kbd>) invokes the command <code>completion-at-point</code>,
+<kbd><span class="key">ESC</span> <span class="key">TAB</span></kbd> instead.
+</p>
+<a name="index-tags_002dbased-completion"></a>
+<a name="index-completion_002dat_002dpoint"></a>
+<a name="index-Lisp-symbol-completion"></a>
+<a name="index-completion-_0028Lisp-symbols_0029"></a>
+<p>In most programming language modes, <kbd>C-M-i</kbd> (or
+<kbd>M-<span class="key">TAB</span></kbd>) invokes the command <code>completion-at-point</code>,
 which generates its completion list in a flexible way.  If Semantic
 mode is enabled, it tries to use the Semantic parser data for
 completion (see <a href="Semantic.html#Semantic">Semantic</a>).  If Semantic mode is not enabled or
 fails at performing completion, it tries to complete using the
-selected tags table (see <a href="Tags.html#Tags">Tags</a>).  If in Emacs Lisp mode, it
+selected tags table (see <a href="Tags-Tables.html#Tags-Tables">Tags Tables</a>).  If in Emacs Lisp mode, it
 performs completion using the function, variable, or property names
 defined in the current Emacs session.
-
-   <p>In all other respects, in-buffer symbol completion behaves like
+</p>
+<p>In all other respects, in-buffer symbol completion behaves like
 minibuffer completion.  For instance, if Emacs cannot complete to a
 unique symbol, it displays a list of completion alternatives in
 another window.  See <a href="Completion.html#Completion">Completion</a>.
+</p>
+<p>In Text mode and related modes, <kbd>M-<span class="key">TAB</span></kbd> completes words
+based on the spell-checker&rsquo;s dictionary.  See <a href="Spelling.html#Spelling">Spelling</a>.
+</p>
 
-   <p>In Text mode and related modes, <kbd>M-&lt;TAB&gt;</kbd> completes words
-based on the spell-checker's dictionary.  See <a href="Spelling.html#Spelling">Spelling</a>.
 
-   </body></html>
 
+</body>
+</html>

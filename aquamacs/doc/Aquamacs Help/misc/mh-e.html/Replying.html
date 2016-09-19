@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is version 8.6 of The MH-E
+Manual, last updated 2016-04-29.
+
+Copyright (C) 1995, 2001-2003, 2005-2016 Free Software
+Foundation, Inc.
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of either:
+
+a. the GNU Free Documentation License, Version 1.3 or any later version
+published by the Free Software Foundation; with no Invariant Sections,
+with the Front-Cover Texts being "A GNU Manual," and with the
+Back-Cover Texts as in (a) below. A copy of the license is included in
+the section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual."
+
+b. the GNU General Public License as published by the Free Software
+Foundation; either version 3, or (at your option) any later version. A
+copy of the license is included in the section entitled "GNU General
+Public License."
+ -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>The MH-E Manual: Replying</title>
+
+<meta name="description" content="The MH-E Manual: Replying">
+<meta name="keywords" content="The MH-E Manual: Replying">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Sending-Mail.html#Sending-Mail" rel="up" title="Sending Mail">
+<link href="Forwarding.html#Forwarding" rel="next" title="Forwarding">
+<link href="Composing.html#Composing" rel="prev" title="Composing">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Replying"></a>
+<div class="header">
+<p>
+Next: <a href="Forwarding.html#Forwarding" accesskey="n" rel="next">Forwarding</a>, Previous: <a href="Composing.html#Composing" accesskey="p" rel="prev">Composing</a>, Up: <a href="Sending-Mail.html#Sending-Mail" accesskey="u" rel="up">Sending Mail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Replying-to-Mail"></a>
+<h3 class="section">8.2 Replying to Mail</h3>
+
+<a name="index-mhl-2"></a>
+<a name="index-mhl_002ereply"></a>
+<a name="index-MH-commands_002c-mhl-2"></a>
+<a name="index-files_002c-mhl_002ereply"></a>
+<a name="index-replying"></a>
+<a name="index-mh_002dreply-1"></a>
+<a name="index-r-2"></a>
+
+<p>To compose a reply to a message, use the <kbd>r</kbd> (<code>mh-reply</code>)
+command.
+</p>
+<p>When you reply to a message, you are first prompted with &lsquo;<samp>Reply
+to whom?</samp>&rsquo;. You have several choices here.
+</p>
+<blockquote>
+<table>
+<tr><td width="20%"><b>Response</b></td><td width="80%"><b>Reply Goes To</b></td></tr>
+<tr><td width="20%"><kbd>from</kbd></td><td width="80%">The person who sent the message. This is the default, so <tt class="key">RET</tt> is
+sufficient.</td></tr>
+<tr><td width="20%"><kbd>to</kbd></td><td width="80%">Replies to the sender, plus all recipients in the &lsquo;<samp>To:</samp>&rsquo; header field.</td></tr>
+<tr><td width="20%"><kbd>cc</kbd><br><kbd>all</kbd></td><td width="80%">Forms a reply to the addresses in the &lsquo;<samp>Mail-Followup-To:</samp>&rsquo; header
+field if one exists; otherwise forms a reply to the sender, plus all
+recipients.</td></tr>
+</table>
+</blockquote>
+
+<a name="index-repl-1"></a>
+<a name="index-MH-commands_002c-repl-1"></a>
+<a name="index-mh_002dreply_002ddefault_002dreply_002dto-1"></a>
+
+<p>Depending on your answer, <code>repl</code><a name="DOCF32" href="#FOOT32"><sup>32</sup></a> is given a different argument to form your reply.
+Specifically, a choice of <kbd>from</kbd> or none at all runs &lsquo;<samp>repl
+-nocc all</samp>&rsquo;, and a choice of <kbd>to</kbd> runs &lsquo;<samp>repl -cc to</samp>&rsquo;. Finally,
+either <kbd>cc</kbd> or <kbd>all</kbd> runs &lsquo;<samp>repl -cc all -nocc me</samp>&rsquo;. If you
+find that most of the time you specify one of these choices when you
+reply to a message, you can change the option
+<code>mh-reply-default-reply-to</code> from its default value of
+&lsquo;<samp>Prompt</samp>&rsquo; to one of the choices listed above. You can always edit
+the recipients in the draft.
+</p>
+<a name="index-repl-MH-profile-component"></a>
+<a name="index-MH-profile-component_002c-repl"></a>
+<a name="index-MH_002dLetter-mode-3"></a>
+<a name="index-MH_002dShow-mode-3"></a>
+<a name="index-draft-1"></a>
+<a name="index-modes_002c-MH_002dLetter-3"></a>
+<a name="index-modes_002c-MH_002dShow-3"></a>
+
+<p>Two windows are then created. One window contains the message to which
+you are replying in an MH-Show buffer. Your draft, in MH-Letter mode
+(see <a href="Editing-Drafts.html#Editing-Drafts">Editing Drafts</a>), is in the other window. If the reply draft
+was not one that you expected, check the things that affect the
+behavior of <code>repl</code> which include the &lsquo;<samp>repl:</samp>&rsquo; profile
+component and the <samp>replcomps</samp> and <samp>replgroupcomps</samp> files.
+</p>
+<p>If you supply a prefix argument (as in <kbd>C-u r</kbd>), the message you
+are replying to is inserted in your reply after having first been run
+through <code>mhl</code> with the format file <samp>mhl.reply</samp>. See
+<code>mhl</code>(1) or the section
+<a href="http://rand-mh.sourceforge.net/book/mh/shomes.html#Usisho">Using mhl</a> in the MH
+book to see how you can modify the default <samp>mhl.reply</samp> file.
+</p>
+<a name="index-mh_002dyank_002dbehavior-1"></a>
+
+<p>Alternatively, you can customize the option <code>mh-yank-behavior</code>
+and choose one of its &lsquo;<samp>Automatically</samp>&rsquo; variants to do the same
+thing. See <a href="Inserting-Letter.html#Inserting-Letter">Inserting Letter</a>. If you do so, the prefix argument has
+no effect.
+</p>
+<p>Another way to include the message automatically in your draft is to
+use &lsquo;<samp>repl: -filter repl.filter</samp>&rsquo; in your MH profile.
+</p>
+<a name="index-mh_002dreply_002dshow_002dmessage_002dflag-1"></a>
+
+<p>If you include the message automatically, you can hide the MH-Show
+buffer by turning off the option <code>mh-reply-show-message-flag</code>.
+</p>
+<p>If you wish to customize the header or other parts of the reply draft,
+please see <code>repl</code>(1) and <code>mh-format</code>(5).
+</p>
+<div class="footnote">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h3><a name="FOOT32" href="#DOCF32">(32)</a></h3>
+<p>See the section
+<a href="http://rand-mh.sourceforge.net/book/mh/reprep.html">Replying to Messages: repl</a> in
+the MH book.</p>
+</div>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Forwarding.html#Forwarding" accesskey="n" rel="next">Forwarding</a>, Previous: <a href="Composing.html#Composing" accesskey="p" rel="prev">Composing</a>, Up: <a href="Sending-Mail.html#Sending-Mail" accesskey="u" rel="up">Sending Mail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

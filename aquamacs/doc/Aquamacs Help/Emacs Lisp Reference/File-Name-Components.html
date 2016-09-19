@@ -1,162 +1,212 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>File Name Components - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: File Name Components</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: File Name Components">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: File Name Components">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="File-Names.html#File-Names" title="File Names">
-<link rel="next" href="Relative-File-Names.html#Relative-File-Names" title="Relative File Names">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="File-Names.html#File-Names" rel="up" title="File Names">
+<link href="Relative-File-Names.html#Relative-File-Names" rel="next" title="Relative File Names">
+<link href="File-Names.html#File-Names" rel="prev" title="File Names">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="File-Name-Components"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Relative-File-Names.html#Relative-File-Names">Relative File Names</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="File-Names.html#File-Names">File Names</a>
-<hr>
+Next: <a href="Relative-File-Names.html#Relative-File-Names" accesskey="n" rel="next">Relative File Names</a>, Up: <a href="File-Names.html#File-Names" accesskey="u" rel="up">File Names</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="File-Name-Components-1"></a>
 <h4 class="subsection">24.8.1 File Name Components</h4>
+<a name="index-directory-part-_0028of-file-name_0029"></a>
+<a name="index-nondirectory-part-_0028of-file-name_0029"></a>
+<a name="index-version-number-_0028in-file-name_0029"></a>
 
-<p><a name="index-directory-part-_0028of-file-name_0029-2158"></a><a name="index-nondirectory-part-_0028of-file-name_0029-2159"></a><a name="index-version-number-_0028in-file-name_0029-2160"></a>
-  The operating system groups files into directories.  To specify a
-file, you must specify the directory and the file's name within that
+<p>The operating system groups files into directories.  To specify a
+file, you must specify the directory and the file&rsquo;s name within that
 directory.  Therefore, Emacs considers a file name as having two main
-parts: the <dfn>directory name</dfn> part, and the <dfn>nondirectory</dfn> part
-(or <dfn>file name within the directory</dfn>).  Either part may be empty. 
+parts: the <em>directory name</em> part, and the <em>nondirectory</em> part
+(or <em>file name within the directory</em>).  Either part may be empty.
 Concatenating these two parts reproduces the original file name.
-
-   <p>On most systems, the directory part is everything up to and including
+</p>
+<p>On most systems, the directory part is everything up to and including
 the last slash (backslash is also allowed in input on MS-DOS or
 MS-Windows); the nondirectory part is the rest.
-
-   <p>For some purposes, the nondirectory part is further subdivided into
-the name proper and the <dfn>version number</dfn>.  On most systems, only
+</p>
+<p>For some purposes, the nondirectory part is further subdivided into
+the name proper and the <em>version number</em>.  On most systems, only
 backup files have version numbers in their names.
-
-<div class="defun">
-&mdash; Function: <b>file-name-directory</b><var> filename<a name="index-file_002dname_002ddirectory-2161"></a></var><br>
-<blockquote><p>This function returns the directory part of <var>filename</var>, as a
+</p>
+<dl>
+<dt><a name="index-file_002dname_002ddirectory"></a>Function: <strong>file-name-directory</strong> <em>filename</em></dt>
+<dd><p>This function returns the directory part of <var>filename</var>, as a
 directory name (see <a href="Directory-Names.html#Directory-Names">Directory Names</a>), or <code>nil</code> if
 <var>filename</var> does not include a directory part.
-
-        <p>On GNU and Unix systems, a string returned by this function always
+</p>
+<p>On GNU and Unix systems, a string returned by this function always
 ends in a slash.  On MS-DOS it can also end in a colon.
+</p>
+<div class="example">
+<pre class="example">(file-name-directory &quot;lewis/foo&quot;)  ; <span class="roman">Unix example</span>
+     &rArr; &quot;lewis/&quot;
+</pre><pre class="example">(file-name-directory &quot;foo&quot;)        ; <span class="roman">Unix example</span>
+     &rArr; nil
+</pre></div>
+</dd></dl>
 
-     <pre class="example">          (file-name-directory "lewis/foo")  ; <span class="roman">Unix example</span>
-               &rArr; "lewis/"
-          (file-name-directory "foo")        ; <span class="roman">Unix example</span>
-               &rArr; nil
-</pre>
-        </blockquote></div>
+<dl>
+<dt><a name="index-file_002dname_002dnondirectory"></a>Function: <strong>file-name-nondirectory</strong> <em>filename</em></dt>
+<dd><p>This function returns the nondirectory part of <var>filename</var>.
+</p>
+<div class="example">
+<pre class="example">(file-name-nondirectory &quot;lewis/foo&quot;)
+     &rArr; &quot;foo&quot;
+</pre><pre class="example">(file-name-nondirectory &quot;foo&quot;)
+     &rArr; &quot;foo&quot;
+</pre><pre class="example">(file-name-nondirectory &quot;lewis/&quot;)
+     &rArr; &quot;&quot;
+</pre></div>
+</dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>file-name-nondirectory</b><var> filename<a name="index-file_002dname_002dnondirectory-2162"></a></var><br>
-<blockquote><p>This function returns the nondirectory part of <var>filename</var>.
-
-     <pre class="example">          (file-name-nondirectory "lewis/foo")
-               &rArr; "foo"
-          (file-name-nondirectory "foo")
-               &rArr; "foo"
-          (file-name-nondirectory "lewis/")
-               &rArr; ""
-</pre>
-        </blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>file-name-sans-versions</b><var> filename &amp;optional keep-backup-version<a name="index-file_002dname_002dsans_002dversions-2163"></a></var><br>
-<blockquote><p>This function returns <var>filename</var> with any file version numbers,
+<dl>
+<dt><a name="index-file_002dname_002dsans_002dversions"></a>Function: <strong>file-name-sans-versions</strong> <em>filename &amp;optional keep-backup-version</em></dt>
+<dd><p>This function returns <var>filename</var> with any file version numbers,
 backup version numbers, or trailing tildes discarded.
-
-        <p>If <var>keep-backup-version</var> is non-<code>nil</code>, then true file version
+</p>
+<p>If <var>keep-backup-version</var> is non-<code>nil</code>, then true file version
 numbers understood as such by the file system are discarded from the
 return value, but backup version numbers are kept.
+</p>
+<div class="example">
+<pre class="example">(file-name-sans-versions &quot;~rms/foo.~1~&quot;)
+     &rArr; &quot;~rms/foo&quot;
+</pre><pre class="example">(file-name-sans-versions &quot;~rms/foo~&quot;)
+     &rArr; &quot;~rms/foo&quot;
+</pre><pre class="example">(file-name-sans-versions &quot;~rms/foo&quot;)
+     &rArr; &quot;~rms/foo&quot;
+</pre></div>
+</dd></dl>
 
-     <pre class="example">          (file-name-sans-versions "~rms/foo.~1~")
-               &rArr; "~rms/foo"
-          (file-name-sans-versions "~rms/foo~")
-               &rArr; "~rms/foo"
-          (file-name-sans-versions "~rms/foo")
-               &rArr; "~rms/foo"
-</pre>
-        </blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>file-name-extension</b><var> filename &amp;optional period<a name="index-file_002dname_002dextension-2164"></a></var><br>
-<blockquote><p>This function returns <var>filename</var>'s final extension, if any,
+<dl>
+<dt><a name="index-file_002dname_002dextension"></a>Function: <strong>file-name-extension</strong> <em>filename &amp;optional period</em></dt>
+<dd><p>This function returns <var>filename</var>&rsquo;s final extension, if any,
 after applying <code>file-name-sans-versions</code> to remove any
 version/backup part.  The extension, in a file name, is the part that
-follows the last &lsquo;<samp><span class="samp">.</span></samp>&rsquo; in the last name component (minus any
+follows the last &lsquo;<samp>.</samp>&rsquo; in the last name component (minus any
 version/backup part).
-
-        <p>This function returns <code>nil</code> for extensionless file names such as
-<samp><span class="file">foo</span></samp>.  It returns <code>""</code> for null extensions, as in
-<samp><span class="file">foo.</span></samp>.  If the last component of a file name begins with a
-&lsquo;<samp><span class="samp">.</span></samp>&rsquo;, that &lsquo;<samp><span class="samp">.</span></samp>&rsquo;  doesn't count as the beginning of an
-extension.  Thus, <samp><span class="file">.emacs</span></samp>'s extension is <code>nil</code>, not
-&lsquo;<samp><span class="samp">.emacs</span></samp>&rsquo;.
-
-        <p>If <var>period</var> is non-<code>nil</code>, then the returned value includes
+</p>
+<p>This function returns <code>nil</code> for extensionless file names such as
+<samp>foo</samp>.  It returns <code>&quot;&quot;</code> for null extensions, as in
+<samp>foo.</samp>.  If the last component of a file name begins with a
+&lsquo;<samp>.</samp>&rsquo;, that &lsquo;<samp>.</samp>&rsquo;  doesn&rsquo;t count as the beginning of an
+extension.  Thus, <samp>.emacs</samp>&rsquo;s extension is <code>nil</code>, not
+&lsquo;<samp>.emacs</samp>&rsquo;.
+</p>
+<p>If <var>period</var> is non-<code>nil</code>, then the returned value includes
 the period that delimits the extension, and if <var>filename</var> has no
-extension, the value is <code>""</code>. 
-</p></blockquote></div>
+extension, the value is <code>&quot;&quot;</code>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>file-name-sans-extension</b><var> filename<a name="index-file_002dname_002dsans_002dextension-2165"></a></var><br>
-<blockquote><p>This function returns <var>filename</var> minus its extension, if any.  The
+<dl>
+<dt><a name="index-file_002dname_002dsans_002dextension"></a>Function: <strong>file-name-sans-extension</strong> <em>filename</em></dt>
+<dd><p>This function returns <var>filename</var> minus its extension, if any.  The
 version/backup part, if present, is only removed if the file has an
 extension.  For example,
+</p>
+<div class="example">
+<pre class="example">(file-name-sans-extension &quot;foo.lose.c&quot;)
+     &rArr; &quot;foo.lose&quot;
+(file-name-sans-extension &quot;big.hack/foo&quot;)
+     &rArr; &quot;big.hack/foo&quot;
+(file-name-sans-extension &quot;/my/home/.emacs&quot;)
+     &rArr; &quot;/my/home/.emacs&quot;
+(file-name-sans-extension &quot;/my/home/.emacs.el&quot;)
+     &rArr; &quot;/my/home/.emacs&quot;
+(file-name-sans-extension &quot;~/foo.el.~3~&quot;)
+     &rArr; &quot;~/foo&quot;
+(file-name-sans-extension &quot;~/foo.~3~&quot;)
+     &rArr; &quot;~/foo.~3~&quot;
+</pre></div>
 
-     <pre class="example">          (file-name-sans-extension "foo.lose.c")
-               &rArr; "foo.lose"
-          (file-name-sans-extension "big.hack/foo")
-               &rArr; "big.hack/foo"
-          (file-name-sans-extension "/my/home/.emacs")
-               &rArr; "/my/home/.emacs"
-          (file-name-sans-extension "/my/home/.emacs.el")
-               &rArr; "/my/home/.emacs"
-          (file-name-sans-extension "~/foo.el.~3~")
-               &rArr; "~/foo"
-          (file-name-sans-extension "~/foo.~3~")
-               &rArr; "~/foo.~3~"
-</pre>
-        <p>Note that the &lsquo;<samp><span class="samp">.~3~</span></samp>&rsquo; in the two last examples is the backup part,
-not an extension. 
-</p></blockquote></div>
+<p>Note that the &lsquo;<samp>.~3~</samp>&rsquo; in the two last examples is the backup part,
+not an extension.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>file-name-base</b><var> &amp;optional filename<a name="index-file_002dname_002dbase-2166"></a></var><br>
-<blockquote><p>This function is the composition of <code>file-name-sans-extension</code>
+<dl>
+<dt><a name="index-file_002dname_002dbase"></a>Function: <strong>file-name-base</strong> <em>&amp;optional filename</em></dt>
+<dd><p>This function is the composition of <code>file-name-sans-extension</code>
 and <code>file-name-nondirectory</code>.  For example,
+</p>
+<div class="example">
+<pre class="example">(file-name-base &quot;/my/home/foo.c&quot;)
+    &rArr; &quot;foo&quot;
+</pre></div>
 
-     <pre class="example">          (file-name-base "/my/home/foo.c")
-              &rArr; "foo"
-</pre>
-        <p>The <var>filename</var> argument defaults to <code>buffer-file-name</code>. 
-</p></blockquote></div>
+<p>The <var>filename</var> argument defaults to <code>buffer-file-name</code>.
+</p></dd></dl>
 
-   </body></html>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Relative-File-Names.html#Relative-File-Names" accesskey="n" rel="next">Relative File Names</a>, Up: <a href="File-Names.html#File-Names" accesskey="u" rel="up">File Names</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
+
+
+</body>
+</html>

@@ -1,129 +1,187 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Compilation - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Compilation</title>
+
+<meta name="description" content="GNU Emacs Manual: Compilation">
+<meta name="keywords" content="GNU Emacs Manual: Compilation">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Building.html#Building" title="Building">
-<link rel="next" href="Compilation-Mode.html#Compilation-Mode" title="Compilation Mode">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Building.html#Building" rel="up" title="Building">
+<link href="Compilation-Mode.html#Compilation-Mode" rel="next" title="Compilation Mode">
+<link href="Building.html#Building" rel="prev" title="Building">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Compilation"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Compilation-Mode.html#Compilation-Mode">Compilation Mode</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
-<hr>
+Next: <a href="Compilation-Mode.html#Compilation-Mode" accesskey="n" rel="next">Compilation Mode</a>, Up: <a href="Building.html#Building" accesskey="u" rel="up">Building</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Running-Compilations-under-Emacs"></a>
 <h3 class="section">27.1 Running Compilations under Emacs</h3>
+<a name="index-inferior-process"></a>
+<a name="index-make"></a>
+<a name="index-compilation-errors"></a>
+<a name="index-error-log"></a>
 
-<p><a name="index-inferior-process-2677"></a><a name="index-make-2678"></a><a name="index-compilation-errors-2679"></a><a name="index-error-log-2680"></a>
-  Emacs can run compilers for languages such as C and Fortran, feeding
+<p>Emacs can run compilers for languages such as C and Fortran, feeding
 the compilation log into an Emacs buffer.  It can also parse the error
 messages and show you where the errors occurred.
-
-     <dl>
-<dt><kbd>M-x compile</kbd><dd>Run a compiler asynchronously under Emacs, with error messages going to
-the <samp><span class="file">*compilation*</span></samp> buffer. 
-<br><dt><kbd>M-x recompile</kbd><dd>Invoke a compiler with the same command as in the last invocation of
-<kbd>M-x compile</kbd>. 
-<br><dt><kbd>M-x kill-compilation</kbd><dd>Kill the running compilation subprocess. 
+</p>
+<dl compact="compact">
+<dt><kbd>M-x compile</kbd></dt>
+<dd><p>Run a compiler asynchronously under Emacs, with error messages going to
+the <samp>*compilation*</samp> buffer.
+</p></dd>
+<dt><kbd>M-x recompile</kbd></dt>
+<dd><p>Invoke a compiler with the same command as in the last invocation of
+<kbd>M-x compile</kbd>.
+</p></dd>
+<dt><kbd>M-x kill-compilation</kbd></dt>
+<dd><p>Kill the running compilation subprocess.
+</p></dd>
 </dl>
 
-   <p><a name="index-compile-2681"></a>  To run <code>make</code> or another compilation command, type <kbd>M-x
+<a name="index-compile"></a>
+<p>To run <code>make</code> or another compilation command, type <kbd>M-x
 compile</kbd>.  This reads a shell command line using the minibuffer, and
 then executes the command by running a shell as a subprocess (or
-<dfn>inferior process</dfn>) of Emacs.  The output is inserted in a buffer
-named <samp><span class="file">*compilation*</span></samp>.  The current buffer's default directory is
+<em>inferior process</em>) of Emacs.  The output is inserted in a buffer
+named <samp>*compilation*</samp>.  The current buffer&rsquo;s default directory is
 used as the working directory for the execution of the command;
 normally, therefore, compilation takes place in this directory.
-
-   <p><a name="index-compile_002dcommand-2682"></a>  The default compilation command is &lsquo;<samp><span class="samp">make -k</span></samp>&rsquo;, which is usually
-correct for programs compiled using the <samp><span class="command">make</span></samp> utility (the
-&lsquo;<samp><span class="samp">-k</span></samp>&rsquo; flag tells <samp><span class="command">make</span></samp> to continue compiling as much as
-possible after an error).  See <a href="../make/index.html#Top">Make</a>. 
+</p>
+<a name="index-compile_002dcommand"></a>
+<p>The default compilation command is &lsquo;<samp>make -k</samp>&rsquo;, which is usually
+correct for programs compiled using the <code>make</code> utility (the
+&lsquo;<samp>-k</samp>&rsquo; flag tells <code>make</code> to continue compiling as much as
+possible after an error).  See <a href="http://www.gnu.org/software/make/manual/html_node/index.html#Top">Make</a> in <cite>GNU Make Manual</cite>.
 If you have done <kbd>M-x compile</kbd> before, the command that you
 specified is automatically stored in the variable
 <code>compile-command</code>; this is used as the default the next time you
 type <kbd>M-x compile</kbd>.  A file can also specify a file-local value
 for <code>compile-command</code> (see <a href="File-Variables.html#File-Variables">File Variables</a>).
-
-   <p>Starting a compilation displays the <samp><span class="file">*compilation*</span></samp> buffer in
+</p>
+<p>Starting a compilation displays the <samp>*compilation*</samp> buffer in
 another window but does not select it.  While the compilation is
-running, the word &lsquo;<samp><span class="samp">run</span></samp>&rsquo; is shown in the major mode indicator for
-the <samp><span class="file">*compilation*</span></samp> buffer, and the word &lsquo;<samp><span class="samp">Compiling</span></samp>&rsquo; appears
-in all mode lines.  You do not have to keep the <samp><span class="file">*compilation*</span></samp>
-buffer visible while compilation is running; it continues in any case. 
+running, the word &lsquo;<samp>run</samp>&rsquo; is shown in the major mode indicator for
+the <samp>*compilation*</samp> buffer, and the word &lsquo;<samp>Compiling</samp>&rsquo; appears
+in all mode lines.  You do not have to keep the <samp>*compilation*</samp>
+buffer visible while compilation is running; it continues in any case.
 When the compilation ends, for whatever reason, the mode line of the
-<samp><span class="file">*compilation*</span></samp> buffer changes to say &lsquo;<samp><span class="samp">exit</span></samp>&rsquo; (followed by
-the exit code: &lsquo;<samp><span class="samp">[0]</span></samp>&rsquo; for a normal exit), or &lsquo;<samp><span class="samp">signal</span></samp>&rsquo; (if a
+<samp>*compilation*</samp> buffer changes to say &lsquo;<samp>exit</samp>&rsquo; (followed by
+the exit code: &lsquo;<samp>[0]</samp>&rsquo; for a normal exit), or &lsquo;<samp>signal</samp>&rsquo; (if a
 signal terminated the process).
-
-   <p>If you want to watch the compilation transcript as it appears,
-switch to the <samp><span class="file">*compilation*</span></samp> buffer and move point to the end of
+</p>
+<p>If you want to watch the compilation transcript as it appears,
+switch to the <samp>*compilation*</samp> buffer and move point to the end of
 the buffer.  When point is at the end, new compilation output is
 inserted above point, which remains at the end.  Otherwise, point
 remains fixed while compilation output is added at the end of the
 buffer.
-
-   <p><a name="index-compilation-buffer_002c-keeping-point-at-end-2683"></a><a name="index-compilation_002dscroll_002doutput-2684"></a>  If you change the variable <code>compilation-scroll-output</code> to a
-non-<code>nil</code> value, the <samp><span class="file">*compilation*</span></samp> buffer scrolls
+</p>
+<a name="index-compilation-buffer_002c-keeping-point-at-end"></a>
+<a name="index-compilation_002dscroll_002doutput"></a>
+<p>If you change the variable <code>compilation-scroll-output</code> to a
+non-<code>nil</code> value, the <samp>*compilation*</samp> buffer scrolls
 automatically to follow the output.  If the value is
 <code>first-error</code>, scrolling stops when the first error appears,
 leaving point at that error.  For any other non-<code>nil</code> value,
 scrolling continues until there is no more output.
-
-   <p><a name="index-recompile-2685"></a>  To rerun the last compilation with the same command, type <kbd>M-x
+</p>
+<a name="index-recompile"></a>
+<p>To rerun the last compilation with the same command, type <kbd>M-x
 recompile</kbd>.  This reuses the compilation command from the last
 invocation of <kbd>M-x compile</kbd>.  It also reuses the
-<samp><span class="file">*compilation*</span></samp> buffer and starts the compilation in its default
+<samp>*compilation*</samp> buffer and starts the compilation in its default
 directory, which is the directory in which the previous compilation
 was started.
-
-   <p><a name="index-kill_002dcompilation-2686"></a><a name="index-compilation_002dalways_002dkill-2687"></a>  Starting a new compilation also kills any compilation already
-running in <samp><span class="file">*compilation*</span></samp>, as the buffer can only handle one
+</p>
+<a name="index-kill_002dcompilation"></a>
+<a name="index-compilation_002dalways_002dkill"></a>
+<p>Starting a new compilation also kills any compilation already
+running in <samp>*compilation*</samp>, as the buffer can only handle one
 compilation at any time.  However, <kbd>M-x compile</kbd> asks for
 confirmation before actually killing a compilation that is running; to
 always automatically kill the compilation without asking, change the
 variable <code>compilation-always-kill</code> to <code>t</code>.  You can also
 kill a compilation process with the command <kbd>M-x
 kill-compilation</kbd>.
-
-   <p>To run two compilations at once, start the first one, then rename
-the <samp><span class="file">*compilation*</span></samp> buffer (perhaps using <code>rename-uniquely</code>;
+</p>
+<p>To run two compilations at once, start the first one, then rename
+the <samp>*compilation*</samp> buffer (perhaps using <code>rename-uniquely</code>;
 see <a href="Misc-Buffer.html#Misc-Buffer">Misc Buffer</a>), then switch buffers and start the other
-compilation.  This will create a new <samp><span class="file">*compilation*</span></samp> buffer.
-
-   <p><a name="index-compilation_002denvironment-2688"></a>  You can control the environment passed to the compilation command
+compilation.  This will create a new <samp>*compilation*</samp> buffer.
+</p>
+<a name="index-compilation_002denvironment"></a>
+<p>You can control the environment passed to the compilation command
 with the variable <code>compilation-environment</code>.  Its value is a list
 of environment variable settings; each element should be a string of
-the form <code>"</code><var>envvarname</var><code>=</code><var>value</var><code>"</code>.  These environment
+the form <code>&quot;<var>envvarname</var>=<var>value</var>&quot;</code>.  These environment
 variable settings override the usual ones.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Compilation-Mode.html#Compilation-Mode" accesskey="n" rel="next">Compilation Mode</a>, Up: <a href="Building.html#Building" accesskey="u" rel="up">Building</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

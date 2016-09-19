@@ -9,8 +9,10 @@ rm -r /tmp/emanual 2>/dev/null
 
 echo "Using $1 as input file."
 cd "$1"
+rm -r elisp.html
 make html HTML_OPTS='--html'  # avoid the "--no-split".  HTML_OPTS must be defined with :=
-cp -r elisp.html /tmp/emanual
+
+cp -r elisp.html /tmp/emanual/
 cp elisp.html/index.html /tmp/manual.html # needed for GNU head / last change
 cd /tmp/emanual 
 
@@ -24,16 +26,19 @@ cp $P/manual-sources/gnu-head-sm.jpg /tmp/emanual/
 #rm /tmp/emanual/Mac-*.html /tmp/emanual/Windows-*.html
 # leave Windows info for now
 
-
+echo "Setting stylesheet"
 perl -i -p -e 's/<\/head>/<link rel="stylesheet" href="aquamacs.css" type="text\/css" \/><\/head>/i' /tmp/emanual/*.html
 
-
+echo "convert manual pages"
 $P/convert-emacs-manual-pages /tmp/emanual/*.html
 # version=`$P/convert-emacs-reference-title /tmp/emanual/index.html`
-sed 's|<body>|<body><a name="EmacsLispReferenceIndex"></a>|'  </tmp/emanual/index.html >/tmp/emanual/index2.html
+echo "sed"
+sed -E 's|<body([^>]*)>|<body\1><a name="EmacsLispReferenceIndex"></a>|'  </tmp/emanual/index.html >/tmp/emanual/index2.html
 mv /tmp/emanual/index2.html /tmp/emanual/index.html
 
 echo $version >/tmp/emanual/VERSION
+
+echo "Moving temp folder"
 
 rm -r "$P"/../"Aquamacs Help"/"Emacs Lisp Reference"
 mv /tmp/emanual $P/../"Aquamacs Help"/"Emacs Lisp Reference"

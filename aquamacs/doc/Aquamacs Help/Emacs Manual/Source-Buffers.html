@@ -1,83 +1,130 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Source Buffers - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Source Buffers</title>
+
+<meta name="description" content="GNU Emacs Manual: Source Buffers">
+<meta name="keywords" content="GNU Emacs Manual: Source Buffers">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" title="GDB Graphical Interface">
-<link rel="prev" href="GDB-User-Interface-Layout.html#GDB-User-Interface-Layout" title="GDB User Interface Layout">
-<link rel="next" href="Breakpoints-Buffer.html#Breakpoints-Buffer" title="Breakpoints Buffer">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" rel="up" title="GDB Graphical Interface">
+<link href="Breakpoints-Buffer.html#Breakpoints-Buffer" rel="next" title="Breakpoints Buffer">
+<link href="GDB-User-Interface-Layout.html#GDB-User-Interface-Layout" rel="prev" title="GDB User Interface Layout">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Source-Buffers"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Breakpoints-Buffer.html#Breakpoints-Buffer">Breakpoints Buffer</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="GDB-User-Interface-Layout.html#GDB-User-Interface-Layout">GDB User Interface Layout</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="GDB-Graphical-Interface.html#GDB-Graphical-Interface">GDB Graphical Interface</a>
-<hr>
+Next: <a href="Breakpoints-Buffer.html#Breakpoints-Buffer" accesskey="n" rel="next">Breakpoints Buffer</a>, Previous: <a href="GDB-User-Interface-Layout.html#GDB-User-Interface-Layout" accesskey="p" rel="prev">GDB User Interface Layout</a>, Up: <a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
+<hr>
+<a name="Source-Buffers-1"></a>
+<h4 class="subsubsection">27.6.5.2 Source Buffers</h4>
+<a name="index-fringes_002c-for-debugging"></a>
 
-<h5 class="subsubsection">27.6.5.2 Source Buffers</h5>
-
-<p><a name="index-fringes_002c-for-debugging-2784"></a>
-     <dl>
-<dt><kbd>Mouse-1</kbd> (in fringe)<dd>Set or clear a breakpoint on that line.
-
-     <br><dt><kbd>C-Mouse-1</kbd> (in fringe)<dd>Enable or disable a breakpoint on that line.
-
-     <br><dt><kbd>Mouse-3</kbd> (in fringe)<dd>Continue execution to that line.
-
-     <br><dt><kbd>C-Mouse-3</kbd> (in fringe)<dd>Jump to that line. 
+<dl compact="compact">
+<dt><kbd>mouse-1</kbd> (in fringe)</dt>
+<dd><p>Set or clear a breakpoint on that line.
+</p>
+</dd>
+<dt><kbd>C-mouse-1</kbd> (in fringe)</dt>
+<dd><p>Enable or disable a breakpoint on that line.
+</p>
+</dd>
+<dt><kbd>mouse-3</kbd> (in fringe)</dt>
+<dd><p>Continue execution to that line.
+</p>
+</dd>
+<dt><kbd>C-mouse-3</kbd> (in fringe)</dt>
+<dd><p>Jump to that line.
+</p></dd>
 </dl>
 
-   <p>On a graphical display, you can click <kbd>Mouse-1</kbd> in the fringe of
-a source buffer, to set a breakpoint on that line (see <a href="Fringes.html#Fringes">Fringes</a>). 
+<p>On a graphical display, you can click <kbd>mouse-1</kbd> in the fringe of
+a source buffer, to set a breakpoint on that line (see <a href="Fringes.html#Fringes">Fringes</a>).
 A red dot appears in the fringe, where you clicked.  If a breakpoint
-already exists there, the click removes it.  A <kbd>C-Mouse-1</kbd> click
+already exists there, the click removes it.  A <kbd>C-mouse-1</kbd> click
 enables or disables an existing breakpoint; a breakpoint that is
 disabled, but not unset, is indicated by a gray dot.
-
-   <p>On a text terminal, or when fringes are disabled, enabled
-breakpoints are indicated with a &lsquo;<samp><span class="samp">B</span></samp>&rsquo; character in the left margin
-of the window.  Disabled breakpoints are indicated with &lsquo;<samp><span class="samp">b</span></samp>&rsquo;. 
+</p>
+<p>On a text terminal, or when fringes are disabled, enabled
+breakpoints are indicated with a &lsquo;<samp>B</samp>&rsquo; character in the left margin
+of the window.  Disabled breakpoints are indicated with &lsquo;<samp>b</samp>&rsquo;.
 (The margin is only displayed if a breakpoint is present.)
-
-   <p>A solid arrow in the left fringe of a source buffer indicates the
+</p>
+<p>A solid arrow in the left fringe of a source buffer indicates the
 line of the innermost frame where the debugged program has stopped.  A
 hollow arrow indicates the current execution line of a higher-level
-frame.  If you drag the arrow in the fringe with <kbd>Mouse-1</kbd>, that
-causes execution to advance to the line where you release the button. 
-Alternatively, you can click <kbd>Mouse-3</kbd> in the fringe to advance to
-that line.  You can click <kbd>C-Mouse-3</kbd> in the fringe to jump to
+frame.  If you drag the arrow in the fringe with <kbd>mouse-1</kbd>, that
+causes execution to advance to the line where you release the button.
+Alternatively, you can click <kbd>mouse-3</kbd> in the fringe to advance to
+that line.  You can click <kbd>C-mouse-3</kbd> in the fringe to jump to
 that line without executing the intermediate lines.  This command
 allows you to go backwards, which can be useful for running through
 code that has already executed, in order to examine its execution in
 more detail.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Breakpoints-Buffer.html#Breakpoints-Buffer" accesskey="n" rel="next">Breakpoints Buffer</a>, Previous: <a href="GDB-User-Interface-Layout.html#GDB-User-Interface-Layout" accesskey="p" rel="prev">GDB User Interface Layout</a>, Up: <a href="GDB-Graphical-Interface.html#GDB-Graphical-Interface" accesskey="u" rel="up">GDB Graphical Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

@@ -1,155 +1,221 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Prefix Keys - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Prefix Keys</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Prefix Keys">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Prefix Keys">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Keymaps.html#Keymaps" title="Keymaps">
-<link rel="prev" href="Inheritance-and-Keymaps.html#Inheritance-and-Keymaps" title="Inheritance and Keymaps">
-<link rel="next" href="Active-Keymaps.html#Active-Keymaps" title="Active Keymaps">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Keymaps.html#Keymaps" rel="up" title="Keymaps">
+<link href="Active-Keymaps.html#Active-Keymaps" rel="next" title="Active Keymaps">
+<link href="Inheritance-and-Keymaps.html#Inheritance-and-Keymaps" rel="prev" title="Inheritance and Keymaps">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Prefix-Keys"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Inheritance-and-Keymaps.html#Inheritance-and-Keymaps">Inheritance and Keymaps</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
-<hr>
+Next: <a href="Active-Keymaps.html#Active-Keymaps" accesskey="n" rel="next">Active Keymaps</a>, Previous: <a href="Inheritance-and-Keymaps.html#Inheritance-and-Keymaps" accesskey="p" rel="prev">Inheritance and Keymaps</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Prefix-Keys-1"></a>
 <h3 class="section">21.6 Prefix Keys</h3>
+<a name="index-prefix-key"></a>
 
-<p><a name="index-prefix-key-1678"></a>
-  A <dfn>prefix key</dfn> is a key sequence whose binding is a keymap.  The
-keymap defines what to do with key sequences that extend the prefix key. 
+<p>A <em>prefix key</em> is a key sequence whose binding is a keymap.  The
+keymap defines what to do with key sequences that extend the prefix key.
 For example, <kbd>C-x</kbd> is a prefix key, and it uses a keymap that is
 also stored in the variable <code>ctl-x-map</code>.  This keymap defines
 bindings for key sequences starting with <kbd>C-x</kbd>.
-
-   <p>Some of the standard Emacs prefix keys use keymaps that are
+</p>
+<p>Some of the standard Emacs prefix keys use keymaps that are
 also found in Lisp variables:
-
-     <ul>
-<li><a name="index-esc_002dmap-1679"></a><a name="index-ESC_002dprefix-1680"></a><code>esc-map</code> is the global keymap for the &lt;ESC&gt; prefix key.  Thus,
-the global definitions of all meta characters are actually found here. 
+</p>
+<ul>
+<li> <a name="index-esc_002dmap"></a>
+<a name="index-ESC_002dprefix"></a>
+<code>esc-map</code> is the global keymap for the <tt class="key">ESC</tt> prefix key.  Thus,
+the global definitions of all meta characters are actually found here.
 This map is also the function definition of <code>ESC-prefix</code>.
 
-     <li><a name="index-g_t_0040kbd_007bC_002dh_007d-1681"></a><code>help-map</code> is the global keymap for the <kbd>C-h</kbd> prefix key.
+</li><li> <a name="index-C_002dh"></a>
+<code>help-map</code> is the global keymap for the <kbd>C-h</kbd> prefix key.
 
-     <li><a name="index-g_t_0040kbd_007bC_002dc_007d-1682"></a><a name="index-mode_002dspecific_002dmap-1683"></a><code>mode-specific-map</code> is the global keymap for the prefix key
+</li><li> <a name="index-C_002dc"></a>
+<a name="index-mode_002dspecific_002dmap"></a>
+<code>mode-specific-map</code> is the global keymap for the prefix key
 <kbd>C-c</kbd>.  This map is actually global, not mode-specific, but its name
 provides useful information about <kbd>C-c</kbd> in the output of <kbd>C-h b</kbd>
 (<code>display-bindings</code>), since the main use of this prefix key is for
 mode-specific bindings.
 
-     <li><a name="index-g_t_0040kbd_007bC_002dx_007d-1684"></a><a name="index-ctl_002dx_002dmap-1685"></a><a name="index-Control_002dX_002dprefix-1686"></a><code>ctl-x-map</code> is the global keymap used for the <kbd>C-x</kbd> prefix key. 
+</li><li> <a name="index-C_002dx"></a>
+<a name="index-ctl_002dx_002dmap"></a>
+<a name="index-Control_002dX_002dprefix"></a>
+<code>ctl-x-map</code> is the global keymap used for the <kbd>C-x</kbd> prefix key.
 This map is found via the function cell of the symbol
 <code>Control-X-prefix</code>.
 
-     <li><a name="index-g_t_0040kbd_007bC_002dx-_0040key_007bRET_007d_007d-1687"></a><a name="index-mule_002dkeymap-1688"></a><code>mule-keymap</code> is the global keymap used for the <kbd>C-x &lt;RET&gt;</kbd>
+</li><li> <a name="index-C_002dx-RET"></a>
+<a name="index-mule_002dkeymap"></a>
+<code>mule-keymap</code> is the global keymap used for the <kbd>C-x <span class="key">RET</span></kbd>
 prefix key.
 
-     <li><a name="index-g_t_0040kbd_007bC_002dx-4_007d-1689"></a><a name="index-ctl_002dx_002d4_002dmap-1690"></a><code>ctl-x-4-map</code> is the global keymap used for the <kbd>C-x 4</kbd> prefix
+</li><li> <a name="index-C_002dx-4"></a>
+<a name="index-ctl_002dx_002d4_002dmap"></a>
+<code>ctl-x-4-map</code> is the global keymap used for the <kbd>C-x 4</kbd> prefix
 key.
 
-     <li><a name="index-g_t_0040kbd_007bC_002dx-5_007d-1691"></a><a name="index-ctl_002dx_002d5_002dmap-1692"></a><code>ctl-x-5-map</code> is the global keymap used for the <kbd>C-x 5</kbd> prefix
+</li><li> <a name="index-C_002dx-5"></a>
+<a name="index-ctl_002dx_002d5_002dmap"></a>
+<code>ctl-x-5-map</code> is the global keymap used for the <kbd>C-x 5</kbd> prefix
 key.
 
-     <li><a name="index-g_t_0040kbd_007bC_002dx-6_007d-1693"></a><a name="index-g_t2C_002dmode_002dmap-1694"></a><code>2C-mode-map</code> is the global keymap used for the <kbd>C-x 6</kbd> prefix
+</li><li> <a name="index-C_002dx-6"></a>
+<a name="index-2C_002dmode_002dmap"></a>
+<code>2C-mode-map</code> is the global keymap used for the <kbd>C-x 6</kbd> prefix
 key.
 
-     <li><a name="index-g_t_0040kbd_007bC_002dx-v_007d-1695"></a><a name="index-vc_002dprefix_002dmap-1696"></a><code>vc-prefix-map</code> is the global keymap used for the <kbd>C-x v</kbd> prefix
+</li><li> <a name="index-C_002dx-v"></a>
+<a name="index-vc_002dprefix_002dmap"></a>
+<code>vc-prefix-map</code> is the global keymap used for the <kbd>C-x v</kbd> prefix
 key.
 
-     <li><a name="index-g_t_0040kbd_007bM_002dg_007d-1697"></a><a name="index-goto_002dmap-1698"></a><code>goto-map</code> is the global keymap used for the <kbd>M-g</kbd> prefix
+</li><li> <a name="index-M_002dg"></a>
+<a name="index-goto_002dmap"></a>
+<code>goto-map</code> is the global keymap used for the <kbd>M-g</kbd> prefix
 key.
 
-     <li><a name="index-g_t_0040kbd_007bM_002ds_007d-1699"></a><a name="index-search_002dmap-1700"></a><code>search-map</code> is the global keymap used for the <kbd>M-s</kbd> prefix
+</li><li> <a name="index-M_002ds"></a>
+<a name="index-search_002dmap"></a>
+<code>search-map</code> is the global keymap used for the <kbd>M-s</kbd> prefix
 key.
 
-     <li><a name="index-g_t_0040kbd_007bM_002do_007d-1701"></a><a name="index-facemenu_002dkeymap-1702"></a><code>facemenu-keymap</code> is the global keymap used for the <kbd>M-o</kbd>
+</li><li> <a name="index-M_002do"></a>
+<a name="index-facemenu_002dkeymap"></a>
+<code>facemenu-keymap</code> is the global keymap used for the <kbd>M-o</kbd>
 prefix key.
 
-     <li>The other Emacs prefix keys are <kbd>C-x @</kbd>, <kbd>C-x a i</kbd>, <kbd>C-x
-&lt;ESC&gt;</kbd> and <kbd>&lt;ESC&gt; &lt;ESC&gt;</kbd>.  They use keymaps that have
-no special names. 
-</ul>
+</li><li> The other Emacs prefix keys are <kbd>C-x @</kbd>, <kbd>C-x a i</kbd>, <kbd>C-x
+<span class="key">ESC</span></kbd> and <kbd><span class="key">ESC</span> <span class="key">ESC</span></kbd>.  They use keymaps that have
+no special names.
+</li></ul>
 
-   <p>The keymap binding of a prefix key is used for looking up the event
+<p>The keymap binding of a prefix key is used for looking up the event
 that follows the prefix key.  (It may instead be a symbol whose function
 definition is a keymap.  The effect is the same, but the symbol serves
 as a name for the prefix key.)  Thus, the binding of <kbd>C-x</kbd> is the
 symbol <code>Control-X-prefix</code>, whose function cell holds the keymap
 for <kbd>C-x</kbd> commands.  (The same keymap is also the value of
 <code>ctl-x-map</code>.)
-
-   <p>Prefix key definitions can appear in any active keymap.  The
-definitions of <kbd>C-c</kbd>, <kbd>C-x</kbd>, <kbd>C-h</kbd> and &lt;ESC&gt; as prefix
+</p>
+<p>Prefix key definitions can appear in any active keymap.  The
+definitions of <kbd>C-c</kbd>, <kbd>C-x</kbd>, <kbd>C-h</kbd> and <tt class="key">ESC</tt> as prefix
 keys appear in the global map, so these prefix keys are always
 available.  Major and minor modes can redefine a key as a prefix by
 putting a prefix key definition for it in the local map or the minor
-mode's map.  See <a href="Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>.
-
-   <p>If a key is defined as a prefix in more than one active map, then its
+mode&rsquo;s map.  See <a href="Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>.
+</p>
+<p>If a key is defined as a prefix in more than one active map, then its
 various definitions are in effect merged: the commands defined in the
-minor mode keymaps come first, followed by those in the local map's
+minor mode keymaps come first, followed by those in the local map&rsquo;s
 prefix definition, and then by those from the global map.
-
-   <p>In the following example, we make <kbd>C-p</kbd> a prefix key in the local
+</p>
+<p>In the following example, we make <kbd>C-p</kbd> a prefix key in the local
 keymap, in such a way that <kbd>C-p</kbd> is identical to <kbd>C-x</kbd>.  Then
 the binding for <kbd>C-p C-f</kbd> is the function <code>find-file</code>, just
 like <kbd>C-x C-f</kbd>.  The key sequence <kbd>C-p 6</kbd> is not found in any
 active keymap.
+</p>
+<div class="example">
+<pre class="example">(use-local-map (make-sparse-keymap))
+    &rArr; nil
+</pre><pre class="example">(local-set-key &quot;\C-p&quot; ctl-x-map)
+    &rArr; nil
+</pre><pre class="example">(key-binding &quot;\C-p\C-f&quot;)
+    &rArr; find-file
+</pre><pre class="example">
+</pre><pre class="example">(key-binding &quot;\C-p6&quot;)
+    &rArr; nil
+</pre></div>
 
-<pre class="example">     (use-local-map (make-sparse-keymap))
-         &rArr; nil
-     (local-set-key "\C-p" ctl-x-map)
-         &rArr; nil
-     (key-binding "\C-p\C-f")
-         &rArr; find-file
-     
-     (key-binding "\C-p6")
-         &rArr; nil
-</pre>
-   <div class="defun">
-&mdash; Function: <b>define-prefix-command</b><var> symbol &amp;optional mapvar prompt<a name="index-define_002dprefix_002dcommand-1703"></a></var><br>
-<blockquote><p><a name="index-prefix-command-1704"></a><a name="Definition-of-define_002dprefix_002dcommand"></a>This function prepares <var>symbol</var> for use as a prefix key's binding:
-it creates a sparse keymap and stores it as <var>symbol</var>'s function
+<dl>
+<dt><a name="index-define_002dprefix_002dcommand"></a>Function: <strong>define-prefix-command</strong> <em>symbol &amp;optional mapvar prompt</em></dt>
+<dd><a name="index-prefix-command"></a>
+<a name="Definition-of-define_002dprefix_002dcommand"></a><p>This function prepares <var>symbol</var> for use as a prefix key&rsquo;s binding:
+it creates a sparse keymap and stores it as <var>symbol</var>&rsquo;s function
 definition.  Subsequently binding a key sequence to <var>symbol</var> will
 make that key sequence into a prefix key.  The return value is <code>symbol</code>.
-
-        <p>This function also sets <var>symbol</var> as a variable, with the keymap as
+</p>
+<p>This function also sets <var>symbol</var> as a variable, with the keymap as
 its value.  But if <var>mapvar</var> is non-<code>nil</code>, it sets <var>mapvar</var>
 as a variable instead.
-
-        <p>If <var>prompt</var> is non-<code>nil</code>, that becomes the overall prompt
+</p>
+<p>If <var>prompt</var> is non-<code>nil</code>, that becomes the overall prompt
 string for the keymap.  The prompt string should be given for menu keymaps
-(see <a href="Defining-Menus.html#Defining-Menus">Defining Menus</a>). 
-</p></blockquote></div>
+(see <a href="Defining-Menus.html#Defining-Menus">Defining Menus</a>).
+</p></dd></dl>
 
-   </body></html>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Active-Keymaps.html#Active-Keymaps" accesskey="n" rel="next">Active Keymaps</a>, Previous: <a href="Inheritance-and-Keymaps.html#Inheritance-and-Keymaps" accesskey="p" rel="prev">Inheritance and Keymaps</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
+
+
+</body>
+</html>

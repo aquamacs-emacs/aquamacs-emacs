@@ -1,56 +1,87 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Datagrams - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Datagrams</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Datagrams">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Datagrams">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Processes.html#Processes" title="Processes">
-<link rel="prev" href="Network-Servers.html#Network-Servers" title="Network Servers">
-<link rel="next" href="Low_002dLevel-Network.html#Low_002dLevel-Network" title="Low-Level Network">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Processes.html#Processes" rel="up" title="Processes">
+<link href="Low_002dLevel-Network.html#Low_002dLevel-Network" rel="next" title="Low-Level Network">
+<link href="Network-Servers.html#Network-Servers" rel="prev" title="Network Servers">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Datagrams"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Low_002dLevel-Network.html#Low_002dLevel-Network">Low-Level Network</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Network-Servers.html#Network-Servers">Network Servers</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
-<hr>
+Next: <a href="Low_002dLevel-Network.html#Low_002dLevel-Network" accesskey="n" rel="next">Low-Level Network</a>, Previous: <a href="Network-Servers.html#Network-Servers" accesskey="p" rel="prev">Network Servers</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Datagrams-1"></a>
 <h3 class="section">36.16 Datagrams</h3>
+<a name="index-datagrams"></a>
 
-<p><a name="index-datagrams-3984"></a>
-  A <dfn>datagram</dfn> connection communicates with individual packets rather
+<p>A <em>datagram</em> connection communicates with individual packets rather
 than streams of data.  Each call to <code>process-send</code> sends one
 datagram packet (see <a href="Input-to-Processes.html#Input-to-Processes">Input to Processes</a>), and each datagram
 received results in one call to the filter function.
-
-   <p>The datagram connection doesn't have to talk with the same remote
-peer all the time.  It has a <dfn>remote peer address</dfn> which specifies
+</p>
+<p>The datagram connection doesn&rsquo;t have to talk with the same remote
+peer all the time.  It has a <em>remote peer address</em> which specifies
 where to send datagrams to.  Each time an incoming datagram is passed
 to the filter function, the peer address is set to the address that
 datagram came from; that way, if the filter function sends a datagram,
@@ -58,18 +89,21 @@ it will go back to that place.  You can specify the remote peer
 address when you create the datagram connection using the
 <code>:remote</code> keyword.  You can change it later on by calling
 <code>set-process-datagram-address</code>.
+</p>
+<dl>
+<dt><a name="index-process_002ddatagram_002daddress"></a>Function: <strong>process-datagram-address</strong> <em>process</em></dt>
+<dd><p>If <var>process</var> is a datagram connection or server, this function
+returns its remote peer address.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>process-datagram-address</b><var> process<a name="index-process_002ddatagram_002daddress-3985"></a></var><br>
-<blockquote><p>If <var>process</var> is a datagram connection or server, this function
-returns its remote peer address. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-set_002dprocess_002ddatagram_002daddress"></a>Function: <strong>set-process-datagram-address</strong> <em>process address</em></dt>
+<dd><p>If <var>process</var> is a datagram connection or server, this function
+sets its remote peer address to <var>address</var>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>set-process-datagram-address</b><var> process address<a name="index-set_002dprocess_002ddatagram_002daddress-3986"></a></var><br>
-<blockquote><p>If <var>process</var> is a datagram connection or server, this function
-sets its remote peer address to <var>address</var>. 
-</p></blockquote></div>
 
-   </body></html>
 
+
+</body>
+</html>

@@ -1,62 +1,103 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Motion - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Motion</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Motion">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Motion">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Positions.html#Positions" title="Positions">
-<link rel="prev" href="Point.html#Point" title="Point">
-<link rel="next" href="Excursions.html#Excursions" title="Excursions">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Positions.html#Positions" rel="up" title="Positions">
+<link href="Character-Motion.html#Character-Motion" rel="next" title="Character Motion">
+<link href="Point.html#Point" rel="prev" title="Point">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Motion"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Excursions.html#Excursions">Excursions</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Point.html#Point">Point</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Positions.html#Positions">Positions</a>
-<hr>
+Next: <a href="Excursions.html#Excursions" accesskey="n" rel="next">Excursions</a>, Previous: <a href="Point.html#Point" accesskey="p" rel="prev">Point</a>, Up: <a href="Positions.html#Positions" accesskey="u" rel="up">Positions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Motion-1"></a>
 <h3 class="section">29.2 Motion</h3>
+<a name="index-motion-by-chars_002c-words_002c-lines_002c-lists"></a>
 
-<p><a name="index-motion-by-chars_002c-words_002c-lines_002c-lists-3006"></a>
-  Motion functions change the value of point, either relative to the
+<p>Motion functions change the value of point, either relative to the
 current value of point, relative to the beginning or end of the buffer,
 or relative to the edges of the selected window.  See <a href="Point.html#Point">Point</a>.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Character-Motion.html#Character-Motion" accesskey="1">Character Motion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Moving in terms of characters.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Word-Motion.html#Word-Motion" accesskey="2">Word Motion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Moving in terms of words.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Buffer-End-Motion.html#Buffer-End-Motion" accesskey="3">Buffer End Motion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Moving to the beginning or end of the buffer.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Text-Lines.html#Text-Lines" accesskey="4">Text Lines</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Moving in terms of lines of text.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Screen-Lines.html#Screen-Lines" accesskey="5">Screen Lines</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Moving in terms of lines as displayed.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="List-Motion.html#List-Motion" accesskey="6">List Motion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Moving by parsing lists and sexps.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Skipping-Characters.html#Skipping-Characters" accesskey="7">Skipping Characters</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Skipping characters belonging to a certain set.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Character-Motion.html#Character-Motion">Character Motion</a>:        Moving in terms of characters. 
-<li><a accesskey="2" href="Word-Motion.html#Word-Motion">Word Motion</a>:             Moving in terms of words. 
-<li><a accesskey="3" href="Buffer-End-Motion.html#Buffer-End-Motion">Buffer End Motion</a>:       Moving to the beginning or end of the buffer. 
-<li><a accesskey="4" href="Text-Lines.html#Text-Lines">Text Lines</a>:              Moving in terms of lines of text. 
-<li><a accesskey="5" href="Screen-Lines.html#Screen-Lines">Screen Lines</a>:            Moving in terms of lines as displayed. 
-<li><a accesskey="6" href="List-Motion.html#List-Motion">List Motion</a>:             Moving by parsing lists and sexps. 
-<li><a accesskey="7" href="Skipping-Characters.html#Skipping-Characters">Skipping Characters</a>:     Skipping characters belonging to a certain set. 
-</ul>
 
-   </body></html>
 
+
+</body>
+</html>

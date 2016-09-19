@@ -1,70 +1,105 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Warning Tips - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Warning Tips</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Warning Tips">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Warning Tips">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Tips.html#Tips" title="Tips">
-<link rel="prev" href="Compilation-Tips.html#Compilation-Tips" title="Compilation Tips">
-<link rel="next" href="Documentation-Tips.html#Documentation-Tips" title="Documentation Tips">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Tips.html#Tips" rel="up" title="Tips">
+<link href="Documentation-Tips.html#Documentation-Tips" rel="next" title="Documentation Tips">
+<link href="Compilation-Tips.html#Compilation-Tips" rel="prev" title="Compilation Tips">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Warning-Tips"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Documentation-Tips.html#Documentation-Tips">Documentation Tips</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Compilation-Tips.html#Compilation-Tips">Compilation Tips</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Tips.html#Tips">Tips</a>
-<hr>
+Next: <a href="Documentation-Tips.html#Documentation-Tips" accesskey="n" rel="next">Documentation Tips</a>, Previous: <a href="Compilation-Tips.html#Compilation-Tips" accesskey="p" rel="prev">Compilation Tips</a>, Up: <a href="Tips.html#Tips" accesskey="u" rel="up">Tips</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Tips-for-Avoiding-Compiler-Warnings"></a>
 <h3 class="section">D.5 Tips for Avoiding Compiler Warnings</h3>
+<a name="index-byte-compiler-warnings_002c-how-to-avoid"></a>
 
-<p><a name="index-byte-compiler-warnings_002c-how-to-avoid-4751"></a>
-     <ul>
-<li>Try to avoid compiler warnings about undefined free variables, by adding
+<ul>
+<li> Try to avoid compiler warnings about undefined free variables, by adding
 dummy <code>defvar</code> definitions for these variables, like this:
 
-     <pre class="example">          (defvar foo)
-</pre>
-     <p>Such a definition has no effect except to tell the compiler
-not to warn about uses of the variable <code>foo</code> in this file.
+<div class="example">
+<pre class="example">(defvar foo)
+</pre></div>
 
-     <li>Similarly, to avoid a compiler warning about an undefined function
+<p>Such a definition has no effect except to tell the compiler
+not to warn about uses of the variable <code>foo</code> in this file.
+</p>
+</li><li> Similarly, to avoid a compiler warning about an undefined function
 that you know <em>will</em> be defined, use a <code>declare-function</code>
 statement (see <a href="Declaring-Functions.html#Declaring-Functions">Declaring Functions</a>).
 
-     <li>If you use many functions and variables from a certain file, you can
+</li><li> If you use many functions and variables from a certain file, you can
 add a <code>require</code> for that package to avoid compilation warnings
 for them.  For instance,
 
-     <pre class="example">          (eval-when-compile
-            (require 'foo))
-</pre>
-     <li>If you bind a variable in one function, and use it or set it in
+<div class="example">
+<pre class="example">(eval-when-compile
+  (require 'foo))
+</pre></div>
+
+</li><li> If you bind a variable in one function, and use it or set it in
 another function, the compiler warns about the latter function unless
 the variable has a definition.  But adding a definition would be
 unclean if the variable has a short name, since Lisp packages should
@@ -72,10 +107,13 @@ not define short variable names.  The right thing to do is to rename
 this variable to start with the name prefix used for the other
 functions and variables in your package.
 
-     <li>The last resort for avoiding a warning, when you want to do something
+</li><li> The last resort for avoiding a warning, when you want to do something
 that is usually a mistake but you know is not a mistake in your usage,
-is to put it inside <code>with-no-warnings</code>.  See <a href="Compiler-Errors.html#Compiler-Errors">Compiler Errors</a>. 
-</ul>
+is to put it inside <code>with-no-warnings</code>.  See <a href="Compiler-Errors.html#Compiler-Errors">Compiler Errors</a>.
+</li></ul>
 
-   </body></html>
 
+
+
+</body>
+</html>

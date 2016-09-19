@@ -1,78 +1,114 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Vectors - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Vectors</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Vectors">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Vectors">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" title="Sequences Arrays Vectors">
-<link rel="prev" href="Array-Functions.html#Array-Functions" title="Array Functions">
-<link rel="next" href="Vector-Functions.html#Vector-Functions" title="Vector Functions">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel="up" title="Sequences Arrays Vectors">
+<link href="Vector-Functions.html#Vector-Functions" rel="next" title="Vector Functions">
+<link href="Array-Functions.html#Array-Functions" rel="prev" title="Array Functions">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Vectors"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Vector-Functions.html#Vector-Functions">Vector Functions</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Array-Functions.html#Array-Functions">Array Functions</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>
-<hr>
+Next: <a href="Vector-Functions.html#Vector-Functions" accesskey="n" rel="next">Vector Functions</a>, Previous: <a href="Array-Functions.html#Array-Functions" accesskey="p" rel="prev">Array Functions</a>, Up: <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Vectors-1"></a>
 <h3 class="section">6.4 Vectors</h3>
+<a name="index-vector-_0028type_0029"></a>
 
-<p><a name="index-vector-_0028type_0029-486"></a>
-  A <dfn>vector</dfn> is a general-purpose array whose elements can be any
+<p>A <em>vector</em> is a general-purpose array whose elements can be any
 Lisp objects.  (By contrast, the elements of a string can only be
 characters.  See <a href="Strings-and-Characters.html#Strings-and-Characters">Strings and Characters</a>.)  Vectors are used in
 Emacs for many purposes: as key sequences (see <a href="Key-Sequences.html#Key-Sequences">Key Sequences</a>), as
 symbol-lookup tables (see <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>), as part of the
 representation of a byte-compiled function (see <a href="Byte-Compilation.html#Byte-Compilation">Byte Compilation</a>),
 and more.
-
-   <p>Like other arrays, vectors use zero-origin indexing: the first
+</p>
+<p>Like other arrays, vectors use zero-origin indexing: the first
 element has index 0.
-
-   <p>Vectors are printed with square brackets surrounding the elements. 
+</p>
+<p>Vectors are printed with square brackets surrounding the elements.
 Thus, a vector whose elements are the symbols <code>a</code>, <code>b</code> and
 <code>a</code> is printed as <code>[a b a]</code>.  You can write vectors in the
 same way in Lisp input.
-
-   <p>A vector, like a string or a number, is considered a constant for
+</p>
+<p>A vector, like a string or a number, is considered a constant for
 evaluation: the result of evaluating it is the same vector.  This does
-not evaluate or even examine the elements of the vector. 
+not evaluate or even examine the elements of the vector.
 See <a href="Self_002dEvaluating-Forms.html#Self_002dEvaluating-Forms">Self-Evaluating Forms</a>.
+</p>
+<p>Here are examples illustrating these principles:
+</p>
+<div class="example">
+<pre class="example">(setq avector [1 two '(three) &quot;four&quot; [five]])
+     &rArr; [1 two (quote (three)) &quot;four&quot; [five]]
+(eval avector)
+     &rArr; [1 two (quote (three)) &quot;four&quot; [five]]
+(eq avector (eval avector))
+     &rArr; t
+</pre></div>
 
-   <p>Here are examples illustrating these principles:
 
-<pre class="example">     (setq avector [1 two '(three) "four" [five]])
-          &rArr; [1 two (quote (three)) "four" [five]]
-     (eval avector)
-          &rArr; [1 two (quote (three)) "four" [five]]
-     (eq avector (eval avector))
-          &rArr; t
-</pre>
-   </body></html>
 
+
+</body>
+</html>

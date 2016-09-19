@@ -1,63 +1,107 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Menu Keymaps - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Menu Keymaps</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Menu Keymaps">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Menu Keymaps">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Keymaps.html#Keymaps" title="Keymaps">
-<link rel="prev" href="Scanning-Keymaps.html#Scanning-Keymaps" title="Scanning Keymaps">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Keymaps.html#Keymaps" rel="up" title="Keymaps">
+<link href="Defining-Menus.html#Defining-Menus" rel="next" title="Defining Menus">
+<link href="Scanning-Keymaps.html#Scanning-Keymaps" rel="prev" title="Scanning Keymaps">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Menu-Keymaps"></a>
+<div class="header">
 <p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Scanning-Keymaps.html#Scanning-Keymaps">Scanning Keymaps</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
-<hr>
+Previous: <a href="Scanning-Keymaps.html#Scanning-Keymaps" accesskey="p" rel="prev">Scanning Keymaps</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Menu-Keymaps-1"></a>
 <h3 class="section">21.17 Menu Keymaps</h3>
+<a name="index-menu-keymaps"></a>
 
-<p><a name="index-menu-keymaps-1779"></a>
-A keymap can operate as a menu as well as defining bindings for
+<p>A keymap can operate as a menu as well as defining bindings for
 keyboard keys and mouse buttons.  Menus are usually actuated with the
 mouse, but they can function with the keyboard also.  If a menu keymap
 is active for the next input event, that activates the keyboard menu
 feature.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Defining-Menus.html#Defining-Menus" accesskey="1">Defining Menus</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to make a keymap that defines a menu.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Mouse-Menus.html#Mouse-Menus" accesskey="2">Mouse Menus</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How users actuate the menu with the mouse.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Keyboard-Menus.html#Keyboard-Menus" accesskey="3">Keyboard Menus</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How users actuate the menu with the keyboard.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Menu-Example.html#Menu-Example" accesskey="4">Menu Example</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Making a simple menu.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Menu-Bar.html#Menu-Bar" accesskey="5">Menu Bar</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to customize the menu bar.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Tool-Bar.html#Tool-Bar" accesskey="6">Tool Bar</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A tool bar is a row of images.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Modifying-Menus.html#Modifying-Menus" accesskey="7">Modifying Menus</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to add new items to a menu.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Easy-Menu.html#Easy-Menu" accesskey="8">Easy Menu</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A convenience macro for making menus.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Defining-Menus.html#Defining-Menus">Defining Menus</a>:      How to make a keymap that defines a menu. 
-<li><a accesskey="2" href="Mouse-Menus.html#Mouse-Menus">Mouse Menus</a>:         How users actuate the menu with the mouse. 
-<li><a accesskey="3" href="Keyboard-Menus.html#Keyboard-Menus">Keyboard Menus</a>:      How users actuate the menu with the keyboard. 
-<li><a accesskey="4" href="Menu-Example.html#Menu-Example">Menu Example</a>:        Making a simple menu. 
-<li><a accesskey="5" href="Menu-Bar.html#Menu-Bar">Menu Bar</a>:            How to customize the menu bar. 
-<li><a accesskey="6" href="Tool-Bar.html#Tool-Bar">Tool Bar</a>:            A tool bar is a row of images. 
-<li><a accesskey="7" href="Modifying-Menus.html#Modifying-Menus">Modifying Menus</a>:     How to add new items to a menu. 
-<li><a accesskey="8" href="Easy-Menu.html#Easy-Menu">Easy Menu</a>:       A convenience macro for making menus. 
-</ul>
 
-   </body></html>
 
+
+</body>
+</html>

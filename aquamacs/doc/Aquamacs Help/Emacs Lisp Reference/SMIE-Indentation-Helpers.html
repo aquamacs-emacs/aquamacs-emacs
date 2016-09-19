@@ -1,113 +1,152 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>SMIE Indentation Helpers - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: SMIE Indentation Helpers</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: SMIE Indentation Helpers">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: SMIE Indentation Helpers">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="SMIE.html#SMIE" title="SMIE">
-<link rel="prev" href="SMIE-Indentation.html#SMIE-Indentation" title="SMIE Indentation">
-<link rel="next" href="SMIE-Indentation-Example.html#SMIE-Indentation-Example" title="SMIE Indentation Example">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SMIE.html#SMIE" rel="up" title="SMIE">
+<link href="SMIE-Indentation-Example.html#SMIE-Indentation-Example" rel="next" title="SMIE Indentation Example">
+<link href="SMIE-Indentation.html#SMIE-Indentation" rel="prev" title="SMIE Indentation">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="SMIE-Indentation-Helpers"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="SMIE-Indentation-Example.html#SMIE-Indentation-Example">SMIE Indentation Example</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="SMIE-Indentation.html#SMIE-Indentation">SMIE Indentation</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="SMIE.html#SMIE">SMIE</a>
-<hr>
-</div>
 
-<h5 class="subsubsection">22.7.1.7 Helper Functions for Indentation Rules</h5>
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="SMIE-Indentation-Helpers"></a>
+<div class="header">
+<p>
+Next: <a href="SMIE-Indentation-Example.html#SMIE-Indentation-Example" accesskey="n" rel="next">SMIE Indentation Example</a>, Previous: <a href="SMIE-Indentation.html#SMIE-Indentation" accesskey="p" rel="prev">SMIE Indentation</a>, Up: <a href="SMIE.html#SMIE" accesskey="u" rel="up">SMIE</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Helper-Functions-for-Indentation-Rules"></a>
+<h4 class="subsubsection">22.7.1.7 Helper Functions for Indentation Rules</h4>
 
 <p>SMIE provides various functions designed specifically for use in the
 indentation rules function (several of those functions break if used in
 another context).  These functions all start with the prefix
 <code>smie-rule-</code>.
+</p>
+<dl>
+<dt><a name="index-smie_002drule_002dbolp"></a>Function: <strong>smie-rule-bolp</strong></dt>
+<dd><p>Return non-<code>nil</code> if the current token is the first on the line.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>smie-rule-bolp</b><var><a name="index-smie_002drule_002dbolp-1965"></a></var><br>
-<blockquote><p>Return non-<code>nil</code> if the current token is the first on the line. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>smie-rule-hanging-p</b><var><a name="index-smie_002drule_002dhanging_002dp-1966"></a></var><br>
-<blockquote><p>Return non-<code>nil</code> if the current token is <em>hanging</em>. 
+<dl>
+<dt><a name="index-smie_002drule_002dhanging_002dp"></a>Function: <strong>smie-rule-hanging-p</strong></dt>
+<dd><p>Return non-<code>nil</code> if the current token is <em>hanging</em>.
 A token is <em>hanging</em> if it is the last token on the line
 and if it is preceded by other tokens: a lone token on a line is not
-hanging. 
-</p></blockquote></div>
+hanging.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>smie-rule-next-p</b><var> &amp;rest tokens<a name="index-smie_002drule_002dnext_002dp-1967"></a></var><br>
-<blockquote><p>Return non-<code>nil</code> if the next token is among <var>tokens</var>. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-smie_002drule_002dnext_002dp"></a>Function: <strong>smie-rule-next-p</strong> <em>&amp;rest tokens</em></dt>
+<dd><p>Return non-<code>nil</code> if the next token is among <var>tokens</var>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>smie-rule-prev-p</b><var> &amp;rest tokens<a name="index-smie_002drule_002dprev_002dp-1968"></a></var><br>
-<blockquote><p>Return non-<code>nil</code> if the previous token is among <var>tokens</var>. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-smie_002drule_002dprev_002dp"></a>Function: <strong>smie-rule-prev-p</strong> <em>&amp;rest tokens</em></dt>
+<dd><p>Return non-<code>nil</code> if the previous token is among <var>tokens</var>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>smie-rule-parent-p</b><var> &amp;rest parents<a name="index-smie_002drule_002dparent_002dp-1969"></a></var><br>
-<blockquote><p>Return non-<code>nil</code> if the current token's parent is among <var>parents</var>. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-smie_002drule_002dparent_002dp"></a>Function: <strong>smie-rule-parent-p</strong> <em>&amp;rest parents</em></dt>
+<dd><p>Return non-<code>nil</code> if the current token&rsquo;s parent is among <var>parents</var>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>smie-rule-sibling-p</b><var><a name="index-smie_002drule_002dsibling_002dp-1970"></a></var><br>
-<blockquote><p>Return non-<code>nil</code> if the current token's parent is actually a
-sibling.  This is the case for example when the parent of a <code>","</code>
-is just the previous <code>","</code>. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-smie_002drule_002dsibling_002dp"></a>Function: <strong>smie-rule-sibling-p</strong></dt>
+<dd><p>Return non-<code>nil</code> if the current token&rsquo;s parent is actually a
+sibling.  This is the case for example when the parent of a <code>&quot;,&quot;</code>
+is just the previous <code>&quot;,&quot;</code>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>smie-rule-parent</b><var> &amp;optional offset<a name="index-smie_002drule_002dparent-1971"></a></var><br>
-<blockquote><p>Return the proper offset to align the current token with the parent. 
+<dl>
+<dt><a name="index-smie_002drule_002dparent"></a>Function: <strong>smie-rule-parent</strong> <em>&amp;optional offset</em></dt>
+<dd><p>Return the proper offset to align the current token with the parent.
 If non-<code>nil</code>, <var>offset</var> should be an integer giving an
-additional offset to apply. 
-</p></blockquote></div>
+additional offset to apply.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>smie-rule-separator</b><var> method<a name="index-smie_002drule_002dseparator-1972"></a></var><br>
-<blockquote><p>Indent current token as a <em>separator</em>.
-
-        <p>By <em>separator</em>, we mean here a token whose sole purpose is to
+<dl>
+<dt><a name="index-smie_002drule_002dseparator"></a>Function: <strong>smie-rule-separator</strong> <em>method</em></dt>
+<dd><p>Indent current token as a <em>separator</em>.
+</p>
+<p>By <em>separator</em>, we mean here a token whose sole purpose is to
 separate various elements within some enclosing syntactic construct, and
 which does not have any semantic significance in itself (i.e., it would
 typically not exist as a node in an abstract syntax tree).
-
-        <p>Such a token is expected to have an associative syntax and be closely
-tied to its syntactic parent.  Typical examples are <code>","</code> in lists
-of arguments (enclosed inside parentheses), or <code>";"</code> in sequences
+</p>
+<p>Such a token is expected to have an associative syntax and be closely
+tied to its syntactic parent.  Typical examples are <code>&quot;,&quot;</code> in lists
+of arguments (enclosed inside parentheses), or <code>&quot;;&quot;</code> in sequences
 of instructions (enclosed in a <code>{...}</code> or <code>begin...end</code>
 block).
+</p>
+<p><var>method</var> should be the method name that was passed to
+<code>smie-rules-function</code>.
+</p></dd></dl>
 
-        <p><var>method</var> should be the method name that was passed to
-<code>smie-rules-function</code>. 
-</p></blockquote></div>
+<hr>
+<div class="header">
+<p>
+Next: <a href="SMIE-Indentation-Example.html#SMIE-Indentation-Example" accesskey="n" rel="next">SMIE Indentation Example</a>, Previous: <a href="SMIE-Indentation.html#SMIE-Indentation" accesskey="p" rel="prev">SMIE Indentation</a>, Up: <a href="SMIE.html#SMIE" accesskey="u" rel="up">SMIE</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

@@ -1,100 +1,143 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Date Formats - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Date Formats</title>
+
+<meta name="description" content="GNU Emacs Manual: Date Formats">
+<meta name="keywords" content="GNU Emacs Manual: Date Formats">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Diary.html#Diary" title="Diary">
-<link rel="prev" href="Displaying-the-Diary.html#Displaying-the-Diary" title="Displaying the Diary">
-<link rel="next" href="Adding-to-Diary.html#Adding-to-Diary" title="Adding to Diary">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Diary.html#Diary" rel="up" title="Diary">
+<link href="Adding-to-Diary.html#Adding-to-Diary" rel="next" title="Adding to Diary">
+<link href="Displaying-the-Diary.html#Displaying-the-Diary" rel="prev" title="Displaying the Diary">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Date-Formats"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Adding-to-Diary.html#Adding-to-Diary">Adding to Diary</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Displaying-the-Diary.html#Displaying-the-Diary">Displaying the Diary</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Diary.html#Diary">Diary</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Date-Formats"></a>
+<div class="header">
+<p>
+Next: <a href="Adding-to-Diary.html#Adding-to-Diary" accesskey="n" rel="next">Adding to Diary</a>, Previous: <a href="Displaying-the-Diary.html#Displaying-the-Diary" accesskey="p" rel="prev">Displaying the Diary</a>, Up: <a href="Diary.html#Diary" accesskey="u" rel="up">Diary</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Date-Formats-1"></a>
 <h4 class="subsection">31.10.3 Date Formats</h4>
 
 <p>Here are some sample diary entries, illustrating different ways of
 formatting a date.  The examples all show dates in American order
 (month, day, year), but Calendar mode supports European order (day,
 month, year) and ISO order (year, month, day) as options.
+</p>
+<div class="example">
+<pre class="example">4/20/12  Switch-over to new tabulation system
+apr. 25  Start tabulating annual results
+4/30  Results for April are due
+*/25  Monthly cycle finishes
+Friday  Don't leave without backing up files
+</pre></div>
 
-<pre class="example">     4/20/12  Switch-over to new tabulation system
-     apr. 25  Start tabulating annual results
-     4/30  Results for April are due
-     */25  Monthly cycle finishes
-     Friday  Don't leave without backing up files
-</pre>
-   <p>The first entry appears only once, on April 20, 2012.  The second and
+<p>The first entry appears only once, on April 20, 2012.  The second and
 third appear every year on the specified dates, and the fourth uses a
 wildcard (asterisk) for the month, so it appears on the 25th of every
 month.  The final entry appears every week on Friday.
-
-   <p>You can use just numbers to express a date, as in
-&lsquo;<samp><var>month</var><span class="samp">/</span><var>day</var></samp>&rsquo; or &lsquo;<samp><var>month</var><span class="samp">/</span><var>day</var><span class="samp">/</span><var>year</var></samp>&rsquo;. 
+</p>
+<p>You can use just numbers to express a date, as in
+&lsquo;<samp><var>month</var>/<var>day</var></samp>&rsquo; or &lsquo;<samp><var>month</var>/<var>day</var>/<var>year</var></samp>&rsquo;.
 This must be followed by a nondigit.  In the date itself, <var>month</var>
 and <var>day</var> are numbers of one or two digits.  The optional <var>year</var>
 is also a number, and may be abbreviated to the last two digits; that
-is, you can use &lsquo;<samp><span class="samp">11/12/2012</span></samp>&rsquo; or &lsquo;<samp><span class="samp">11/12/12</span></samp>&rsquo;.
-
-   <p>Dates can also have the form &lsquo;<samp><var>monthname</var> <var>day</var></samp>&rsquo; or
-&lsquo;<samp><var>monthname</var> <var>day</var><span class="samp">, </span><var>year</var></samp>&rsquo;, where the month's name can
+is, you can use &lsquo;<samp>11/12/2012</samp>&rsquo; or &lsquo;<samp>11/12/12</samp>&rsquo;.
+</p>
+<p>Dates can also have the form &lsquo;<samp><var>monthname</var> <var>day</var></samp>&rsquo; or
+&lsquo;<samp><var>monthname</var> <var>day</var>, <var>year</var></samp>&rsquo;, where the month&rsquo;s name can
 be spelled in full or abbreviated (with or without a period).  The
 preferred abbreviations for month and day names can be set using
 the variables <code>calendar-abbrev-length</code>,
 <code>calendar-month-abbrev-array</code>, and
 <code>calendar-day-abbrev-array</code>.  The default is to use the first three
 letters of a name as its abbreviation.  Case is not significant.
-
-   <p>A date may be <dfn>generic</dfn>; that is, partially unspecified.  Then the
+</p>
+<p>A date may be <em>generic</em>; that is, partially unspecified.  Then the
 entry applies to all dates that match the specification.  If the date
-does not contain a year, it is generic and applies to any year. 
-Alternatively, <var>month</var>, <var>day</var>, or <var>year</var> can be &lsquo;<samp><span class="samp">*</span></samp>&rsquo;;
+does not contain a year, it is generic and applies to any year.
+Alternatively, <var>month</var>, <var>day</var>, or <var>year</var> can be &lsquo;<samp>*</samp>&rsquo;;
 this matches any month, day, or year, respectively.  Thus, a diary entry
-&lsquo;<samp><span class="samp">3/*/*</span></samp>&rsquo; matches any day in March of any year; so does &lsquo;<samp><span class="samp">march
-*</span></samp>&rsquo;.
-
-   <p><a name="index-calendar_002ddate_002dstyle-3540"></a><a name="index-calendar_002dset_002ddate_002dstyle-3541"></a>  If you prefer the European style of writing dates (in which the day
+&lsquo;<samp>3/*/*</samp>&rsquo; matches any day in March of any year; so does &lsquo;<samp>march
+*</samp>&rsquo;.
+</p>
+<a name="index-calendar_002ddate_002dstyle"></a>
+<a name="index-calendar_002dset_002ddate_002dstyle"></a>
+<p>If you prefer the European style of writing dates (in which the day
 comes before the month), or the ISO style (in which the order is year,
 month, day), type <kbd>M-x calendar-set-date-style</kbd> while in the
 calendar, or customize the variable <code>calendar-date-style</code>.  This
 affects how diary dates are interpreted, date display, and the order in
 which some commands expect their arguments to be given.
-
-   <p>You can use the name of a day of the week as a generic date which
+</p>
+<p>You can use the name of a day of the week as a generic date which
 applies to any date falling on that day of the week.  You can abbreviate
 the day of the week as described above, or spell it in full; case is not
 significant.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Adding-to-Diary.html#Adding-to-Diary" accesskey="n" rel="next">Adding to Diary</a>, Previous: <a href="Displaying-the-Diary.html#Displaying-the-Diary" accesskey="p" rel="prev">Displaying the Diary</a>, Up: <a href="Diary.html#Diary" accesskey="u" rel="up">Diary</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

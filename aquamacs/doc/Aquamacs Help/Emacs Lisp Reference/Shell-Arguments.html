@@ -1,126 +1,178 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Shell Arguments - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Shell Arguments</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Shell Arguments">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Shell Arguments">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Processes.html#Processes" title="Processes">
-<link rel="prev" href="Subprocess-Creation.html#Subprocess-Creation" title="Subprocess Creation">
-<link rel="next" href="Synchronous-Processes.html#Synchronous-Processes" title="Synchronous Processes">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Processes.html#Processes" rel="up" title="Processes">
+<link href="Synchronous-Processes.html#Synchronous-Processes" rel="next" title="Synchronous Processes">
+<link href="Subprocess-Creation.html#Subprocess-Creation" rel="prev" title="Subprocess Creation">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Shell-Arguments"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Synchronous-Processes.html#Synchronous-Processes">Synchronous Processes</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Subprocess-Creation.html#Subprocess-Creation">Subprocess Creation</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
-<hr>
+Next: <a href="Synchronous-Processes.html#Synchronous-Processes" accesskey="n" rel="next">Synchronous Processes</a>, Previous: <a href="Subprocess-Creation.html#Subprocess-Creation" accesskey="p" rel="prev">Subprocess Creation</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Shell-Arguments-1"></a>
 <h3 class="section">36.2 Shell Arguments</h3>
+<a name="index-arguments-for-shell-commands"></a>
+<a name="index-shell-command-arguments"></a>
 
-<p><a name="index-arguments-for-shell-commands-3880"></a><a name="index-shell-command-arguments-3881"></a>
-  Lisp programs sometimes need to run a shell and give it a command
+<p>Lisp programs sometimes need to run a shell and give it a command
 that contains file names that were specified by the user.  These
 programs ought to be able to support any valid file name.  But the shell
 gives special treatment to certain characters, and if these characters
 occur in the file name, they will confuse the shell.  To handle these
 characters, use the function <code>shell-quote-argument</code>:
-
-<div class="defun">
-&mdash; Function: <b>shell-quote-argument</b><var> argument<a name="index-shell_002dquote_002dargument-3882"></a></var><br>
-<blockquote><p>This function returns a string that represents, in shell syntax,
+</p>
+<dl>
+<dt><a name="index-shell_002dquote_002dargument"></a>Function: <strong>shell-quote-argument</strong> <em>argument</em></dt>
+<dd><p>This function returns a string that represents, in shell syntax,
 an argument whose actual contents are <var>argument</var>.  It should
 work reliably to concatenate the return value into a shell command
 and then pass it to a shell for execution.
-
-        <p>Precisely what this function does depends on your operating system.  The
-function is designed to work with the syntax of your system's standard
+</p>
+<p>Precisely what this function does depends on your operating system.  The
+function is designed to work with the syntax of your system&rsquo;s standard
 shell; if you use an unusual shell, you will need to redefine this
 function.  See <a href="Security-Considerations.html#Security-Considerations">Security Considerations</a>.
+</p>
+<div class="example">
+<pre class="example">;; <span class="roman">This example shows the behavior on GNU and Unix systems.</span>
+(shell-quote-argument &quot;foo &gt; bar&quot;)
+     &rArr; &quot;foo\\ \\&gt;\\ bar&quot;
 
-     <pre class="example">          ;; <span class="roman">This example shows the behavior on GNU and Unix systems.</span>
-          (shell-quote-argument "foo &gt; bar")
-               &rArr; "foo\\ \\&gt;\\ bar"
-          
-          ;; <span class="roman">This example shows the behavior on MS-DOS and MS-Windows.</span>
-          (shell-quote-argument "foo &gt; bar")
-               &rArr; "\"foo &gt; bar\""
-</pre>
-        <p>Here's an example of using <code>shell-quote-argument</code> to construct
+;; <span class="roman">This example shows the behavior on MS-DOS and MS-Windows.</span>
+(shell-quote-argument &quot;foo &gt; bar&quot;)
+     &rArr; &quot;\&quot;foo &gt; bar\&quot;&quot;
+</pre></div>
+
+<p>Here&rsquo;s an example of using <code>shell-quote-argument</code> to construct
 a shell command:
+</p>
+<div class="example">
+<pre class="example">(concat &quot;diff -u &quot;
+        (shell-quote-argument oldfile)
+        &quot; &quot;
+        (shell-quote-argument newfile))
+</pre></div>
+</dd></dl>
 
-     <pre class="example">          (concat "diff -u "
-                  (shell-quote-argument oldfile)
-                  " "
-                  (shell-quote-argument newfile))
-</pre>
-        </blockquote></div>
-
-   <p><a name="index-quoting-and-unquoting-command_002dline-arguments-3883"></a><a name="index-minibuffer-input_002c-and-command_002dline-arguments-3884"></a><a name="index-g_t_0040code_007bcall_002dprocess_007d_002c-command_002dline-arguments-from-minibuffer-3885"></a><a name="index-g_t_0040code_007bstart_002dprocess_007d_002c-command_002dline-arguments-from-minibuffer-3886"></a>  The following two functions are useful for combining a list of
+<a name="index-quoting-and-unquoting-command_002dline-arguments"></a>
+<a name="index-minibuffer-input_002c-and-command_002dline-arguments"></a>
+<a name="index-call_002dprocess_002c-command_002dline-arguments-from-minibuffer"></a>
+<a name="index-start_002dprocess_002c-command_002dline-arguments-from-minibuffer"></a>
+<p>The following two functions are useful for combining a list of
 individual command-line argument strings into a single string, and
 taking a string apart into a list of individual command-line
-arguments.  These functions are mainly intended for
-converting user input in the minibuffer, a Lisp string, into a list of
-string arguments to be passed to <code>call-process</code> or
-<code>start-process</code>, or for converting such lists of arguments into
-a single Lisp string to be presented in the minibuffer or echo area.
-
-<div class="defun">
-&mdash; Function: <b>split-string-and-unquote</b><var> string &amp;optional separators<a name="index-split_002dstring_002dand_002dunquote-3887"></a></var><br>
-<blockquote><p>This function splits <var>string</var> into substrings at matches for the
+arguments.  These functions are mainly intended for converting user
+input in the minibuffer, a Lisp string, into a list of string
+arguments to be passed to <code>make-process</code>, <code>call-process</code> or
+<code>start-process</code>, or for converting such lists of arguments into a
+single Lisp string to be presented in the minibuffer or echo area.
+Note that if a shell is involved (e.g., if using
+<code>call-process-shell-command</code>), arguments should still be
+protected by <code>shell-quote-argument</code>;
+<code>combine-and-quote-strings</code> is <em>not</em> intended to protect
+special characters from shell evaluation.
+</p>
+<dl>
+<dt><a name="index-split_002dstring_002dand_002dunquote"></a>Function: <strong>split-string-and-unquote</strong> <em>string &amp;optional separators</em></dt>
+<dd><p>This function splits <var>string</var> into substrings at matches for the
 regular expression <var>separators</var>, like <code>split-string</code> does
 (see <a href="Creating-Strings.html#Creating-Strings">Creating Strings</a>); in addition, it removes quoting from the
 substrings.  It then makes a list of the substrings and returns it.
-
-        <p>If <var>separators</var> is omitted or <code>nil</code>, it defaults to
-<code>"\\s-+"</code>, which is a regular expression that matches one or more
+</p>
+<p>If <var>separators</var> is omitted or <code>nil</code>, it defaults to
+<code>&quot;\\s-+&quot;</code>, which is a regular expression that matches one or more
 characters with whitespace syntax (see <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>).
+</p>
+<p>This function supports two types of quoting: enclosing a whole string
+in double quotes <code>&quot;&hellip;&quot;</code>, and quoting individual characters
+with a backslash escape &lsquo;<samp>\</samp>&rsquo;.  The latter is also used in Lisp
+strings, so this function can handle those as well.
+</p></dd></dl>
 
-        <p>This function supports two types of quoting: enclosing a whole string
-in double quotes <code>"..."</code>, and quoting individual characters
-with a backslash escape &lsquo;<samp><span class="samp">\</span></samp>&rsquo;.  The latter is also used in Lisp
-strings, so this function can handle those as well. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>combine-and-quote-strings</b><var> list-of-strings &amp;optional separator<a name="index-combine_002dand_002dquote_002dstrings-3888"></a></var><br>
-<blockquote><p>This function concatenates <var>list-of-strings</var> into a single string,
+<dl>
+<dt><a name="index-combine_002dand_002dquote_002dstrings"></a>Function: <strong>combine-and-quote-strings</strong> <em>list-of-strings &amp;optional separator</em></dt>
+<dd><p>This function concatenates <var>list-of-strings</var> into a single string,
 quoting each string as necessary.  It also sticks the <var>separator</var>
 string between each pair of strings; if <var>separator</var> is omitted or
-<code>nil</code>, it defaults to <code>" "</code>.  The return value is the
+<code>nil</code>, it defaults to <code>&quot; &quot;</code>.  The return value is the
 resulting string.
-
-        <p>The strings in <var>list-of-strings</var> that need quoting are those that
+</p>
+<p>The strings in <var>list-of-strings</var> that need quoting are those that
 include <var>separator</var> as their substring.  Quoting a string encloses
-it in double quotes <code>"..."</code>.  In the simplest case, if you
+it in double quotes <code>&quot;&hellip;&quot;</code>.  In the simplest case, if you
 are consing a command from the individual command-line arguments,
-every argument that includes embedded blanks will be quoted. 
-</p></blockquote></div>
+every argument that includes embedded blanks will be quoted.
+</p></dd></dl>
 
-   </body></html>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Synchronous-Processes.html#Synchronous-Processes" accesskey="n" rel="next">Synchronous Processes</a>, Previous: <a href="Subprocess-Creation.html#Subprocess-Creation" accesskey="p" rel="prev">Subprocess Creation</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
+
+
+</body>
+</html>

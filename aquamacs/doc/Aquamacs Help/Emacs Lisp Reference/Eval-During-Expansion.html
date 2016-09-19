@@ -1,83 +1,125 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Eval During Expansion - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Eval During Expansion</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Eval During Expansion">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Eval During Expansion">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Problems-with-Macros.html#Problems-with-Macros" title="Problems with Macros">
-<link rel="prev" href="Surprising-Local-Vars.html#Surprising-Local-Vars" title="Surprising Local Vars">
-<link rel="next" href="Repeated-Expansion.html#Repeated-Expansion" title="Repeated Expansion">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Problems-with-Macros.html#Problems-with-Macros" rel="up" title="Problems with Macros">
+<link href="Repeated-Expansion.html#Repeated-Expansion" rel="next" title="Repeated Expansion">
+<link href="Surprising-Local-Vars.html#Surprising-Local-Vars" rel="prev" title="Surprising Local Vars">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Eval-During-Expansion"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Repeated-Expansion.html#Repeated-Expansion">Repeated Expansion</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Surprising-Local-Vars.html#Surprising-Local-Vars">Surprising Local Vars</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Problems-with-Macros.html#Problems-with-Macros">Problems with Macros</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Eval-During-Expansion"></a>
+<div class="header">
+<p>
+Next: <a href="Repeated-Expansion.html#Repeated-Expansion" accesskey="n" rel="next">Repeated Expansion</a>, Previous: <a href="Surprising-Local-Vars.html#Surprising-Local-Vars" accesskey="p" rel="prev">Surprising Local Vars</a>, Up: <a href="Problems-with-Macros.html#Problems-with-Macros" accesskey="u" rel="up">Problems with Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Evaluating-Macro-Arguments-in-Expansion"></a>
 <h4 class="subsection">13.5.4 Evaluating Macro Arguments in Expansion</h4>
 
 <p>Another problem can happen if the macro definition itself
 evaluates any of the macro argument expressions, such as by calling
 <code>eval</code> (see <a href="Eval.html#Eval">Eval</a>).  If the argument is supposed to refer to the
-user's variables, you may have trouble if the user happens to use a
+user&rsquo;s variables, you may have trouble if the user happens to use a
 variable with the same name as one of the macro arguments.  Inside the
 macro body, the macro argument binding is the most local binding of this
 variable, so any references inside the form being evaluated do refer to
 it.  Here is an example:
+</p>
+<div class="example">
+<pre class="example">(defmacro foo (a)
+  (list 'setq (eval a) t))
+</pre><pre class="example">(setq x 'b)
+(foo x) &rarr; (setq b t)
+     &rArr; t                  ; <span class="roman">and <code>b</code> has been set.</span>
+;; <span class="roman">but</span>
+(setq a 'c)
+(foo a) &rarr; (setq a t)
+     &rArr; t                  ; <span class="roman">but this set <code>a</code>, not <code>c</code>.</span>
 
-<pre class="example">     (defmacro foo (a)
-       (list 'setq (eval a) t))
-     (setq x 'b)
-     (foo x) ==&gt; (setq b t)
-          &rArr; t                  ; <span class="roman">and </span><code>b</code><span class="roman"> has been set.</span>
-     ;; <span class="roman">but</span>
-     (setq a 'c)
-     (foo a) ==&gt; (setq a t)
-          &rArr; t                  ; <span class="roman">but this set </span><code>a</code><span class="roman">, not </span><code>c</code><span class="roman">.</span>
-</pre>
-   <p>It makes a difference whether the user's variable is named <code>a</code> or
+</pre></div>
+
+<p>It makes a difference whether the user&rsquo;s variable is named <code>a</code> or
 <code>x</code>, because <code>a</code> conflicts with the macro argument variable
 <code>a</code>.
-
-   <p>Another problem with calling <code>eval</code> in a macro definition is that
-it probably won't do what you intend in a compiled program.  The
+</p>
+<p>Another problem with calling <code>eval</code> in a macro definition is that
+it probably won&rsquo;t do what you intend in a compiled program.  The
 byte compiler runs macro definitions while compiling the program, when
-the program's own computations (which you might have wished to access
-with <code>eval</code>) don't occur and its local variable bindings don't
+the program&rsquo;s own computations (which you might have wished to access
+with <code>eval</code>) don&rsquo;t occur and its local variable bindings don&rsquo;t
 exist.
-
-   <p>To avoid these problems, <strong>don't evaluate an argument expression
+</p>
+<p>To avoid these problems, <strong>don&rsquo;t evaluate an argument expression
 while computing the macro expansion</strong>.  Instead, substitute the
 expression into the macro expansion, so that its value will be computed
 as part of executing the expansion.  This is how the other examples in
 this chapter work.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Repeated-Expansion.html#Repeated-Expansion" accesskey="n" rel="next">Repeated Expansion</a>, Previous: <a href="Surprising-Local-Vars.html#Surprising-Local-Vars" accesskey="p" rel="prev">Surprising Local Vars</a>, Up: <a href="Problems-with-Macros.html#Problems-with-Macros" accesskey="u" rel="up">Problems with Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

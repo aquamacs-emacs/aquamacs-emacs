@@ -1,94 +1,131 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Desktop Save Mode - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Desktop Save Mode</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Desktop Save Mode">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Desktop Save Mode">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Modes.html#Modes" title="Modes">
-<link rel="prev" href="Auto_002dIndentation.html#Auto_002dIndentation" title="Auto-Indentation">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Modes.html#Modes" rel="up" title="Modes">
+<link href="Documentation.html#Documentation" rel="next" title="Documentation">
+<link href="SMIE-Customization.html#SMIE-Customization" rel="prev" title="SMIE Customization">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Desktop-Save-Mode"></a>
+<div class="header">
 <p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Auto_002dIndentation.html#Auto_002dIndentation">Auto-Indentation</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Modes.html#Modes">Modes</a>
-<hr>
+Previous: <a href="Auto_002dIndentation.html#Auto_002dIndentation" accesskey="p" rel="prev">Auto-Indentation</a>, Up: <a href="Modes.html#Modes" accesskey="u" rel="up">Modes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Desktop-Save-Mode-1"></a>
 <h3 class="section">22.8 Desktop Save Mode</h3>
+<a name="index-desktop-save-mode"></a>
 
-<p><a name="index-desktop-save-mode-1979"></a>
-<dfn>Desktop Save Mode</dfn> is a feature to save the state of Emacs from
+<p><em>Desktop Save Mode</em> is a feature to save the state of Emacs from
 one session to another.  The user-level commands for using Desktop
-Save Mode are described in the GNU Emacs Manual (see <a href="../emacs/Saving-Emacs-Sessions.html#Saving-Emacs-Sessions">Saving Emacs Sessions</a>).  Modes whose buffers visit
-a file, don't have to do anything to use this feature.
-
-   <p>For buffers not visiting a file to have their state saved, the major
+Save Mode are described in the GNU Emacs Manual (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Saving-Emacs-Sessions.html#Saving-Emacs-Sessions">Saving Emacs
+Sessions</a> in <cite>the GNU Emacs Manual</cite>).  Modes whose buffers visit
+a file, don&rsquo;t have to do anything to use this feature.
+</p>
+<p>For buffers not visiting a file to have their state saved, the major
 mode must bind the buffer local variable <code>desktop-save-buffer</code> to
 a non-<code>nil</code> value.
-
-<div class="defun">
-&mdash; Variable: <b>desktop-save-buffer</b><var><a name="index-desktop_002dsave_002dbuffer-1980"></a></var><br>
-<blockquote><p>If this buffer-local variable is non-<code>nil</code>, the buffer will have
+</p>
+<dl>
+<dt><a name="index-desktop_002dsave_002dbuffer"></a>Variable: <strong>desktop-save-buffer</strong></dt>
+<dd><p>If this buffer-local variable is non-<code>nil</code>, the buffer will have
 its state saved in the desktop file at desktop save.  If the value is
 a function, it is called at desktop save with argument
 <var>desktop-dirname</var>, and its value is saved in the desktop file along
 with the state of the buffer for which it was called.  When file names
 are returned as part of the auxiliary information, they should be
 formatted using the call
+</p>
+<div class="example">
+<pre class="example">(desktop-file-name <var>file-name</var> <var>desktop-dirname</var>)
+</pre></div>
 
-     <pre class="example">          (desktop-file-name <var>file-name</var> <var>desktop-dirname</var>)
-</pre>
-        </blockquote></div>
+</dd></dl>
 
-   <p>For buffers not visiting a file to be restored, the major mode must
+<p>For buffers not visiting a file to be restored, the major mode must
 define a function to do the job, and that function must be listed in
 the alist <code>desktop-buffer-mode-handlers</code>.
+</p>
+<dl>
+<dt><a name="index-desktop_002dbuffer_002dmode_002dhandlers"></a>Variable: <strong>desktop-buffer-mode-handlers</strong></dt>
+<dd><p>Alist with elements
+</p>
+<div class="example">
+<pre class="example">(<var>major-mode</var> . <var>restore-buffer-function</var>)
+</pre></div>
 
-<div class="defun">
-&mdash; Variable: <b>desktop-buffer-mode-handlers</b><var><a name="index-desktop_002dbuffer_002dmode_002dhandlers-1981"></a></var><br>
-<blockquote><p>Alist with elements
-
-     <pre class="example">          (<var>major-mode</var> . <var>restore-buffer-function</var>)
-</pre>
-        <p>The function <var>restore-buffer-function</var> will be called with
+<p>The function <var>restore-buffer-function</var> will be called with
 argument list
+</p>
+<div class="example">
+<pre class="example">(<var>buffer-file-name</var> <var>buffer-name</var> <var>desktop-buffer-misc</var>)
+</pre></div>
 
-     <pre class="example">          (<var>buffer-file-name</var> <var>buffer-name</var> <var>desktop-buffer-misc</var>)
-</pre>
-        <p>and it should return the restored buffer. 
+<p>and it should return the restored buffer.
 Here <var>desktop-buffer-misc</var> is the value returned by the function
-optionally bound to <code>desktop-save-buffer</code>. 
-</p></blockquote></div>
-   <!-- *- mode: texinfo; coding: utf-8 -*- -->
-<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1990-1995, 1998-1999, 2001-2015 Free Software -->
-<!-- Foundation, Inc. -->
-<!-- See the file elisp.texi for copying conditions. -->
+optionally bound to <code>desktop-save-buffer</code>.
+</p></dd></dl>
 
-   </body></html>
 
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Copyright (C) 1999-2004, 2012-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being "A GNU Manual,"
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled "GNU Free Documentation License".
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>Bovine parser development: How Lexical Tokens Match</title>
+
+<meta name="description" content="Bovine parser development: How Lexical Tokens Match">
+<meta name="keywords" content="Bovine parser development: How Lexical Tokens Match">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="index.html#Top" rel="start" title="top">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Bovine-Grammar-Rules.html#Bovine-Grammar-Rules" rel="up" title="Bovine Grammar Rules">
+<link href="Grammar_002dto_002dLisp-Details.html#Grammar_002dto_002dLisp-Details" rel="next" title="Grammar-to-Lisp Details">
+<link href="Bovine-Grammar-Rules.html#Bovine-Grammar-Rules" rel="prev" title="Bovine Grammar Rules">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="How-Lexical-Tokens-Match"></a>
+<div class="header">
+<p>
+Next: <a href="Grammar_002dto_002dLisp-Details.html#Grammar_002dto_002dLisp-Details" accesskey="n" rel="next">Grammar-to-Lisp Details</a>, Up: <a href="Bovine-Grammar-Rules.html#Bovine-Grammar-Rules" accesskey="u" rel="up">Bovine Grammar Rules</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<hr>
+<a name="How-Lexical-Tokens-Match-1"></a>
+<h3 class="section">2.1 How Lexical Tokens Match</h3>
+
+<p>A lexical rule must be used to define how to match a lexical token.
+</p>
+<p>For instance:
+</p>
+<div class="example">
+<pre class="example">%keyword FOO &quot;foo&quot;
+</pre></div>
+
+<p>Means that <code>FOO</code> is a reserved language keyword, matched as such
+by looking up into a keyword table, See <a href="../grammar-fw/keyword-Decl.html#keyword-Decl">(grammar-fw)keyword Decl</a>.  This is because <code>&quot;foo&quot;</code> will be converted to
+<code>FOO</code> in the lexical analysis stage.  Thus the symbol <code>FOO</code>
+won&rsquo;t be available any other way.
+</p>
+<p>If we specify our token in this way:
+</p>
+<div class="example">
+<pre class="example">%token &lt;symbol&gt; FOO &quot;foo&quot;
+</pre></div>
+
+<p>then <code>FOO</code> will match the string <code>&quot;foo&quot;</code> explicitly, but it
+won&rsquo;t do so at the lexical level, allowing use of the text
+<code>&quot;foo&quot;</code> in other forms of regular expressions.
+</p>
+<p>In that case, <code>FOO</code> is a <code>symbol</code>-type token.  To match, a
+<code>symbol</code> must first be encountered, and then it must
+<code>string-match &quot;foo&quot;</code>.
+</p>
+<dl compact="compact">
+<dt><strong>Caution:</strong></dt>
+<dd><p>Be especially careful to remember that <code>&quot;foo&quot;</code>, and more
+generally the %token&rsquo;s match-value string, is a regular expression!
+</p></dd>
+</dl>
+
+<p>Non symbol tokens are also allowed.  For example:
+</p>
+<div class="example">
+<pre class="example">%token &lt;punctuation&gt; PERIOD &quot;[.]&quot;
+
+filename : symbol PERIOD symbol
+         ;
+</pre></div>
+
+<p><code>PERIOD</code> is a <code>punctuation</code>-type token that will explicitly
+match one period when used in the above rule.
+</p>
+<dl compact="compact">
+<dt><strong>Please Note:</strong></dt>
+<dd><p><code>symbol</code>, <code>punctuation</code>, etc., are predefined lexical token
+types, based on the <em>syntax class</em>-character associations
+currently in effect.
+</p></dd>
+</dl>
+
+
+
+
+</body>
+</html>

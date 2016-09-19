@@ -1,113 +1,170 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Emacs Server - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Emacs Server</title>
+
+<meta name="description" content="GNU Emacs Manual: Emacs Server">
+<meta name="keywords" content="GNU Emacs Manual: Emacs Server">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Shell.html#Shell" title="Shell">
-<link rel="next" href="Printing.html#Printing" title="Printing">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Invoking-emacsclient.html#Invoking-emacsclient" rel="next" title="Invoking emacsclient">
+<link href="Serial-Terminal.html#Serial-Terminal" rel="prev" title="Serial Terminal">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Emacs-Server"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Printing.html#Printing">Printing</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Shell.html#Shell">Shell</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
+Next: <a href="Printing.html#Printing" accesskey="n" rel="next">Printing</a>, Previous: <a href="Shell.html#Shell" accesskey="p" rel="prev">Shell</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
+<hr>
+<a name="Using-Emacs-as-a-Server"></a>
+<h2 class="chapter">41 Using Emacs as a Server</h2>
+<a name="index-emacsclient"></a>
+<a name="index-Emacs-as-a-server"></a>
+<a name="index-server_002c-using-Emacs-as"></a>
+<a name="index-EDITOR-environment-variable"></a>
 
-<h2 class="chapter">39 Using Emacs as a Server</h2>
-
-<p><a name="index-emacsclient-4217"></a><a name="index-Emacs-as-a-server-4218"></a><a name="index-server_002c-using-Emacs-as-4219"></a><a name="index-g_t_0040env_007bEDITOR_007d-environment-variable-4220"></a>
-  Various programs can invoke your choice of editor to edit a
+<p>Various programs can invoke your choice of editor to edit a
 particular piece of text.  For instance, version control programs
-invoke an editor to enter version control logs (see <a href="Version-Control.html#Version-Control">Version Control</a>), and the Unix <samp><span class="command">mail</span></samp> utility invokes an editor to
+invoke an editor to enter version control logs (see <a href="Version-Control.html#Version-Control">Version Control</a>), and the Unix <code>mail</code> utility invokes an editor to
 enter a message to send.  By convention, your choice of editor is
-specified by the environment variable <samp><span class="env">EDITOR</span></samp>.  If you set
-<samp><span class="env">EDITOR</span></samp> to &lsquo;<samp><span class="samp">emacs</span></samp>&rsquo;, Emacs would be invoked, but in an
+specified by the environment variable <code>EDITOR</code>.  If you set
+<code>EDITOR</code> to &lsquo;<samp>emacs</samp>&rsquo;, Emacs would be invoked, but in an
 inconvenient way&mdash;by starting a new Emacs process.  This is
-inconvenient because the new Emacs process doesn't share buffers, a
+inconvenient because the new Emacs process doesn&rsquo;t share buffers, a
 command history, or other kinds of information with any existing Emacs
 process.
-
-   <p>You can solve this problem by setting up Emacs as an <dfn>edit
-server</dfn>, so that it &ldquo;listens&rdquo; for external edit requests and acts
+</p>
+<p>You can solve this problem by setting up Emacs as an <em>edit
+server</em>, so that it &ldquo;listens&rdquo; for external edit requests and acts
 accordingly.  There are two ways to start an Emacs server:
-
-     
-<a name="index-server_002dstart-4221"></a>
-<ul><li>Run the command <code>server-start</code> in an existing Emacs process:
+</p>
+<ul>
+<li> <a name="index-server_002dstart"></a>
+Run the command <code>server-start</code> in an existing Emacs process:
 either type <kbd>M-x server-start</kbd>, or put the expression
 <code>(server-start)</code> in your init file (see <a href="Init-File.html#Init-File">Init File</a>).  The
 existing Emacs process is the server; when you exit Emacs, the server
 dies with the Emacs process.
 
-     <p><a name="index-daemon_002c-Emacs-4222"></a><li>Run Emacs as a <dfn>daemon</dfn>, using the &lsquo;<samp><span class="samp">--daemon</span></samp>&rsquo; command-line
+</li><li> <a name="index-daemon_002c-Emacs"></a>
+Run Emacs as a <em>daemon</em>, using the &lsquo;<samp>--daemon</samp>&rsquo; command-line
 option.  See <a href="Initial-Options.html#Initial-Options">Initial Options</a>.  When Emacs is started this way, it
 calls <code>server-start</code> after initialization, and returns control to
 the calling terminal instead of opening an initial frame; it then
-waits in the background, listening for edit requests. 
-</ul>
+waits in the background, listening for edit requests.
+</li></ul>
 
-   <p><a name="index-g_t_0040env_007bTEXEDIT_007d-environment-variable-4223"></a>  Either way, once an Emacs server is started, you can use a shell
-command called <samp><span class="command">emacsclient</span></samp> to connect to the Emacs process
-and tell it to visit a file.  You can then set the <samp><span class="env">EDITOR</span></samp>
-environment variable to &lsquo;<samp><span class="samp">emacsclient</span></samp>&rsquo;, so that external programs
-will use the existing Emacs process for editing.<a rel="footnote" href="#fn-1" name="fnd-1"><sup>1</sup></a>
+<a name="index-TEXEDIT-environment-variable"></a>
+<p>Either way, once an Emacs server is started, you can use a shell
+command called <code>emacsclient</code> to connect to the Emacs process
+and tell it to visit a file.  You can then set the <code>EDITOR</code>
+environment variable to &lsquo;<samp>emacsclient</samp>&rsquo;, so that external programs
+will use the existing Emacs process for editing.<a name="DOCF19" href="#FOOT19"><sup>19</sup></a>
+</p>
+<a name="index-server_002dname"></a>
+<p>You can run multiple Emacs servers on the same machine by giving
+each one a unique <em>server name</em>, using the variable
+<code>server-name</code>.  For example, <kbd>M-x set-variable <span class="key">RET</span>
+server-name <span class="key">RET</span> &quot;foo&quot; <span class="key">RET</span></kbd> sets the server name to
+&lsquo;<samp>foo</samp>&rsquo;.  The <code>emacsclient</code> program can specify a server by
+name, using the &lsquo;<samp>-s</samp>&rsquo; option (see <a href="emacsclient-Options.html#emacsclient-Options">emacsclient Options</a>).
+</p>
+<p>If you want to run multiple Emacs daemons (see <a href="Initial-Options.html#Initial-Options">Initial Options</a>),
+you can give each daemon its own server name like this:
+</p>
+<div class="example">
+<pre class="example">  emacs --eval &quot;(setq server-name \&quot;foo\&quot;)&quot; --daemon
+</pre></div>
 
-   <p><a name="index-server_002dname-4224"></a>  You can run multiple Emacs servers on the same machine by giving
-each one a unique <dfn>server name</dfn>, using the variable
-<code>server-name</code>.  For example, <kbd>M-x set-variable &lt;RET&gt;
-server-name &lt;RET&gt; foo &lt;RET&gt;</kbd> sets the server name to
-&lsquo;<samp><span class="samp">foo</span></samp>&rsquo;.  The <code>emacsclient</code> program can specify a server by
-name, using the &lsquo;<samp><span class="samp">-s</span></samp>&rsquo; option (see <a href="emacsclient-Options.html#emacsclient-Options">emacsclient Options</a>).
-
-   <p><a name="index-server_002deval_002dat-4225"></a>  If you have defined a server by a unique server name, it is possible
+<a name="index-server_002deval_002dat"></a>
+<p>If you have defined a server by a unique server name, it is possible
 to connect to the server from another Emacs instance and evaluate Lisp
-expressions on the server, using the <code>server-eval-at</code> function. 
-For instance, <code>(server-eval-at "foo" '(+ 1 2))</code> evaluates the
-expression <code>(+ 1 2)</code> on the &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; server, and returns
+expressions on the server, using the <code>server-eval-at</code> function.
+For instance, <code>(server-eval-at &quot;foo&quot; '(+ 1 2))</code> evaluates the
+expression <code>(+ 1 2)</code> on the &lsquo;<samp>foo</samp>&rsquo; server, and returns
 <code>3</code>.  (If there is no server with that name, an error is
 signaled.)  Currently, this feature is mainly useful for developers.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Invoking-emacsclient.html#Invoking-emacsclient" accesskey="1">Invoking emacsclient</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Connecting to the Emacs server.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="emacsclient-Options.html#emacsclient-Options" accesskey="2">emacsclient Options</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Emacs client startup options.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Invoking-emacsclient.html#Invoking-emacsclient">Invoking emacsclient</a>:  Connecting to the Emacs server. 
-<li><a accesskey="2" href="emacsclient-Options.html#emacsclient-Options">emacsclient Options</a>:   Emacs client startup options. 
-</ul>
-
-   <div class="footnote">
+<div class="footnote">
 <hr>
-<h4>Footnotes</h4><p class="footnote"><small>[<a name="fn-1" href="#fnd-1">1</a>]</small> Some
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h3><a name="FOOT19" href="#DOCF19">(19)</a></h3>
+<p>Some
 programs use a different environment variable; for example, to make
-TeX use &lsquo;<samp><span class="samp">emacsclient</span></samp>&rsquo;, set the <samp><span class="env">TEXEDIT</span></samp> environment
-variable to &lsquo;<samp><span class="samp">emacsclient +%d %s</span></samp>&rsquo;.</p>
+TeX use &lsquo;<samp>emacsclient</samp>&rsquo;, set the <code>TEXEDIT</code> environment
+variable to &lsquo;<samp>emacsclient +%d %s</samp>&rsquo;.</p>
+</div>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Printing.html#Printing" accesskey="n" rel="next">Printing</a>, Previous: <a href="Shell.html#Shell" accesskey="p" rel="prev">Shell</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   <hr></div>
 
-   </body></html>
 
+</body>
+</html>

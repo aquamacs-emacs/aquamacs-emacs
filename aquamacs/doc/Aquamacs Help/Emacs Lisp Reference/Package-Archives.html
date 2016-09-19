@@ -1,159 +1,199 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Package Archives - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Package Archives</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Package Archives">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Package Archives">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Packaging.html#Packaging" title="Packaging">
-<link rel="prev" href="Multi_002dfile-Packages.html#Multi_002dfile-Packages" title="Multi-file Packages">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Packaging.html#Packaging" rel="up" title="Packaging">
+<link href="Antinews.html#Antinews" rel="next" title="Antinews">
+<link href="Multi_002dfile-Packages.html#Multi_002dfile-Packages" rel="prev" title="Multi-file Packages">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Package-Archives"></a>
+<div class="header">
 <p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Multi_002dfile-Packages.html#Multi_002dfile-Packages">Multi-file Packages</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Packaging.html#Packaging">Packaging</a>
-<hr>
+Previous: <a href="Multi_002dfile-Packages.html#Multi_002dfile-Packages" accesskey="p" rel="prev">Multi-file Packages</a>, Up: <a href="Packaging.html#Packaging" accesskey="u" rel="up">Packaging</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Creating-and-Maintaining-Package-Archives"></a>
 <h3 class="section">39.4 Creating and Maintaining Package Archives</h3>
+<a name="index-package-archive"></a>
 
-<p><a name="index-package-archive-4730"></a>
-  Via the Package Menu, users may download packages from <dfn>package
-archives</dfn>.  Such archives are specified by the variable
+<p>Via the Package Menu, users may download packages from <em>package
+archives</em>.  Such archives are specified by the variable
 <code>package-archives</code>, whose default value contains a single entry:
 the archive hosted by the GNU project at <a href="http://elpa.gnu.org">http://elpa.gnu.org</a>.  This
 section describes how to set up and maintain a package archive.
-
-   <p><a name="index-base-location_002c-package-archive-4731"></a>
-
-<div class="defun">
-&mdash; User Option: <b>package-archives</b><var><a name="index-package_002darchives-4732"></a></var><br>
-<blockquote><p>The value of this variable is an alist of package archives recognized
+</p>
+<a name="index-base-location_002c-package-archive"></a>
+<dl>
+<dt><a name="index-package_002darchives"></a>User Option: <strong>package-archives</strong></dt>
+<dd><p>The value of this variable is an alist of package archives recognized
 by the Emacs package manager.
-
-        <p>Each alist element corresponds to one archive, and should have the
-form <code>(</code><var>id</var><code> . </code><var>location</var><code>)</code>, where <var>id</var> is the name of
-the archive (a string) and <var>location</var> is its <dfn>base location</dfn>
+</p>
+<p>Each alist element corresponds to one archive, and should have the
+form <code>(<var>id</var> . <var>location</var>)</code>, where <var>id</var> is the name of
+the archive (a string) and <var>location</var> is its <em>base location</em>
 (a string).
-
-        <p>If the base location starts with &lsquo;<samp><span class="samp">http:</span></samp>&rsquo;, it is treated as a HTTP
+</p>
+<p>If the base location starts with &lsquo;<samp>http:</samp>&rsquo;, it is treated as a HTTP
 URL, and packages are downloaded from this archive via HTTP (as is the
 case for the default GNU archive).
-
-        <p>Otherwise, the base location should be a directory name.  In this
+</p>
+<p>Otherwise, the base location should be a directory name.  In this
 case, Emacs retrieves packages from this archive via ordinary file
-access.  Such local archives are mainly useful for testing. 
-</p></blockquote></div>
+access.  Such local archives are mainly useful for testing.
+</p></dd></dl>
 
-   <p>A package archive is simply a directory in which the package files,
+<p>A package archive is simply a directory in which the package files,
 and associated files, are stored.  If you want the archive to be
-reachable via HTTP, this directory must be accessible to a web server. 
+reachable via HTTP, this directory must be accessible to a web server.
 How to accomplish this is beyond the scope of this manual.
-
-   <p>A convenient way to set up and update a package archive is via the
+</p>
+<p>A convenient way to set up and update a package archive is via the
 <code>package-x</code> library.  This is included with Emacs, but not loaded
-by default; type <kbd>M-x load-library &lt;RET&gt; package-x &lt;RET&gt;</kbd> to
-load it, or add <code>(require 'package-x)</code> to your init file. 
-See <a href="../emacs/Lisp-Libraries.html#Lisp-Libraries">Lisp Libraries</a>. 
+by default; type <kbd>M-x load-library <span class="key">RET</span> package-x <span class="key">RET</span></kbd> to
+load it, or add <code>(require 'package-x)</code> to your init file.
+See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Lisp-Libraries.html#Lisp-Libraries">Lisp Libraries</a> in <cite>The GNU Emacs Manual</cite>.
 Once loaded, you can make use of the following:
-
-<div class="defun">
-&mdash; User Option: <b>package-archive-upload-base</b><var><a name="index-package_002darchive_002dupload_002dbase-4733"></a></var><br>
-<blockquote><p>The value of this variable is the base location of a package archive,
+</p>
+<dl>
+<dt><a name="index-package_002darchive_002dupload_002dbase"></a>User Option: <strong>package-archive-upload-base</strong></dt>
+<dd><p>The value of this variable is the base location of a package archive,
 as a directory name.  The commands in the <code>package-x</code> library
 will use this base location.
+</p>
+<p>The directory name should be absolute.  You may specify a remote name,
+such as <samp>/ssh:foo@example.com:/var/www/packages/</samp>, if the
+package archive is on a different machine.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Remote-Files.html#Remote-Files">Remote Files</a> in <cite>The GNU Emacs Manual</cite>.
+</p></dd></dl>
 
-        <p>The directory name should be absolute.  You may specify a remote name,
-such as <samp><span class="file">/ssh:foo@example.com:/var/www/packages/</span></samp>, if the
-package archive is on a different machine.  See <a href="../emacs/Remote-Files.html#Remote-Files">Remote Files</a>. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Command: <b>package-upload-file</b><var> filename<a name="index-package_002dupload_002dfile-4734"></a></var><br>
-<blockquote><p>This command prompts for <var>filename</var>, a file name, and uploads that
+<dl>
+<dt><a name="index-package_002dupload_002dfile"></a>Command: <strong>package-upload-file</strong> <em>filename</em></dt>
+<dd><p>This command prompts for <var>filename</var>, a file name, and uploads that
 file to <code>package-archive-upload-base</code>.  The file must be either a
-simple package (a <samp><span class="file">.el</span></samp> file) or a multi-file package (a
-<samp><span class="file">.tar</span></samp> file); otherwise, an error is raised.  The package
-attributes are automatically extracted, and the archive's contents
+simple package (a <samp>.el</samp> file) or a multi-file package (a
+<samp>.tar</samp> file); otherwise, an error is raised.  The package
+attributes are automatically extracted, and the archive&rsquo;s contents
 list is updated with this information.
-
-        <p>If <code>package-archive-upload-base</code> does not specify a valid
+</p>
+<p>If <code>package-archive-upload-base</code> does not specify a valid
 directory, the function prompts interactively for one.  If the
 directory does not exist, it is created.  The directory need not have
 any initial contents (i.e., you can use this command to populate an
-initially empty archive). 
-</p></blockquote></div>
+initially empty archive).
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Command: <b>package-upload-buffer</b><var><a name="index-package_002dupload_002dbuffer-4735"></a></var><br>
-<blockquote><p>This command is similar to <code>package-upload-file</code>, but instead of
+<dl>
+<dt><a name="index-package_002dupload_002dbuffer"></a>Command: <strong>package-upload-buffer</strong></dt>
+<dd><p>This command is similar to <code>package-upload-file</code>, but instead of
 prompting for a package file, it uploads the contents of the current
 buffer.  The current buffer must be visiting a simple package (a
-<samp><span class="file">.el</span></samp> file) or a multi-file package (a <samp><span class="file">.tar</span></samp> file);
-otherwise, an error is raised. 
-</p></blockquote></div>
+<samp>.el</samp> file) or a multi-file package (a <samp>.tar</samp> file);
+otherwise, an error is raised.
+</p></dd></dl>
 
-<p class="noindent">After you create an archive, remember that it is not accessible in the
+<p>After you create an archive, remember that it is not accessible in the
 Package Menu interface unless it is in <code>package-archives</code>.
-
-   <p><a name="index-package-archive-security-4736"></a><a name="index-package-signing-4737"></a>Maintaining a public package archive entails a degree of responsibility. 
+</p>
+<a name="index-package-archive-security"></a>
+<a name="index-package-signing"></a>
+<p>Maintaining a public package archive entails a degree of responsibility.
 When Emacs users install packages from your archive, those packages
 can cause Emacs to run arbitrary code with the permissions of the
 installing user.  (This is true for Emacs code in general, not just
 for packages.)  So you should ensure that your archive is
 well-maintained and keep the hosting system secure.
-
-   <p>One way to increase the security of your packages is to <dfn>sign</dfn>
+</p>
+<p>One way to increase the security of your packages is to <em>sign</em>
 them using a cryptographic key.  If you have generated a
 private/public gpg key pair, you can use gpg to sign the package like
 this:
+</p>
+<div class="example">
+<pre class="example">gpg -ba -o <var>file</var>.sig <var>file</var>
+</pre></div>
 
-<!-- FIXME EasyPG / package-x way to do this. -->
-<pre class="example">     gpg -ba -o <var>file</var>.sig <var>file</var>
-</pre>
-   <p class="noindent">For a single-file package, <var>file</var> is the package Lisp file;
-for a multi-file package, it is the package tar file. 
-You can also sign the archive's contents file in the same way. 
-Make the <samp><span class="file">.sig</span></samp> files available in the same location as the packages. 
+<p>For a single-file package, <var>file</var> is the package Lisp file;
+for a multi-file package, it is the package tar file.
+You can also sign the archive&rsquo;s contents file in the same way.
+Make the <samp>.sig</samp> files available in the same location as the packages.
 You should also make your public key available for people to download;
-e.g., by uploading it to a key server such as <a href="http://pgp.mit.edu/">http://pgp.mit.edu/</a>. 
+e.g., by uploading it to a key server such as <a href="http://pgp.mit.edu/">http://pgp.mit.edu/</a>.
 When people install packages from your archive, they can use
 your public key to verify the signatures.
-
-   <p>A full explanation of these matters is outside the scope of this
+</p>
+<p>A full explanation of these matters is outside the scope of this
 manual.  For more information on cryptographic keys and signing,
-see <a href="../gnupg/index.html#Top">GnuPG</a>.  Emacs comes
-with an interface to GNU Privacy Guard, see <a href="../epa/index.html#Top">EasyPG</a>.
+see <a href="http://www.gnupg.org/documentation/manuals/gnupg/index.html#Top">GnuPG</a> in <cite>The GNU Privacy Guard Manual</cite>.  Emacs comes
+with an interface to GNU Privacy Guard, see <a href="http://www.gnu.org/software/emacs/manual/html_node/epa/index.html#Top">EasyPG</a> in <cite>Emacs EasyPG Assistant Manual</cite>.
+</p>
 
-<!-- appendices -->
-<!-- *-texinfo-*- -->
-<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1999, 2002-2015 Free Software Foundation, Inc. -->
-<!-- See the file elisp.texi for copying conditions. -->
-<!-- This node must have no pointers. -->
-   </body></html>
 
+
+<hr>
+<div class="header">
+<p>
+Previous: <a href="Multi_002dfile-Packages.html#Multi_002dfile-Packages" accesskey="p" rel="prev">Multi-file Packages</a>, Up: <a href="Packaging.html#Packaging" accesskey="u" rel="up">Packaging</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

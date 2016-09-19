@@ -1,60 +1,95 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Rmail Rot13 - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Rmail Rot13</title>
+
+<meta name="description" content="GNU Emacs Manual: Rmail Rot13">
+<meta name="keywords" content="GNU Emacs Manual: Rmail Rot13">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Rmail.html#Rmail" title="Rmail">
-<link rel="prev" href="Rmail-Digest.html#Rmail-Digest" title="Rmail Digest">
-<link rel="next" href="Movemail.html#Movemail" title="Movemail">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Rmail.html#Rmail" rel="up" title="Rmail">
+<link href="Movemail.html#Movemail" rel="next" title="Movemail">
+<link href="Rmail-Digest.html#Rmail-Digest" rel="prev" title="Rmail Digest">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Rmail-Rot13"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Movemail.html#Movemail">Movemail</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Rmail-Digest.html#Rmail-Digest">Rmail Digest</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Rmail.html#Rmail">Rmail</a>
-<hr>
+Next: <a href="Movemail.html#Movemail" accesskey="n" rel="next">Movemail</a>, Previous: <a href="Rmail-Digest.html#Rmail-Digest" accesskey="p" rel="prev">Rmail Digest</a>, Up: <a href="Rmail.html#Rmail" accesskey="u" rel="up">Rmail</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Reading-Rot13-Messages"></a>
 <h3 class="section">33.17 Reading Rot13 Messages</h3>
+<a name="index-rot13-code"></a>
 
-<p><a name="index-rot13-code-3969"></a>
-  Mailing list messages that might offend or annoy some readers are sometimes
-encoded in a simple code called <dfn>rot13</dfn>&mdash;so named because it
+<p>Mailing list messages that might offend or annoy some readers are sometimes
+encoded in a simple code called <em>rot13</em>&mdash;so named because it
 rotates the alphabet by 13 letters.  This code is not for secrecy, as it
 provides none; rather, it enables those who wish to to avoid
 seeing the real text of the message.  For example, a review of a film
 might use rot13 to hide important plot points.
-
-   <p><a name="index-rot13_002dother_002dwindow-3970"></a>  To view a buffer that uses the rot13 code, use the command <kbd>M-x
+</p>
+<a name="index-rot13_002dother_002dwindow"></a>
+<p>To view a buffer that uses the rot13 code, use the command <kbd>M-x
 rot13-other-window</kbd>.  This displays the current buffer in another window
 which applies the code when displaying the text.
+</p>
 
-   </body></html>
 
+
+</body>
+</html>

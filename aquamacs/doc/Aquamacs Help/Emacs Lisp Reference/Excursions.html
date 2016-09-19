@@ -1,111 +1,157 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Excursions - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Excursions</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Excursions">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Excursions">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Positions.html#Positions" title="Positions">
-<link rel="prev" href="Motion.html#Motion" title="Motion">
-<link rel="next" href="Narrowing.html#Narrowing" title="Narrowing">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Positions.html#Positions" rel="up" title="Positions">
+<link href="Narrowing.html#Narrowing" rel="next" title="Narrowing">
+<link href="Skipping-Characters.html#Skipping-Characters" rel="prev" title="Skipping Characters">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Excursions"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Narrowing.html#Narrowing">Narrowing</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Motion.html#Motion">Motion</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Positions.html#Positions">Positions</a>
-<hr>
+Next: <a href="Narrowing.html#Narrowing" accesskey="n" rel="next">Narrowing</a>, Previous: <a href="Motion.html#Motion" accesskey="p" rel="prev">Motion</a>, Up: <a href="Positions.html#Positions" accesskey="u" rel="up">Positions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Excursions-1"></a>
 <h3 class="section">29.3 Excursions</h3>
+<a name="index-excursion"></a>
 
-<p><a name="index-excursion-3055"></a>
-  It is often useful to move point temporarily within a localized
-portion of the program.  This is called an <dfn>excursion</dfn>, and it is
+<p>It is often useful to move point temporarily within a localized
+portion of the program.  This is called an <em>excursion</em>, and it is
 done with the <code>save-excursion</code> special form.  This construct
 remembers the initial identity of the current buffer, and its value
 of point, and restores them after the excursion
 completes.  It is the standard way to move point within one part of a
 program and avoid affecting the rest of the program, and is used
 thousands of times in the Lisp sources of Emacs.
-
-   <p>If you only need to save and restore the identity of the current
+</p>
+<p>If you only need to save and restore the identity of the current
 buffer, use <code>save-current-buffer</code> or <code>with-current-buffer</code>
 instead (see <a href="Current-Buffer.html#Current-Buffer">Current Buffer</a>).  If you need to save or restore
-window configurations, see the forms described in <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a> and in <a href="Frame-Configurations.html#Frame-Configurations">Frame Configurations</a>. <!-- frameset? -->
-
-<div class="defun">
-&mdash; Special Form: <b>save-excursion</b><var> body<small class="dots">...</small><a name="index-save_002dexcursion-3056"></a></var><br>
-<blockquote><p><a name="index-point-excursion-3057"></a>This special form saves the identity of the current buffer and the
+window configurations, see the forms described in <a href="Window-Configurations.html#Window-Configurations">Window Configurations</a> and in <a href="Frame-Configurations.html#Frame-Configurations">Frame Configurations</a>. </p>
+<dl>
+<dt><a name="index-save_002dexcursion"></a>Special Form: <strong>save-excursion</strong> <em>body&hellip;</em></dt>
+<dd><a name="index-point-excursion"></a>
+<p>This special form saves the identity of the current buffer and the
 value of point in it, evaluates <var>body</var>, and finally
 restores the buffer and its saved value of point.  Both saved values are
 restored even in case of an abnormal exit via
 <code>throw</code> or error (see <a href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>).
+</p>
+<p>The value returned by <code>save-excursion</code> is the result of the last
+form in <var>body</var>, or <code>nil</code> if no body forms were given.
+</p></dd></dl>
 
-        <p>The value returned by <code>save-excursion</code> is the result of the last
-form in <var>body</var>, or <code>nil</code> if no body forms were given. 
-</p></blockquote></div>
-
-   <p>Because <code>save-excursion</code> only saves point for the
+<p>Because <code>save-excursion</code> only saves point for the
 buffer that was current at the start of the excursion, any changes
 made to point in other buffers, during the excursion, will
 remain in effect afterward.  This frequently leads to unintended
 consequences, so the byte compiler warns if you call <code>set-buffer</code>
 during an excursion:
+</p>
+<div class="example">
+<pre class="example">Warning: Use ‘with-current-buffer’ rather than
+         save-excursion+set-buffer
+</pre></div>
 
-<pre class="example">     Warning: Use ‘with-current-buffer’ rather than
-              save-excursion+set-buffer
-</pre>
-   <p class="noindent">To avoid such problems, you should call <code>save-excursion</code> only
+<p>To avoid such problems, you should call <code>save-excursion</code> only
 after setting the desired current buffer, as in the following example:
+</p>
+<div class="example">
+<pre class="example">(defun append-string-to-buffer (string buffer)
+  &quot;Append STRING to the end of BUFFER.&quot;
+  (with-current-buffer buffer
+    (save-excursion
+      (goto-char (point-max))
+      (insert string))))
+</pre></div>
 
-<pre class="example">     (defun append-string-to-buffer (string buffer)
-       "Append STRING to the end of BUFFER."
-       (with-current-buffer buffer
-         (save-excursion
-           (goto-char (point-max))
-           (insert string))))
-</pre>
-   <p><a name="index-window-excursions-3058"></a>  Likewise, <code>save-excursion</code> does not restore window-buffer
+<a name="index-window-excursions"></a>
+<p>Likewise, <code>save-excursion</code> does not restore window-buffer
 correspondences altered by functions such as <code>switch-to-buffer</code>.
-
-   <p><strong>Warning:</strong> Ordinary insertion of text adjacent to the saved
+</p>
+<p><strong>Warning:</strong> Ordinary insertion of text adjacent to the saved
 point value relocates the saved value, just as it relocates all
 markers.  More precisely, the saved value is a marker with insertion
 type <code>nil</code>.  See <a href="Marker-Insertion-Types.html#Marker-Insertion-Types">Marker Insertion Types</a>.  Therefore, when the
 saved point value is restored, it normally comes before the inserted
 text.
-
-<div class="defun">
-&mdash; Macro: <b>save-mark-and-excursion</b><var> body<small class="dots">...</small><a name="index-save_002dmark_002dand_002dexcursion-3059"></a></var><br>
-<blockquote><p><a name="index-mark-excursion-3060"></a><a name="index-point-excursion-3061"></a>This macro is like <code>save-excursion</code>, but also saves and restores
+</p>
+<dl>
+<dt><a name="index-save_002dmark_002dand_002dexcursion"></a>Macro: <strong>save-mark-and-excursion</strong> <em>body&hellip;</em></dt>
+<dd><a name="index-mark-excursion"></a>
+<a name="index-point-excursion-1"></a>
+<p>This macro is like <code>save-excursion</code>, but also saves and restores
 the mark location and <code>mark-active</code>.  This macro does what
-<code>save-excursion</code> did before Emacs 25.1. 
-</p></blockquote></div>
+<code>save-excursion</code> did before Emacs 25.1.
+</p></dd></dl>
 
-   </body></html>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Narrowing.html#Narrowing" accesskey="n" rel="next">Narrowing</a>, Previous: <a href="Motion.html#Motion" accesskey="p" rel="prev">Motion</a>, Up: <a href="Positions.html#Positions" accesskey="u" rel="up">Positions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
+
+
+</body>
+</html>

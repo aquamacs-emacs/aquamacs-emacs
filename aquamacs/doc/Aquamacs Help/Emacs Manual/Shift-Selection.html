@@ -1,79 +1,113 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Shift Selection - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Shift Selection</title>
+
+<meta name="description" content="GNU Emacs Manual: Shift Selection">
+<meta name="keywords" content="GNU Emacs Manual: Shift Selection">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Mark.html#Mark" title="Mark">
-<link rel="prev" href="Global-Mark-Ring.html#Global-Mark-Ring" title="Global Mark Ring">
-<link rel="next" href="Disabled-Transient-Mark.html#Disabled-Transient-Mark" title="Disabled Transient Mark">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Mark.html#Mark" rel="up" title="Mark">
+<link href="Disabled-Transient-Mark.html#Disabled-Transient-Mark" rel="next" title="Disabled Transient Mark">
+<link href="Global-Mark-Ring.html#Global-Mark-Ring" rel="prev" title="Global Mark Ring">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Shift-Selection"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Disabled-Transient-Mark.html#Disabled-Transient-Mark">Disabled Transient Mark</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Global-Mark-Ring.html#Global-Mark-Ring">Global Mark Ring</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Mark.html#Mark">Mark</a>
-<hr>
+Next: <a href="Disabled-Transient-Mark.html#Disabled-Transient-Mark" accesskey="n" rel="next">Disabled Transient Mark</a>, Previous: <a href="Global-Mark-Ring.html#Global-Mark-Ring" accesskey="p" rel="prev">Global Mark Ring</a>, Up: <a href="Mark.html#Mark" accesskey="u" rel="up">Mark</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Shift-Selection-1"></a>
 <h3 class="section">11.6 Shift Selection</h3>
+<a name="index-shift_002dselection-1"></a>
 
-<p><a name="index-shift_002dselection-394"></a>
-  If you hold down the shift key while typing a cursor motion command,
+<p>If you hold down the shift key while typing a cursor motion command,
 this sets the mark before moving point, so that the region extends
 from the original position of point to its new position.  This feature
-is referred to as <dfn>shift-selection</dfn>.  It is similar to the way
+is referred to as <em>shift-selection</em>.  It is similar to the way
 text is selected in other editors.
-
-   <p>The mark set via shift-selection behaves a little differently from
+</p>
+<p>The mark set via shift-selection behaves a little differently from
 what we have described above.  Firstly, in addition to the usual ways
 of deactivating the mark (such as changing the buffer text or typing
 <kbd>C-g</kbd>), the mark is deactivated by any <em>unshifted</em> cursor
 motion command.  Secondly, any subsequent <em>shifted</em> cursor motion
 command avoids setting the mark anew.  Therefore, a series of shifted
 cursor motion commands will continuously adjust the region.
-
-   <p>Shift-selection only works if the shifted cursor motion key is not
+</p>
+<p>Shift-selection only works if the shifted cursor motion key is not
 already bound to a separate command (see <a href="Customization.html#Customization">Customization</a>).  For
 example, if you bind <kbd>S-C-f</kbd> to another command, typing
 <kbd>S-C-f</kbd> runs that command instead of performing a shift-selected
 version of <kbd>C-f</kbd> (<code>forward-char</code>).
-
-   <p>A mark set via mouse commands behaves the same as a mark set via
+</p>
+<p>A mark set via mouse commands behaves the same as a mark set via
 shift-selection (see <a href="Setting-Mark.html#Setting-Mark">Setting Mark</a>).  For example, if you specify a
 region by dragging the mouse, you can continue to extend the region
 using shifted cursor motion commands.  In either case, any unshifted
 cursor motion command deactivates the mark.
-
-   <p>To turn off shift-selection, set <code>shift-select-mode</code> to
+</p>
+<p>To turn off shift-selection, set <code>shift-select-mode</code> to
 <code>nil</code>.  Doing so does not disable setting the mark via mouse
 commands.
+</p>
 
-   </body></html>
 
+
+</body>
+</html>

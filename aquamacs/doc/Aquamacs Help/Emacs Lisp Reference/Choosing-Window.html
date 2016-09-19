@@ -1,46 +1,77 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Choosing Window - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Choosing Window</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Choosing Window">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Choosing Window">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Windows.html#Windows" title="Windows">
-<link rel="prev" href="Switching-Buffers.html#Switching-Buffers" title="Switching Buffers">
-<link rel="next" href="Display-Action-Functions.html#Display-Action-Functions" title="Display Action Functions">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Windows.html#Windows" rel="up" title="Windows">
+<link href="Display-Action-Functions.html#Display-Action-Functions" rel="next" title="Display Action Functions">
+<link href="Switching-Buffers.html#Switching-Buffers" rel="prev" title="Switching Buffers">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Choosing-Window"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Display-Action-Functions.html#Display-Action-Functions">Display Action Functions</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Switching-Buffers.html#Switching-Buffers">Switching Buffers</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Choosing-Window"></a>
+<div class="header">
+<p>
+Next: <a href="Display-Action-Functions.html#Display-Action-Functions" accesskey="n" rel="next">Display Action Functions</a>, Previous: <a href="Switching-Buffers.html#Switching-Buffers" accesskey="p" rel="prev">Switching Buffers</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Choosing-a-Window-for-Display"></a>
 <h3 class="section">27.13 Choosing a Window for Display</h3>
 
 <p>The command <code>display-buffer</code> flexibly chooses a window for
@@ -48,100 +79,112 @@ display, and displays a specified buffer in that window.  It can be
 called interactively, via the key binding <kbd>C-x 4 C-o</kbd>.  It is also
 used as a subroutine by many functions and commands, including
 <code>switch-to-buffer</code> and <code>pop-to-buffer</code> (see <a href="Switching-Buffers.html#Switching-Buffers">Switching Buffers</a>).
-
-   <p><a name="index-display-action-2550"></a><a name="index-action-function_002c-for-_0040code_007bdisplay_002dbuffer_007d-2551"></a><a name="index-action-alist_002c-for-_0040code_007bdisplay_002dbuffer_007d-2552"></a>  This command performs several complex steps to find a window to
-display in.  These steps are described by means of <dfn>display
-actions</dfn>, which have the form <code>(</code><var>function</var><code> . </code><var>alist</var><code>)</code>. 
+</p>
+<a name="index-display-action"></a>
+<a name="index-action-function_002c-for-display_002dbuffer"></a>
+<a name="index-action-alist_002c-for-display_002dbuffer"></a>
+<p>This command performs several complex steps to find a window to
+display in.  These steps are described by means of <em>display
+actions</em>, which have the form <code>(<var>function</var> . <var>alist</var>)</code>.
 Here, <var>function</var> is either a function or a list of functions,
-which we refer to as <dfn>action functions</dfn>; <var>alist</var> is an
-association list, which we refer to as <dfn>action alists</dfn>.
-
-   <p>An action function accepts two arguments: the buffer to display and
+which we refer to as <em>action functions</em>; <var>alist</var> is an
+association list, which we refer to as an <em>action alist</em>.
+</p>
+<p>An action function accepts two arguments: the buffer to display and
 an action alist.  It attempts to display the buffer in some window,
 picking or creating a window according to its own criteria.  If
-successful, it returns the window; otherwise, it returns <code>nil</code>. 
+successful, it returns the window; otherwise, it returns <code>nil</code>.
 See <a href="Display-Action-Functions.html#Display-Action-Functions">Display Action Functions</a>, for a list of predefined action
 functions.
-
-   <p><code>display-buffer</code> works by combining display actions from
+</p>
+<p><code>display-buffer</code> works by combining display actions from
 several sources, and calling the action functions in turn, until one
 of them manages to display the buffer and returns a non-<code>nil</code>
 value.
-
-<div class="defun">
-&mdash; Command: <b>display-buffer</b><var> buffer-or-name &amp;optional action frame<a name="index-display_002dbuffer-2553"></a></var><br>
-<blockquote><p>This command makes <var>buffer-or-name</var> appear in some window, without
+</p>
+<dl>
+<dt><a name="index-display_002dbuffer"></a>Command: <strong>display-buffer</strong> <em>buffer-or-name &amp;optional action frame</em></dt>
+<dd><p>This command makes <var>buffer-or-name</var> appear in some window, without
 selecting the window or making the buffer current.  The argument
 <var>buffer-or-name</var> must be a buffer or the name of an existing
 buffer.  The return value is the window chosen to display the buffer.
-
-        <p>The optional argument <var>action</var>, if non-<code>nil</code>, should normally
+</p>
+<p>The optional argument <var>action</var>, if non-<code>nil</code>, should normally
 be a display action (described above).  <code>display-buffer</code> builds a
 list of action functions and an action alist, by consolidating display
 actions from the following sources (in order):
+</p>
+<ul>
+<li> The variable <code>display-buffer-overriding-action</code>.
 
-          <ul>
-<li>The variable <code>display-buffer-overriding-action</code>.
+</li><li> The user option <code>display-buffer-alist</code>.
 
-          <li>The user option <code>display-buffer-alist</code>.
+</li><li> The <var>action</var> argument.
 
-          <li>The <var>action</var> argument.
+</li><li> The user option <code>display-buffer-base-action</code>.
 
-          <li>The user option <code>display-buffer-base-action</code>.
+</li><li> The constant <code>display-buffer-fallback-action</code>.
+</li></ul>
 
-          <li>The constant <code>display-buffer-fallback-action</code>. 
-</ul>
-
-     <p class="noindent">Each action function is called in turn, passing the buffer as the
+<p>Each action function is called in turn, passing the buffer as the
 first argument and the combined action alist as the second argument,
 until one of the functions returns non-<code>nil</code>.  The caller can
 pass <code>(allow-no-window . t)</code> as an element of the action alist to
 indicate its readiness to handle the case of not displaying the
 buffer in a window.
-
-        <p>The argument <var>action</var> can also have a non-<code>nil</code>, non-list
+</p>
+<p>The argument <var>action</var> can also have a non-<code>nil</code>, non-list
 value.  This has the special meaning that the buffer should be
 displayed in a window other than the selected one, even if the
 selected window is already displaying it.  If called interactively
 with a prefix argument, <var>action</var> is <code>t</code>.
-
-        <p>The optional argument <var>frame</var>, if non-<code>nil</code>, specifies which
-frames to check when deciding whether the buffer is already displayed. 
+</p>
+<p>The optional argument <var>frame</var>, if non-<code>nil</code>, specifies which
+frames to check when deciding whether the buffer is already displayed.
 It is equivalent to adding an element <code>(reusable-frames
-. </code><var>frame</var><code>)</code> to the action alist of <var>action</var>.  See <a href="Display-Action-Functions.html#Display-Action-Functions">Display Action Functions</a>. 
-</p></blockquote></div>
+. <var>frame</var>)</code> to the action alist of <var>action</var>.  See <a href="Display-Action-Functions.html#Display-Action-Functions">Display Action Functions</a>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Variable: <b>display-buffer-overriding-action</b><var><a name="index-display_002dbuffer_002doverriding_002daction-2554"></a></var><br>
-<blockquote><p>The value of this variable should be a display action, which is
+<dl>
+<dt><a name="index-display_002dbuffer_002doverriding_002daction"></a>Variable: <strong>display-buffer-overriding-action</strong></dt>
+<dd><p>The value of this variable should be a display action, which is
 treated with the highest priority by <code>display-buffer</code>.  The
-default value is empty, i.e., <code>(nil . nil)</code>. 
-</p></blockquote></div>
+default value is empty, i.e., <code>(nil . nil)</code>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; User Option: <b>display-buffer-alist</b><var><a name="index-display_002dbuffer_002dalist-2555"></a></var><br>
-<blockquote><p>The value of this option is an alist mapping conditions to display
+<dl>
+<dt><a name="index-display_002dbuffer_002dalist"></a>User Option: <strong>display-buffer-alist</strong></dt>
+<dd><p>The value of this option is an alist mapping conditions to display
 actions.  Each condition may be either a regular expression matching a
 buffer name or a function that takes two arguments: a buffer name and
 the <var>action</var> argument passed to <code>display-buffer</code>.  If the name
 of the buffer passed to <code>display-buffer</code> either matches a regular
 expression in this alist or the function specified by a condition
 returns non-<code>nil</code>, then <code>display-buffer</code> uses the
-corresponding display action to display the buffer. 
-</p></blockquote></div>
+corresponding display action to display the buffer.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; User Option: <b>display-buffer-base-action</b><var><a name="index-display_002dbuffer_002dbase_002daction-2556"></a></var><br>
-<blockquote><p>The value of this option should be a display action.  This option can
+<dl>
+<dt><a name="index-display_002dbuffer_002dbase_002daction"></a>User Option: <strong>display-buffer-base-action</strong></dt>
+<dd><p>The value of this option should be a display action.  This option can
 be used to define a standard display action for calls to
-<code>display-buffer</code>. 
-</p></blockquote></div>
+<code>display-buffer</code>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Constant: <b>display-buffer-fallback-action</b><var><a name="index-display_002dbuffer_002dfallback_002daction-2557"></a></var><br>
-<blockquote><p>This display action specifies the fallback behavior for
-<code>display-buffer</code> if no other display actions are given. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-display_002dbuffer_002dfallback_002daction"></a>Constant: <strong>display-buffer-fallback-action</strong></dt>
+<dd><p>This display action specifies the fallback behavior for
+<code>display-buffer</code> if no other display actions are given.
+</p></dd></dl>
 
-   </body></html>
 
+<hr>
+<div class="header">
+<p>
+Next: <a href="Display-Action-Functions.html#Display-Action-Functions" accesskey="n" rel="next">Display Action Functions</a>, Previous: <a href="Switching-Buffers.html#Switching-Buffers" accesskey="p" rel="prev">Switching Buffers</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

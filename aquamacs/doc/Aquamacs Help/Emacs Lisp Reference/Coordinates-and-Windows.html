@@ -1,248 +1,313 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Coordinates and Windows - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Coordinates and Windows</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Coordinates and Windows">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Coordinates and Windows">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Windows.html#Windows" title="Windows">
-<link rel="prev" href="Horizontal-Scrolling.html#Horizontal-Scrolling" title="Horizontal Scrolling">
-<link rel="next" href="Window-Configurations.html#Window-Configurations" title="Window Configurations">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Windows.html#Windows" rel="up" title="Windows">
+<link href="Window-Configurations.html#Window-Configurations" rel="next" title="Window Configurations">
+<link href="Horizontal-Scrolling.html#Horizontal-Scrolling" rel="prev" title="Horizontal Scrolling">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Coordinates-and-Windows"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Window-Configurations.html#Window-Configurations">Window Configurations</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Horizontal-Scrolling.html#Horizontal-Scrolling">Horizontal Scrolling</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
-<hr>
+Next: <a href="Window-Configurations.html#Window-Configurations" accesskey="n" rel="next">Window Configurations</a>, Previous: <a href="Horizontal-Scrolling.html#Horizontal-Scrolling" accesskey="p" rel="prev">Horizontal Scrolling</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Coordinates-and-Windows-1"></a>
 <h3 class="section">27.24 Coordinates and Windows</h3>
+<a name="index-frame_002drelative-coordinate"></a>
+<a name="index-coordinate_002c-relative-to-frame"></a>
+<a name="index-window-position-1"></a>
 
-<p><a name="index-frame_002drelative-coordinate-2644"></a><a name="index-coordinate_002c-relative-to-frame-2645"></a><a name="index-window-position-2646"></a>
-This section describes functions that report the position of a window. 
+<p>This section describes functions that report the position of a window.
 Most of these functions report positions relative to an origin at the
-native position of the window's frame (see <a href="Frame-Geometry.html#Frame-Geometry">Frame Geometry</a>).  Some
+native position of the window&rsquo;s frame (see <a href="Frame-Geometry.html#Frame-Geometry">Frame Geometry</a>).  Some
 functions report positions relative to the origin of the display of the
-window's frame.  In any case, the origin has the coordinates (0, 0) and
+window&rsquo;s frame.  In any case, the origin has the coordinates (0, 0) and
 X and Y coordinates increase rightward and downward
 respectively.
-
-   <p>For the following functions, X and Y coordinates are reported in
+</p>
+<p>For the following functions, X and Y coordinates are reported in
 integer character units, i.e., numbers of lines and columns
 respectively.  On a graphical display, each &ldquo;line&rdquo; and &ldquo;column&rdquo;
 corresponds to the height and width of the default character specified by
-the frame's default font (see <a href="Frame-Font.html#Frame-Font">Frame Font</a>).
-
-<div class="defun">
-&mdash; Function: <b>window-edges</b><var> &amp;optional window body absolute pixelwise<a name="index-window_002dedges-2647"></a></var><br>
-<blockquote><p>This function returns a list of the edge coordinates of <var>window</var>. 
+the frame&rsquo;s default font (see <a href="Frame-Font.html#Frame-Font">Frame Font</a>).
+</p>
+<dl>
+<dt><a name="index-window_002dedges"></a>Function: <strong>window-edges</strong> <em>&amp;optional window body absolute pixelwise</em></dt>
+<dd><p>This function returns a list of the edge coordinates of <var>window</var>.
 If <var>window</var> is omitted or <code>nil</code>, it defaults to the selected
 window.
-
-        <p>The return value has the form <code>(</code><var>left</var> <var>top</var> <var>right</var>
-<var>bottom</var><code>)</code>.  These list elements are, respectively, the X
+</p>
+<p>The return value has the form <code>(<var>left</var> <var>top</var> <var>right</var>
+<var>bottom</var>)</code>.  These list elements are, respectively, the X
 coordinate of the leftmost column occupied by the window, the Y
 coordinate of the topmost row, the X coordinate one column to the
 right of the rightmost column, and the Y coordinate one row down from
 the bottommost row.
-
-        <p>Note that these are the actual outer edges of the window, including any
+</p>
+<p>Note that these are the actual outer edges of the window, including any
 header line, mode line, scroll bar, fringes, window divider and display
 margins.  On a text terminal, if the window has a neighbor on its right,
 its right edge includes the separator line between the window and its
 neighbor.
-
-        <p>If the optional argument <var>body</var> is <code>nil</code>, this means to
-return the edges corresponding to the total size of <var>window</var>. 
-<var>body</var> non-<code>nil</code> means to return the edges of <var>window</var>'s
+</p>
+<p>If the optional argument <var>body</var> is <code>nil</code>, this means to
+return the edges corresponding to the total size of <var>window</var>.
+<var>body</var> non-<code>nil</code> means to return the edges of <var>window</var>&rsquo;s
 body (aka text area).  If <var>body</var> is non-<code>nil</code>, <var>window</var>
 must specify a live window.
-
-        <p>If the optional argument <var>absolute</var> is <code>nil</code>, this means to
-return edges relative to the native position of <var>window</var>'s frame. 
+</p>
+<p>If the optional argument <var>absolute</var> is <code>nil</code>, this means to
+return edges relative to the native position of <var>window</var>&rsquo;s frame.
 <var>absolute</var> non-<code>nil</code> means to return coordinates relative to
-the origin (0, 0) of <var>window</var>'s display.  On non-graphical systems
+the origin (0, 0) of <var>window</var>&rsquo;s display.  On non-graphical systems
 this argument has no effect.
-
-        <p>If the optional argument <var>pixelwise</var> is <code>nil</code>, this means to
+</p>
+<p>If the optional argument <var>pixelwise</var> is <code>nil</code>, this means to
 return the coordinates in terms of the default character width and
-height of <var>window</var>'s frame (see <a href="Frame-Font.html#Frame-Font">Frame Font</a>), rounded if
+height of <var>window</var>&rsquo;s frame (see <a href="Frame-Font.html#Frame-Font">Frame Font</a>), rounded if
 necessary.  <var>pixelwise</var> non-<code>nil</code> means to return the
 coordinates in pixels.  Note that the pixel specified by <var>right</var> and
 <var>bottom</var> is immediately outside of these edges.  If <var>absolute</var>
-is non-<code>nil</code>, <var>pixelwise</var> is implicitly non-<code>nil</code> too. 
-</p></blockquote></div>
+is non-<code>nil</code>, <var>pixelwise</var> is implicitly non-<code>nil</code> too.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>window-body-edges</b><var> &amp;optional window<a name="index-window_002dbody_002dedges-2648"></a></var><br>
-<blockquote><p>This function returns the edges of <var>window</var>'s body (see <a href="Window-Sizes.html#Window-Sizes">Window Sizes</a>).  Calling <code>(window-body-edges window)</code> is equivalent to
-calling <code>(window-edges window t)</code>, see above. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-window_002dbody_002dedges"></a>Function: <strong>window-body-edges</strong> <em>&amp;optional window</em></dt>
+<dd><p>This function returns the edges of <var>window</var>&rsquo;s body (see <a href="Window-Sizes.html#Window-Sizes">Window Sizes</a>).  Calling <code>(window-body-edges window)</code> is equivalent to
+calling <code>(window-edges window t)</code>, see above.
+</p></dd></dl>
 
-<!-- The following two functions are confusing and hardly used. -->
-   <p>The following functions can be used to relate a set of
+
+<p>The following functions can be used to relate a set of
 frame-relative coordinates to a window:
-
-<div class="defun">
-&mdash; Function: <b>window-at</b><var> x y &amp;optional frame<a name="index-window_002dat-2649"></a></var><br>
-<blockquote><p>This function returns the live window at the coordinates <var>x</var> and
+</p>
+<dl>
+<dt><a name="index-window_002dat"></a>Function: <strong>window-at</strong> <em>x y &amp;optional frame</em></dt>
+<dd><p>This function returns the live window at the coordinates <var>x</var> and
 <var>y</var> given in default character sizes (see <a href="Frame-Font.html#Frame-Font">Frame Font</a>) relative
 to the native position of <var>frame</var> (see <a href="Frame-Geometry.html#Frame-Geometry">Frame Geometry</a>).
-
-        <p>If there is no window at that position, the return value is <code>nil</code>. 
+</p>
+<p>If there is no window at that position, the return value is <code>nil</code>.
 If <var>frame</var> is omitted or <code>nil</code>, it defaults to the selected
-frame. 
-</p></blockquote></div>
+frame.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>coordinates-in-window-p</b><var> coordinates window<a name="index-coordinates_002din_002dwindow_002dp-2650"></a></var><br>
-<blockquote><p>This function checks whether a window <var>window</var> occupies the frame
+<dl>
+<dt><a name="index-coordinates_002din_002dwindow_002dp"></a>Function: <strong>coordinates-in-window-p</strong> <em>coordinates window</em></dt>
+<dd><p>This function checks whether a window <var>window</var> occupies the frame
 relative coordinates <var>coordinates</var>, and if so, which part of the
 window that is.  <var>window</var> should be a live window.
-
-        <p><var>coordinates</var> should be a cons cell of the form <code>(</code><var>x</var><code>
-. </code><var>y</var><code>)</code>, where <var>x</var> and <var>y</var> are given in default character
+</p>
+<p><var>coordinates</var> should be a cons cell of the form <code>(<var>x</var>
+. <var>y</var>)</code>, where <var>x</var> and <var>y</var> are given in default character
 sizes (see <a href="Frame-Font.html#Frame-Font">Frame Font</a>) relative to the native position of
-<var>window</var>'s frame (see <a href="Frame-Geometry.html#Frame-Geometry">Frame Geometry</a>).
-
-        <p>If there is no window at the specified position, the return value is
+<var>window</var>&rsquo;s frame (see <a href="Frame-Geometry.html#Frame-Geometry">Frame Geometry</a>).
+</p>
+<p>If there is no window at the specified position, the return value is
 <code>nil</code> .  Otherwise, the return value is one of the following:
-
-          <dl>
-<dt><code>(</code><var>relx</var><code> . </code><var>rely</var><code>)</code><dd>The coordinates are inside <var>window</var>.  The numbers <var>relx</var> and
+</p>
+<dl compact="compact">
+<dt><code>(<var>relx</var> . <var>rely</var>)</code></dt>
+<dd><p>The coordinates are inside <var>window</var>.  The numbers <var>relx</var> and
 <var>rely</var> are the equivalent window-relative coordinates for the
 specified position, counting from 0 at the top left corner of the
 window.
-
-          <br><dt><code>mode-line</code><dd>The coordinates are in the mode line of <var>window</var>.
-
-          <br><dt><code>header-line</code><dd>The coordinates are in the header line of <var>window</var>.
-
-          <br><dt><code>right-divider</code><dd>The coordinates are in the divider separating <var>window</var> from a
+</p>
+</dd>
+<dt><code>mode-line</code></dt>
+<dd><p>The coordinates are in the mode line of <var>window</var>.
+</p>
+</dd>
+<dt><code>header-line</code></dt>
+<dd><p>The coordinates are in the header line of <var>window</var>.
+</p>
+</dd>
+<dt><code>right-divider</code></dt>
+<dd><p>The coordinates are in the divider separating <var>window</var> from a
 window on the right.
-
-          <br><dt><code>bottom-divider</code><dd>The coordinates are in the divider separating <var>window</var> from a
+</p>
+</dd>
+<dt><code>bottom-divider</code></dt>
+<dd><p>The coordinates are in the divider separating <var>window</var> from a
 window beneath.
-
-          <br><dt><code>vertical-line</code><dd>The coordinates are in the vertical line between <var>window</var> and its
-neighbor to the right.  This value occurs only if the window doesn't
+</p>
+</dd>
+<dt><code>vertical-line</code></dt>
+<dd><p>The coordinates are in the vertical line between <var>window</var> and its
+neighbor to the right.  This value occurs only if the window doesn&rsquo;t
 have a scroll bar; positions in a scroll bar are considered outside the
 window for these purposes.
-
-          <br><dt><code>left-fringe</code><dt><code>right-fringe</code><dd>The coordinates are in the left or right fringe of the window.
-
-          <br><dt><code>left-margin</code><dt><code>right-margin</code><dd>The coordinates are in the left or right margin of the window.
-
-          <br><dt><code>nil</code><dd>The coordinates are not in any part of <var>window</var>. 
+</p>
+</dd>
+<dt><code>left-fringe</code></dt>
+<dt><code>right-fringe</code></dt>
+<dd><p>The coordinates are in the left or right fringe of the window.
+</p>
+</dd>
+<dt><code>left-margin</code></dt>
+<dt><code>right-margin</code></dt>
+<dd><p>The coordinates are in the left or right margin of the window.
+</p>
+</dd>
+<dt><code>nil</code></dt>
+<dd><p>The coordinates are not in any part of <var>window</var>.
+</p></dd>
 </dl>
 
-        <p>The function <code>coordinates-in-window-p</code> does not require a frame as
-argument because it always uses the frame that <var>window</var> is on. 
-</p></blockquote></div>
+<p>The function <code>coordinates-in-window-p</code> does not require a frame as
+argument because it always uses the frame that <var>window</var> is on.
+</p></dd></dl>
 
-   <p>The following functions return window positions in pixels, rather
+<p>The following functions return window positions in pixels, rather
 than character units.  Though mostly useful on graphical displays,
 they can also be called on text terminals, where the screen area of
 each text character is taken to be one pixel.
-
-<div class="defun">
-&mdash; Function: <b>window-pixel-edges</b><var> &amp;optional window<a name="index-window_002dpixel_002dedges-2651"></a></var><br>
-<blockquote><p>This function returns a list of pixel coordinates for the edges of
+</p>
+<dl>
+<dt><a name="index-window_002dpixel_002dedges"></a>Function: <strong>window-pixel-edges</strong> <em>&amp;optional window</em></dt>
+<dd><p>This function returns a list of pixel coordinates for the edges of
 <var>window</var>.  Calling <code>(window-pixel-edges window)</code> is equivalent
-to calling <code>(window-edges window nil nil t)</code>, see above. 
-</p></blockquote></div>
+to calling <code>(window-edges window nil nil t)</code>, see above.
+</p></dd></dl>
 
-<!-- The following two functions are confusing and hardly used. -->
-<div class="defun">
-&mdash; Function: <b>window-body-pixel-edges</b><var> &amp;optional window<a name="index-window_002dbody_002dpixel_002dedges-2652"></a></var><br>
-<blockquote><p>This function returns the pixel edges of <var>window</var>'s body.  Calling
+
+<dl>
+<dt><a name="index-window_002dbody_002dpixel_002dedges"></a>Function: <strong>window-body-pixel-edges</strong> <em>&amp;optional window</em></dt>
+<dd><p>This function returns the pixel edges of <var>window</var>&rsquo;s body.  Calling
 <code>(window-body-pixel-edges window)</code> is equivalent to calling
-<code>(window-edges window t nil t)</code>, see above. 
-</p></blockquote></div>
+<code>(window-edges window t nil t)</code>, see above.
+</p></dd></dl>
 
-   <p>The following functions return window positions in pixels, relative to
+<p>The following functions return window positions in pixels, relative to
 the origin of the display screen rather than that of the frame:
-
-<div class="defun">
-&mdash; Function: <b>window-absolute-pixel-edges</b><var> &amp;optional window<a name="index-window_002dabsolute_002dpixel_002dedges-2653"></a></var><br>
-<blockquote><p>This function returns the pixel coordinates of <var>WINDOW</var> relative to
-an origin at (0, 0) of the display of <var>window</var>'s frame.  Calling
+</p>
+<dl>
+<dt><a name="index-window_002dabsolute_002dpixel_002dedges"></a>Function: <strong>window-absolute-pixel-edges</strong> <em>&amp;optional window</em></dt>
+<dd><p>This function returns the pixel coordinates of <var>WINDOW</var> relative to
+an origin at (0, 0) of the display of <var>window</var>&rsquo;s frame.  Calling
 <code>(window-absolute-pixel-edges)</code> is equivalent to calling
-<code>(window-edges window nil t t)</code>, see above. 
-</p></blockquote></div>
+<code>(window-edges window nil t t)</code>, see above.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>window-absolute-body-pixel-edges</b><var> &amp;optional window<a name="index-window_002dabsolute_002dbody_002dpixel_002dedges-2654"></a></var><br>
-<blockquote><p>This function returns the pixel coordinates of <var>WINDOW</var>'s body
-relative to an origin at (0, 0) of the display of <var>window</var>'s frame. 
+<dl>
+<dt><a name="index-window_002dabsolute_002dbody_002dpixel_002dedges"></a>Function: <strong>window-absolute-body-pixel-edges</strong> <em>&amp;optional window</em></dt>
+<dd><p>This function returns the pixel coordinates of <var>WINDOW</var>&rsquo;s body
+relative to an origin at (0, 0) of the display of <var>window</var>&rsquo;s frame.
 Calling <code>(window-absolute-body-pixel-edges window)</code> is equivalent
 to calling <code>(window-edges window t t t)</code>, see above.
-
-        <p>Combined with <code>set-mouse-absolute-pixel-position</code>, this function
+</p>
+<p>Combined with <code>set-mouse-absolute-pixel-position</code>, this function
 can be used to move the mouse pointer to an arbitrary buffer position
 visible in some window:
+</p>
+<div class="example">
+<pre class="example">(let ((edges (window-absolute-body-pixel-edges))
+      (position (pos-visible-in-window-p nil nil t)))
+  (set-mouse-absolute-pixel-position
+   (+ (nth 0 edges) (nth 0 position))
+   (+ (nth 1 edges) (nth 1 position))))
+</pre></div>
 
-     <pre class="example">          (let ((edges (window-absolute-body-pixel-edges))
-                (position (pos-visible-in-window-p nil nil t)))
-            (x-set-mouse-absolute-pixel-position
-             (+ (nth 0 edges) (nth 0 position))
-             (+ (nth 1 edges) (nth 1 position))))
-</pre>
-        <p>On a graphical terminal this form &ldquo;warps&rdquo; the mouse cursor to the
-upper left corner of the glyph at the selected window's point.  A
+<p>On a graphical terminal this form &ldquo;warps&rdquo; the mouse cursor to the
+upper left corner of the glyph at the selected window&rsquo;s point.  A
 position calculated this way can be also used to show a tooltip window
-there. 
-</p></blockquote></div>
+there.
+</p></dd></dl>
 
-   <p>The following function returns the screen coordinates of a buffer
+<p>The following function returns the screen coordinates of a buffer
 position visible in a window:
-
-<div class="defun">
-&mdash; Function: <b>window-absolute-pixel-position</b><var> &amp;optional position window<a name="index-window_002dabsolute_002dpixel_002dposition-2655"></a></var><br>
-<blockquote><p>If the buffer position <var>position</var> is visible in window <var>window</var>,
+</p>
+<dl>
+<dt><a name="index-window_002dabsolute_002dpixel_002dposition"></a>Function: <strong>window-absolute-pixel-position</strong> <em>&amp;optional position window</em></dt>
+<dd><p>If the buffer position <var>position</var> is visible in window <var>window</var>,
 this function returns the display coordinates of the upper/left corner
 of the glyph at <var>position</var>.  The return value is a cons of the X-
 and Y-coordinates of that corner, relative to an origin at (0, 0) of
-<var>window</var>'s display.  It returns <code>nil</code> if <var>position</var> is not
+<var>window</var>&rsquo;s display.  It returns <code>nil</code> if <var>position</var> is not
 visible in <var>window</var>.
-
-        <p><var>window</var> must be a live window and defaults to the selected
+</p>
+<p><var>window</var> must be a live window and defaults to the selected
 window.  <var>position</var> defaults to the value of <code>window-point</code>
 of <var>window</var>.
+</p>
+<p>This means that in order to move the mouse pointer to the position of
+point in the selected window, it&rsquo;s sufficient to write:
+</p>
+<div class="example">
+<pre class="example">(let ((position (window-absolute-pixel-position)))
+  (set-mouse-absolute-pixel-position
+   (car position) (cdr position)))
+</pre></div>
+</dd></dl>
 
-        <p>This means that in order to move the mouse pointer to the position of
-point in the selected window, it's sufficient to write:
 
-     <pre class="example">          (let ((position (window-absolute-pixel-position)))
-            (set-mouse-absolute-pixel-position
-             (car position) (cdr position)))
-</pre>
-        </blockquote></div>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Window-Configurations.html#Window-Configurations" accesskey="n" rel="next">Window Configurations</a>, Previous: <a href="Horizontal-Scrolling.html#Horizontal-Scrolling" accesskey="p" rel="prev">Horizontal Scrolling</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

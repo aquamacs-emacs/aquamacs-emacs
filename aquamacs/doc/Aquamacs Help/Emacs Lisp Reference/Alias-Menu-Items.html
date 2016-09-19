@@ -1,69 +1,109 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Alias Menu Items - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Alias Menu Items</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Alias Menu Items">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Alias Menu Items">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Defining-Menus.html#Defining-Menus" title="Defining Menus">
-<link rel="prev" href="Menu-Separators.html#Menu-Separators" title="Menu Separators">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Defining-Menus.html#Defining-Menus" rel="up" title="Defining Menus">
+<link href="Mouse-Menus.html#Mouse-Menus" rel="next" title="Mouse Menus">
+<link href="Menu-Separators.html#Menu-Separators" rel="prev" title="Menu Separators">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Alias-Menu-Items"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Menu-Separators.html#Menu-Separators">Menu Separators</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Defining-Menus.html#Defining-Menus">Defining Menus</a>
-<hr>
-</div>
 
-<h5 class="subsubsection">21.17.1.4 Alias Menu Items</h5>
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Alias-Menu-Items"></a>
+<div class="header">
+<p>
+Previous: <a href="Menu-Separators.html#Menu-Separators" accesskey="p" rel="prev">Menu Separators</a>, Up: <a href="Defining-Menus.html#Defining-Menus" accesskey="u" rel="up">Defining Menus</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Alias-Menu-Items-1"></a>
+<h4 class="subsubsection">21.17.1.4 Alias Menu Items</h4>
 
 <p>Sometimes it is useful to make menu items that use the same
 command but with different enable conditions.  The best way to do this
 in Emacs now is with extended menu items; before that feature existed,
 it could be done by defining alias commands and using them in menu
-items.  Here's an example that makes two aliases for
+items.  Here&rsquo;s an example that makes two aliases for
 <code>read-only-mode</code> and gives them different enable conditions:
+</p>
+<div class="example">
+<pre class="example">(defalias 'make-read-only 'read-only-mode)
+(put 'make-read-only 'menu-enable '(not buffer-read-only))
+(defalias 'make-writable 'read-only-mode)
+(put 'make-writable 'menu-enable 'buffer-read-only)
+</pre></div>
 
-<pre class="example">     (defalias 'make-read-only 'read-only-mode)
-     (put 'make-read-only 'menu-enable '(not buffer-read-only))
-     (defalias 'make-writable 'read-only-mode)
-     (put 'make-writable 'menu-enable 'buffer-read-only)
-</pre>
-   <p>When using aliases in menus, often it is useful to display the
+<p>When using aliases in menus, often it is useful to display the
 equivalent key bindings for the real command name, not the aliases
-(which typically don't have any key bindings except for the menu
+(which typically don&rsquo;t have any key bindings except for the menu
 itself).  To request this, give the alias symbol a non-<code>nil</code>
 <code>menu-alias</code> property.  Thus,
+</p>
+<div class="example">
+<pre class="example">(put 'make-read-only 'menu-alias t)
+(put 'make-writable 'menu-alias t)
+</pre></div>
 
-<pre class="example">     (put 'make-read-only 'menu-alias t)
-     (put 'make-writable 'menu-alias t)
-</pre>
-   <p class="noindent">causes menu items for <code>make-read-only</code> and <code>make-writable</code> to
+<p>causes menu items for <code>make-read-only</code> and <code>make-writable</code> to
 show the keyboard bindings for <code>read-only-mode</code>.
+</p>
 
-   </body></html>
 
+
+</body>
+</html>

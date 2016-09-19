@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Copyright (C) 1995-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being "A GNU Manual",
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled "GNU Free Documentation License".
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>Gnus Manual: Signing and encrypting</title>
+
+<meta name="description" content="Gnus Manual: Signing and encrypting">
+<meta name="keywords" content="Gnus Manual: Signing and encrypting">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Composing-Messages.html#Composing-Messages" rel="up" title="Composing Messages">
+<link href="Select-Methods.html#Select-Methods" rel="next" title="Select Methods">
+<link href="Rejected-Articles.html#Rejected-Articles" rel="prev" title="Rejected Articles">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Signing-and-encrypting"></a>
+<div class="header">
+<p>
+Previous: <a href="Rejected-Articles.html#Rejected-Articles" accesskey="p" rel="prev">Rejected Articles</a>, Up: <a href="Composing-Messages.html#Composing-Messages" accesskey="u" rel="up">Composing Messages</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Signing-and-encrypting-1"></a>
+<h3 class="section">5.9 Signing and encrypting</h3>
+<a name="index-using-gpg-1"></a>
+<a name="index-using-s_002fmime-1"></a>
+<a name="index-using-smime-1"></a>
+
+<p>Gnus can digitally sign and encrypt your messages, using vanilla
+<acronym>PGP</acronym> format or <acronym>PGP/MIME</acronym> or <acronym>S/MIME</acronym>.  For
+decoding such messages, see the <code>mm-verify-option</code> and
+<code>mm-decrypt-option</code> options (see <a href="Security.html#Security">Security</a>).
+</p>
+<a name="index-gnus_002dmessage_002dreplysign"></a>
+<a name="index-gnus_002dmessage_002dreplyencrypt"></a>
+<a name="index-gnus_002dmessage_002dreplysignencrypted"></a>
+<p>Often, you would like to sign replies to people who send you signed
+messages.  Even more often, you might want to encrypt messages which
+are in reply to encrypted messages.  Gnus offers
+<code>gnus-message-replysign</code> to enable the former, and
+<code>gnus-message-replyencrypt</code> for the latter.  In addition, setting
+<code>gnus-message-replysignencrypted</code> (on by default) will sign
+automatically encrypted messages.
+</p>
+<p>Instructing <acronym>MML</acronym> to perform security operations on a
+<acronym>MIME</acronym> part is done using the <kbd>C-c C-m s</kbd> key map for
+signing and the <kbd>C-c C-m c</kbd> key map for encryption, as follows.
+</p>
+<dl compact="compact">
+<dt><kbd>C-c C-m s s</kbd></dt>
+<dd><a name="index-C_002dc-C_002dm-s-s-_0028Message_0029"></a>
+<a name="index-mml_002dsecure_002dmessage_002dsign_002dsmime"></a>
+
+<p>Digitally sign current message using <acronym>S/MIME</acronym>.
+</p>
+</dd>
+<dt><kbd>C-c C-m s o</kbd></dt>
+<dd><a name="index-C_002dc-C_002dm-s-o-_0028Message_0029"></a>
+<a name="index-mml_002dsecure_002dmessage_002dsign_002dpgp"></a>
+
+<p>Digitally sign current message using <acronym>PGP</acronym>.
+</p>
+</dd>
+<dt><kbd>C-c C-m s p</kbd></dt>
+<dd><a name="index-C_002dc-C_002dm-s-p-_0028Message_0029"></a>
+<a name="index-mml_002dsecure_002dmessage_002dsign_002dpgp-1"></a>
+
+<p>Digitally sign current message using <acronym>PGP/MIME</acronym>.
+</p>
+</dd>
+<dt><kbd>C-c C-m c s</kbd></dt>
+<dd><a name="index-C_002dc-C_002dm-c-s-_0028Message_0029"></a>
+<a name="index-mml_002dsecure_002dmessage_002dencrypt_002dsmime"></a>
+
+<p>Digitally encrypt current message using <acronym>S/MIME</acronym>.
+</p>
+</dd>
+<dt><kbd>C-c C-m c o</kbd></dt>
+<dd><a name="index-C_002dc-C_002dm-c-o-_0028Message_0029"></a>
+<a name="index-mml_002dsecure_002dmessage_002dencrypt_002dpgp"></a>
+
+<p>Digitally encrypt current message using <acronym>PGP</acronym>.
+</p>
+</dd>
+<dt><kbd>C-c C-m c p</kbd></dt>
+<dd><a name="index-C_002dc-C_002dm-c-p-_0028Message_0029"></a>
+<a name="index-mml_002dsecure_002dmessage_002dencrypt_002dpgpmime"></a>
+
+<p>Digitally encrypt current message using <acronym>PGP/MIME</acronym>.
+</p>
+</dd>
+<dt><kbd>C-c C-m C-n</kbd></dt>
+<dd><a name="index-C_002dc-C_002dm-C_002dn-_0028Message_0029"></a>
+<a name="index-mml_002dunsecure_002dmessage"></a>
+<p>Remove security related <acronym>MML</acronym> tags from message.
+</p>
+</dd>
+</dl>
+
+<p>See <a href="http://www.gnu.org/software/emacs/manual/html_node/message/Security.html#Security">Security</a> in <cite>Message Manual</cite>, for more information.
+</p>
+
+
+
+</body>
+</html>

@@ -1,69 +1,105 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Multiple Displays - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Multiple Displays</title>
+
+<meta name="description" content="GNU Emacs Manual: Multiple Displays">
+<meta name="keywords" content="GNU Emacs Manual: Multiple Displays">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Frames.html#Frames" title="Frames">
-<link rel="prev" href="Speedbar.html#Speedbar" title="Speedbar">
-<link rel="next" href="Frame-Parameters.html#Frame-Parameters" title="Frame Parameters">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Frames.html#Frames" rel="up" title="Frames">
+<link href="Frame-Parameters.html#Frame-Parameters" rel="next" title="Frame Parameters">
+<link href="Speedbar.html#Speedbar" rel="prev" title="Speedbar">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Multiple-Displays"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Frame-Parameters.html#Frame-Parameters">Frame Parameters</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Speedbar.html#Speedbar">Speedbar</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
-<hr>
+Next: <a href="Frame-Parameters.html#Frame-Parameters" accesskey="n" rel="next">Frame Parameters</a>, Previous: <a href="Speedbar.html#Speedbar" accesskey="p" rel="prev">Speedbar</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Multiple-Displays-1"></a>
 <h3 class="section">21.10 Multiple Displays</h3>
+<a name="index-multiple-displays"></a>
 
-<p><a name="index-multiple-displays-1558"></a>
-  A single Emacs can talk to more than one X display.  Initially, Emacs
-uses just one display&mdash;the one specified with the <samp><span class="env">DISPLAY</span></samp>
-environment variable or with the &lsquo;<samp><span class="samp">--display</span></samp>&rsquo; option (see <a href="Initial-Options.html#Initial-Options">Initial Options</a>).  To connect to another display, use the command
+<p>A single Emacs can talk to more than one X display.  Initially, Emacs
+uses just one display&mdash;the one specified with the <code>DISPLAY</code>
+environment variable or with the &lsquo;<samp>--display</samp>&rsquo; option (see <a href="Initial-Options.html#Initial-Options">Initial Options</a>).  To connect to another display, use the command
 <code>make-frame-on-display</code>:
-
-   <p><a name="index-make_002dframe_002don_002ddisplay-1559"></a>
-     <dl>
-<dt><kbd>M-x make-frame-on-display &lt;RET&gt; </kbd><var>display</var><kbd> &lt;RET&gt;</kbd><dd>Create a new frame on display <var>display</var>. 
+</p>
+<a name="index-make_002dframe_002don_002ddisplay"></a>
+<dl compact="compact">
+<dt><kbd>M-x make-frame-on-display <span class="key">RET</span> <var>display</var> <span class="key">RET</span></kbd></dt>
+<dd><p>Create a new frame on display <var>display</var>.
+</p></dd>
 </dl>
 
-   <p>A single X server can handle more than one screen.  When you open
+<p>A single X server can handle more than one screen.  When you open
 frames on two screens belonging to one server, Emacs knows they share a
 single keyboard, and it treats all the commands arriving from these
 screens as a single stream of input.
-
-   <p>When you open frames on different X servers, Emacs makes a separate
+</p>
+<p>When you open frames on different X servers, Emacs makes a separate
 input stream for each server.  Each server also has its own selected
 frame.  The commands you enter with a particular X server apply to
-that server's selected frame.
+that server&rsquo;s selected frame.
+</p>
 
-   </body></html>
 
+
+</body>
+</html>

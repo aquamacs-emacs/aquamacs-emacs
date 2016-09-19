@@ -1,76 +1,108 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Completion Variables - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Completion Variables</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Completion Variables">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Completion Variables">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Completion.html#Completion" title="Completion">
-<link rel="prev" href="Reading-File-Names.html#Reading-File-Names" title="Reading File Names">
-<link rel="next" href="Programmed-Completion.html#Programmed-Completion" title="Programmed Completion">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Completion.html#Completion" rel="up" title="Completion">
+<link href="Programmed-Completion.html#Programmed-Completion" rel="next" title="Programmed Completion">
+<link href="Reading-File-Names.html#Reading-File-Names" rel="prev" title="Reading File Names">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Completion-Variables"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Programmed-Completion.html#Programmed-Completion">Programmed Completion</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Reading-File-Names.html#Reading-File-Names">Reading File Names</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Completion.html#Completion">Completion</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Completion-Variables"></a>
+<div class="header">
+<p>
+Next: <a href="Programmed-Completion.html#Programmed-Completion" accesskey="n" rel="next">Programmed Completion</a>, Previous: <a href="Reading-File-Names.html#Reading-File-Names" accesskey="p" rel="prev">Reading File Names</a>, Up: <a href="Completion.html#Completion" accesskey="u" rel="up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Completion-Variables-1"></a>
 <h4 class="subsection">19.6.6 Completion Variables</h4>
 
 <p>Here are some variables that can be used to alter the default
 completion behavior.
-
-   <p><a name="index-completion-styles-1347"></a>
-
-<div class="defun">
-&mdash; User Option: <b>completion-styles</b><var><a name="index-completion_002dstyles-1348"></a></var><br>
-<blockquote><p>The value of this variable is a list of completion style (symbols) to
-use for performing completion.  A <dfn>completion style</dfn> is a set of
+</p>
+<a name="index-completion-styles"></a>
+<dl>
+<dt><a name="index-completion_002dstyles"></a>User Option: <strong>completion-styles</strong></dt>
+<dd><p>The value of this variable is a list of completion style (symbols) to
+use for performing completion.  A <em>completion style</em> is a set of
 rules for generating completions.  Each symbol occurring this list
-must have a corresponding entry in <code>completion-styles-alist</code>. 
-</p></blockquote></div>
+must have a corresponding entry in <code>completion-styles-alist</code>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Variable: <b>completion-styles-alist</b><var><a name="index-completion_002dstyles_002dalist-1349"></a></var><br>
-<blockquote><p>This variable stores a list of available completion styles.  Each
+<dl>
+<dt><a name="index-completion_002dstyles_002dalist"></a>Variable: <strong>completion-styles-alist</strong></dt>
+<dd><p>This variable stores a list of available completion styles.  Each
 element in the list has the form
+</p>
+<div class="example">
+<pre class="example">(<var>style</var> <var>try-completion</var> <var>all-completions</var> <var>doc</var>)
+</pre></div>
 
-     <pre class="example">          (<var>style</var> <var>try-completion</var> <var>all-completions</var> <var>doc</var>)
-</pre>
-        <p class="noindent">Here, <var>style</var> is the name of the completion style (a symbol),
+<p>Here, <var>style</var> is the name of the completion style (a symbol),
 which may be used in the <code>completion-styles</code> variable to refer to
 this style; <var>try-completion</var> is the function that does the
 completion; <var>all-completions</var> is the function that lists the
 completions; and <var>doc</var> is a string describing the completion
 style.
-
-        <p>The <var>try-completion</var> and <var>all-completions</var> functions should
+</p>
+<p>The <var>try-completion</var> and <var>all-completions</var> functions should
 each accept four arguments: <var>string</var>, <var>collection</var>,
 <var>predicate</var>, and <var>point</var>.  The <var>string</var>, <var>collection</var>,
 and <var>predicate</var> arguments have the same meanings as in
@@ -79,8 +111,8 @@ argument is the position of point within <var>string</var>.  Each function
 should return a non-<code>nil</code> value if it performed its job, and
 <code>nil</code> if it did not (e.g., if there is no way to complete
 <var>string</var> according to the completion style).
-
-        <p>When the user calls a completion command like
+</p>
+<p>When the user calls a completion command like
 <code>minibuffer-complete</code> (see <a href="Completion-Commands.html#Completion-Commands">Completion Commands</a>), Emacs looks
 for the first style listed in <code>completion-styles</code> and calls its
 <var>try-completion</var> function.  If this function returns <code>nil</code>,
@@ -89,58 +121,74 @@ Emacs moves to the next listed completion style and calls its
 <var>try-completion</var> functions successfully performs completion and
 returns a non-<code>nil</code> value.  A similar procedure is used for
 listing completions, via the <var>all-completions</var> functions.
+</p>
+<p>See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Completion-Styles.html#Completion-Styles">Completion Styles</a> in <cite>The GNU Emacs Manual</cite>, for a
+description of the available completion styles.
+</p></dd></dl>
 
-        <p>See <a href="../emacs/Completion-Styles.html#Completion-Styles">Completion Styles</a>, for a
-description of the available completion styles. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; User Option: <b>completion-category-overrides</b><var><a name="index-completion_002dcategory_002doverrides-1350"></a></var><br>
-<blockquote><p>This variable specifies special completion styles and other completion
+<dl>
+<dt><a name="index-completion_002dcategory_002doverrides"></a>User Option: <strong>completion-category-overrides</strong></dt>
+<dd><p>This variable specifies special completion styles and other completion
 behaviors to use when completing certain types of text.  Its value
-should be an alist with elements of the form <code>(</code><var>category</var><code>
-. </code><var>alist</var><code>)</code>.  <var>category</var> is a symbol describing what is being
+should be an alist with elements of the form <code>(<var>category</var>
+. <var>alist</var>)</code>.  <var>category</var> is a symbol describing what is being
 completed; currently, the <code>buffer</code>, <code>file</code>, and
 <code>unicode-name</code> categories are defined, but others can be defined
-via specialized completion functions (see <a href="Programmed-Completion.html#Programmed-Completion">Programmed Completion</a>). 
+via specialized completion functions (see <a href="Programmed-Completion.html#Programmed-Completion">Programmed Completion</a>).
 <var>alist</var> is an association list describing how completion should
 behave for the corresponding category.  The following alist keys are
 supported:
-
-          <dl>
-<dt><code>styles</code><dd>The value should be a list of completion styles (symbols).
-
-          <br><dt><code>cycle</code><dd>The value should be a value for <code>completion-cycle-threshold</code>
-(see <a href="../emacs/Completion-Options.html#Completion-Options">Completion Options</a>) for this
-category. 
+</p>
+<dl compact="compact">
+<dt><code>styles</code></dt>
+<dd><p>The value should be a list of completion styles (symbols).
+</p>
+</dd>
+<dt><code>cycle</code></dt>
+<dd><p>The value should be a value for <code>completion-cycle-threshold</code>
+(see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Completion-Options.html#Completion-Options">Completion Options</a> in <cite>The GNU Emacs Manual</cite>) for this
+category.
+</p></dd>
 </dl>
 
-     <p class="noindent">Additional alist entries may be defined in the future. 
-</p></blockquote></div>
+<p>Additional alist entries may be defined in the future.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Variable: <b>completion-extra-properties</b><var><a name="index-completion_002dextra_002dproperties-1351"></a></var><br>
-<blockquote><p>This variable is used to specify extra properties of the current
+<dl>
+<dt><a name="index-completion_002dextra_002dproperties"></a>Variable: <strong>completion-extra-properties</strong></dt>
+<dd><p>This variable is used to specify extra properties of the current
 completion command.  It is intended to be let-bound by specialized
 completion commands.  Its value should be a list of property and value
 pairs.  The following properties are supported:
-
-          <dl>
-<dt><code>:annotation-function</code><dd>The value should be a function to add annotations in the completions
+</p>
+<dl compact="compact">
+<dt><code>:annotation-function</code></dt>
+<dd><p>The value should be a function to add annotations in the completions
 buffer.  This function must accept one argument, a completion, and
 should either return <code>nil</code> or a string to be displayed next to
 the completion.
-
-          <br><dt><code>:exit-function</code><dd>The value should be a function to run after performing completion. 
+</p>
+</dd>
+<dt><code>:exit-function</code></dt>
+<dd><p>The value should be a function to run after performing completion.
 The function should accept two arguments, <var>string</var> and
 <var>status</var>, where <var>string</var> is the text to which the field was
 completed, and <var>status</var> indicates what kind of operation happened:
 <code>finished</code> if text is now complete, <code>sole</code> if the text
 cannot be further completed but completion is not finished, or
 <code>exact</code> if the text is a valid completion but may be further
-completed. 
+completed.
+</p></dd>
 </dl>
-        </p></blockquote></div>
+</dd></dl>
 
-   </body></html>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Programmed-Completion.html#Programmed-Completion" accesskey="n" rel="next">Programmed Completion</a>, Previous: <a href="Reading-File-Names.html#Reading-File-Names" accesskey="p" rel="prev">Reading File Names</a>, Up: <a href="Completion.html#Completion" accesskey="u" rel="up">Completion</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
+
+
+</body>
+</html>

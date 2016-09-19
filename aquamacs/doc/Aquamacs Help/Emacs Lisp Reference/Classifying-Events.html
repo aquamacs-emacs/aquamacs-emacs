@@ -1,156 +1,200 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Classifying Events - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Classifying Events</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Classifying Events">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Classifying Events">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Input-Events.html#Input-Events" title="Input Events">
-<link rel="prev" href="Event-Examples.html#Event-Examples" title="Event Examples">
-<link rel="next" href="Accessing-Mouse.html#Accessing-Mouse" title="Accessing Mouse">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Input-Events.html#Input-Events" rel="up" title="Input Events">
+<link href="Accessing-Mouse.html#Accessing-Mouse" rel="next" title="Accessing Mouse">
+<link href="Event-Examples.html#Event-Examples" rel="prev" title="Event Examples">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Classifying-Events"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Accessing-Mouse.html#Accessing-Mouse">Accessing Mouse</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Event-Examples.html#Event-Examples">Event Examples</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Input-Events.html#Input-Events">Input Events</a>
-<hr>
+Next: <a href="Accessing-Mouse.html#Accessing-Mouse" accesskey="n" rel="next">Accessing Mouse</a>, Previous: <a href="Event-Examples.html#Event-Examples" accesskey="p" rel="prev">Event Examples</a>, Up: <a href="Input-Events.html#Input-Events" accesskey="u" rel="up">Input Events</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Classifying-Events-1"></a>
 <h4 class="subsection">20.7.12 Classifying Events</h4>
+<a name="index-event-type"></a>
+<a name="index-classifying-events"></a>
 
-<p><a name="index-event-type-1514"></a><a name="index-classifying-events-1515"></a>
-  Every event has an <dfn>event type</dfn>, which classifies the event for
+<p>Every event has an <em>event type</em>, which classifies the event for
 key binding purposes.  For a keyboard event, the event type equals the
 event value; thus, the event type for a character is the character, and
 the event type for a function key symbol is the symbol itself.  For
-events that are lists, the event type is the symbol in the <span class="sc">car</span> of
+events that are lists, the event type is the symbol in the <small>CAR</small> of
 the list.  Thus, the event type is always a symbol or a character.
-
-   <p>Two events of the same type are equivalent where key bindings are
+</p>
+<p>Two events of the same type are equivalent where key bindings are
 concerned; thus, they always run the same command.  That does not
 necessarily mean they do the same things, however, as some commands look
 at the whole event to decide what to do.  For example, some commands use
 the location of a mouse event to decide where in the buffer to act.
-
-   <p>Sometimes broader classifications of events are useful.  For example,
-you might want to ask whether an event involved the &lt;META&gt; key,
+</p>
+<p>Sometimes broader classifications of events are useful.  For example,
+you might want to ask whether an event involved the <tt class="key">META</tt> key,
 regardless of which other key or mouse button was used.
-
-   <p>The functions <code>event-modifiers</code> and <code>event-basic-type</code> are
+</p>
+<p>The functions <code>event-modifiers</code> and <code>event-basic-type</code> are
 provided to get such information conveniently.
-
-<div class="defun">
-&mdash; Function: <b>event-modifiers</b><var> event<a name="index-event_002dmodifiers-1516"></a></var><br>
-<blockquote><p>This function returns a list of the modifiers that <var>event</var> has.  The
+</p>
+<dl>
+<dt><a name="index-event_002dmodifiers"></a>Function: <strong>event-modifiers</strong> <em>event</em></dt>
+<dd><p>This function returns a list of the modifiers that <var>event</var> has.  The
 modifiers are symbols; they include <code>shift</code>, <code>control</code>,
 <code>meta</code>, <code>alt</code>, <code>hyper</code> and <code>super</code>.  In addition,
 the modifiers list of a mouse event symbol always contains one of
 <code>click</code>, <code>drag</code>, and <code>down</code>.  For double or triple
 events, it also contains <code>double</code> or <code>triple</code>.
-
-        <p>The argument <var>event</var> may be an entire event object, or just an
+</p>
+<p>The argument <var>event</var> may be an entire event object, or just an
 event type.  If <var>event</var> is a symbol that has never been used in an
 event that has been read as input in the current Emacs session, then
 <code>event-modifiers</code> can return <code>nil</code>, even when <var>event</var>
 actually has modifiers.
+</p>
+<p>Here are some examples:
+</p>
+<div class="example">
+<pre class="example">(event-modifiers ?a)
+     &rArr; nil
+(event-modifiers ?A)
+     &rArr; (shift)
+(event-modifiers ?\C-a)
+     &rArr; (control)
+(event-modifiers ?\C-%)
+     &rArr; (control)
+(event-modifiers ?\C-\S-a)
+     &rArr; (control shift)
+(event-modifiers 'f5)
+     &rArr; nil
+(event-modifiers 's-f5)
+     &rArr; (super)
+(event-modifiers 'M-S-f5)
+     &rArr; (meta shift)
+(event-modifiers 'mouse-1)
+     &rArr; (click)
+(event-modifiers 'down-mouse-1)
+     &rArr; (down)
+</pre></div>
 
-        <p>Here are some examples:
+<p>The modifiers list for a click event explicitly contains <code>click</code>,
+but the event symbol name itself does not contain &lsquo;<samp>click</samp>&rsquo;.
+</p></dd></dl>
 
-     <pre class="example">          (event-modifiers ?a)
-               &rArr; nil
-          (event-modifiers ?A)
-               &rArr; (shift)
-          (event-modifiers ?\C-a)
-               &rArr; (control)
-          (event-modifiers ?\C-%)
-               &rArr; (control)
-          (event-modifiers ?\C-\S-a)
-               &rArr; (control shift)
-          (event-modifiers 'f5)
-               &rArr; nil
-          (event-modifiers 's-f5)
-               &rArr; (super)
-          (event-modifiers 'M-S-f5)
-               &rArr; (meta shift)
-          (event-modifiers 'mouse-1)
-               &rArr; (click)
-          (event-modifiers 'down-mouse-1)
-               &rArr; (down)
-</pre>
-        <p>The modifiers list for a click event explicitly contains <code>click</code>,
-but the event symbol name itself does not contain &lsquo;<samp><span class="samp">click</span></samp>&rsquo;. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>event-basic-type</b><var> event<a name="index-event_002dbasic_002dtype-1517"></a></var><br>
-<blockquote><p>This function returns the key or mouse button that <var>event</var>
+<dl>
+<dt><a name="index-event_002dbasic_002dtype"></a>Function: <strong>event-basic-type</strong> <em>event</em></dt>
+<dd><p>This function returns the key or mouse button that <var>event</var>
 describes, with all modifiers removed.  The <var>event</var> argument is as
 in <code>event-modifiers</code>.  For example:
+</p>
+<div class="example">
+<pre class="example">(event-basic-type ?a)
+     &rArr; 97
+(event-basic-type ?A)
+     &rArr; 97
+(event-basic-type ?\C-a)
+     &rArr; 97
+(event-basic-type ?\C-\S-a)
+     &rArr; 97
+(event-basic-type 'f5)
+     &rArr; f5
+(event-basic-type 's-f5)
+     &rArr; f5
+(event-basic-type 'M-S-f5)
+     &rArr; f5
+(event-basic-type 'down-mouse-1)
+     &rArr; mouse-1
+</pre></div>
+</dd></dl>
 
-     <pre class="example">          (event-basic-type ?a)
-               &rArr; 97
-          (event-basic-type ?A)
-               &rArr; 97
-          (event-basic-type ?\C-a)
-               &rArr; 97
-          (event-basic-type ?\C-\S-a)
-               &rArr; 97
-          (event-basic-type 'f5)
-               &rArr; f5
-          (event-basic-type 's-f5)
-               &rArr; f5
-          (event-basic-type 'M-S-f5)
-               &rArr; f5
-          (event-basic-type 'down-mouse-1)
-               &rArr; mouse-1
-</pre>
-        </blockquote></div>
+<dl>
+<dt><a name="index-mouse_002dmovement_002dp"></a>Function: <strong>mouse-movement-p</strong> <em>object</em></dt>
+<dd><p>This function returns non-<code>nil</code> if <var>object</var> is a mouse movement
+event.  See <a href="Motion-Events.html#Motion-Events">Motion Events</a>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>mouse-movement-p</b><var> object<a name="index-mouse_002dmovement_002dp-1518"></a></var><br>
-<blockquote><p>This function returns non-<code>nil</code> if <var>object</var> is a mouse movement
-event. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>event-convert-list</b><var> list<a name="index-event_002dconvert_002dlist-1519"></a></var><br>
-<blockquote><p>This function converts a list of modifier names and a basic event type
+<dl>
+<dt><a name="index-event_002dconvert_002dlist"></a>Function: <strong>event-convert-list</strong> <em>list</em></dt>
+<dd><p>This function converts a list of modifier names and a basic event type
 to an event type which specifies all of them.  The basic event type
 must be the last element of the list.  For example,
+</p>
+<div class="example">
+<pre class="example">(event-convert-list '(control ?a))
+     &rArr; 1
+(event-convert-list '(control meta ?a))
+     &rArr; -134217727
+(event-convert-list '(control super f1))
+     &rArr; C-s-f1
+</pre></div>
+</dd></dl>
 
-     <pre class="example">          (event-convert-list '(control ?a))
-               &rArr; 1
-          (event-convert-list '(control meta ?a))
-               &rArr; -134217727
-          (event-convert-list '(control super f1))
-               &rArr; C-s-f1
-</pre>
-        </blockquote></div>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Accessing-Mouse.html#Accessing-Mouse" accesskey="n" rel="next">Accessing Mouse</a>, Previous: <a href="Event-Examples.html#Event-Examples" accesskey="p" rel="prev">Event Examples</a>, Up: <a href="Input-Events.html#Input-Events" accesskey="u" rel="up">Input Events</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

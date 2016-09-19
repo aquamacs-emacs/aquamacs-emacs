@@ -1,142 +1,188 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Creating Markers - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Creating Markers</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Creating Markers">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Creating Markers">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Markers.html#Markers" title="Markers">
-<link rel="prev" href="Predicates-on-Markers.html#Predicates-on-Markers" title="Predicates on Markers">
-<link rel="next" href="Information-from-Markers.html#Information-from-Markers" title="Information from Markers">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Markers.html#Markers" rel="up" title="Markers">
+<link href="Information-from-Markers.html#Information-from-Markers" rel="next" title="Information from Markers">
+<link href="Predicates-on-Markers.html#Predicates-on-Markers" rel="prev" title="Predicates on Markers">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Creating-Markers"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Information-from-Markers.html#Information-from-Markers">Information from Markers</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Predicates-on-Markers.html#Predicates-on-Markers">Predicates on Markers</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Markers.html#Markers">Markers</a>
-<hr>
+Next: <a href="Information-from-Markers.html#Information-from-Markers" accesskey="n" rel="next">Information from Markers</a>, Previous: <a href="Predicates-on-Markers.html#Predicates-on-Markers" accesskey="p" rel="prev">Predicates on Markers</a>, Up: <a href="Markers.html#Markers" accesskey="u" rel="up">Markers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Functions-that-Create-Markers"></a>
 <h3 class="section">30.3 Functions that Create Markers</h3>
+<a name="index-creating-markers"></a>
+<a name="index-marker-creation"></a>
 
-<p><a name="index-creating-markers-3080"></a><a name="index-marker-creation-3081"></a>
-  When you create a new marker, you can make it point nowhere, or point
+<p>When you create a new marker, you can make it point nowhere, or point
 to the present position of point, or to the beginning or end of the
 accessible portion of the buffer, or to the same place as another given
 marker.
-
-   <p>The next four functions all return markers with insertion type
+</p>
+<p>The next four functions all return markers with insertion type
 <code>nil</code>.  See <a href="Marker-Insertion-Types.html#Marker-Insertion-Types">Marker Insertion Types</a>.
-
-<div class="defun">
-&mdash; Function: <b>make-marker</b><var><a name="index-make_002dmarker-3082"></a></var><br>
-<blockquote><p>This function returns a newly created marker that does not point
+</p>
+<dl>
+<dt><a name="index-make_002dmarker"></a>Function: <strong>make-marker</strong></dt>
+<dd><p>This function returns a newly created marker that does not point
 anywhere.
+</p>
+<div class="example">
+<pre class="example">(make-marker)
+     &rArr; #&lt;marker in no buffer&gt;
+</pre></div>
+</dd></dl>
 
-     <pre class="example">          (make-marker)
-               &rArr; #&lt;marker in no buffer&gt;
-</pre>
-        </blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>point-marker</b><var><a name="index-point_002dmarker-3083"></a></var><br>
-<blockquote><p>This function returns a new marker that points to the present position
+<dl>
+<dt><a name="index-point_002dmarker"></a>Function: <strong>point-marker</strong></dt>
+<dd><p>This function returns a new marker that points to the present position
 of point in the current buffer.  See <a href="Point.html#Point">Point</a>.  For an example, see
-<code>copy-marker</code>, below. 
-</p></blockquote></div>
+<code>copy-marker</code>, below.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>point-min-marker</b><var><a name="index-point_002dmin_002dmarker-3084"></a></var><br>
-<blockquote><p>This function returns a new marker that points to the beginning of the
+<dl>
+<dt><a name="index-point_002dmin_002dmarker"></a>Function: <strong>point-min-marker</strong></dt>
+<dd><p>This function returns a new marker that points to the beginning of the
 accessible portion of the buffer.  This will be the beginning of the
-buffer unless narrowing is in effect.  See <a href="Narrowing.html#Narrowing">Narrowing</a>. 
-</p></blockquote></div>
+buffer unless narrowing is in effect.  See <a href="Narrowing.html#Narrowing">Narrowing</a>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>point-max-marker</b><var><a name="index-point_002dmax_002dmarker-3085"></a></var><br>
-<blockquote><p>This function returns a new marker that points to the end of the
+<dl>
+<dt><a name="index-point_002dmax_002dmarker"></a>Function: <strong>point-max-marker</strong></dt>
+<dd><p>This function returns a new marker that points to the end of the
 accessible portion of the buffer.  This will be the end of the buffer
 unless narrowing is in effect.  See <a href="Narrowing.html#Narrowing">Narrowing</a>.
-
-        <p>Here are examples of this function and <code>point-min-marker</code>, shown in
+</p>
+<p>Here are examples of this function and <code>point-min-marker</code>, shown in
 a buffer containing a version of the source file for the text of this
 chapter.
+</p>
+<div class="example">
+<pre class="example">(point-min-marker)
+     &rArr; #&lt;marker at 1 in markers.texi&gt;
+(point-max-marker)
+     &rArr; #&lt;marker at 24080 in markers.texi&gt;
+</pre><pre class="example">
+</pre><pre class="example">(narrow-to-region 100 200)
+     &rArr; nil
+</pre><pre class="example">(point-min-marker)
+     &rArr; #&lt;marker at 100 in markers.texi&gt;
+</pre><pre class="example">(point-max-marker)
+     &rArr; #&lt;marker at 200 in markers.texi&gt;
+</pre></div>
+</dd></dl>
 
-     <pre class="example">          (point-min-marker)
-               &rArr; #&lt;marker at 1 in markers.texi&gt;
-          (point-max-marker)
-               &rArr; #&lt;marker at 24080 in markers.texi&gt;
-          
-          (narrow-to-region 100 200)
-               &rArr; nil
-          (point-min-marker)
-               &rArr; #&lt;marker at 100 in markers.texi&gt;
-          (point-max-marker)
-               &rArr; #&lt;marker at 200 in markers.texi&gt;
-</pre>
-        </blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>copy-marker</b><var> &amp;optional marker-or-integer insertion-type<a name="index-copy_002dmarker-3086"></a></var><br>
-<blockquote><p>If passed a marker as its argument, <code>copy-marker</code> returns a
+<dl>
+<dt><a name="index-copy_002dmarker"></a>Function: <strong>copy-marker</strong> <em>&amp;optional marker-or-integer insertion-type</em></dt>
+<dd><p>If passed a marker as its argument, <code>copy-marker</code> returns a
 new marker that points to the same place and the same buffer as does
 <var>marker-or-integer</var>.  If passed an integer as its argument,
 <code>copy-marker</code> returns a new marker that points to position
 <var>marker-or-integer</var> in the current buffer.
-
-        <p>The new marker's insertion type is specified by the argument
+</p>
+<p>The new marker&rsquo;s insertion type is specified by the argument
 <var>insertion-type</var>.  See <a href="Marker-Insertion-Types.html#Marker-Insertion-Types">Marker Insertion Types</a>.
+</p>
 
-     <!-- This behavior used to be documented until 2013/08. -->
-     <pre class="example">          (copy-marker 0)
-               &rArr; #&lt;marker at 1 in markers.texi&gt;
-          
-          (copy-marker 90000)
-               &rArr; #&lt;marker at 24080 in markers.texi&gt;
-</pre>
-        <p>An error is signaled if <var>marker</var> is neither a marker nor an
-integer. 
-</p></blockquote></div>
+<div class="example">
+<pre class="example">(copy-marker 0)
+     &rArr; #&lt;marker at 1 in markers.texi&gt;
+</pre><pre class="example">
+</pre><pre class="example">(copy-marker 90000)
+     &rArr; #&lt;marker at 24080 in markers.texi&gt;
+</pre></div>
 
-   <p>Two distinct markers are considered <code>equal</code> (even though not
+<p>An error is signaled if <var>marker</var> is neither a marker nor an
+integer.
+</p></dd></dl>
+
+<p>Two distinct markers are considered <code>equal</code> (even though not
 <code>eq</code>) to each other if they have the same position and buffer, or
 if they both point nowhere.
+</p>
+<div class="example">
+<pre class="example">(setq p (point-marker))
+     &rArr; #&lt;marker at 2139 in markers.texi&gt;
+</pre><pre class="example">
+</pre><pre class="example">(setq q (copy-marker p))
+     &rArr; #&lt;marker at 2139 in markers.texi&gt;
+</pre><pre class="example">
+</pre><pre class="example">(eq p q)
+     &rArr; nil
+</pre><pre class="example">
+</pre><pre class="example">(equal p q)
+     &rArr; t
+</pre></div>
 
-<pre class="example">     (setq p (point-marker))
-          &rArr; #&lt;marker at 2139 in markers.texi&gt;
-     
-     (setq q (copy-marker p))
-          &rArr; #&lt;marker at 2139 in markers.texi&gt;
-     
-     (eq p q)
-          &rArr; nil
-     
-     (equal p q)
-          &rArr; t
-</pre>
-   </body></html>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Information-from-Markers.html#Information-from-Markers" accesskey="n" rel="next">Information from Markers</a>, Previous: <a href="Predicates-on-Markers.html#Predicates-on-Markers" accesskey="p" rel="prev">Predicates on Markers</a>, Up: <a href="Markers.html#Markers" accesskey="u" rel="up">Markers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
+
+
+</body>
+</html>

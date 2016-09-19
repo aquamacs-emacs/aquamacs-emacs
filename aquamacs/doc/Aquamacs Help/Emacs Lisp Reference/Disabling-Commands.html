@@ -1,101 +1,145 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Disabling Commands - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Disabling Commands</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Disabling Commands">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Disabling Commands">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Command-Loop.html#Command-Loop" title="Command Loop">
-<link rel="prev" href="Recursive-Editing.html#Recursive-Editing" title="Recursive Editing">
-<link rel="next" href="Command-History.html#Command-History" title="Command History">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Command-Loop.html#Command-Loop" rel="up" title="Command Loop">
+<link href="Command-History.html#Command-History" rel="next" title="Command History">
+<link href="Recursive-Editing.html#Recursive-Editing" rel="prev" title="Recursive Editing">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Disabling-Commands"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Command-History.html#Command-History">Command History</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Command-Loop.html#Command-Loop">Command Loop</a>
-<hr>
+Next: <a href="Command-History.html#Command-History" accesskey="n" rel="next">Command History</a>, Previous: <a href="Recursive-Editing.html#Recursive-Editing" accesskey="p" rel="prev">Recursive Editing</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Disabling-Commands-1"></a>
 <h3 class="section">20.14 Disabling Commands</h3>
+<a name="index-disabled-command"></a>
 
-<p><a name="index-disabled-command-1634"></a>
-  <dfn>Disabling a command</dfn> marks the command as requiring user
+<p><em>Disabling a command</em> marks the command as requiring user
 confirmation before it can be executed.  Disabling is used for commands
 which might be confusing to beginning users, to prevent them from using
 the commands by accident.
-
-   <p><a name="index-disabled-1635"></a>  The low-level mechanism for disabling a command is to put a
+</p>
+<a name="index-disabled"></a>
+<p>The low-level mechanism for disabling a command is to put a
 non-<code>nil</code> <code>disabled</code> property on the Lisp symbol for the
-command.  These properties are normally set up by the user's
+command.  These properties are normally set up by the user&rsquo;s
 init file (see <a href="Init-File.html#Init-File">Init File</a>) with Lisp expressions such as this:
+</p>
+<div class="example">
+<pre class="example">(put 'upcase-region 'disabled t)
+</pre></div>
 
-<pre class="example">     (put 'upcase-region 'disabled t)
-</pre>
-   <p class="noindent">For a few commands, these properties are present by default (you can
+<p>For a few commands, these properties are present by default (you can
 remove them in your init file if you wish).
-
-   <p>If the value of the <code>disabled</code> property is a string, the message
+</p>
+<p>If the value of the <code>disabled</code> property is a string, the message
 saying the command is disabled includes that string.  For example:
+</p>
+<div class="example">
+<pre class="example">(put 'delete-region 'disabled
+     &quot;Text deleted this way cannot be yanked back!\n&quot;)
+</pre></div>
 
-<pre class="example">     (put 'delete-region 'disabled
-          "Text deleted this way cannot be yanked back!\n")
-</pre>
-   <p>See <a href="../emacs/Disabling.html#Disabling">Disabling</a>, for the details on
-what happens when a disabled command is invoked interactively. 
+<p>See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Disabling.html#Disabling">Disabling</a> in <cite>The GNU Emacs Manual</cite>, for the details on
+what happens when a disabled command is invoked interactively.
 Disabling a command has no effect on calling it as a function from Lisp
 programs.
+</p>
+<dl>
+<dt><a name="index-enable_002dcommand"></a>Command: <strong>enable-command</strong> <em>command</em></dt>
+<dd><p>Allow <var>command</var> (a symbol) to be executed without special
+confirmation from now on, and alter the user&rsquo;s init file (see <a href="Init-File.html#Init-File">Init File</a>) so that this will apply to future sessions.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Command: <b>enable-command</b><var> command<a name="index-enable_002dcommand-1636"></a></var><br>
-<blockquote><p>Allow <var>command</var> (a symbol) to be executed without special
-confirmation from now on, and alter the user's init file (see <a href="Init-File.html#Init-File">Init File</a>) so that this will apply to future sessions. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-disable_002dcommand"></a>Command: <strong>disable-command</strong> <em>command</em></dt>
+<dd><p>Require special confirmation to execute <var>command</var> from now on, and
+alter the user&rsquo;s init file so that this will apply to future sessions.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Command: <b>disable-command</b><var> command<a name="index-disable_002dcommand-1637"></a></var><br>
-<blockquote><p>Require special confirmation to execute <var>command</var> from now on, and
-alter the user's init file so that this will apply to future sessions. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Variable: <b>disabled-command-function</b><var><a name="index-disabled_002dcommand_002dfunction-1638"></a></var><br>
-<blockquote><p>The value of this variable should be a function.  When the user
+<dl>
+<dt><a name="index-disabled_002dcommand_002dfunction"></a>Variable: <strong>disabled-command-function</strong></dt>
+<dd><p>The value of this variable should be a function.  When the user
 invokes a disabled command interactively, this function is called
 instead of the disabled command.  It can use <code>this-command-keys</code>
 to determine what the user typed to run the command, and thus find the
 command itself.
-
-        <p>The value may also be <code>nil</code>.  Then all commands work normally,
+</p>
+<p>The value may also be <code>nil</code>.  Then all commands work normally,
 even disabled ones.
+</p>
+<p>By default, the value is a function that asks the user whether to
+proceed.
+</p></dd></dl>
 
-        <p>By default, the value is a function that asks the user whether to
-proceed. 
-</p></blockquote></div>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Command-History.html#Command-History" accesskey="n" rel="next">Command History</a>, Previous: <a href="Recursive-Editing.html#Recursive-Editing" accesskey="p" rel="prev">Recursive Editing</a>, Up: <a href="Command-Loop.html#Command-Loop" accesskey="u" rel="up">Command Loop</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

@@ -1,71 +1,110 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Abbrev Concepts - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Abbrev Concepts</title>
+
+<meta name="description" content="GNU Emacs Manual: Abbrev Concepts">
+<meta name="keywords" content="GNU Emacs Manual: Abbrev Concepts">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Abbrevs.html#Abbrevs" title="Abbrevs">
-<link rel="next" href="Defining-Abbrevs.html#Defining-Abbrevs" title="Defining Abbrevs">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Abbrevs.html#Abbrevs" rel="up" title="Abbrevs">
+<link href="Defining-Abbrevs.html#Defining-Abbrevs" rel="next" title="Defining Abbrevs">
+<link href="Abbrevs.html#Abbrevs" rel="prev" title="Abbrevs">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Abbrev-Concepts"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Defining-Abbrevs.html#Defining-Abbrevs">Defining Abbrevs</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Abbrevs.html#Abbrevs">Abbrevs</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Abbrev-Concepts"></a>
+<div class="header">
+<p>
+Next: <a href="Defining-Abbrevs.html#Defining-Abbrevs" accesskey="n" rel="next">Defining Abbrevs</a>, Up: <a href="Abbrevs.html#Abbrevs" accesskey="u" rel="up">Abbrevs</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Abbrev-Concepts-1"></a>
 <h3 class="section">29.1 Abbrev Concepts</h3>
 
-<p>An <dfn>abbrev</dfn> is a word that has been defined to <dfn>expand</dfn> into
-a specified <dfn>expansion</dfn>.  When you insert a word-separator character
+<p>An <em>abbrev</em> is a word that has been defined to <em>expand</em> into
+a specified <em>expansion</em>.  When you insert a word-separator character
 following the abbrev, that expands the abbrev&mdash;replacing the abbrev
-with its expansion.  For example, if &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; is defined as an abbrev
-expanding to &lsquo;<samp><span class="samp">find outer otter</span></samp>&rsquo;, then typing <kbd>f o o .</kbd> will
-insert &lsquo;<samp><span class="samp">find outer otter.</span></samp>&rsquo;.
-
-   <p><a name="index-abbrev_002dmode-3069"></a><a name="index-Abbrev-mode-3070"></a><a name="index-mode_002c-Abbrev-3071"></a>  Abbrevs expand only when Abbrev mode, a buffer-local minor mode, is
+with its expansion.  For example, if &lsquo;<samp>foo</samp>&rsquo; is defined as an abbrev
+expanding to &lsquo;<samp>find outer otter</samp>&rsquo;, then typing <kbd>f o o .</kbd> will
+insert &lsquo;<samp>find outer otter.</samp>&rsquo;.
+</p>
+<a name="index-abbrev_002dmode"></a>
+<a name="index-Abbrev-mode"></a>
+<a name="index-mode_002c-Abbrev"></a>
+<p>Abbrevs expand only when Abbrev mode, a buffer-local minor mode, is
 enabled.  Disabling Abbrev mode does not cause abbrev definitions to
 be forgotten, but they do not expand until Abbrev mode is enabled
 again.  The command <kbd>M-x abbrev-mode</kbd> toggles Abbrev mode; with a
 numeric argument, it turns Abbrev mode on if the argument is positive,
 off otherwise.  See <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>.
-
-   <p>Abbrevs can have <dfn>mode-specific</dfn> definitions, active only in one major
-mode.  Abbrevs can also have <dfn>global</dfn> definitions that are active in
+</p>
+<p>Abbrevs can have <em>mode-specific</em> definitions, active only in one major
+mode.  Abbrevs can also have <em>global</em> definitions that are active in
 all major modes.  The same abbrev can have a global definition and various
 mode-specific definitions for different major modes.  A mode-specific
 definition for the current major mode overrides a global definition.
-
-   <p>You can define abbrevs interactively during the editing session,
+</p>
+<p>You can define abbrevs interactively during the editing session,
 irrespective of whether Abbrev mode is enabled.  You can also save
 lists of abbrev definitions in files, which you can the reload for use
 in later sessions.
+</p>
 
-   </body></html>
 
+
+</body>
+</html>

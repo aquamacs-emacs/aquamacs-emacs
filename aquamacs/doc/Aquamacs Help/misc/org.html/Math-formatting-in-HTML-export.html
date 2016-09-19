@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This manual is for Org version 8.2.9.
+
+Copyright (C) 2004-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being "A GNU Manual,"
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>The Org Manual: Math formatting in HTML export</title>
+
+<meta name="description" content="The Org Manual: Math formatting in HTML export">
+<meta name="keywords" content="The Org Manual: Math formatting in HTML export">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="HTML-export.html#HTML-export" rel="up" title="HTML export">
+<link href="Text-areas-in-HTML-export.html#Text-areas-in-HTML-export" rel="next" title="Text areas in HTML export">
+<link href="Images-in-HTML-export.html#Images-in-HTML-export" rel="prev" title="Images in HTML export">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Math-formatting-in-HTML-export"></a>
+<div class="header">
+<p>
+Next: <a href="Text-areas-in-HTML-export.html#Text-areas-in-HTML-export" accesskey="n" rel="next">Text areas in HTML export</a>, Previous: <a href="Images-in-HTML-export.html#Images-in-HTML-export" accesskey="p" rel="prev">Images in HTML export</a>, Up: <a href="HTML-export.html#HTML-export" accesskey="u" rel="up">HTML export</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Math-formatting-in-HTML-export-1"></a>
+<h4 class="subsection">12.6.8 Math formatting in HTML export</h4>
+<a name="index-MathJax"></a>
+<a name="index-dvipng"></a>
+<a name="index-imagemagick"></a>
+
+<p>LaTeX math snippets (see <a href="LaTeX-fragments.html#LaTeX-fragments">LaTeX fragments</a>) can be displayed in two
+different ways on HTML pages.  The default is to use the
+<a href="http://www.mathjax.org">MathJax system</a> which should work out of the
+box with Org mode installation because <a href="http://orgmode.org">http://orgmode.org</a> serves
+<samp>MathJax</samp> for Org mode users for small applications and for testing
+purposes.  <b>If you plan to use this regularly or on pages with significant
+page views, you should install<a name="DOCF139" href="#FOOT139"><sup>139</sup></a> MathJax on
+your own server in order to limit the load of our server.</b>  To configure
+<samp>MathJax</samp>, use the variable <code>org-html-mathjax-options</code> or
+insert something like the following into the buffer:
+</p>
+<div class="example">
+<pre class="example">#+HTML_MATHJAX: align:&quot;left&quot; mathml:t path:&quot;/MathJax/MathJax.js&quot;
+</pre></div>
+
+<p>See the docstring of the variable
+<code>org-html-mathjax-options</code> for the meaning of the parameters in
+this line.
+</p>
+<p>If you prefer, you can also request that LaTeX fragments are processed
+into small images that will be inserted into the browser page.  Before the
+availability of MathJax, this was the default method for Org files.  This
+method requires that the <samp>dvipng</samp> program or <samp>imagemagick</samp> suite is
+available on your system.  You can still get this processing with
+</p>
+<div class="example">
+<pre class="example">#+OPTIONS: tex:dvipng
+</pre></div>
+
+<p>or:
+</p>
+<div class="example">
+<pre class="example">#+OPTIONS: tex:imagemagick
+</pre></div>
+
+<div class="footnote">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h3><a name="FOOT139" href="#DOCF139">(139)</a></h3>
+<p>Installation instructions can be
+found on the MathJax website, see
+<a href="http://www.mathjax.org/resources/docs/?installation.html">http://www.mathjax.org/resources/docs/?installation.html</a>.</p>
+</div>
+
+
+
+</body>
+</html>

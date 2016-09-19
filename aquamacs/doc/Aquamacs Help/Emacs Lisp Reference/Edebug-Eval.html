@@ -1,72 +1,112 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Edebug Eval - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Edebug Eval</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Edebug Eval">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Edebug Eval">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Edebug.html#Edebug" title="Edebug">
-<link rel="prev" href="Edebug-Views.html#Edebug-Views" title="Edebug Views">
-<link rel="next" href="Eval-List.html#Eval-List" title="Eval List">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Edebug.html#Edebug" rel="up" title="Edebug">
+<link href="Eval-List.html#Eval-List" rel="next" title="Eval List">
+<link href="Edebug-Views.html#Edebug-Views" rel="prev" title="Edebug Views">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Edebug-Eval"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Eval-List.html#Eval-List">Eval List</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Edebug-Views.html#Edebug-Views">Edebug Views</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Edebug.html#Edebug">Edebug</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Edebug-Eval"></a>
+<div class="header">
+<p>
+Next: <a href="Eval-List.html#Eval-List" accesskey="n" rel="next">Eval List</a>, Previous: <a href="Edebug-Views.html#Edebug-Views" accesskey="p" rel="prev">Edebug Views</a>, Up: <a href="Edebug.html#Edebug" accesskey="u" rel="up">Edebug</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Evaluation-2"></a>
 <h4 class="subsection">17.2.9 Evaluation</h4>
 
 <p>While within Edebug, you can evaluate expressions as if Edebug
-were not running.  Edebug tries to be invisible to the expression's
+were not running.  Edebug tries to be invisible to the expression&rsquo;s
 evaluation and printing.  Evaluation of expressions that cause side
 effects will work as expected, except for changes to data that Edebug
 explicitly saves and restores.  See <a href="The-Outside-Context.html#The-Outside-Context">The Outside Context</a>, for details
 on this process.
-
-     <dl>
-<dt><kbd>e </kbd><var>exp</var><kbd> &lt;RET&gt;</kbd><dd>Evaluate expression <var>exp</var> in the context outside of Edebug
+</p>
+<dl compact="compact">
+<dt><kbd>e <var>exp</var> <span class="key">RET</span></kbd></dt>
+<dd><p>Evaluate expression <var>exp</var> in the context outside of Edebug
 (<code>edebug-eval-expression</code>).  That is, Edebug tries to minimize its
 interference with the evaluation.
-
-     <br><dt><kbd>M-: </kbd><var>exp</var><kbd> &lt;RET&gt;</kbd><dd>Evaluate expression <var>exp</var> in the context of Edebug itself
+</p>
+</dd>
+<dt><kbd>M-: <var>exp</var> <span class="key">RET</span></kbd></dt>
+<dd><p>Evaluate expression <var>exp</var> in the context of Edebug itself
 (<code>eval-expression</code>).
-
-     <br><dt><kbd>C-x C-e</kbd><dd>Evaluate the expression before point, in the context outside of Edebug
-(<code>edebug-eval-last-sexp</code>). 
+</p>
+</dd>
+<dt><kbd>C-x C-e</kbd></dt>
+<dd><p>Evaluate the expression before point, in the context outside of Edebug
+(<code>edebug-eval-last-sexp</code>).
+</p></dd>
 </dl>
 
-   <p><a name="index-lexical-binding-_0028Edebug_0029-1136"></a>  Edebug supports evaluation of expressions containing references to
+<a name="index-lexical-binding-_0028Edebug_0029"></a>
+<p>Edebug supports evaluation of expressions containing references to
 lexically bound symbols created by the following constructs in
-<samp><span class="file">cl.el</span></samp>: <code>lexical-let</code>, <code>macrolet</code>, and
-<code>symbol-macrolet</code>. 
-<!-- FIXME?  What about lexical-binding = t? -->
+<samp>cl.el</samp>: <code>lexical-let</code>, <code>macrolet</code>, and
+<code>symbol-macrolet</code>.
+</p>
 
-   </body></html>
 
+
+</body>
+</html>

@@ -1,78 +1,116 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>File Name Coding - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: File Name Coding</title>
+
+<meta name="description" content="GNU Emacs Manual: File Name Coding">
+<meta name="keywords" content="GNU Emacs Manual: File Name Coding">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="International.html#International" title="International">
-<link rel="prev" href="Communication-Coding.html#Communication-Coding" title="Communication Coding">
-<link rel="next" href="Terminal-Coding.html#Terminal-Coding" title="Terminal Coding">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="International.html#International" rel="up" title="International">
+<link href="Terminal-Coding.html#Terminal-Coding" rel="next" title="Terminal Coding">
+<link href="Communication-Coding.html#Communication-Coding" rel="prev" title="Communication Coding">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="File-Name-Coding"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Terminal-Coding.html#Terminal-Coding">Terminal Coding</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Communication-Coding.html#Communication-Coding">Communication Coding</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="International.html#International">International</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="File-Name-Coding"></a>
+<div class="header">
+<p>
+Next: <a href="Terminal-Coding.html#Terminal-Coding" accesskey="n" rel="next">Terminal Coding</a>, Previous: <a href="Communication-Coding.html#Communication-Coding" accesskey="p" rel="prev">Communication Coding</a>, Up: <a href="International.html#International" accesskey="u" rel="up">International</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Coding-Systems-for-File-Names"></a>
 <h3 class="section">22.11 Coding Systems for File Names</h3>
 
-     <dl>
-<dt><kbd>C-x &lt;RET&gt; F </kbd><var>coding</var><kbd> &lt;RET&gt;</kbd><dd>Use coding system <var>coding</var> for encoding and decoding file
-names (<code>set-file-name-coding-system</code>). 
+<dl compact="compact">
+<dt><kbd>C-x <span class="key">RET</span> F <var>coding</var> <span class="key">RET</span></kbd></dt>
+<dd><p>Use coding system <var>coding</var> for encoding and decoding file
+names (<code>set-file-name-coding-system</code>).
+</p></dd>
 </dl>
 
-   <p><a name="index-set_002dfile_002dname_002dcoding_002dsystem-1785"></a><a name="index-C_002dx-_0040key_007bRET_007d-F-1786"></a><a name="index-file-names-with-non_002d_0040acronym_007bASCII_007d-characters-1787"></a>  The command <kbd>C-x &lt;RET&gt; F</kbd> (<code>set-file-name-coding-system</code>)
+<a name="index-set_002dfile_002dname_002dcoding_002dsystem"></a>
+<a name="index-C_002dx-RET-F"></a>
+<a name="index-file-names-with-non_002dASCII-characters"></a>
+<p>The command <kbd>C-x <span class="key">RET</span> F</kbd> (<code>set-file-name-coding-system</code>)
 specifies a coding system to use for encoding file <em>names</em>.  It
 has no effect on reading and writing the <em>contents</em> of files.
-
-   <p><a name="index-file_002dname_002dcoding_002dsystem-1788"></a>  In fact, all this command does is set the value of the variable
+</p>
+<a name="index-file_002dname_002dcoding_002dsystem"></a>
+<p>In fact, all this command does is set the value of the variable
 <code>file-name-coding-system</code>.  If you set the variable to a coding
 system name (as a Lisp symbol or a string), Emacs encodes file names
 using that coding system for all file operations.  This makes it
 possible to use non-<acronym>ASCII</acronym> characters in file names&mdash;or, at
 least, those non-<acronym>ASCII</acronym> characters that the specified coding
 system can encode.
-
-   <p>If <code>file-name-coding-system</code> is <code>nil</code>, Emacs uses a
+</p>
+<p>If <code>file-name-coding-system</code> is <code>nil</code>, Emacs uses a
 default coding system determined by the selected language environment,
-and stored in the <code>default-file-name-coding-system</code> variable. 
-<!-- FIXME?  Is this correct?  What is the "default language environment"? -->
+and stored in the <code>default-file-name-coding-system</code> variable.
 In the default language environment, non-<acronym>ASCII</acronym> characters in
 file names are not encoded specially; they appear in the file system
 using the internal Emacs representation.
-
-   <p><a name="index-file_002dname-encoding_002c-MS_002dWindows-1789"></a><a name="index-w32_002dunicode_002dfilenames-1790"></a>  When Emacs runs on MS-Windows versions that are descendants of the
+</p>
+<a name="index-file_002dname-encoding_002c-MS_002dWindows"></a>
+<a name="index-w32_002dunicode_002dfilenames"></a>
+<p>When Emacs runs on MS-Windows versions that are descendants of the
 NT family (Windows 2000, XP, Vista, Windows 7, and Windows 8), the
 value of <code>file-name-coding-system</code> is largely ignored, as Emacs
-by default uses APIs that allow to pass Unicode file names directly. 
+by default uses APIs that allow passing Unicode file names directly.
 By contrast, on Windows 9X, file names are encoded using
 <code>file-name-coding-system</code>, which should be set to the codepage
 (see <a href="Coding-Systems.html#Coding-Systems">codepage</a>) pertinent for the current system
@@ -81,8 +119,8 @@ controls whether Emacs uses the Unicode APIs when it calls OS
 functions that accept file names.  This variable is set by the startup
 code to <code>nil</code> on Windows 9X, and to <code>t</code> on newer versions of
 MS-Windows.
-
-   <p><strong>Warning:</strong> if you change <code>file-name-coding-system</code> (or the
+</p>
+<p><strong>Warning:</strong> if you change <code>file-name-coding-system</code> (or the
 language environment) in the middle of an Emacs session, problems can
 result if you have already visited files whose names were encoded using
 the earlier coding system and cannot be encoded (or are encoded
@@ -90,11 +128,20 @@ differently) under the new coding system.  If you try to save one of
 these buffers under the visited file name, saving may use the wrong file
 name, or it may encounter an error.  If such a problem happens, use <kbd>C-x
 C-w</kbd> to specify a new file name for that buffer.
-
-   <p><a name="index-recode_002dfile_002dname-1791"></a>  If a mistake occurs when encoding a file name, use the command
-<kbd>M-x recode-file-name</kbd> to change the file name's coding
+</p>
+<a name="index-recode_002dfile_002dname"></a>
+<p>If a mistake occurs when encoding a file name, use the command
+<kbd>M-x recode-file-name</kbd> to change the file name&rsquo;s coding
 system.  This prompts for an existing file name, its old coding
 system, and the coding system to which you wish to convert.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Terminal-Coding.html#Terminal-Coding" accesskey="n" rel="next">Terminal Coding</a>, Previous: <a href="Communication-Coding.html#Communication-Coding" accesskey="p" rel="prev">Communication Coding</a>, Up: <a href="International.html#International" accesskey="u" rel="up">International</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

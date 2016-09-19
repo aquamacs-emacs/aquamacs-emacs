@@ -1,77 +1,108 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Variables - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Variables</title>
+
+<meta name="description" content="GNU Emacs Manual: Variables">
+<meta name="keywords" content="GNU Emacs Manual: Variables">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Customization.html#Customization" title="Customization">
-<link rel="prev" href="Easy-Customization.html#Easy-Customization" title="Easy Customization">
-<link rel="next" href="Key-Bindings.html#Key-Bindings" title="Key Bindings">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Customization.html#Customization" rel="up" title="Customization">
+<link href="Examining.html#Examining" rel="next" title="Examining">
+<link href="Creating-Custom-Themes.html#Creating-Custom-Themes" rel="prev" title="Creating Custom Themes">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Variables"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Key-Bindings.html#Key-Bindings">Key Bindings</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Easy-Customization.html#Easy-Customization">Easy Customization</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Customization.html#Customization">Customization</a>
-<hr>
+Next: <a href="Key-Bindings.html#Key-Bindings" accesskey="n" rel="next">Key Bindings</a>, Previous: <a href="Easy-Customization.html#Easy-Customization" accesskey="p" rel="prev">Easy Customization</a>, Up: <a href="Customization.html#Customization" accesskey="u" rel="up">Customization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
+<hr>
+<a name="Variables-1"></a>
+<h3 class="section">51.2 Variables</h3>
+<a name="index-variable"></a>
 
-<h3 class="section">49.2 Variables</h3>
-
-<p><a name="index-variable-4518"></a>
-  A <dfn>variable</dfn> is a Lisp symbol which has a value.  The symbol's
-name is also called the <dfn>variable name</dfn>.  A variable name can
+<p>A <em>variable</em> is a Lisp symbol which has a value.  The symbol&rsquo;s
+name is also called the <em>variable name</em>.  A variable name can
 contain any characters that can appear in a file, but most variable
 names consist of ordinary words separated by hyphens.
-
-   <p>The name of the variable serves as a compact description of its
-role.  Most variables also have a <dfn>documentation string</dfn>, which
-describes what the variable's purpose is, what kind of value it should
+</p>
+<p>The name of the variable serves as a compact description of its
+role.  Most variables also have a <em>documentation string</em>, which
+describes what the variable&rsquo;s purpose is, what kind of value it should
 have, and how the value will be used.  You can view this documentation
-using the help command <kbd>C-h v</kbd> (<code>describe-variable</code>). 
+using the help command <kbd>C-h v</kbd> (<code>describe-variable</code>).
 See <a href="Examining.html#Examining">Examining</a>.
-
-   <p>Emacs uses many Lisp variables for internal record keeping, but the
+</p>
+<p>Emacs uses many Lisp variables for internal record keeping, but the
 most interesting variables for a non-programmer user are those meant
-for users to change&mdash;these are called <dfn>customizable variables</dfn> or
-<dfn>user options</dfn> (see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>).  In the following
+for users to change&mdash;these are called <em>customizable variables</em> or
+<em>user options</em> (see <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>).  In the following
 sections, we will describe other aspects of Emacs variables, such as
 how to set them outside Customize.
-
-   <p>Emacs Lisp allows any variable (with a few exceptions) to have any
+</p>
+<p>Emacs Lisp allows any variable (with a few exceptions) to have any
 kind of value.  However, many variables are meaningful only if
 assigned values of a certain type.  For example, only numbers are
 meaningful values for <code>kill-ring-max</code>, which specifies the
 maximum length of the kill ring (see <a href="Earlier-Kills.html#Earlier-Kills">Earlier Kills</a>); if you give
 <code>kill-ring-max</code> a string value, commands such as <kbd>C-y</kbd>
 (<code>yank</code>) will signal an error.  On the other hand, some variables
-don't care about type; for instance, if a variable has one effect for
+don&rsquo;t care about type; for instance, if a variable has one effect for
 <code>nil</code> values and another effect for non-<code>nil</code> values,
 then any value that is not the symbol <code>nil</code> induces the second
 effect, regardless of its type (by convention, we usually use the
@@ -80,17 +111,30 @@ non-<code>nil</code> value).  If you set a variable using the customization
 buffer, you need not worry about giving it an invalid type: the
 customization buffer usually only allows you to enter meaningful
 values.  When in doubt, use <kbd>C-h v</kbd> (<code>describe-variable</code>) to
-check the variable's documentation string to see kind of value it
+check the variable&rsquo;s documentation string to see kind of value it
 expects (see <a href="Examining.html#Examining">Examining</a>).
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Examining.html#Examining" accesskey="1">Examining</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Examining or setting one variable&rsquo;s value.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Hooks.html#Hooks" accesskey="2">Hooks</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Hook variables let you specify programs for parts
+                          of Emacs to run on particular occasions.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Locals.html#Locals" accesskey="3">Locals</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Per-buffer values of variables.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="File-Variables.html#File-Variables" accesskey="4">File Variables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How files can specify variable values.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Directory-Variables.html#Directory-Variables" accesskey="5">Directory Variables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How variable values can be specified by directory.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Examining.html#Examining">Examining</a>:            Examining or setting one variable's value. 
-<li><a accesskey="2" href="Hooks.html#Hooks">Hooks</a>:                Hook variables let you specify programs for parts
-                          of Emacs to run on particular occasions. 
-<li><a accesskey="3" href="Locals.html#Locals">Locals</a>:               Per-buffer values of variables. 
-<li><a accesskey="4" href="File-Variables.html#File-Variables">File Variables</a>:       How files can specify variable values. 
-<li><a accesskey="5" href="Directory-Variables.html#Directory-Variables">Directory Variables</a>:  How variable values can be specified by directory. 
-</ul>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Key-Bindings.html#Key-Bindings" accesskey="n" rel="next">Key Bindings</a>, Previous: <a href="Easy-Customization.html#Easy-Customization" accesskey="p" rel="prev">Easy Customization</a>, Up: <a href="Customization.html#Customization" accesskey="u" rel="up">Customization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

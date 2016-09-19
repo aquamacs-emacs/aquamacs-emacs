@@ -1,107 +1,143 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Keyboard Macro Step-Edit - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Keyboard Macro Step-Edit</title>
+
+<meta name="description" content="GNU Emacs Manual: Keyboard Macro Step-Edit">
+<meta name="keywords" content="GNU Emacs Manual: Keyboard Macro Step-Edit">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Keyboard-Macros.html#Keyboard-Macros" title="Keyboard Macros">
-<link rel="prev" href="Edit-Keyboard-Macro.html#Edit-Keyboard-Macro" title="Edit Keyboard Macro">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Keyboard-Macros.html#Keyboard-Macros" rel="up" title="Keyboard Macros">
+<link href="Files.html#Files" rel="next" title="Files">
+<link href="Edit-Keyboard-Macro.html#Edit-Keyboard-Macro" rel="prev" title="Edit Keyboard Macro">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Keyboard-Macro-Step-Edit"></a>
-<a name="Keyboard-Macro-Step_002dEdit"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Edit-Keyboard-Macro.html#Edit-Keyboard-Macro">Edit Keyboard Macro</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Keyboard-Macro-Step_002dEdit"></a>
+<div class="header">
+<p>
+Previous: <a href="Edit-Keyboard-Macro.html#Edit-Keyboard-Macro" accesskey="p" rel="prev">Edit Keyboard Macro</a>, Up: <a href="Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel="up">Keyboard Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Stepwise-Editing-a-Keyboard-Macro"></a>
 <h3 class="section">17.7 Stepwise Editing a Keyboard Macro</h3>
 
-<p><a name="index-kmacro_002dstep_002dedit_002dmacro-1044"></a><a name="index-C_002dx-C_002dk-SPC-1045"></a>  You can interactively replay and edit the last keyboard
-macro, one command at a time, by typing <kbd>C-x C-k &lt;SPC&gt;</kbd>
+<a name="index-kmacro_002dstep_002dedit_002dmacro"></a>
+<a name="index-C_002dx-C_002dk-SPC"></a>
+<p>You can interactively replay and edit the last keyboard
+macro, one command at a time, by typing <kbd>C-x C-k <span class="key">SPC</span></kbd>
 (<code>kmacro-step-edit-macro</code>).  Unless you quit the macro using
 <kbd>q</kbd> or <kbd>C-g</kbd>, the edited macro replaces the last macro on the
 macro ring.
-
-   <p>This macro editing feature shows the last macro in the minibuffer
+</p>
+<p>This macro editing feature shows the last macro in the minibuffer
 together with the first (or next) command to be executed, and prompts
 you for an action.  You can enter <kbd>?</kbd> to get a summary of your
 options.  These actions are available:
-
-     <ul>
-<li>&lt;SPC&gt; and <kbd>y</kbd> execute the current command, and advance to the
-next command in the keyboard macro. 
-<li><kbd>n</kbd>, <kbd>d</kbd>, and &lt;DEL&gt; skip and delete the current command. 
-<li><kbd>f</kbd> skips the current command in this execution of the keyboard
-macro, but doesn't delete it from the macro. 
-<li>&lt;TAB&gt; executes the current command, as well as all similar
-commands immediately following the current command; for example, &lt;TAB&gt;
+</p>
+<ul>
+<li> <tt class="key">SPC</tt> and <kbd>y</kbd> execute the current command, and advance to the
+next command in the keyboard macro.
+</li><li> <kbd>n</kbd>, <kbd>d</kbd>, and <tt class="key">DEL</tt> skip and delete the current command.
+</li><li> <kbd>f</kbd> skips the current command in this execution of the keyboard
+macro, but doesn&rsquo;t delete it from the macro.
+</li><li> <tt class="key">TAB</tt> executes the current command, as well as all similar
+commands immediately following the current command; for example, <tt class="key">TAB</tt>
 may be used to insert a sequence of characters (corresponding to a
-sequence of <code>self-insert-command</code> commands). 
-<li><kbd>c</kbd> continues execution (without further editing) until the end of
+sequence of <code>self-insert-command</code> commands).
+</li><li> <kbd>c</kbd> continues execution (without further editing) until the end of
 the keyboard macro.  If execution terminates normally, the edited
-macro replaces the original keyboard macro. 
-<li><kbd>C-k</kbd> skips and deletes the rest of the keyboard macro,
+macro replaces the original keyboard macro.
+</li><li> <kbd>C-k</kbd> skips and deletes the rest of the keyboard macro,
 terminates step-editing, and replaces the original keyboard macro
-with the edited macro. 
-<li><kbd>q</kbd> and <kbd>C-g</kbd> cancels the step-editing of the keyboard macro;
-discarding any changes made to the keyboard macro. 
-<li><kbd>i </kbd><var>key</var><kbd>... C-j</kbd> reads and executes a series of key sequences (not
+with the edited macro.
+</li><li> <kbd>q</kbd> and <kbd>C-g</kbd> cancels the step-editing of the keyboard macro;
+discarding any changes made to the keyboard macro.
+</li><li> <kbd>i <var>key</var>&hellip; C-j</kbd> reads and executes a series of key sequences (not
 including the final <kbd>C-j</kbd>), and inserts them before the current
 command in the keyboard macro, without advancing over the current
-command. 
-<li><kbd>I </kbd><var>key</var><kbd>...</kbd> reads one key sequence, executes it, and inserts it
+command.
+</li><li> <kbd>I <var>key</var>&hellip;</kbd> reads one key sequence, executes it, and inserts it
 before the current command in the keyboard macro, without advancing
-over the current command. 
-<li><kbd>r </kbd><var>key</var><kbd>... C-j</kbd> reads and executes a series of key sequences (not
+over the current command.
+</li><li> <kbd>r <var>key</var>&hellip; C-j</kbd> reads and executes a series of key sequences (not
 including the final <kbd>C-j</kbd>), and replaces the current command in
 the keyboard macro with them, advancing over the inserted key
-sequences. 
-<li><kbd>R </kbd><var>key</var><kbd>...</kbd> reads one key sequence, executes it, and replaces the
+sequences.
+</li><li> <kbd>R <var>key</var>&hellip;</kbd> reads one key sequence, executes it, and replaces the
 current command in the keyboard macro with that key sequence,
-advancing over the inserted key sequence. 
-<li><kbd>a </kbd><var>key</var><kbd>... C-j</kbd> executes the current command, then reads and
+advancing over the inserted key sequence.
+</li><li> <kbd>a <var>key</var>&hellip; C-j</kbd> executes the current command, then reads and
 executes a series of key sequences (not including the final
 <kbd>C-j</kbd>), and inserts them after the current command in the keyboard
 macro; it then advances over the current command and the inserted key
-sequences. 
-<li><kbd>A </kbd><var>key</var><kbd>... C-j</kbd> executes the rest of the commands in the keyboard
+sequences.
+</li><li> <kbd>A <var>key</var>&hellip; C-j</kbd> executes the rest of the commands in the keyboard
 macro, then reads and executes a series of key sequences (not
 including the final <kbd>C-j</kbd>), and appends them at the end of the
 keyboard macro; it then terminates the step-editing and replaces the
-original keyboard macro with the edited macro. 
-</ul>
-   <!-- Includes arevert-xtra. -->
+original keyboard macro with the edited macro.
+</li></ul>
+<hr>
+<div class="header">
+<p>
+Previous: <a href="Edit-Keyboard-Macro.html#Edit-Keyboard-Macro" accesskey="p" rel="prev">Edit Keyboard Macro</a>, Up: <a href="Keyboard-Macros.html#Keyboard-Macros" accesskey="u" rel="up">Keyboard Macros</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-<!-- This is part of the Emacs manual. -->
-<!-- Copyright (C) 1985-1987, 1993-1995, 1997, 1999-2015 Free Software -->
-<!-- Foundation, Inc. -->
-<!-- See file emacs.texi for copying conditions. -->
-   </body></html>
 
+
+</body>
+</html>

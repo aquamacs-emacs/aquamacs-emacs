@@ -1,70 +1,107 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Generic Commands - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Generic Commands</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Generic Commands">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Generic Commands">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Defining-Commands.html#Defining-Commands" title="Defining Commands">
-<link rel="prev" href="Interactive-Examples.html#Interactive-Examples" title="Interactive Examples">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Defining-Commands.html#Defining-Commands" rel="up" title="Defining Commands">
+<link href="Interactive-Call.html#Interactive-Call" rel="next" title="Interactive Call">
+<link href="Interactive-Examples.html#Interactive-Examples" rel="prev" title="Interactive Examples">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Generic-Commands"></a>
+<div class="header">
 <p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Interactive-Examples.html#Interactive-Examples">Interactive Examples</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Defining-Commands.html#Defining-Commands">Defining Commands</a>
-<hr>
+Previous: <a href="Interactive-Examples.html#Interactive-Examples" accesskey="p" rel="prev">Interactive Examples</a>, Up: <a href="Defining-Commands.html#Defining-Commands" accesskey="u" rel="up">Defining Commands</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Select-among-Command-Alternatives"></a>
 <h4 class="subsection">20.2.4 Select among Command Alternatives</h4>
+<a name="index-generic-commands"></a>
+<a name="index-alternatives_002c-defining"></a>
 
-<p><a name="index-generic-commands-1442"></a><a name="index-alternatives_002c-defining-1443"></a>
-The macro <code>define-alternatives</code> can be used to define
-<dfn>generic commands</dfn>.  These are interactive functions whose
+<p>The macro <code>define-alternatives</code> can be used to define
+<em>generic commands</em>.  These are interactive functions whose
 implementation can be selected from several alternatives, as a matter
 of user preference.
-
-<div class="defun">
-&mdash; Macro: <b>define-alternatives</b><var> command &amp;rest customizations<a name="index-define_002dalternatives-1444"></a></var><br>
-<blockquote><p>Define the new command <var>command</var>, a symbol.
-
-        <p>When a user runs <kbd>M-x </kbd><var>command</var><kbd> &lt;RET&gt;</kbd> for the first time,
+</p>
+<dl>
+<dt><a name="index-define_002dalternatives"></a>Macro: <strong>define-alternatives</strong> <em>command &amp;rest customizations</em></dt>
+<dd><p>Define the new command <var>command</var>, a symbol.
+</p>
+<p>When a user runs <kbd>M-x <var>command</var> <span class="key">RET</span></kbd> for the first time,
 Emacs prompts for which real form of the command to use, and records
 the selection by way of a custom variable.  Using a prefix argument
 repeats this process of choosing an alternative.
-
-        <p>The variable <var>command</var><code>-alternatives</code> should contain an alist
-with alternative implementations of <var>command</var>. 
+</p>
+<p>The variable <code><var>command</var>-alternatives</code> should contain an alist
+with alternative implementations of <var>command</var>.
 Until this variable is set, <code>define-alternatives</code> has no effect.
-
-        <p>If <var>customizations</var> is non-<code>nil</code>, it should consist of
+</p>
+<p>If <var>customizations</var> is non-<code>nil</code>, it should consist of
 alternating <code>defcustom</code> keywords (typically <code>:group</code> and
 <code>:version</code>) and values to add to the declaration of
-<var>command</var><code>-alternatives</code>. 
-</p></blockquote></div>
+<code><var>command</var>-alternatives</code>.
+</p></dd></dl>
 
-   </body></html>
 
+
+
+</body>
+</html>

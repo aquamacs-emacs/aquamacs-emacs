@@ -1,102 +1,141 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Arrays - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Arrays</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Arrays">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Arrays">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" title="Sequences Arrays Vectors">
-<link rel="prev" href="Sequence-Functions.html#Sequence-Functions" title="Sequence Functions">
-<link rel="next" href="Array-Functions.html#Array-Functions" title="Array Functions">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel="up" title="Sequences Arrays Vectors">
+<link href="Array-Functions.html#Array-Functions" rel="next" title="Array Functions">
+<link href="Sequence-Functions.html#Sequence-Functions" rel="prev" title="Sequence Functions">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Arrays"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Array-Functions.html#Array-Functions">Array Functions</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Sequence-Functions.html#Sequence-Functions">Sequence Functions</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>
-<hr>
+Next: <a href="Array-Functions.html#Array-Functions" accesskey="n" rel="next">Array Functions</a>, Previous: <a href="Sequence-Functions.html#Sequence-Functions" accesskey="p" rel="prev">Sequence Functions</a>, Up: <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Arrays-1"></a>
 <h3 class="section">6.2 Arrays</h3>
+<a name="index-array"></a>
 
-<p><a name="index-array-480"></a>
-  An <dfn>array</dfn> object has slots that hold a number of other Lisp
+<p>An <em>array</em> object has slots that hold a number of other Lisp
 objects, called the elements of the array.  Any element of an array
 may be accessed in constant time.  In contrast, the time to access an
 element of a list is proportional to the position of that element in
 the list.
-
-   <p>Emacs defines four types of array, all one-dimensional:
-<dfn>strings</dfn> (see <a href="String-Type.html#String-Type">String Type</a>), <dfn>vectors</dfn> (see <a href="Vector-Type.html#Vector-Type">Vector Type</a>), <dfn>bool-vectors</dfn> (see <a href="Bool_002dVector-Type.html#Bool_002dVector-Type">Bool-Vector Type</a>), and
-<dfn>char-tables</dfn> (see <a href="Char_002dTable-Type.html#Char_002dTable-Type">Char-Table Type</a>).  Vectors and char-tables
+</p>
+<p>Emacs defines four types of array, all one-dimensional:
+<em>strings</em> (see <a href="String-Type.html#String-Type">String Type</a>), <em>vectors</em> (see <a href="Vector-Type.html#Vector-Type">Vector Type</a>), <em>bool-vectors</em> (see <a href="Bool_002dVector-Type.html#Bool_002dVector-Type">Bool-Vector Type</a>), and
+<em>char-tables</em> (see <a href="Char_002dTable-Type.html#Char_002dTable-Type">Char-Table Type</a>).  Vectors and char-tables
 can hold elements of any type, but strings can only hold characters,
 and bool-vectors can only hold <code>t</code> and <code>nil</code>.
-
-   <p>All four kinds of array share these characteristics:
-
-     <ul>
-<li>The first element of an array has index zero, the second element has
-index 1, and so on.  This is called <dfn>zero-origin</dfn> indexing.  For
+</p>
+<p>All four kinds of array share these characteristics:
+</p>
+<ul>
+<li> The first element of an array has index zero, the second element has
+index 1, and so on.  This is called <em>zero-origin</em> indexing.  For
 example, an array of four elements has indices 0, 1, 2, and&nbsp;3<!-- /@w -->.
 
-     <li>The length of the array is fixed once you create it; you cannot
+</li><li> The length of the array is fixed once you create it; you cannot
 change the length of an existing array.
 
-     <li>For purposes of evaluation, the array is a constant&mdash;i.e.,
+</li><li> For purposes of evaluation, the array is a constant&mdash;i.e.,
 it evaluates to itself.
 
-     <li>The elements of an array may be referenced or changed with the functions
-<code>aref</code> and <code>aset</code>, respectively (see <a href="Array-Functions.html#Array-Functions">Array Functions</a>). 
-</ul>
+</li><li> The elements of an array may be referenced or changed with the functions
+<code>aref</code> and <code>aset</code>, respectively (see <a href="Array-Functions.html#Array-Functions">Array Functions</a>).
+</li></ul>
 
-   <p>When you create an array, other than a char-table, you must specify
+<p>When you create an array, other than a char-table, you must specify
 its length.  You cannot specify the length of a char-table, because that
 is determined by the range of character codes.
-
-   <p>In principle, if you want an array of text characters, you could use
+</p>
+<p>In principle, if you want an array of text characters, you could use
 either a string or a vector.  In practice, we always choose strings for
 such applications, for four reasons:
+</p>
+<ul>
+<li> They occupy one-fourth the space of a vector of the same elements.
 
-     <ul>
-<li>They occupy one-fourth the space of a vector of the same elements.
-
-     <li>Strings are printed in a way that shows the contents more clearly
+</li><li> Strings are printed in a way that shows the contents more clearly
 as text.
 
-     <li>Strings can hold text properties.  See <a href="Text-Properties.html#Text-Properties">Text Properties</a>.
+</li><li> Strings can hold text properties.  See <a href="Text-Properties.html#Text-Properties">Text Properties</a>.
 
-     <li>Many of the specialized editing and I/O facilities of Emacs accept only
+</li><li> Many of the specialized editing and I/O facilities of Emacs accept only
 strings.  For example, you cannot insert a vector of characters into a
-buffer the way you can insert a string.  See <a href="Strings-and-Characters.html#Strings-and-Characters">Strings and Characters</a>. 
-</ul>
+buffer the way you can insert a string.  See <a href="Strings-and-Characters.html#Strings-and-Characters">Strings and Characters</a>.
+</li></ul>
 
-   <p>By contrast, for an array of keyboard input characters (such as a key
+<p>By contrast, for an array of keyboard input characters (such as a key
 sequence), a vector may be necessary, because many keyboard input
 characters are outside the range that will fit in a string.  See <a href="Key-Sequence-Input.html#Key-Sequence-Input">Key Sequence Input</a>.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Array-Functions.html#Array-Functions" accesskey="n" rel="next">Array Functions</a>, Previous: <a href="Sequence-Functions.html#Sequence-Functions" accesskey="p" rel="prev">Sequence Functions</a>, Up: <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

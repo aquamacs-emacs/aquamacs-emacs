@@ -1,94 +1,141 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Abbrevs - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Abbrevs</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Abbrevs">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Abbrevs">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Syntax-Tables.html#Syntax-Tables" title="Syntax Tables">
-<link rel="next" href="Processes.html#Processes" title="Processes">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Abbrev-Tables.html#Abbrev-Tables" rel="next" title="Abbrev Tables">
+<link href="Categories.html#Categories" rel="prev" title="Categories">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Abbrevs"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Processes.html#Processes">Processes</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
+Next: <a href="Processes.html#Processes" accesskey="n" rel="next">Processes</a>, Previous: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="p" rel="prev">Syntax Tables</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Abbrevs-and-Abbrev-Expansion"></a>
 <h2 class="chapter">35 Abbrevs and Abbrev Expansion</h2>
+<a name="index-abbrev"></a>
 
-<p><a name="index-abbrev-3815"></a><!-- @cindex abbrev table  Redundant with "abbrev". -->
-
-   <p>An abbreviation or <dfn>abbrev</dfn> is a string of characters that may be
+<p>An abbreviation or <em>abbrev</em> is a string of characters that may be
 expanded to a longer string.  The user can insert the abbrev string and
 find it replaced automatically with the expansion of the abbrev.  This
 saves typing.
-
-   <p>The set of abbrevs currently in effect is recorded in an <dfn>abbrev
-table</dfn>.  Each buffer has a local abbrev table, but normally all buffers
+</p>
+<p>The set of abbrevs currently in effect is recorded in an <em>abbrev
+table</em>.  Each buffer has a local abbrev table, but normally all buffers
 in the same major mode share one abbrev table.  There is also a global
 abbrev table.  Normally both are used.
-
-   <p>An abbrev table is represented as an obarray.  See <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>, for information about obarrays.  Each abbreviation is
-represented by a symbol in the obarray.  The symbol's name is the
+</p>
+<p>An abbrev table is represented as an obarray.  See <a href="Creating-Symbols.html#Creating-Symbols">Creating Symbols</a>, for information about obarrays.  Each abbreviation is
+represented by a symbol in the obarray.  The symbol&rsquo;s name is the
 abbreviation; its value is the expansion; its function definition is
 the hook function for performing the expansion (see <a href="Defining-Abbrevs.html#Defining-Abbrevs">Defining Abbrevs</a>); and its property list cell contains various additional
 properties, including the use count and the number of times the
 abbreviation has been expanded (see <a href="Abbrev-Properties.html#Abbrev-Properties">Abbrev Properties</a>).
-
-   <p><a name="index-system-abbrev-3816"></a>  Certain abbrevs, called <dfn>system abbrevs</dfn>, are defined by a major
+</p>
+<a name="index-system-abbrev"></a>
+<p>Certain abbrevs, called <em>system abbrevs</em>, are defined by a major
 mode instead of the user.  A system abbrev is identified by its
-non-<code>nil</code> <code>:system</code> property (see <a href="Abbrev-Properties.html#Abbrev-Properties">Abbrev Properties</a>). 
-When abbrevs are saved to an abbrev file, system abbrevs are omitted. 
+non-<code>nil</code> <code>:system</code> property (see <a href="Abbrev-Properties.html#Abbrev-Properties">Abbrev Properties</a>).
+When abbrevs are saved to an abbrev file, system abbrevs are omitted.
 See <a href="Abbrev-Files.html#Abbrev-Files">Abbrev Files</a>.
-
-   <p>Because the symbols used for abbrevs are not interned in the usual
+</p>
+<p>Because the symbols used for abbrevs are not interned in the usual
 obarray, they will never appear as the result of reading a Lisp
 expression; in fact, normally they are never used except by the code
 that handles abbrevs.  Therefore, it is safe to use them in a
 nonstandard way.
-
-   <p>If the minor mode Abbrev mode is enabled, the buffer-local variable
+</p>
+<p>If the minor mode Abbrev mode is enabled, the buffer-local variable
 <code>abbrev-mode</code> is non-<code>nil</code>, and abbrevs are automatically
 expanded in the buffer.  For the user-level commands for abbrevs, see
-<a href="../emacs/Abbrevs.html#Abbrevs">Abbrev Mode</a>.
+<a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Abbrevs.html#Abbrevs">Abbrev Mode</a> in <cite>The GNU Emacs Manual</cite>.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Abbrev-Tables.html#Abbrev-Tables" accesskey="1">Tables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Creating and working with abbrev tables.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Defining-Abbrevs.html#Defining-Abbrevs" accesskey="2">Defining Abbrevs</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Specifying abbreviations and their expansions.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Abbrev-Files.html#Abbrev-Files" accesskey="3">Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Saving abbrevs in files.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Abbrev-Expansion.html#Abbrev-Expansion" accesskey="4">Expansion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Controlling expansion; expansion subroutines.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Standard-Abbrev-Tables.html#Standard-Abbrev-Tables" accesskey="5">Standard Abbrev Tables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Abbrev tables used by various major modes.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Abbrev-Properties.html#Abbrev-Properties" accesskey="6">Abbrev Properties</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to read and set abbrev properties.
+                                Which properties have which effect.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Abbrev-Table-Properties.html#Abbrev-Table-Properties" accesskey="7">Abbrev Table Properties</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to read and set abbrev table properties.
+                                Which properties have which effect.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Abbrev-Tables.html#Abbrev-Tables">Tables</a>:         Creating and working with abbrev tables. 
-<li><a accesskey="2" href="Defining-Abbrevs.html#Defining-Abbrevs">Defining Abbrevs</a>:             Specifying abbreviations and their expansions. 
-<li><a accesskey="3" href="Abbrev-Files.html#Abbrev-Files">Files</a>:           Saving abbrevs in files. 
-<li><a accesskey="4" href="Abbrev-Expansion.html#Abbrev-Expansion">Expansion</a>:   Controlling expansion; expansion subroutines. 
-<li><a accesskey="5" href="Standard-Abbrev-Tables.html#Standard-Abbrev-Tables">Standard Abbrev Tables</a>:       Abbrev tables used by various major modes. 
-<li><a accesskey="6" href="Abbrev-Properties.html#Abbrev-Properties">Abbrev Properties</a>:            How to read and set abbrev properties. 
-                                Which properties have which effect. 
-<li><a accesskey="7" href="Abbrev-Table-Properties.html#Abbrev-Table-Properties">Abbrev Table Properties</a>:      How to read and set abbrev table properties. 
-                                Which properties have which effect. 
-</ul>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Processes.html#Processes" accesskey="n" rel="next">Processes</a>, Previous: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="p" rel="prev">Syntax Tables</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

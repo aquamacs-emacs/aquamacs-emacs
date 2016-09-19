@@ -1,126 +1,173 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Array Functions - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Array Functions</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Array Functions">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Array Functions">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" title="Sequences Arrays Vectors">
-<link rel="prev" href="Arrays.html#Arrays" title="Arrays">
-<link rel="next" href="Vectors.html#Vectors" title="Vectors">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" rel="up" title="Sequences Arrays Vectors">
+<link href="Vectors.html#Vectors" rel="next" title="Vectors">
+<link href="Arrays.html#Arrays" rel="prev" title="Arrays">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Array-Functions"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Vectors.html#Vectors">Vectors</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Arrays.html#Arrays">Arrays</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Array-Functions"></a>
+<div class="header">
+<p>
+Next: <a href="Vectors.html#Vectors" accesskey="n" rel="next">Vectors</a>, Previous: <a href="Arrays.html#Arrays" accesskey="p" rel="prev">Arrays</a>, Up: <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Functions-that-Operate-on-Arrays"></a>
 <h3 class="section">6.3 Functions that Operate on Arrays</h3>
 
 <p>In this section, we describe the functions that accept all types of
 arrays.
-
-<div class="defun">
-&mdash; Function: <b>arrayp</b><var> object<a name="index-arrayp-481"></a></var><br>
-<blockquote><p>This function returns <code>t</code> if <var>object</var> is an array (i.e., a
+</p>
+<dl>
+<dt><a name="index-arrayp"></a>Function: <strong>arrayp</strong> <em>object</em></dt>
+<dd><p>This function returns <code>t</code> if <var>object</var> is an array (i.e., a
 vector, a string, a bool-vector or a char-table).
+</p>
+<div class="example">
+<pre class="example">(arrayp [a])
+     &rArr; t
+(arrayp &quot;asdf&quot;)
+     &rArr; t
+(arrayp (syntax-table))    ;; <span class="roman">A char-table.</span>
+     &rArr; t
+</pre></div>
+</dd></dl>
 
-     <pre class="example">          (arrayp [a])
-               &rArr; t
-          (arrayp "asdf")
-               &rArr; t
-          (arrayp (syntax-table))    ;; <span class="roman">A char-table.</span>
-               &rArr; t
-</pre>
-        </blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>aref</b><var> array index<a name="index-aref-482"></a></var><br>
-<blockquote><p><a name="index-array-elements-483"></a>This function returns the <var>index</var>th element of <var>array</var>.  The
+<dl>
+<dt><a name="index-aref"></a>Function: <strong>aref</strong> <em>array index</em></dt>
+<dd><a name="index-array-elements"></a>
+<p>This function returns the <var>index</var>th element of <var>array</var>.  The
 first element is at index zero.
+</p>
+<div class="example">
+<pre class="example">(setq primes [2 3 5 7 11 13])
+     &rArr; [2 3 5 7 11 13]
+(aref primes 4)
+     &rArr; 11
+</pre><pre class="example">(aref &quot;abcdefg&quot; 1)
+     &rArr; 98           ; <span class="roman">&lsquo;<samp>b</samp>&rsquo; is <acronym>ASCII</acronym> code 98.</span>
+</pre></div>
 
-     <pre class="example">          (setq primes [2 3 5 7 11 13])
-               &rArr; [2 3 5 7 11 13]
-          (aref primes 4)
-               &rArr; 11
-          (aref "abcdefg" 1)
-               &rArr; 98           ; <span class="roman">&lsquo;</span><samp><span class="samp">b</span></samp><span class="roman">&rsquo; is <acronym>ASCII</acronym> code 98.</span>
-</pre>
-        <p>See also the function <code>elt</code>, in <a href="Sequence-Functions.html#Sequence-Functions">Sequence Functions</a>. 
-</p></blockquote></div>
+<p>See also the function <code>elt</code>, in <a href="Sequence-Functions.html#Sequence-Functions">Sequence Functions</a>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>aset</b><var> array index object<a name="index-aset-484"></a></var><br>
-<blockquote><p>This function sets the <var>index</var>th element of <var>array</var> to be
+<dl>
+<dt><a name="index-aset"></a>Function: <strong>aset</strong> <em>array index object</em></dt>
+<dd><p>This function sets the <var>index</var>th element of <var>array</var> to be
 <var>object</var>.  It returns <var>object</var>.
+</p>
+<div class="example">
+<pre class="example">(setq w [foo bar baz])
+     &rArr; [foo bar baz]
+(aset w 0 'fu)
+     &rArr; fu
+w
+     &rArr; [fu bar baz]
+</pre><pre class="example">
+</pre><pre class="example">(setq x &quot;asdfasfd&quot;)
+     &rArr; &quot;asdfasfd&quot;
+(aset x 3 ?Z)
+     &rArr; 90
+x
+     &rArr; &quot;asdZasfd&quot;
+</pre></div>
 
-     <pre class="example">          (setq w [foo bar baz])
-               &rArr; [foo bar baz]
-          (aset w 0 'fu)
-               &rArr; fu
-          w
-               &rArr; [fu bar baz]
-          
-          (setq x "asdfasfd")
-               &rArr; "asdfasfd"
-          (aset x 3 ?Z)
-               &rArr; 90
-          x
-               &rArr; "asdZasfd"
-</pre>
-        <p>If <var>array</var> is a string and <var>object</var> is not a character, a
+<p>If <var>array</var> is a string and <var>object</var> is not a character, a
 <code>wrong-type-argument</code> error results.  The function converts a
-unibyte string to multibyte if necessary to insert a character. 
-</p></blockquote></div>
+unibyte string to multibyte if necessary to insert a character.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>fillarray</b><var> array object<a name="index-fillarray-485"></a></var><br>
-<blockquote><p>This function fills the array <var>array</var> with <var>object</var>, so that
+<dl>
+<dt><a name="index-fillarray"></a>Function: <strong>fillarray</strong> <em>array object</em></dt>
+<dd><p>This function fills the array <var>array</var> with <var>object</var>, so that
 each element of <var>array</var> is <var>object</var>.  It returns <var>array</var>.
+</p>
+<div class="example">
+<pre class="example">(setq a [a b c d e f g])
+     &rArr; [a b c d e f g]
+(fillarray a 0)
+     &rArr; [0 0 0 0 0 0 0]
+a
+     &rArr; [0 0 0 0 0 0 0]
+</pre><pre class="example">(setq s &quot;When in the course&quot;)
+     &rArr; &quot;When in the course&quot;
+(fillarray s ?-)
+     &rArr; &quot;------------------&quot;
+</pre></div>
 
-     <pre class="example">          (setq a [a b c d e f g])
-               &rArr; [a b c d e f g]
-          (fillarray a 0)
-               &rArr; [0 0 0 0 0 0 0]
-          a
-               &rArr; [0 0 0 0 0 0 0]
-          (setq s "When in the course")
-               &rArr; "When in the course"
-          (fillarray s ?-)
-               &rArr; "------------------"
-</pre>
-        <p>If <var>array</var> is a string and <var>object</var> is not a character, a
-<code>wrong-type-argument</code> error results. 
-</p></blockquote></div>
+<p>If <var>array</var> is a string and <var>object</var> is not a character, a
+<code>wrong-type-argument</code> error results.
+</p></dd></dl>
 
-   <p>The general sequence functions <code>copy-sequence</code> and <code>length</code>
+<p>The general sequence functions <code>copy-sequence</code> and <code>length</code>
 are often useful for objects known to be arrays.  See <a href="Sequence-Functions.html#Sequence-Functions">Sequence Functions</a>.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Vectors.html#Vectors" accesskey="n" rel="next">Vectors</a>, Previous: <a href="Arrays.html#Arrays" accesskey="p" rel="prev">Arrays</a>, Up: <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors" accesskey="u" rel="up">Sequences Arrays Vectors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

@@ -1,68 +1,104 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Excess Close - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Excess Close</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Excess Close">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Excess Close">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Syntax-Errors.html#Syntax-Errors" title="Syntax Errors">
-<link rel="prev" href="Excess-Open.html#Excess-Open" title="Excess Open">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Syntax-Errors.html#Syntax-Errors" rel="up" title="Syntax Errors">
+<link href="Test-Coverage.html#Test-Coverage" rel="next" title="Test Coverage">
+<link href="Excess-Open.html#Excess-Open" rel="prev" title="Excess Open">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Excess-Close"></a>
+<div class="header">
 <p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Excess-Open.html#Excess-Open">Excess Open</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Syntax-Errors.html#Syntax-Errors">Syntax Errors</a>
-<hr>
+Previous: <a href="Excess-Open.html#Excess-Open" accesskey="p" rel="prev">Excess Open</a>, Up: <a href="Syntax-Errors.html#Syntax-Errors" accesskey="u" rel="up">Syntax Errors</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Excess-Close-Parentheses"></a>
 <h4 class="subsection">17.3.2 Excess Close Parentheses</h4>
+<a name="index-excess-close-parentheses"></a>
 
-<p><a name="index-excess-close-parentheses-1184"></a>
-  To deal with an excess close parenthesis, first go to the beginning
+<p>To deal with an excess close parenthesis, first go to the beginning
 of the file, then type <kbd>C-u -1 C-M-u</kbd> to find the end of the first
 unbalanced defun.
-
-   <p>Then find the actual matching close parenthesis by typing <kbd>C-M-f</kbd>
+</p>
+<p>Then find the actual matching close parenthesis by typing <kbd>C-M-f</kbd>
 at the beginning of that defun.  This will leave you somewhere short of
 the place where the defun ought to end.  It is possible that you will
 find a spurious close parenthesis in that vicinity.
-
-   <p>If you don't see a problem at that point, the next thing to do is to
+</p>
+<p>If you don&rsquo;t see a problem at that point, the next thing to do is to
 type <kbd>C-M-q</kbd> at the beginning of the defun.  A range of lines will
 probably shift left; if so, the missing open parenthesis or spurious
 close parenthesis is probably near the first of those lines.  (However,
-don't assume this is true; study the code to make sure.)  Once you have
+don&rsquo;t assume this is true; study the code to make sure.)  Once you have
 found the discrepancy, undo the <kbd>C-M-q</kbd> with <kbd>C-_</kbd>, since the
 old indentation is probably appropriate to the intended parentheses.
-
-   <p>After you think you have fixed the problem, use <kbd>C-M-q</kbd> again.  If
+</p>
+<p>After you think you have fixed the problem, use <kbd>C-M-q</kbd> again.  If
 the old indentation actually fits the intended nesting of parentheses,
 and you have put back those parentheses, <kbd>C-M-q</kbd> should not change
 anything.
+</p>
 
-   </body></html>
 
+
+</body>
+</html>

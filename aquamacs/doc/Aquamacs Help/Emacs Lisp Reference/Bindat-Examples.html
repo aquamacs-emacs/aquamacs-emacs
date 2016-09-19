@@ -1,219 +1,264 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Bindat Examples - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Bindat Examples</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Bindat Examples">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Bindat Examples">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Byte-Packing.html#Byte-Packing" title="Byte Packing">
-<link rel="prev" href="Bindat-Functions.html#Bindat-Functions" title="Bindat Functions">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Byte-Packing.html#Byte-Packing" rel="up" title="Byte Packing">
+<link href="Display.html#Display" rel="next" title="Display">
+<link href="Bindat-Functions.html#Bindat-Functions" rel="prev" title="Bindat Functions">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Bindat-Examples"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Bindat-Functions.html#Bindat-Functions">Bindat Functions</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Byte-Packing.html#Byte-Packing">Byte Packing</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Bindat-Examples"></a>
+<div class="header">
+<p>
+Previous: <a href="Bindat-Functions.html#Bindat-Functions" accesskey="p" rel="prev">Bindat Functions</a>, Up: <a href="Byte-Packing.html#Byte-Packing" accesskey="u" rel="up">Byte Packing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Examples-of-Byte-Unpacking-and-Packing"></a>
 <h4 class="subsection">36.20.3 Examples of Byte Unpacking and Packing</h4>
 
-<!-- FIXME?  This seems a very long example for something that is not used -->
-<!-- very often.  As of 24.1, gdb-mi.el is the only user of bindat.el in Emacs. -->
-<!-- Maybe one or both of these examples should just be moved to the -->
-<!-- commentary of bindat.el. -->
 <p>Here is a complete example of byte unpacking and packing:
+</p>
+<div class="lisp">
+<pre class="lisp">(require 'bindat)
 
-<pre class="lisp">     (require 'bindat)
-     
-     (defvar fcookie-index-spec
-       '((:version  u32)
-         (:count    u32)
-         (:longest  u32)
-         (:shortest u32)
-         (:flags    u32)
-         (:delim    u8)
-         (:ignored  fill 3)
-         (:offset   repeat (:count) (:foo u32)))
-       "Description of a fortune cookie index file's contents.")
-     
-     (defun fcookie (cookies &amp;optional index)
-       "Display a random fortune cookie from file COOKIES.
-     Optional second arg INDEX specifies the associated index
-     filename, by default \"COOKIES.dat\".  Display cookie text
-     in buffer \"*Fortune Cookie: BASENAME*\", where BASENAME
-     is COOKIES without the directory part."
-       (interactive "fCookies file: ")
-       (let* ((info (with-temp-buffer
-                      (insert-file-contents-literally
-                       (or index (concat cookies ".dat")))
-                      (bindat-unpack fcookie-index-spec
-                                     (buffer-string))))
-              (sel (random (bindat-get-field info :count)))
-              (beg (cdar (bindat-get-field info :offset sel)))
-              (end (or (cdar (bindat-get-field info
-                                               :offset (1+ sel)))
-                       (nth 7 (file-attributes cookies)))))
-         (switch-to-buffer
-          (get-buffer-create
-           (format "*Fortune Cookie: %s*"
-                   (file-name-nondirectory cookies))))
-         (erase-buffer)
-         (insert-file-contents-literally
-          cookies nil beg (- end 3))))
-     
-     (defun fcookie-create-index (cookies &amp;optional index delim)
-       "Scan file COOKIES, and write out its index file.
-     Optional arg INDEX specifies the index filename, which by
-     default is \"COOKIES.dat\".  Optional arg DELIM specifies the
-     unibyte character that, when found on a line of its own in
-     COOKIES, indicates the border between entries."
-       (interactive "fCookies file: ")
-       (setq delim (or delim ?%))
-       (let ((delim-line (format "\n%c\n" delim))
-             (count 0)
-             (max 0)
-             min p q len offsets)
-         (unless (= 3 (string-bytes delim-line))
-           (error "Delimiter cannot be represented in one byte"))
-         (with-temp-buffer
-           (insert-file-contents-literally cookies)
-           (while (and (setq p (point))
-                       (search-forward delim-line (point-max) t)
-                       (setq len (- (point) 3 p)))
-             (setq count (1+ count)
-                   max (max max len)
-                   min (min (or min max) len)
-                   offsets (cons (1- p) offsets))))
-         (with-temp-buffer
-           (set-buffer-multibyte nil)
-           (insert
-            (bindat-pack
-             fcookie-index-spec
-             `((:version . 2)
-               (:count . ,count)
-               (:longest . ,max)
-               (:shortest . ,min)
-               (:flags . 0)
-               (:delim . ,delim)
-               (:offset . ,(mapcar (lambda (o)
-                                     (list (cons :foo o)))
-                                   (nreverse offsets))))))
-           (let ((coding-system-for-write 'raw-text-unix))
-             (write-file (or index (concat cookies ".dat")))))))
-</pre>
-   <p>The following is an example of defining and unpacking a complex
+(defvar fcookie-index-spec
+  '((:version  u32)
+    (:count    u32)
+    (:longest  u32)
+    (:shortest u32)
+    (:flags    u32)
+    (:delim    u8)
+    (:ignored  fill 3)
+    (:offset   repeat (:count) (:foo u32)))
+  &quot;Description of a fortune cookie index file's contents.&quot;)
+
+(defun fcookie (cookies &amp;optional index)
+  &quot;Display a random fortune cookie from file COOKIES.
+Optional second arg INDEX specifies the associated index
+filename, by default \&quot;COOKIES.dat\&quot;.  Display cookie text
+in buffer \&quot;*Fortune Cookie: BASENAME*\&quot;, where BASENAME
+is COOKIES without the directory part.&quot;
+  (interactive &quot;fCookies file: &quot;)
+  (let* ((info (with-temp-buffer
+                 (insert-file-contents-literally
+                  (or index (concat cookies &quot;.dat&quot;)))
+                 (bindat-unpack fcookie-index-spec
+                                (buffer-string))))
+         (sel (random (bindat-get-field info :count)))
+         (beg (cdar (bindat-get-field info :offset sel)))
+         (end (or (cdar (bindat-get-field info
+                                          :offset (1+ sel)))
+                  (nth 7 (file-attributes cookies)))))
+    (switch-to-buffer
+     (get-buffer-create
+      (format &quot;*Fortune Cookie: %s*&quot;
+              (file-name-nondirectory cookies))))
+    (erase-buffer)
+    (insert-file-contents-literally
+     cookies nil beg (- end 3))))
+
+(defun fcookie-create-index (cookies &amp;optional index delim)
+  &quot;Scan file COOKIES, and write out its index file.
+Optional arg INDEX specifies the index filename, which by
+default is \&quot;COOKIES.dat\&quot;.  Optional arg DELIM specifies the
+unibyte character that, when found on a line of its own in
+COOKIES, indicates the border between entries.&quot;
+  (interactive &quot;fCookies file: &quot;)
+  (setq delim (or delim ?%))
+  (let ((delim-line (format &quot;\n%c\n&quot; delim))
+        (count 0)
+        (max 0)
+        min p q len offsets)
+    (unless (= 3 (string-bytes delim-line))
+      (error &quot;Delimiter cannot be represented in one byte&quot;))
+    (with-temp-buffer
+      (insert-file-contents-literally cookies)
+      (while (and (setq p (point))
+                  (search-forward delim-line (point-max) t)
+                  (setq len (- (point) 3 p)))
+        (setq count (1+ count)
+              max (max max len)
+              min (min (or min max) len)
+              offsets (cons (1- p) offsets))))
+    (with-temp-buffer
+      (set-buffer-multibyte nil)
+      (insert
+       (bindat-pack
+        fcookie-index-spec
+        `((:version . 2)
+          (:count . ,count)
+          (:longest . ,max)
+          (:shortest . ,min)
+          (:flags . 0)
+          (:delim . ,delim)
+          (:offset . ,(mapcar (lambda (o)
+                                (list (cons :foo o)))
+                              (nreverse offsets))))))
+      (let ((coding-system-for-write 'raw-text-unix))
+        (write-file (or index (concat cookies &quot;.dat&quot;)))))))
+</pre></div>
+
+<p>The following is an example of defining and unpacking a complex
 structure.  Consider the following C structures:
+</p>
+<div class="example">
+<pre class="example">struct header {
+    unsigned long    dest_ip;
+    unsigned long    src_ip;
+    unsigned short   dest_port;
+    unsigned short   src_port;
+};
 
-<pre class="example">     struct header {
-         unsigned long    dest_ip;
-         unsigned long    src_ip;
-         unsigned short   dest_port;
-         unsigned short   src_port;
-     };
-     
-     struct data {
-         unsigned char    type;
-         unsigned char    opcode;
-         unsigned short   length;  /* in network byte order  */
-         unsigned char    id[8];   /* null-terminated string  */
-         unsigned char    data[/* (length + 3) &amp; ~3 */];
-     };
-     
-     struct packet {
-         struct header    header;
-         unsigned long    counters[2];  /* in little endian order  */
-         unsigned char    items;
-         unsigned char    filler[3];
-         struct data      item[/* items */];
-     
-     };
-</pre>
-   <p>The corresponding data layout specification is:
+struct data {
+    unsigned char    type;
+    unsigned char    opcode;
+    unsigned short   length;  /* in network byte order  */
+    unsigned char    id[8];   /* null-terminated string  */
+    unsigned char    data[/* (length + 3) &amp; ~3 */];
+};
 
-<pre class="lisp">     (setq header-spec
-           '((dest-ip   ip)
-             (src-ip    ip)
-             (dest-port u16)
-             (src-port  u16)))
-     
-     (setq data-spec
-           '((type      u8)
-             (opcode    u8)
-             (length    u16)  ; network byte order
-             (id        strz 8)
-             (data      vec (length))
-             (align     4)))
-     
-     (setq packet-spec
-           '((header    struct header-spec)
-             (counters  vec 2 u32r)   ; little endian order
-             (items     u8)
-             (fill      3)
-             (item      repeat (items)
-                        (struct data-spec))))
-</pre>
-   <p>A binary data representation is:
+struct packet {
+    struct header    header;
+    unsigned long    counters[2];  /* in little endian order  */
+    unsigned char    items;
+    unsigned char    filler[3];
+    struct data      item[/* items */];
 
-<pre class="lisp">     (setq binary-data
-           [ 192 168 1 100 192 168 1 101 01 28 21 32
-             160 134 1 0 5 1 0 0 2 0 0 0
-             2 3 0 5 ?A ?B ?C ?D ?E ?F 0 0 1 2 3 4 5 0 0 0
-             1 4 0 7 ?B ?C ?D ?E ?F ?G 0 0 6 7 8 9 10 11 12 0 ])
-</pre>
-   <p>The corresponding decoded structure is:
+};
+</pre></div>
 
-<pre class="lisp">     (setq decoded (bindat-unpack packet-spec binary-data))
-          &rArr;
-     ((header
-       (dest-ip   . [192 168 1 100])
-       (src-ip    . [192 168 1 101])
-       (dest-port . 284)
-       (src-port  . 5408))
-      (counters . [100000 261])
-      (items . 2)
-      (item ((data . [1 2 3 4 5])
-             (id . "ABCDEF")
-             (length . 5)
-             (opcode . 3)
-             (type . 2))
-            ((data . [6 7 8 9 10 11 12])
-             (id . "BCDEFG")
-             (length . 7)
-             (opcode . 4)
-             (type . 1))))
-</pre>
-   <p>An example of fetching data from this structure:
+<p>The corresponding data layout specification is:
+</p>
+<div class="lisp">
+<pre class="lisp">(setq header-spec
+      '((dest-ip   ip)
+        (src-ip    ip)
+        (dest-port u16)
+        (src-port  u16)))
 
-<pre class="lisp">     (bindat-get-field decoded 'item 1 'id)
-          &rArr; "BCDEFG"
-</pre>
-   <!-- *- mode: texinfo; coding: utf-8 -*- -->
-<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1990-1995, 1998-2015 Free Software Foundation, Inc. -->
-<!-- See the file elisp.texi for copying conditions. -->
-   </body></html>
+(setq data-spec
+      '((type      u8)
+        (opcode    u8)
+        (length    u16)  ; network byte order
+        (id        strz 8)
+        (data      vec (length))
+        (align     4)))
 
+(setq packet-spec
+      '((header    struct header-spec)
+        (counters  vec 2 u32r)   ; little endian order
+        (items     u8)
+        (fill      3)
+        (item      repeat (items)
+                   (struct data-spec))))
+</pre></div>
+
+<p>A binary data representation is:
+</p>
+<div class="lisp">
+<pre class="lisp">(setq binary-data
+      [ 192 168 1 100 192 168 1 101 01 28 21 32
+        160 134 1 0 5 1 0 0 2 0 0 0
+        2 3 0 5 ?A ?B ?C ?D ?E ?F 0 0 1 2 3 4 5 0 0 0
+        1 4 0 7 ?B ?C ?D ?E ?F ?G 0 0 6 7 8 9 10 11 12 0 ])
+</pre></div>
+
+<p>The corresponding decoded structure is:
+</p>
+<div class="lisp">
+<pre class="lisp">(setq decoded (bindat-unpack packet-spec binary-data))
+     &rArr;
+((header
+  (dest-ip   . [192 168 1 100])
+  (src-ip    . [192 168 1 101])
+  (dest-port . 284)
+  (src-port  . 5408))
+ (counters . [100000 261])
+ (items . 2)
+ (item ((data . [1 2 3 4 5])
+        (id . &quot;ABCDEF&quot;)
+        (length . 5)
+        (opcode . 3)
+        (type . 2))
+       ((data . [6 7 8 9 10 11 12])
+        (id . &quot;BCDEFG&quot;)
+        (length . 7)
+        (opcode . 4)
+        (type . 1))))
+</pre></div>
+
+<p>An example of fetching data from this structure:
+</p>
+<div class="lisp">
+<pre class="lisp">(bindat-get-field decoded 'item 1 'id)
+     &rArr; &quot;BCDEFG&quot;
+</pre></div>
+
+<hr>
+<div class="header">
+<p>
+Previous: <a href="Bindat-Functions.html#Bindat-Functions" accesskey="p" rel="prev">Bindat Functions</a>, Up: <a href="Byte-Packing.html#Byte-Packing" accesskey="u" rel="up">Byte Packing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

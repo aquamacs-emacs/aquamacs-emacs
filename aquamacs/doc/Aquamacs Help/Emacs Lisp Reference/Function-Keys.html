@@ -1,107 +1,173 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Function Keys - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Function Keys</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Function Keys">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Function Keys">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Input-Events.html#Input-Events" title="Input Events">
-<link rel="prev" href="Keyboard-Events.html#Keyboard-Events" title="Keyboard Events">
-<link rel="next" href="Mouse-Events.html#Mouse-Events" title="Mouse Events">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Input-Events.html#Input-Events" rel="up" title="Input Events">
+<link href="Mouse-Events.html#Mouse-Events" rel="next" title="Mouse Events">
+<link href="Keyboard-Events.html#Keyboard-Events" rel="prev" title="Keyboard Events">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Function-Keys"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Mouse-Events.html#Mouse-Events">Mouse Events</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Keyboard-Events.html#Keyboard-Events">Keyboard Events</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Input-Events.html#Input-Events">Input Events</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Function-Keys"></a>
+<div class="header">
+<p>
+Next: <a href="Mouse-Events.html#Mouse-Events" accesskey="n" rel="next">Mouse Events</a>, Previous: <a href="Keyboard-Events.html#Keyboard-Events" accesskey="p" rel="prev">Keyboard Events</a>, Up: <a href="Input-Events.html#Input-Events" accesskey="u" rel="up">Input Events</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Function-Keys-1"></a>
 <h4 class="subsection">20.7.2 Function Keys</h4>
 
-<p><a name="index-function-keys-1484"></a>Most keyboards also have <dfn>function keys</dfn>&mdash;keys that have names or
+<a name="index-function-keys"></a>
+<p>Most keyboards also have <em>function keys</em>&mdash;keys that have names or
 symbols that are not characters.  Function keys are represented in
-Emacs Lisp as symbols; the symbol's name is the function key's label,
-in lower case.  For example, pressing a key labeled &lt;F1&gt; generates
+Emacs Lisp as symbols; the symbol&rsquo;s name is the function key&rsquo;s label,
+in lower case.  For example, pressing a key labeled <tt class="key">F1</tt> generates
 an input event represented by the symbol <code>f1</code>.
-
-   <p>The event type of a function key event is the event symbol itself. 
+</p>
+<p>The event type of a function key event is the event symbol itself.
 See <a href="Classifying-Events.html#Classifying-Events">Classifying Events</a>.
-
-   <p>Here are a few special cases in the symbol-naming convention for
+</p>
+<p>Here are a few special cases in the symbol-naming convention for
 function keys:
-
-     <dl>
-<dt><code>backspace</code>, <code>tab</code>, <code>newline</code>, <code>return</code>, <code>delete</code><dd>These keys correspond to common <acronym>ASCII</acronym> control characters that have
+</p>
+<dl compact="compact">
+<dt><code>backspace</code>, <code>tab</code>, <code>newline</code>, <code>return</code>, <code>delete</code></dt>
+<dd><p>These keys correspond to common <acronym>ASCII</acronym> control characters that have
 special keys on most keyboards.
-
-     <p>In <acronym>ASCII</acronym>, <kbd>C-i</kbd> and &lt;TAB&gt; are the same character.  If the
+</p>
+<p>In <acronym>ASCII</acronym>, <kbd>C-i</kbd> and <tt class="key">TAB</tt> are the same character.  If the
 terminal can distinguish between them, Emacs conveys the distinction to
 Lisp programs by representing the former as the integer 9, and the
 latter as the symbol <code>tab</code>.
-
-     <p>Most of the time, it's not useful to distinguish the two.  So normally
+</p>
+<p>Most of the time, it&rsquo;s not useful to distinguish the two.  So normally
 <code>local-function-key-map</code> (see <a href="Translation-Keymaps.html#Translation-Keymaps">Translation Keymaps</a>) is set up
 to map <code>tab</code> into 9.  Thus, a key binding for character code 9
 (the character <kbd>C-i</kbd>) also applies to <code>tab</code>.  Likewise for
 the other symbols in this group.  The function <code>read-char</code>
 likewise converts these events into characters.
-
-     <p>In <acronym>ASCII</acronym>, &lt;BS&gt; is really <kbd>C-h</kbd>.  But <code>backspace</code>
-converts into the character code 127 (&lt;DEL&gt;), not into code 8
-(&lt;BS&gt;).  This is what most users prefer.
-
-     <br><dt><code>left</code>, <code>up</code>, <code>right</code>, <code>down</code><dd>Cursor arrow keys
-<br><dt><code>kp-add</code>, <code>kp-decimal</code>, <code>kp-divide</code>, <small class="dots">...</small><dd>Keypad keys (to the right of the regular keyboard). 
-<br><dt><code>kp-0</code>, <code>kp-1</code>, <small class="dots">...</small><dd>Keypad keys with digits. 
-<br><dt><code>kp-f1</code>, <code>kp-f2</code>, <code>kp-f3</code>, <code>kp-f4</code><dd>Keypad PF keys. 
-<br><dt><code>kp-home</code>, <code>kp-left</code>, <code>kp-up</code>, <code>kp-right</code>, <code>kp-down</code><dd>Keypad arrow keys.  Emacs normally translates these into the
-corresponding non-keypad keys <code>home</code>, <code>left</code>, <small class="dots">...</small>
-<br><dt><code>kp-prior</code>, <code>kp-next</code>, <code>kp-end</code>, <code>kp-begin</code>, <code>kp-insert</code>, <code>kp-delete</code><dd>Additional keypad duplicates of keys ordinarily found elsewhere.  Emacs
-normally translates these into the like-named non-keypad keys. 
+</p>
+<p>In <acronym>ASCII</acronym>, <tt class="key">BS</tt> is really <kbd>C-h</kbd>.  But <code>backspace</code>
+converts into the character code 127 (<tt class="key">DEL</tt>), not into code 8
+(<tt class="key">BS</tt>).  This is what most users prefer.
+</p>
+</dd>
+<dt><code>left</code>, <code>up</code>, <code>right</code>, <code>down</code></dt>
+<dd><p>Cursor arrow keys
+</p></dd>
+<dt><code>kp-add</code>, <code>kp-decimal</code>, <code>kp-divide</code>, &hellip;</dt>
+<dd><p>Keypad keys (to the right of the regular keyboard).
+</p></dd>
+<dt><code>kp-0</code>, <code>kp-1</code>, &hellip;</dt>
+<dd><p>Keypad keys with digits.
+</p></dd>
+<dt><code>kp-f1</code>, <code>kp-f2</code>, <code>kp-f3</code>, <code>kp-f4</code></dt>
+<dd><p>Keypad PF keys.
+</p></dd>
+<dt><code>kp-home</code>, <code>kp-left</code>, <code>kp-up</code>, <code>kp-right</code>, <code>kp-down</code></dt>
+<dd><p>Keypad arrow keys.  Emacs normally translates these into the
+corresponding non-keypad keys <code>home</code>, <code>left</code>, &hellip;
+</p></dd>
+<dt><code>kp-prior</code>, <code>kp-next</code>, <code>kp-end</code>, <code>kp-begin</code>, <code>kp-insert</code>, <code>kp-delete</code></dt>
+<dd><p>Additional keypad duplicates of keys ordinarily found elsewhere.  Emacs
+normally translates these into the like-named non-keypad keys.
+</p></dd>
 </dl>
 
-   <p>You can use the modifier keys &lt;ALT&gt;, &lt;CTRL&gt;, &lt;HYPER&gt;,
-&lt;META&gt;, &lt;SHIFT&gt;, and &lt;SUPER&gt; with function keys.  The way to
+<p>You can use the modifier keys <tt class="key">ALT</tt>, <tt class="key">CTRL</tt>, <tt class="key">HYPER</tt>,
+<tt class="key">META</tt>, <tt class="key">SHIFT</tt>, and <tt class="key">SUPER</tt> with function keys.  The way to
 represent them is with prefixes in the symbol name:
-
-     <dl>
-<dt>&lsquo;<samp><span class="samp">A-</span></samp>&rsquo;<dd>The alt modifier. 
-<br><dt>&lsquo;<samp><span class="samp">C-</span></samp>&rsquo;<dd>The control modifier. 
-<br><dt>&lsquo;<samp><span class="samp">H-</span></samp>&rsquo;<dd>The hyper modifier. 
-<br><dt>&lsquo;<samp><span class="samp">M-</span></samp>&rsquo;<dd>The meta modifier. 
-<br><dt>&lsquo;<samp><span class="samp">S-</span></samp>&rsquo;<dd>The shift modifier. 
-<br><dt>&lsquo;<samp><span class="samp">s-</span></samp>&rsquo;<dd>The super modifier. 
+</p>
+<dl compact="compact">
+<dt>&lsquo;<samp>A-</samp>&rsquo;</dt>
+<dd><p>The alt modifier.
+</p></dd>
+<dt>&lsquo;<samp>C-</samp>&rsquo;</dt>
+<dd><p>The control modifier.
+</p></dd>
+<dt>&lsquo;<samp>H-</samp>&rsquo;</dt>
+<dd><p>The hyper modifier.
+</p></dd>
+<dt>&lsquo;<samp>M-</samp>&rsquo;</dt>
+<dd><p>The meta modifier.
+</p></dd>
+<dt>&lsquo;<samp>S-</samp>&rsquo;</dt>
+<dd><p>The shift modifier.
+</p></dd>
+<dt>&lsquo;<samp>s-</samp>&rsquo;</dt>
+<dd><p>The super modifier.
+</p></dd>
 </dl>
 
-   <p>Thus, the symbol for the key &lt;F3&gt; with &lt;META&gt; held down is
+<p>Thus, the symbol for the key <tt class="key">F3</tt> with <tt class="key">META</tt> held down is
 <code>M-f3</code>.  When you use more than one prefix, we recommend you
 write them in alphabetical order; but the order does not matter in
 arguments to the key-binding lookup and modification functions.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Mouse-Events.html#Mouse-Events" accesskey="n" rel="next">Mouse Events</a>, Previous: <a href="Keyboard-Events.html#Keyboard-Events" accesskey="p" rel="prev">Keyboard Events</a>, Up: <a href="Input-Events.html#Input-Events" accesskey="u" rel="up">Input Events</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

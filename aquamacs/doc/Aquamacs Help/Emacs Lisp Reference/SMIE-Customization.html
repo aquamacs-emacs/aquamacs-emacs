@@ -1,92 +1,129 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>SMIE Customization - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: SMIE Customization</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: SMIE Customization">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: SMIE Customization">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="SMIE.html#SMIE" title="SMIE">
-<link rel="prev" href="SMIE-Indentation-Example.html#SMIE-Indentation-Example" title="SMIE Indentation Example">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="SMIE.html#SMIE" rel="up" title="SMIE">
+<link href="Desktop-Save-Mode.html#Desktop-Save-Mode" rel="next" title="Desktop Save Mode">
+<link href="SMIE-Indentation-Example.html#SMIE-Indentation-Example" rel="prev" title="SMIE Indentation Example">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="SMIE-Customization"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="SMIE-Indentation-Example.html#SMIE-Indentation-Example">SMIE Indentation Example</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="SMIE.html#SMIE">SMIE</a>
-<hr>
-</div>
 
-<h5 class="subsubsection">22.7.1.9 Customizing Indentation</h5>
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="SMIE-Customization"></a>
+<div class="header">
+<p>
+Previous: <a href="SMIE-Indentation-Example.html#SMIE-Indentation-Example" accesskey="p" rel="prev">SMIE Indentation Example</a>, Up: <a href="SMIE.html#SMIE" accesskey="u" rel="up">SMIE</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Customizing-Indentation"></a>
+<h4 class="subsubsection">22.7.1.9 Customizing Indentation</h4>
 
 <p>If you are using a mode whose indentation is provided by SMIE, you can
 customize the indentation to suit your preferences.  You can do this
 on a per-mode basis (using the option <code>smie-config</code>), or a
 per-file basis (using the function <code>smie-config-local</code> in a
 file-local variable specification).
+</p>
+<dl>
+<dt><a name="index-smie_002dconfig"></a>User Option: <strong>smie-config</strong></dt>
+<dd><p>This option lets you customize indentation on a per-mode basis.
+It is an alist with elements of the form <code>(<var>mode</var> . <var>rules</var>)</code>.
+For the precise form of rules, see the variable&rsquo;s documentation; but
+you may find it easier to use the command <code>smie-config-guess</code>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; User Option: <b>smie-config</b><var><a name="index-smie_002dconfig-1973"></a></var><br>
-<blockquote><p>This option lets you customize indentation on a per-mode basis. 
-It is an alist with elements of the form <code>(</code><var>mode</var><code> . </code><var>rules</var><code>)</code>. 
-For the precise form of rules, see the variable's documentation; but
-you may find it easier to use the command <code>smie-config-guess</code>. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Command: <b>smie-config-guess</b><var><a name="index-smie_002dconfig_002dguess-1974"></a></var><br>
-<blockquote><p>This command tries to work out appropriate settings to produce
+<dl>
+<dt><a name="index-smie_002dconfig_002dguess"></a>Command: <strong>smie-config-guess</strong></dt>
+<dd><p>This command tries to work out appropriate settings to produce
 your preferred style of indentation.  Simply call the command while
-visiting a file that is indented with your style. 
-</p></blockquote></div>
+visiting a file that is indented with your style.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Command: <b>smie-config-save</b><var><a name="index-smie_002dconfig_002dsave-1975"></a></var><br>
-<blockquote><p>Call this command after using <code>smie-config-guess</code>, to save your
-settings for future sessions. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-smie_002dconfig_002dsave"></a>Command: <strong>smie-config-save</strong></dt>
+<dd><p>Call this command after using <code>smie-config-guess</code>, to save your
+settings for future sessions.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Command: <b>smie-config-show-indent</b><var> &amp;optional move<a name="index-smie_002dconfig_002dshow_002dindent-1976"></a></var><br>
-<blockquote><p>This command displays the rules that are used to indent the current
-line. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-smie_002dconfig_002dshow_002dindent"></a>Command: <strong>smie-config-show-indent</strong> <em>&amp;optional move</em></dt>
+<dd><p>This command displays the rules that are used to indent the current
+line.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Command: <b>smie-config-set-indent</b><var><a name="index-smie_002dconfig_002dset_002dindent-1977"></a></var><br>
-<blockquote><p>This command adds a local rule to adjust the indentation of the current line. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-smie_002dconfig_002dset_002dindent"></a>Command: <strong>smie-config-set-indent</strong></dt>
+<dd><p>This command adds a local rule to adjust the indentation of the current line.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>smie-config-local</b><var> rules<a name="index-smie_002dconfig_002dlocal-1978"></a></var><br>
-<blockquote><p>This function adds <var>rules</var> as indentation rules for the current buffer. 
-These add to any mode-specific rules defined by the <code>smie-config</code> option. 
+<dl>
+<dt><a name="index-smie_002dconfig_002dlocal"></a>Function: <strong>smie-config-local</strong> <em>rules</em></dt>
+<dd><p>This function adds <var>rules</var> as indentation rules for the current buffer.
+These add to any mode-specific rules defined by the <code>smie-config</code> option.
 To specify custom indentation rules for a specific file, add an entry
-to the file's local variables of the form:
-<code>eval: (smie-config-local '(</code><var>rules</var><code>))</code>. 
-</p></blockquote></div>
+to the file&rsquo;s local variables of the form:
+<code>eval: (smie-config-local '(<var>rules</var>))</code>.
+</p></dd></dl>
 
-   </body></html>
 
+
+
+
+</body>
+</html>

@@ -1,84 +1,133 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Lisp Eval - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Lisp Eval</title>
+
+<meta name="description" content="GNU Emacs Manual: Lisp Eval">
+<meta name="keywords" content="GNU Emacs Manual: Lisp Eval">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Building.html#Building" title="Building">
-<link rel="prev" href="Lisp-Libraries.html#Lisp-Libraries" title="Lisp Libraries">
-<link rel="next" href="Lisp-Interaction.html#Lisp-Interaction" title="Lisp Interaction">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Building.html#Building" rel="up" title="Building">
+<link href="Lisp-Interaction.html#Lisp-Interaction" rel="next" title="Lisp Interaction">
+<link href="Lisp-Libraries.html#Lisp-Libraries" rel="prev" title="Lisp Libraries">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Lisp-Eval"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Lisp-Interaction.html#Lisp-Interaction">Lisp Interaction</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Lisp-Libraries.html#Lisp-Libraries">Lisp Libraries</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
-<hr>
+Next: <a href="Lisp-Interaction.html#Lisp-Interaction" accesskey="n" rel="next">Lisp Interaction</a>, Previous: <a href="Lisp-Libraries.html#Lisp-Libraries" accesskey="p" rel="prev">Lisp Libraries</a>, Up: <a href="Building.html#Building" accesskey="u" rel="up">Building</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Evaluating-Emacs-Lisp-Expressions"></a>
 <h3 class="section">27.9 Evaluating Emacs Lisp Expressions</h3>
+<a name="index-Emacs-Lisp-mode"></a>
+<a name="index-mode_002c-Emacs-Lisp"></a>
+<a name="index-evaluation_002c-Emacs-Lisp"></a>
 
-<p><a name="index-Emacs-Lisp-mode-2839"></a><a name="index-mode_002c-Emacs-Lisp-2840"></a><a name="index-evaluation_002c-Emacs-Lisp-2841"></a>
-<a name="index-emacs_002dlisp_002dmode-2842"></a>  Emacs Lisp mode is the major mode for editing Emacs Lisp.  Its mode
+<a name="index-emacs_002dlisp_002dmode"></a>
+<p>Emacs Lisp mode is the major mode for editing Emacs Lisp.  Its mode
 command is <kbd>M-x emacs-lisp-mode</kbd>.
-
-   <p>Emacs provides several commands for evaluating Emacs Lisp
+</p>
+<p>Emacs provides several commands for evaluating Emacs Lisp
 expressions.  You can use these commands in Emacs Lisp mode, to test
 your Emacs Lisp code as it is being written.  For example, after
 re-writing a function, you can evaluate the function definition to
 make it take effect for subsequent function calls.  These commands are
 also available globally, and can be used outside Emacs Lisp mode.
-
-     <dl>
-<dt><kbd>M-:</kbd><dd>Read a single Emacs Lisp expression in the minibuffer, evaluate it,
-and print the value in the echo area (<code>eval-expression</code>). 
-<br><dt><kbd>C-x C-e</kbd><dd>Evaluate the Emacs Lisp expression before point, and print the value
-in the echo area (<code>eval-last-sexp</code>). 
-<br><dt><kbd>C-M-x</kbd> <span class="roman">(in Emacs Lisp mode)</span><dt><kbd>M-x eval-defun</kbd><dd>Evaluate the defun containing or after point, and print the value in
-the echo area (<code>eval-defun</code>). 
-<br><dt><kbd>M-x eval-region</kbd><dd>Evaluate all the Emacs Lisp expressions in the region. 
-<br><dt><kbd>M-x eval-buffer</kbd><dd>Evaluate all the Emacs Lisp expressions in the buffer. 
+</p>
+<dl compact="compact">
+<dt><kbd>M-:</kbd></dt>
+<dd><p>Read a single Emacs Lisp expression in the minibuffer, evaluate it,
+and print the value in the echo area (<code>eval-expression</code>).
+</p></dd>
+<dt><kbd>C-x C-e</kbd></dt>
+<dd><p>Evaluate the Emacs Lisp expression before point, and print the value
+in the echo area (<code>eval-last-sexp</code>).
+</p></dd>
+<dt><kbd>C-M-x</kbd> <span class="roman">(in Emacs Lisp mode)</span></dt>
+<dt><kbd>M-x eval-defun</kbd></dt>
+<dd><p>Evaluate the defun containing or after point, and print the value in
+the echo area (<code>eval-defun</code>).
+</p></dd>
+<dt><kbd>M-x eval-region</kbd></dt>
+<dd><p>Evaluate all the Emacs Lisp expressions in the region.
+</p></dd>
+<dt><kbd>M-x eval-buffer</kbd></dt>
+<dd><p>Evaluate all the Emacs Lisp expressions in the buffer.
+</p></dd>
 </dl>
 
-   <p><a name="index-M_002d_003a-2843"></a><a name="index-eval_002dexpression-2844"></a>  <kbd>M-:</kbd> (<code>eval-expression</code>) reads an expression using the
+<a name="index-M_002d_003a"></a>
+<a name="index-eval_002dexpression"></a>
+<p><kbd>M-:</kbd> (<code>eval-expression</code>) reads an expression using the
 minibuffer, and evaluates it.  (Before evaluating the expression, the
 current buffer switches back to the buffer that was current when you
 typed <kbd>M-:</kbd>, not the minibuffer into which you typed the
 expression.)
-
-   <p><a name="index-C_002dx-C_002de-2845"></a><a name="index-eval_002dlast_002dsexp-2846"></a>  The command <kbd>C-x C-e</kbd> (<code>eval-last-sexp</code>) evaluates the
+</p>
+<a name="index-C_002dx-C_002de"></a>
+<a name="index-eval_002dlast_002dsexp"></a>
+<p>The command <kbd>C-x C-e</kbd> (<code>eval-last-sexp</code>) evaluates the
 Emacs Lisp expression preceding point in the buffer, and displays the
 value in the echo area.  When the result of an evaluation is an
 integer, it is displayed together with the value in other formats
 (octal, hexadecimal, and character).
-
-   <p>If <kbd>M-:</kbd> or <kbd>C-x C-e</kbd> is given a prefix argument, it inserts
+</p>
+<p>If <kbd>M-:</kbd> or <kbd>C-x C-e</kbd> is given a prefix argument, it inserts
 the value into the current buffer at point, rather than displaying it
 in the echo area.  If the prefix argument is zero, any integer output
 is inserted together with its value in other formats (octal,
@@ -86,13 +135,15 @@ hexadecimal, and character).  Such a prefix argument also prevents
 abbreviation of the output according to the variables
 <code>eval-expression-print-level</code> and <code>eval-expression-print-length</code>
 (see below).
-
-   <p><a name="index-C_002dM_002dx-_0040r_007b_0028Emacs-Lisp-mode_0029_007d-2847"></a><a name="index-eval_002ddefun-2848"></a>  The <code>eval-defun</code> command is bound to <kbd>C-M-x</kbd> in Emacs Lisp
+</p>
+<a name="index-C_002dM_002dx-_0028Emacs-Lisp-mode_0029"></a>
+<a name="index-eval_002ddefun"></a>
+<p>The <code>eval-defun</code> command is bound to <kbd>C-M-x</kbd> in Emacs Lisp
 mode.  It evaluates the top-level Lisp expression containing or
 following point, and prints the value in the echo area.  In this
 context, a top-level expression is referred to as a &ldquo;defun&rdquo;, but it
 need not be an actual <code>defun</code> (function definition).  In
-particular, this command treats <code>defvar</code> expressions specially. 
+particular, this command treats <code>defvar</code> expressions specially.
 Normally, evaluating a <code>defvar</code> expression does nothing if the
 variable it defines already has a value.  But this command
 unconditionally resets the variable to the initial value specified by
@@ -100,15 +151,20 @@ the <code>defvar</code>; this is convenient for debugging Emacs Lisp
 programs.  <code>defcustom</code> and <code>defface</code> expressions are treated
 similarly.  Note that the other commands documented in this section do
 not have this special feature.
-
-   <p>With a prefix argument, <kbd>C-M-x</kbd> instruments the function
-definition for Edebug, the Emacs Lisp Debugger.  See <a href="../elisp/Instrumenting.html#Instrumenting">Instrumenting for Edebug</a>.
-
-   <p><a name="index-eval_002dregion-2849"></a><a name="index-eval_002dbuffer-2850"></a>  The command <kbd>M-x eval-region</kbd> parses the text of the region as
+</p>
+<p>With a prefix argument, <kbd>C-M-x</kbd> instruments the function
+definition for Edebug, the Emacs Lisp Debugger.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Instrumenting.html#Instrumenting">Instrumenting for Edebug</a> in <cite>the Emacs Lisp Reference Manual</cite>.
+</p>
+<a name="index-eval_002dregion"></a>
+<a name="index-eval_002dbuffer"></a>
+<p>The command <kbd>M-x eval-region</kbd> parses the text of the region as
 one or more Lisp expressions, evaluating them one by one.  <kbd>M-x
 eval-buffer</kbd> is similar but evaluates the entire buffer.
-
-   <p><a name="index-eval_002dexpression_002dprint_002dlevel-2851"></a><a name="index-eval_002dexpression_002dprint_002dlength-2852"></a><a name="index-eval_002dexpression_002ddebug_002don_002derror-2853"></a>  The options <code>eval-expression-print-level</code> and
+</p>
+<a name="index-eval_002dexpression_002dprint_002dlevel"></a>
+<a name="index-eval_002dexpression_002dprint_002dlength"></a>
+<a name="index-eval_002dexpression_002ddebug_002don_002derror"></a>
+<p>The options <code>eval-expression-print-level</code> and
 <code>eval-expression-print-length</code> control the maximum depth and
 length of lists to print in the result of the evaluation commands
 before abbreviating them.  Supplying a zero prefix argument to
@@ -116,6 +172,14 @@ before abbreviating them.  Supplying a zero prefix argument to
 printed in full.  <code>eval-expression-debug-on-error</code> controls
 whether evaluation errors invoke the debugger when these commands are
 used; its default is <code>t</code>.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Lisp-Interaction.html#Lisp-Interaction" accesskey="n" rel="next">Lisp Interaction</a>, Previous: <a href="Lisp-Libraries.html#Lisp-Libraries" accesskey="p" rel="prev">Lisp Libraries</a>, Up: <a href="Building.html#Building" accesskey="u" rel="up">Building</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

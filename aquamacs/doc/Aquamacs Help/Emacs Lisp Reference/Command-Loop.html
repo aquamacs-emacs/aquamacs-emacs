@@ -1,72 +1,129 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Command Loop - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Command Loop</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Command Loop">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Command Loop">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Minibuffers.html#Minibuffers" title="Minibuffers">
-<link rel="next" href="Keymaps.html#Keymaps" title="Keymaps">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Command-Overview.html#Command-Overview" rel="next" title="Command Overview">
+<link href="Minibuffer-Misc.html#Minibuffer-Misc" rel="prev" title="Minibuffer Misc">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Command-Loop"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Keymaps.html#Keymaps">Keymaps</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Minibuffers.html#Minibuffers">Minibuffers</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
+Next: <a href="Keymaps.html#Keymaps" accesskey="n" rel="next">Keymaps</a>, Previous: <a href="Minibuffers.html#Minibuffers" accesskey="p" rel="prev">Minibuffers</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Command-Loop-1"></a>
 <h2 class="chapter">20 Command Loop</h2>
+<a name="index-editor-command-loop"></a>
+<a name="index-command-loop"></a>
 
-<p><a name="index-editor-command-loop-1406"></a><a name="index-command-loop-1407"></a>
-  When you run Emacs, it enters the <dfn>editor command loop</dfn> almost
+<p>When you run Emacs, it enters the <em>editor command loop</em> almost
 immediately.  This loop reads key sequences, executes their definitions,
 and displays the results.  In this chapter, we describe how these things
 are done, and the subroutines that allow Lisp programs to do them.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Command-Overview.html#Command-Overview" accesskey="1">Command Overview</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How the command loop reads commands.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Defining-Commands.html#Defining-Commands" accesskey="2">Defining Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Specifying how a function should read arguments.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Interactive-Call.html#Interactive-Call" accesskey="3">Interactive Call</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Calling a command, so that it will read arguments.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Distinguish-Interactive.html#Distinguish-Interactive" accesskey="4">Distinguish Interactive</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Making a command distinguish interactive calls.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Command-Loop-Info.html#Command-Loop-Info" accesskey="5">Command Loop Info</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Variables set by the command loop for you to examine.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Adjusting-Point.html#Adjusting-Point" accesskey="6">Adjusting Point</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Adjustment of point after a command.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Input-Events.html#Input-Events" accesskey="7">Input Events</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What input looks like when you read it.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Reading-Input.html#Reading-Input" accesskey="8">Reading Input</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to read input events from the keyboard or mouse.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Special-Events.html#Special-Events" accesskey="9">Special Events</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Events processed immediately and individually.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Waiting.html#Waiting">Waiting</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Waiting for user input or elapsed time.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Quitting.html#Quitting">Quitting</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How <kbd>C-g</kbd> works.  How to catch or defer quitting.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Prefix-Command-Arguments.html#Prefix-Command-Arguments">Prefix Command Arguments</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How the commands to set prefix args work.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Entering a recursive edit,
+                          and why you usually shouldn&rsquo;t.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Disabling-Commands.html#Disabling-Commands">Disabling Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How the command loop handles disabled commands.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Command-History.html#Command-History">Command History</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How the command history is set up, and how accessed.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How keyboard macros are implemented.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Command-Overview.html#Command-Overview">Command Overview</a>:     How the command loop reads commands. 
-<li><a accesskey="2" href="Defining-Commands.html#Defining-Commands">Defining Commands</a>:    Specifying how a function should read arguments. 
-<li><a accesskey="3" href="Interactive-Call.html#Interactive-Call">Interactive Call</a>:     Calling a command, so that it will read arguments. 
-<li><a accesskey="4" href="Distinguish-Interactive.html#Distinguish-Interactive">Distinguish Interactive</a>:      Making a command distinguish interactive calls. 
-<li><a accesskey="5" href="Command-Loop-Info.html#Command-Loop-Info">Command Loop Info</a>:    Variables set by the command loop for you to examine. 
-<li><a accesskey="6" href="Adjusting-Point.html#Adjusting-Point">Adjusting Point</a>:      Adjustment of point after a command. 
-<li><a accesskey="7" href="Input-Events.html#Input-Events">Input Events</a>:         What input looks like when you read it. 
-<li><a accesskey="8" href="Reading-Input.html#Reading-Input">Reading Input</a>:        How to read input events from the keyboard or mouse. 
-<li><a accesskey="9" href="Special-Events.html#Special-Events">Special Events</a>:       Events processed immediately and individually. 
-<li><a href="Waiting.html#Waiting">Waiting</a>:              Waiting for user input or elapsed time. 
-<li><a href="Quitting.html#Quitting">Quitting</a>:             How <kbd>C-g</kbd> works.  How to catch or defer quitting. 
-<li><a href="Prefix-Command-Arguments.html#Prefix-Command-Arguments">Prefix Command Arguments</a>:     How the commands to set prefix args work. 
-<li><a href="Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>:    Entering a recursive edit,
-                          and why you usually shouldn't. 
-<li><a href="Disabling-Commands.html#Disabling-Commands">Disabling Commands</a>:   How the command loop handles disabled commands. 
-<li><a href="Command-History.html#Command-History">Command History</a>:      How the command history is set up, and how accessed. 
-<li><a href="Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>:      How keyboard macros are implemented. 
-</ul>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Keymaps.html#Keymaps" accesskey="n" rel="next">Keymaps</a>, Previous: <a href="Minibuffers.html#Minibuffers" accesskey="p" rel="prev">Minibuffers</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

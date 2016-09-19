@@ -1,100 +1,144 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Faces - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Faces</title>
+
+<meta name="description" content="GNU Emacs Manual: Faces">
+<meta name="keywords" content="GNU Emacs Manual: Faces">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Display.html#Display" title="Display">
-<link rel="prev" href="Follow-Mode.html#Follow-Mode" title="Follow Mode">
-<link rel="next" href="Colors.html#Colors" title="Colors">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Display.html#Display" rel="up" title="Display">
+<link href="Colors.html#Colors" rel="next" title="Colors">
+<link href="Follow-Mode.html#Follow-Mode" rel="prev" title="Follow Mode">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Faces"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Colors.html#Colors">Colors</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Follow-Mode.html#Follow-Mode">Follow Mode</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
-<hr>
+Next: <a href="Colors.html#Colors" accesskey="n" rel="next">Colors</a>, Previous: <a href="Follow-Mode.html#Follow-Mode" accesskey="p" rel="prev">Follow Mode</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Text-Faces"></a>
 <h3 class="section">14.8 Text Faces</h3>
+<a name="index-faces"></a>
 
-<p><a name="index-faces-630"></a>
-  Emacs can display text in several different styles, called
-<dfn>faces</dfn>.  Each face can specify various <dfn>face attributes</dfn>,
+<p>Emacs can display text in several different styles, called
+<em>faces</em>.  Each face can specify various <em>face attributes</em>,
 such as the font, height, weight, slant, foreground and background
 color, and underlining or overlining.  Most major modes assign faces
 to the text automatically, via Font Lock mode.  See <a href="Font-Lock.html#Font-Lock">Font Lock</a>, for
 more information about how these faces are assigned.
-
-   <p><a name="index-list_002dfaces_002ddisplay-631"></a>  To see what faces are currently defined, and what they look like,
+</p>
+<a name="index-list_002dfaces_002ddisplay"></a>
+<p>To see what faces are currently defined, and what they look like,
 type <kbd>M-x list-faces-display</kbd>.  With a prefix argument, this
 prompts for a regular expression, and displays only faces with names
 matching that regular expression (see <a href="Regexps.html#Regexps">Regexps</a>).
-
-   <p><a name="index-frame_002dbackground_002dmode-632"></a>  It's possible for a given face to look different in different
+</p>
+<a name="index-frame_002dbackground_002dmode"></a>
+<p>It&rsquo;s possible for a given face to look different in different
 frames.  For instance, some text terminals do not support all face
 attributes, particularly font, height, and width, and some support a
 limited range of colors.  In addition, most Emacs faces are defined so
 that their attributes are different on light and dark frame
 backgrounds, for reasons of legibility.  By default, Emacs
 automatically chooses which set of face attributes to display on each
-frame, based on the frame's current background color.  However, you
+frame, based on the frame&rsquo;s current background color.  However, you
 can override this by giving the variable <code>frame-background-mode</code>
 a non-<code>nil</code> value.  A value of <code>dark</code> makes Emacs treat all
 frames as if they have a dark background, whereas a value of
 <code>light</code> makes it treat all frames as if they have a light
 background.
-
-   <p><a name="index-background-color-633"></a><a name="index-default-face-634"></a>  You can customize a face to alter its attributes, and save those
+</p>
+<a name="index-background-color"></a>
+<a name="index-default-face"></a>
+<p>You can customize a face to alter its attributes, and save those
 customizations for future Emacs sessions.  See <a href="Face-Customization.html#Face-Customization">Face Customization</a>,
 for details.
-
-   <p>The <code>default</code> face is the default for displaying text, and all
+</p>
+<p>The <code>default</code> face is the default for displaying text, and all
 of its attributes are specified.  Its background color is also used as
-the frame's background color.  See <a href="Colors.html#Colors">Colors</a>.
-
-   <p><a name="index-cursor-face-635"></a>  Another special face is the <code>cursor</code> face.  On graphical
+the frame&rsquo;s background color.  See <a href="Colors.html#Colors">Colors</a>.
+</p>
+<a name="index-cursor-face"></a>
+<p>Another special face is the <code>cursor</code> face.  On graphical
 displays, the background color of this face is used to draw the text
 cursor.  None of the other attributes of this face have any effect;
 the foreground color for text under the cursor is taken from the
 background color of the underlying text.  On text terminals, the
 appearance of the text cursor is determined by the terminal, not by
 the <code>cursor</code> face.
-
-   <p>You can also use X resources to specify attributes of any particular
+</p>
+<p>You can also use X resources to specify attributes of any particular
 face.  See <a href="Resources.html#Resources">Resources</a>.
-
-   <p>Emacs can display variable-width fonts, but some Emacs commands,
+</p>
+<p>Emacs can display variable-width fonts, but some Emacs commands,
 particularly indentation commands, do not account for variable
 character display widths.  Therefore, we recommend not using
 variable-width fonts for most faces, particularly those assigned by
 Font Lock mode.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Colors.html#Colors" accesskey="n" rel="next">Colors</a>, Previous: <a href="Follow-Mode.html#Follow-Mode" accesskey="p" rel="prev">Follow Mode</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This manual documents Htmlfontify, a source code -> crosslinked +
+formatted + syntax colorized html transformer.
+
+Copyright (C) 2002-2003, 2013-2016 Free Software Foundation,
+Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being "A GNU Manual,"
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled "GNU Free Documentation License".
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>Htmlfontify User Manual: Data Structures</title>
+
+<meta name="description" content="Htmlfontify User Manual: Data Structures">
+<meta name="keywords" content="Htmlfontify User Manual: Data Structures">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Usage-_0026-Examples.html#Usage-_0026-Examples" rel="up" title="Usage &amp; Examples">
+<link href="Examples.html#Examples" rel="next" title="Examples">
+<link href="Variables.html#Variables" rel="prev" title="Variables">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Data-Structures"></a>
+<div class="header">
+<p>
+Next: <a href="Examples.html#Examples" accesskey="n" rel="next">Examples</a>, Previous: <a href="Variables.html#Variables" accesskey="p" rel="prev">Variables</a>, Up: <a href="Usage-_0026-Examples.html#Usage-_0026-Examples" accesskey="u" rel="up">Usage &amp; Examples</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Data-Structures-1"></a>
+<h3 class="section">2.4 Data Structures</h3>
+<a name="index-Data-Structures"></a>
+
+<p>Some of the (informal) data structures used in Htmlfontify are detailed here:
+</p>
+<dl compact="compact">
+<dt><code>hfy-style-assoc</code></dt>
+<dd><a name="index-hfy_002dstyle_002dassoc"></a>
+<a name="hfy_002dstyle_002dassoc"></a>
+<p>An assoc representing/describing an Emacs face.  Properties may be repeated,
+in which case later properties should be treated as if they were inherited
+from a &ldquo;parent&rdquo; font.  (For some properties, only the first encountered value
+is of any importance, for others the values might be cumulative, and for
+others they might be cumulative in a complex way.)
+</p>
+<p>Some examples:
+</p>
+<div class="lisp">
+<pre class="lisp">(hfy-face-to-style 'default) =&gt;
+
+  ((&quot;background&quot;      . &quot;rgb(0, 0, 0)&quot;      )
+   (&quot;color&quot;           . &quot;rgb(255, 255, 255)&quot;)
+   (&quot;font-style&quot;      . &quot;normal&quot;            )
+   (&quot;font-weight&quot;     . &quot;500&quot;               )
+   (&quot;font-stretch&quot;    . &quot;normal&quot;            )
+   (&quot;font-family&quot;     . &quot;misc-fixed&quot;        )
+   (&quot;font-size&quot;       . &quot;13pt&quot;              )
+   (&quot;text-decoration&quot; . &quot;none&quot;              ))
+
+(hfy-face-to-style 'Info-title-3-face) =&gt;
+
+  ((&quot;font-weight&quot;     . &quot;700&quot;        )
+   (&quot;font-family&quot;     . &quot;helv&quot;       )
+   (&quot;font-size&quot;       . &quot;120%&quot;       )
+   (&quot;text-decoration&quot; . &quot;none&quot;)      )
+</pre></div>
+
+</dd>
+<dt><code>hfy-sheet-assoc</code></dt>
+<dd><a name="index-hfy_002dsheet_002dassoc"></a>
+<a name="hfy_002dsheet_002dassoc"></a>
+<p>An assoc with elements of the form &lsquo;<samp>(face-name style-name . style-string)</samp>&rsquo;.
+The actual stylesheet for each page is derived from one of these.
+</p>
+<div class="lisp">
+<pre class="lisp">((default       &quot;default&quot; . &quot;{ background: black; color: white}&quot;)
+ (font-lock-string-face &quot;string&quot;  . &quot;{ color: rgb(64,224,208) }&quot;))
+</pre></div>
+
+</dd>
+<dt><code>hfy-facemap-assoc</code></dt>
+<dd><a name="index-hfy_002dfacemap_002dassoc"></a>
+<a name="hfy_002dfacemap_002dassoc"></a>
+<p>An assoc of <code>(point . <var>face-symbol</var>)</code> or
+<code>(point . <code>defface</code> attribute list)</code> and <code>(point
+. end)</code> elements, in descending order of point value (i.e., from the
+file&rsquo;s end to its beginning).  The map is in reverse order because
+inserting a &lsquo;<samp>&lt;style&gt;</samp>&rsquo; tag (or any other string) at <var>point</var>
+invalidates the map for all entries with a greater value of point. By
+traversing the map from greatest to least <var>point</var>, we still
+invalidate the map as we go, but only those points we have already
+dealt with (and therefore no longer care about) will be invalid at any
+time.
+</p>
+<div class="lisp">
+<pre class="lisp">((64820 . end)
+ (64744 . font-lock-comment-face)
+ (64736 . end)
+ (64722 . font-lock-string-face)
+ (64630 . end)
+ (64623 . font-lock-string-face)
+ (64449 . end)
+ ;; Big similar section elided.  You get the idea.
+ (5459 . end)
+ (5431 . (:inherit font-lock-keyword-face :background &quot;7e7e7e&quot;))
+ (5431 . end)
+ (4285 . font-lock-constant-face)
+ (4285 . end)
+ (4221 . font-lock-comment-face)
+ (4221 . end)
+ (4197 . font-lock-constant-face)
+ (4197 . end)
+ (1 . font-lock-comment-face))
+</pre></div>
+
+</dd>
+</dl>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="Examples.html#Examples" accesskey="n" rel="next">Examples</a>, Previous: <a href="Variables.html#Variables" accesskey="p" rel="prev">Variables</a>, Up: <a href="Usage-_0026-Examples.html#Usage-_0026-Examples" accesskey="u" rel="up">Usage &amp; Examples</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

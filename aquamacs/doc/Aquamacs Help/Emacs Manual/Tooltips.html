@@ -1,75 +1,164 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Tooltips - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Tooltips</title>
+
+<meta name="description" content="GNU Emacs Manual: Tooltips">
+<meta name="keywords" content="GNU Emacs Manual: Tooltips">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Frames.html#Frames" title="Frames">
-<link rel="prev" href="Dialog-Boxes.html#Dialog-Boxes" title="Dialog Boxes">
-<link rel="next" href="Mouse-Avoidance.html#Mouse-Avoidance" title="Mouse Avoidance">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Frames.html#Frames" rel="up" title="Frames">
+<link href="Mouse-Avoidance.html#Mouse-Avoidance" rel="next" title="Mouse Avoidance">
+<link href="Dialog-Boxes.html#Dialog-Boxes" rel="prev" title="Dialog Boxes">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Tooltips"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Mouse-Avoidance.html#Mouse-Avoidance">Mouse Avoidance</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Dialog-Boxes.html#Dialog-Boxes">Dialog Boxes</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
-<hr>
+Next: <a href="Mouse-Avoidance.html#Mouse-Avoidance" accesskey="n" rel="next">Mouse Avoidance</a>, Previous: <a href="Dialog-Boxes.html#Dialog-Boxes" accesskey="p" rel="prev">Dialog Boxes</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Tooltips-1"></a>
 <h3 class="section">21.18 Tooltips</h3>
+<a name="index-tooltips-1"></a>
 
-<p><a name="index-tooltips-1609"></a>
-  <dfn>Tooltips</dfn> are small windows that display text information at
-the current mouse position.  They activate when there is a pause in
-mouse movement over some significant piece of text in a window, or the
-mode line, or some other part of the Emacs frame such as a tool bar
-button or menu item.
-
-   <p><a name="index-tooltip_002dmode-1610"></a>  You can toggle the use of tooltips with the command <kbd>M-x
+<p><em>Tooltips</em> are small special frames that display text
+information at the current mouse position.  They activate when there
+is a pause in mouse movement over some significant piece of text in a
+window, or the mode line, or some other part of the Emacs frame such
+as a tool bar button or menu item.
+</p>
+<a name="index-tooltip_002dmode"></a>
+<p>You can toggle the use of tooltips with the command <kbd>M-x
 tooltip-mode</kbd>.  When Tooltip mode is disabled, the help text is
 displayed in the echo area instead.  To control the use of tooltips at
 startup, customize the variable <code>tooltip-mode</code>.
+</p>
+<p>The following variables provide customization options for tooltip
+display:
+</p>
+<dl compact="compact">
+<dt><code>tooltip-delay</code>
+<a name="index-tooltip_002ddelay"></a>
+</dt>
+<dd><p>This variable specifies how long Emacs should wait before displaying
+the first tooltip.  The value is in seconds.
+</p>
+</dd>
+<dt><code>tooltip-short-delay</code>
+<a name="index-tooltip_002dshort_002ddelay"></a>
+</dt>
+<dd><p>This variable specifies how long Emacs should wait before displaying
+subsequent tooltips on different items, having already displayed the
+first tooltip.  The value is in seconds.
+</p>
+</dd>
+<dt><code>tooltip-hide-delay</code>
+<a name="index-tooltip_002dhide_002ddelay"></a>
+</dt>
+<dd><p>The number of seconds since displaying a tooltip to hide it, if the
+mouse doesn&rsquo;t move.
+</p>
+</dd>
+<dt><code>tooltip-x-offset</code>
+<a name="index-tooltip_002dx_002doffset"></a>
+</dt>
+<dt><code>tooltip-y-offset</code>
+<a name="index-tooltip_002dy_002doffset"></a>
+</dt>
+<dd><p>The X and Y offsets, in pixels, of the left top corner of the tooltip
+from the mouse pointer position.  Note that these are ignored if
+<code>tooltip-frame-parameters</code> was customized to include,
+respectively, the <code>left</code> and <code>top</code> parameters.  The values
+of the offsets should be chosen so that the tooltip doesn&rsquo;t cover the
+mouse pointer&rsquo;s hot spot, or it might interfere with clicking the
+mouse.
+</p>
+</dd>
+<dt><code>tooltip-frame-parameters</code>
+<a name="index-tooltip_002dframe_002dparameters"></a>
+</dt>
+<dd><p>The frame parameters used for displaying tooltips.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Frame-Parameters.html#Frame-Parameters">Frame
+Parameters</a> in <cite>The Emacs Lisp Reference Manual</cite>, and also
+<a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Tooltips.html#Tooltips">Tooltips</a> in <cite>The Emacs Lisp Reference Manual</cite>.
+</p></dd>
+</dl>
 
-   <p><a name="index-tooltip_002ddelay-1611"></a>  The variables <code>tooltip-delay</code> specifies how long Emacs should
-wait before displaying a tooltip.  For additional customization
-options for displaying tooltips, use <kbd>M-x customize-group
-&lt;RET&gt; tooltip &lt;RET&gt;</kbd>.
-
-   <p><a name="index-x_002dgtk_002duse_002dsystem_002dtooltips-1612"></a>  If Emacs is built with GTK+ support, it displays tooltips via GTK+,
+<p>For additional customization options for displaying tooltips, use
+<kbd>M-x customize-group <span class="key">RET</span> tooltip <span class="key">RET</span></kbd>.
+</p>
+<a name="index-x_002dgtk_002duse_002dsystem_002dtooltips"></a>
+<p>If Emacs is built with GTK+ support, it displays tooltips via GTK+,
 using the default appearance of GTK+ tooltips.  To disable this,
-change the variable <code>x-gtk-use-system-tooltips</code> to <code>nil</code>. 
+change the variable <code>x-gtk-use-system-tooltips</code> to <code>nil</code>.
 If you do this, or if Emacs is built without GTK+ support, most
 attributes of the tooltip text are specified by the <code>tooltip</code>
 face, and by X resources (see <a href="X-Resources.html#X-Resources">X Resources</a>).
-
-   <p><dfn>GUD tooltips</dfn> are special tooltips that show the values of
+</p>
+<p><em>GUD tooltips</em> are special tooltips that show the values of
 variables when debugging a program with GUD.  See <a href="Debugger-Operation.html#Debugger-Operation">Debugger Operation</a>.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Mouse-Avoidance.html#Mouse-Avoidance" accesskey="n" rel="next">Mouse Avoidance</a>, Previous: <a href="Dialog-Boxes.html#Dialog-Boxes" accesskey="p" rel="prev">Dialog Boxes</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

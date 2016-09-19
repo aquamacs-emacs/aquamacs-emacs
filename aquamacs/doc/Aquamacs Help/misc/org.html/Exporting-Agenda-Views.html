@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This manual is for Org version 8.2.9.
+
+Copyright (C) 2004-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being "A GNU Manual,"
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>The Org Manual: Exporting Agenda Views</title>
+
+<meta name="description" content="The Org Manual: Exporting Agenda Views">
+<meta name="keywords" content="The Org Manual: Exporting Agenda Views">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Main-Index.html#Main-Index" rel="index" title="Main Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Agenda-Views.html#Agenda-Views" rel="up" title="Agenda Views">
+<link href="Agenda-column-view.html#Agenda-column-view" rel="next" title="Agenda column view">
+<link href="Setting-Options.html#Setting-Options" rel="prev" title="Setting Options">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Exporting-Agenda-Views"></a>
+<div class="header">
+<p>
+Next: <a href="Agenda-column-view.html#Agenda-column-view" accesskey="n" rel="next">Agenda column view</a>, Previous: <a href="Custom-agenda-views.html#Custom-agenda-views" accesskey="p" rel="prev">Custom agenda views</a>, Up: <a href="Agenda-Views.html#Agenda-Views" accesskey="u" rel="up">Agenda Views</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Exporting-Agenda-Views-1"></a>
+<h3 class="section">10.7 Exporting Agenda Views</h3>
+<a name="index-agenda-views_002c-exporting-1"></a>
+
+<p>If you are away from your computer, it can be very useful to have a printed
+version of some agenda views to carry around.  Org mode can export custom
+agenda views as plain text, HTML<a name="DOCF115" href="#FOOT115"><sup>115</sup></a>, Postscript, PDF<a name="DOCF116" href="#FOOT116"><sup>116</sup></a>, and iCalendar files.  If
+you want to do this only occasionally, use the command
+</p>
+<dl compact="compact">
+<dd><a name="index-C_002dx-C_002dw-1"></a>
+<a name="index-org_002dagenda_002dwrite-1"></a>
+</dd>
+<dt><kbd><kbd>C-x C-w</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-agenda-write</code>)</kbd></dt>
+<dd><a name="index-exporting-agenda-views-1"></a>
+<a name="index-agenda-views_002c-exporting-2"></a>
+<a name="index-org_002dagenda_002dexporter_002dsettings-1"></a>
+<p>Write the agenda view to a file.  Depending on the extension of the selected
+file name, the view will be exported as HTML (extension <samp>.html</samp> or
+<samp>.htm</samp>), Postscript (extension <samp>.ps</samp>), iCalendar (extension
+<samp>.ics</samp>), or plain text (any other extension).  Use the variable
+<code>org-agenda-exporter-settings</code> to set options for <samp>ps-print</samp> and
+for <samp>htmlize</samp> to be used during export, for example
+</p>
+<a name="index-org_002dagenda_002dadd_002dentry_002dtext_002dmaxlines"></a>
+<a name="index-htmlize_002doutput_002dtype"></a>
+<a name="index-ps_002dnumber_002dof_002dcolumns"></a>
+<a name="index-ps_002dlandscape_002dmode"></a>
+<div class="lisp">
+<pre class="lisp">(setq org-agenda-exporter-settings
+      '((ps-number-of-columns 2)
+        (ps-landscape-mode t)
+        (org-agenda-add-entry-text-maxlines 5)
+        (htmlize-output-type 'css)))
+</pre></div>
+</dd>
+</dl>
+
+<p>If you need to export certain agenda views frequently, you can associate
+any custom agenda command with a list of output file names
+<a name="DOCF117" href="#FOOT117"><sup>117</sup></a>.  Here is an example
+that first defines custom commands for the agenda and the global
+TODO list, together with a number of files to which to export them.
+Then we define two block agenda commands and specify file names for them
+as well.  File names can be relative to the current working directory,
+or absolute.
+</p>
+<div class="lisp">
+<pre class="lisp">(setq org-agenda-custom-commands
+      '((&quot;X&quot; agenda &quot;&quot; nil (&quot;agenda.html&quot; &quot;agenda.ps&quot;))
+        (&quot;Y&quot; alltodo &quot;&quot; nil (&quot;todo.html&quot; &quot;todo.txt&quot; &quot;todo.ps&quot;))
+        (&quot;h&quot; &quot;Agenda and Home-related tasks&quot;
+         ((agenda &quot;&quot;)
+          (tags-todo &quot;home&quot;)
+          (tags &quot;garden&quot;))
+         nil
+         (&quot;~/views/home.html&quot;))
+        (&quot;o&quot; &quot;Agenda and Office-related tasks&quot;
+         ((agenda)
+          (tags-todo &quot;work&quot;)
+          (tags &quot;office&quot;))
+         nil
+         (&quot;~/views/office.ps&quot; &quot;~/calendars/office.ics&quot;))))
+</pre></div>
+
+<p>The extension of the file name determines the type of export.  If it is
+<samp>.html</samp>, Org mode will use the <samp>htmlize.el</samp> package to convert
+the buffer to HTML and save it to this file name.  If the extension is
+<samp>.ps</samp>, <code>ps-print-buffer-with-faces</code> is used to produce
+Postscript output.  If the extension is <samp>.ics</samp>, iCalendar export is
+run export over all files that were used to construct the agenda, and
+limit the export to entries listed in the agenda.  Any other
+extension produces a plain ASCII file.
+</p>
+<p>The export files are <em>not</em> created when you use one of those
+commands interactively because this might use too much overhead.
+Instead, there is a special command to produce <em>all</em> specified
+files in one step:
+</p>
+<dl compact="compact">
+<dd><a name="index-C_002dc-a-e"></a>
+<a name="index-org_002dstore_002dagenda_002dviews"></a>
+</dd>
+<dt><kbd><kbd>C-c a e</kbd> &nbsp;&nbsp;&nbsp;&nbsp;(<code>org-store-agenda-views</code>)</kbd></dt>
+<dd><p>Export all agenda views that have export file names associated with
+them.
+</p></dd>
+</dl>
+
+<p>You can use the options section of the custom agenda commands to also
+set options for the export commands.  For example:
+</p>
+<div class="lisp">
+<pre class="lisp">(setq org-agenda-custom-commands
+      '((&quot;X&quot; agenda &quot;&quot;
+         ((ps-number-of-columns 2)
+          (ps-landscape-mode t)
+          (org-agenda-prefix-format &quot; [ ] &quot;)
+          (org-agenda-with-colors nil)
+          (org-agenda-remove-tags t))
+         (&quot;theagenda.ps&quot;))))
+</pre></div>
+
+<p>This command sets two options for the Postscript exporter, to make it
+print in two columns in landscape format&mdash;the resulting page can be cut
+in two and then used in a paper agenda.  The remaining settings modify
+the agenda prefix to omit category and scheduling information, and
+instead include a checkbox to check off items.  We also remove the tags
+to make the lines compact, and we don&rsquo;t want to use colors for the
+black-and-white printer.  Settings specified in
+<code>org-agenda-exporter-settings</code> will also apply, but the settings
+in <code>org-agenda-custom-commands</code> take precedence.
+</p>
+<p>From the command line you may also use
+</p><div class="example">
+<pre class="example">emacs -eval (org-batch-store-agenda-views) -kill
+</pre></div>
+<p>or, if you need to modify some parameters<a name="DOCF118" href="#FOOT118"><sup>118</sup></a>
+</p><div class="example">
+<pre class="example">emacs -eval '(org-batch-store-agenda-views                      \
+              org-agenda-span (quote month)                     \
+              org-agenda-start-day &quot;2007-11-01&quot;                 \
+              org-agenda-include-diary nil                      \
+              org-agenda-files (quote (&quot;~/org/project.org&quot;)))'  \
+      -kill
+</pre></div>
+<p>which will create the agenda views restricted to the file
+<samp>~/org/project.org</samp>, without diary entries and with a 30-day
+extent.
+</p>
+<p>You can also extract agenda information in a way that allows further
+processing by other programs.  See <a href="Extracting-agenda-information.html#Extracting-agenda-information">Extracting agenda information</a>, for
+more information.
+</p>
+
+<div class="footnote">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h3><a name="FOOT115" href="#DOCF115">(115)</a></h3>
+<p>You need to install Hrvoje Niksic&rsquo;s
+<samp>htmlize.el</samp>.</p>
+<h3><a name="FOOT116" href="#DOCF116">(116)</a></h3>
+<p>To create PDF output, the
+ghostscript <samp>ps2pdf</samp> utility must be installed on the system.  Selecting
+a PDF file will also create the postscript file.</p>
+<h3><a name="FOOT117" href="#DOCF117">(117)</a></h3>
+<p>If you want to store standard views like the weekly agenda
+or the global TODO list as well, you need to define custom commands for
+them in order to be able to specify file names.</p>
+<h3><a name="FOOT118" href="#DOCF118">(118)</a></h3>
+<p>Quoting depends on the
+system you use, please check the FAQ for examples.</p>
+</div>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Agenda-column-view.html#Agenda-column-view" accesskey="n" rel="next">Agenda column view</a>, Previous: <a href="Custom-agenda-views.html#Custom-agenda-views" accesskey="p" rel="prev">Custom agenda views</a>, Up: <a href="Agenda-Views.html#Agenda-Views" accesskey="u" rel="up">Agenda Views</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Main-Index.html#Main-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

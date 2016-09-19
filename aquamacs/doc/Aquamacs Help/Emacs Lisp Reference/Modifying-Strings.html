@@ -1,78 +1,113 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Modifying Strings - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Modifying Strings</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Modifying Strings">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Modifying Strings">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Strings-and-Characters.html#Strings-and-Characters" title="Strings and Characters">
-<link rel="prev" href="Creating-Strings.html#Creating-Strings" title="Creating Strings">
-<link rel="next" href="Text-Comparison.html#Text-Comparison" title="Text Comparison">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Strings-and-Characters.html#Strings-and-Characters" rel="up" title="Strings and Characters">
+<link href="Text-Comparison.html#Text-Comparison" rel="next" title="Text Comparison">
+<link href="Creating-Strings.html#Creating-Strings" rel="prev" title="Creating Strings">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Modifying-Strings"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Text-Comparison.html#Text-Comparison">Text Comparison</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Creating-Strings.html#Creating-Strings">Creating Strings</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Strings-and-Characters.html#Strings-and-Characters">Strings and Characters</a>
-<hr>
+Next: <a href="Text-Comparison.html#Text-Comparison" accesskey="n" rel="next">Text Comparison</a>, Previous: <a href="Creating-Strings.html#Creating-Strings" accesskey="p" rel="prev">Creating Strings</a>, Up: <a href="Strings-and-Characters.html#Strings-and-Characters" accesskey="u" rel="up">Strings and Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Modifying-Strings-1"></a>
 <h3 class="section">4.4 Modifying Strings</h3>
+<a name="index-modifying-strings"></a>
+<a name="index-string-modification"></a>
 
-<p><a name="index-modifying-strings-251"></a><a name="index-string-modification-252"></a>
-  The most basic way to alter the contents of an existing string is with
-<code>aset</code> (see <a href="Array-Functions.html#Array-Functions">Array Functions</a>).  <code>(aset </code><var>string</var>
-<var>idx</var> <var>char</var><code>)</code> stores <var>char</var> into <var>string</var> at index
+<p>The most basic way to alter the contents of an existing string is with
+<code>aset</code> (see <a href="Array-Functions.html#Array-Functions">Array Functions</a>).  <code>(aset <var>string</var>
+<var>idx</var> <var>char</var>)</code> stores <var>char</var> into <var>string</var> at index
 <var>idx</var>.  Each character occupies one or more bytes, and if <var>char</var>
 needs a different number of bytes from the character already present at
 that index, <code>aset</code> signals an error.
-
-   <p>A more powerful function is <code>store-substring</code>:
-
-<div class="defun">
-&mdash; Function: <b>store-substring</b><var> string idx obj<a name="index-store_002dsubstring-253"></a></var><br>
-<blockquote><p>This function alters part of the contents of the string <var>string</var>, by
+</p>
+<p>A more powerful function is <code>store-substring</code>:
+</p>
+<dl>
+<dt><a name="index-store_002dsubstring"></a>Function: <strong>store-substring</strong> <em>string idx obj</em></dt>
+<dd><p>This function alters part of the contents of the string <var>string</var>, by
 storing <var>obj</var> starting at index <var>idx</var>.  The argument <var>obj</var>
 may be either a character or a (smaller) string.
-
-        <p>Since it is impossible to change the length of an existing string, it is
-an error if <var>obj</var> doesn't fit within <var>string</var>'s actual length,
+</p>
+<p>Since it is impossible to change the length of an existing string, it is
+an error if <var>obj</var> doesn&rsquo;t fit within <var>string</var>&rsquo;s actual length,
 or if any new character requires a different number of bytes from the
-character currently present at that point in <var>string</var>. 
-</p></blockquote></div>
+character currently present at that point in <var>string</var>.
+</p></dd></dl>
 
-   <p>To clear out a string that contained a password, use
+<p>To clear out a string that contained a password, use
 <code>clear-string</code>:
+</p>
+<dl>
+<dt><a name="index-clear_002dstring"></a>Function: <strong>clear-string</strong> <em>string</em></dt>
+<dd><p>This makes <var>string</var> a unibyte string and clears its contents to
+zeros.  It may also change <var>string</var>&rsquo;s length.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>clear-string</b><var> string<a name="index-clear_002dstring-254"></a></var><br>
-<blockquote><p>This makes <var>string</var> a unibyte string and clears its contents to
-zeros.  It may also change <var>string</var>'s length. 
-</p></blockquote></div>
 
-   </body></html>
 
+
+</body>
+</html>

@@ -1,165 +1,289 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Standard Keymaps - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Standard Keymaps</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Standard Keymaps">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Standard Keymaps">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Standard-Errors.html#Standard-Errors" title="Standard Errors">
-<link rel="next" href="Standard-Hooks.html#Standard-Hooks" title="Standard Hooks">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Standard-Hooks.html#Standard-Hooks" rel="next" title="Standard Hooks">
+<link href="Standard-Errors.html#Standard-Errors" rel="prev" title="Standard Errors">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Standard-Keymaps"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Standard-Hooks.html#Standard-Hooks">Standard Hooks</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Standard-Errors.html#Standard-Errors">Standard Errors</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
+Next: <a href="Standard-Hooks.html#Standard-Hooks" accesskey="n" rel="next">Standard Hooks</a>, Previous: <a href="Standard-Errors.html#Standard-Errors" accesskey="p" rel="prev">Standard Errors</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Standard-Keymaps-1"></a>
 <h2 class="appendix">Appendix G Standard Keymaps</h2>
+<a name="index-keymaps_002c-standard"></a>
 
-<p><a name="index-keymaps_002c-standard-4833"></a>
-In this section we list some of the more general keymaps.  Many of
+<p>In this section we list some of the more general keymaps.  Many of
 these exist when Emacs is first started, but some are loaded only when
 the respective feature is accessed.
-
-   <p>There are many other, more specialized, maps than these; in particular
+</p>
+<p>There are many other, more specialized, maps than these; in particular
 those associated with major and minor modes.  The minibuffer uses
 several keymaps (see <a href="Completion-Commands.html#Completion-Commands">Completion Commands</a>).  For more details on
 keymaps, see <a href="Keymaps.html#Keymaps">Keymaps</a>.
-
-<!-- Don't list individual major mode keymaps here, only more general things. -->
-<!-- Only add vindex for things not covered elsewhere in this manual. -->
-<!-- Don't add xrefs to things covered in {Keymaps}. -->
-     <dl>
-<dt><code>2C-mode-map</code><dd>A sparse keymap for subcommands of the prefix <kbd>C-x 6</kbd>.<br>
-See <a href="../emacs/Two_002dColumn.html#Two_002dColumn">Two-Column Editing</a>.
-
-     <br><dt><code>abbrev-map</code><dd><a name="index-abbrev_002dmap-4834"></a>A sparse keymap for subcommands of the prefix <kbd>C-x a</kbd>.<br>
-See <a href="../emacs/Defining-Abbrevs.html#Defining-Abbrevs">Defining Abbrevs</a>.
-
-     <br><dt><code>button-buffer-map</code><dd>A sparse keymap useful for buffers containing buffers.<br>
+</p>
+<dl compact="compact">
+<dt><code>2C-mode-map</code></dt>
+<dd><p>A sparse keymap for subcommands of the prefix <kbd>C-x 6</kbd>.<br>
+See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Two_002dColumn.html#Two_002dColumn">Two-Column Editing</a> in <cite>The GNU Emacs Manual</cite>.
+</p>
+</dd>
+<dt><code>abbrev-map</code></dt>
+<dd><a name="index-abbrev_002dmap"></a>
+<p>A sparse keymap for subcommands of the prefix <kbd>C-x a</kbd>.<br>
+See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Defining-Abbrevs.html#Defining-Abbrevs">Defining Abbrevs</a> in <cite>The GNU Emacs Manual</cite>.
+</p>
+</dd>
+<dt><code>button-buffer-map</code></dt>
+<dd><p>A sparse keymap useful for buffers containing buffers.<br>
 You may want to use this as a parent keymap.  See <a href="Buttons.html#Buttons">Buttons</a>.
+</p>
+</dd>
+<dt><code>button-map</code></dt>
+<dd><p>A sparse keymap used by buttons.
+</p>
+</dd>
+<dt><code>ctl-x-4-map</code></dt>
+<dd><p>A sparse keymap for subcommands of the prefix <kbd>C-x 4</kbd>.
+</p>
+</dd>
+<dt><code>ctl-x-5-map</code></dt>
+<dd><p>A sparse keymap for subcommands of the prefix <kbd>C-x 5</kbd>.
+</p>
+</dd>
+<dt><code>ctl-x-map</code></dt>
+<dd><p>A full keymap for <kbd>C-x</kbd> commands.
+</p>
+</dd>
+<dt><code>ctl-x-r-map</code></dt>
+<dd><a name="index-ctl_002dx_002dr_002dmap"></a>
+<p>A sparse keymap for subcommands of the prefix <kbd>C-x r</kbd>.<br>
+See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Registers.html#Registers">Registers</a> in <cite>The GNU Emacs Manual</cite>.
+</p>
+</dd>
+<dt><code>esc-map</code></dt>
+<dd><p>A full keymap for <kbd>ESC</kbd> (or <kbd>Meta</kbd>) commands.
+</p>
+</dd>
+<dt><code>facemenu-keymap</code></dt>
+<dd><p>A sparse keymap used for the <kbd>M-o</kbd> prefix key.
+</p>
+</dd>
+<dt><code>function-key-map</code></dt>
+<dd><p>The parent keymap of all <code>local-function-key-map</code> (q.v.) instances.
+</p>
 
-     <br><dt><code>button-map</code><dd>A sparse keymap used by buttons.
-
-     <br><dt><code>ctl-x-4-map</code><dd>A sparse keymap for subcommands of the prefix <kbd>C-x 4</kbd>.
-
-     <br><dt><code>ctl-x-5-map</code><dd>A sparse keymap for subcommands of the prefix <kbd>C-x 5</kbd>.
-
-     <br><dt><code>ctl-x-map</code><dd>A full keymap for <kbd>C-x</kbd> commands.
-
-     <br><dt><code>ctl-x-r-map</code><dd><a name="index-ctl_002dx_002dr_002dmap-4835"></a>A sparse keymap for subcommands of the prefix <kbd>C-x r</kbd>.<br>
-See <a href="../emacs/Registers.html#Registers">Registers</a>.
-
-     <br><dt><code>esc-map</code><dd>A full keymap for <kbd>ESC</kbd> (or <kbd>Meta</kbd>) commands.
-
-     <br><dt><code>facemenu-keymap</code><dd>A sparse keymap used for the <kbd>M-o</kbd> prefix key.
-
-     <br><dt><code>function-key-map</code><dd>The parent keymap of all <code>local-function-key-map</code> (q.v.) instances.
-
-     <br><dt><code>global-map</code><dd>The full keymap containing default global key bindings.<br>
+</dd>
+<dt><code>global-map</code></dt>
+<dd><p>The full keymap containing default global key bindings.<br>
 Modes should not modify the Global map.
-
-     <br><dt><code>goto-map</code><dd>A sparse keymap used for the <kbd>M-g</kbd> prefix key.
-
-     <br><dt><code>help-map</code><dd>A sparse keymap for the keys following the help character <kbd>C-h</kbd>.<br>
+</p>
+</dd>
+<dt><code>goto-map</code></dt>
+<dd><p>A sparse keymap used for the <kbd>M-g</kbd> prefix key.
+</p>
+</dd>
+<dt><code>help-map</code></dt>
+<dd><p>A sparse keymap for the keys following the help character <kbd>C-h</kbd>.<br>
 See <a href="Help-Functions.html#Help-Functions">Help Functions</a>.
-
-     <br><dt><code>Helper-help-map</code><dd>A full keymap used by the help utility package.<br>
+</p>
+</dd>
+<dt><code>Helper-help-map</code></dt>
+<dd><p>A full keymap used by the help utility package.<br>
 It has the same keymap in its value cell and in its function cell.
-
-     <br><dt><code>input-decode-map</code><dd>The keymap for translating keypad and function keys.<br>
-If there are none, then it contains an empty sparse keymap. 
+</p>
+</dd>
+<dt><code>input-decode-map</code></dt>
+<dd><p>The keymap for translating keypad and function keys.<br>
+If there are none, then it contains an empty sparse keymap.
 See <a href="Translation-Keymaps.html#Translation-Keymaps">Translation Keymaps</a>.
-
-     <br><dt><code>key-translation-map</code><dd>A keymap for translating keys.  This one overrides ordinary key
+</p>
+</dd>
+<dt><code>key-translation-map</code></dt>
+<dd><p>A keymap for translating keys.  This one overrides ordinary key
 bindings, unlike <code>local-function-key-map</code>.  See <a href="Translation-Keymaps.html#Translation-Keymaps">Translation Keymaps</a>.
-
-     <br><dt><code>kmacro-keymap</code><dd><a name="index-kmacro_002dkeymap-4836"></a>A sparse keymap for keys that follows the <kbd>C-x C-k</kbd> prefix search.<br>
-See <a href="../emacs/Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a>.
-
-     <br><dt><code>local-function-key-map</code><dd>The keymap for translating key sequences to preferred alternatives.<br>
-If there are none, then it contains an empty sparse keymap. 
+</p>
+</dd>
+<dt><code>kmacro-keymap</code></dt>
+<dd><a name="index-kmacro_002dkeymap"></a>
+<p>A sparse keymap for keys that follows the <kbd>C-x C-k</kbd> prefix search.<br>
+See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Keyboard-Macros.html#Keyboard-Macros">Keyboard Macros</a> in <cite>The GNU Emacs Manual</cite>.
+</p>
+</dd>
+<dt><code>local-function-key-map</code></dt>
+<dd><p>The keymap for translating key sequences to preferred alternatives.<br>
+If there are none, then it contains an empty sparse keymap.
 See <a href="Translation-Keymaps.html#Translation-Keymaps">Translation Keymaps</a>.
-
-     <br><dt><code>menu-bar-file-menu</code><dt><code>menu-bar-edit-menu</code><dt><code>menu-bar-options-menu</code><dt><code>global-buffers-menu-map</code><dt><code>menu-bar-tools-menu</code><dt><code>menu-bar-help-menu</code><dd><a name="index-menu-bar-keymaps-4837"></a><a name="index-menu_002dbar_002dfile_002dmenu-4838"></a><a name="index-menu_002dbar_002doptions_002dmenu-4839"></a><a name="index-global_002dbuffers_002dmenu_002dmap-4840"></a><a name="index-menu_002dbar_002dtools_002dmenu-4841"></a><a name="index-menu_002dbar_002dhelp_002dmenu-4842"></a>These keymaps display the main, top-level menus in the menu bar.<br>
+</p>
+</dd>
+<dt><code>menu-bar-file-menu</code></dt>
+<dt><code>menu-bar-edit-menu</code></dt>
+<dt><code>menu-bar-options-menu</code></dt>
+<dt><code>global-buffers-menu-map</code></dt>
+<dt><code>menu-bar-tools-menu</code></dt>
+<dt><code>menu-bar-help-menu</code></dt>
+<dd><a name="index-menu-bar-keymaps"></a>
+<a name="index-menu_002dbar_002dfile_002dmenu"></a>
+<a name="index-menu_002dbar_002doptions_002dmenu"></a>
+<a name="index-global_002dbuffers_002dmenu_002dmap"></a>
+<a name="index-menu_002dbar_002dtools_002dmenu"></a>
+<a name="index-menu_002dbar_002dhelp_002dmenu"></a>
+<p>These keymaps display the main, top-level menus in the menu bar.<br>
 Some of them contain sub-menus.  For example, the Edit menu contains
 <code>menu-bar-search-menu</code>, etc.  See <a href="Menu-Bar.html#Menu-Bar">Menu Bar</a>.
-
-     <br><dt><code>minibuffer-inactive-mode-map</code><dd>A full keymap used in the minibuffer when it is not active.<br>
-See <a href="../emacs/Minibuffer-Edit.html#Minibuffer-Edit">Editing in the Minibuffer</a>.
-
-     <br><dt><code>mode-line-coding-system-map</code><dt><code>mode-line-input-method-map</code><dt><code>mode-line-column-line-number-mode-map</code><dd><a name="index-mode_002dline_002dcoding_002dsystem_002dmap-4843"></a><a name="index-mode_002dline_002dinput_002dmethod_002dmap-4844"></a><a name="index-mode_002dline_002dcolumn_002dline_002dnumber_002dmode_002dmap-4845"></a>These keymaps control various areas of the mode line.<br>
+</p>
+</dd>
+<dt><code>minibuffer-inactive-mode-map</code></dt>
+<dd><p>A full keymap used in the minibuffer when it is not active.<br>
+See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Minibuffer-Edit.html#Minibuffer-Edit">Editing in the Minibuffer</a> in <cite>The GNU Emacs Manual</cite>.
+</p>
+</dd>
+<dt><code>mode-line-coding-system-map</code></dt>
+<dt><code>mode-line-input-method-map</code></dt>
+<dt><code>mode-line-column-line-number-mode-map</code></dt>
+<dd><a name="index-mode_002dline_002dcoding_002dsystem_002dmap"></a>
+<a name="index-mode_002dline_002dinput_002dmethod_002dmap"></a>
+<a name="index-mode_002dline_002dcolumn_002dline_002dnumber_002dmode_002dmap"></a>
+<p>These keymaps control various areas of the mode line.<br>
 See <a href="Mode-Line-Format.html#Mode-Line-Format">Mode Line Format</a>.
-
-     <br><dt><code>mode-specific-map</code><dd>The keymap for characters following <kbd>C-c</kbd>.  Note, this is in the
+</p>
+</dd>
+<dt><code>mode-specific-map</code></dt>
+<dd><p>The keymap for characters following <kbd>C-c</kbd>.  Note, this is in the
 global map.  This map is not actually mode-specific: its name was chosen
 to be informative in <kbd>C-h b</kbd> (<code>display-bindings</code>),
 where it describes the main use of the <kbd>C-c</kbd> prefix key.
-
-     <!-- FIXME - don't mention this one? -->
-     <br><dt><code>mouse-appearance-menu-map</code><dd><a name="index-mouse_002dappearance_002dmenu_002dmap-4846"></a>A sparse keymap used for the <kbd>S-mouse-1</kbd> key.
-
-     <br><dt><code>mule-keymap</code><dd>The global keymap used for the <kbd>C-x &lt;RET&gt;</kbd> prefix key.
-
-     <br><dt><code>narrow-map</code><dd><a name="index-narrow_002dmap-4847"></a>A sparse keymap for subcommands of the prefix <kbd>C-x n</kbd>.
-
-     <br><dt><code>prog-mode-map</code><dd>The keymap used by Prog mode.<br>
+</p>
+</dd>
+<dt><code>mouse-appearance-menu-map</code></dt>
+<dd><a name="index-mouse_002dappearance_002dmenu_002dmap"></a>
+<p>A sparse keymap used for the <kbd>S-mouse-1</kbd> key.
+</p>
+</dd>
+<dt><code>mule-keymap</code></dt>
+<dd><p>The global keymap used for the <kbd>C-x <span class="key">RET</span></kbd> prefix key.
+</p>
+</dd>
+<dt><code>narrow-map</code></dt>
+<dd><a name="index-narrow_002dmap"></a>
+<p>A sparse keymap for subcommands of the prefix <kbd>C-x n</kbd>.
+</p>
+</dd>
+<dt><code>prog-mode-map</code></dt>
+<dd><p>The keymap used by Prog mode.<br>
 See <a href="Basic-Major-Modes.html#Basic-Major-Modes">Basic Major Modes</a>.
-
-     <br><dt><code>query-replace-map</code><dt><code>multi-query-replace-map</code><dd>A sparse keymap used for responses in <code>query-replace</code> and related
+</p>
+</dd>
+<dt><code>query-replace-map</code></dt>
+<dt><code>multi-query-replace-map</code></dt>
+<dd><p>A sparse keymap used for responses in <code>query-replace</code> and related
 commands; also for <code>y-or-n-p</code> and <code>map-y-or-n-p</code>.  The functions
 that use this map do not support prefix keys; they look up one event at a
 time.  <code>multi-query-replace-map</code> extends <code>query-replace-map</code>
 for multi-buffer replacements.  See <a href="Search-and-Replace.html#Search-and-Replace">query-replace-map</a>.
-
-     <br><dt><code>search-map</code><dd>A sparse keymap that provides global bindings for search-related commands.
-
-     <br><dt><code>special-mode-map</code><dd>The keymap used by Special mode.<br>
+</p>
+</dd>
+<dt><code>search-map</code></dt>
+<dd><p>A sparse keymap that provides global bindings for search-related commands.
+</p>
+</dd>
+<dt><code>special-mode-map</code></dt>
+<dd><p>The keymap used by Special mode.<br>
 See <a href="Basic-Major-Modes.html#Basic-Major-Modes">Basic Major Modes</a>.
-
-     <br><dt><code>tool-bar-map</code><dd>The keymap defining the contents of the tool bar.<br>
+</p>
+</dd>
+<dt><code>tool-bar-map</code></dt>
+<dd><p>The keymap defining the contents of the tool bar.<br>
 See <a href="Tool-Bar.html#Tool-Bar">Tool Bar</a>.
-
-     <br><dt><code>universal-argument-map</code><dd><a name="index-universal_002dargument_002dmap-4848"></a>A sparse keymap used while processing <kbd>C-u</kbd>.<br>
+</p>
+</dd>
+<dt><code>universal-argument-map</code></dt>
+<dd><a name="index-universal_002dargument_002dmap"></a>
+<p>A sparse keymap used while processing <kbd>C-u</kbd>.<br>
 See <a href="Prefix-Command-Arguments.html#Prefix-Command-Arguments">Prefix Command Arguments</a>.
-
-     <br><dt><code>vc-prefix-map</code><dd>The global keymap used for the <kbd>C-x v</kbd> prefix key.
-
-     <br><dt><code>x-alternatives-map</code><dd><a name="index-x_002dalternatives_002dmap-4849"></a><a name="index-x_002dsetup_002dfunction_002dkeys-4850"></a>A sparse keymap used to map certain keys under graphical frames.<br>
+</p>
+</dd>
+<dt><code>vc-prefix-map</code></dt>
+<dd><p>The global keymap used for the <kbd>C-x v</kbd> prefix key.
+</p>
+</dd>
+<dt><code>x-alternatives-map</code></dt>
+<dd><a name="index-x_002dalternatives_002dmap"></a>
+<a name="index-x_002dsetup_002dfunction_002dkeys"></a>
+<p>A sparse keymap used to map certain keys under graphical frames.<br>
 The function <code>x-setup-function-keys</code> uses this.
+</p>
+</dd>
+</dl>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Standard-Hooks.html#Standard-Hooks" accesskey="n" rel="next">Standard Hooks</a>, Previous: <a href="Standard-Errors.html#Standard-Errors" accesskey="p" rel="prev">Standard Errors</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </dl>
-   <!-- *-texinfo-*- -->
-<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1990-1993, 1998, 2001-2015 Free Software Foundation, -->
-<!-- Inc. -->
-<!-- See the file elisp.texi for copying conditions. -->
 
-   </body></html>
 
+</body>
+</html>

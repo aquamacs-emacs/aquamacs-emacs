@@ -1,65 +1,109 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>View Mode - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: View Mode</title>
+
+<meta name="description" content="GNU Emacs Manual: View Mode">
+<meta name="keywords" content="GNU Emacs Manual: View Mode">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Display.html#Display" title="Display">
-<link rel="prev" href="Narrowing.html#Narrowing" title="Narrowing">
-<link rel="next" href="Follow-Mode.html#Follow-Mode" title="Follow Mode">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Display.html#Display" rel="up" title="Display">
+<link href="Follow-Mode.html#Follow-Mode" rel="next" title="Follow Mode">
+<link href="Narrowing.html#Narrowing" rel="prev" title="Narrowing">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="View-Mode"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Follow-Mode.html#Follow-Mode">Follow Mode</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Narrowing.html#Narrowing">Narrowing</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
-<hr>
+Next: <a href="Follow-Mode.html#Follow-Mode" accesskey="n" rel="next">Follow Mode</a>, Previous: <a href="Narrowing.html#Narrowing" accesskey="p" rel="prev">Narrowing</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="View-Mode-1"></a>
 <h3 class="section">14.6 View Mode</h3>
+<a name="index-View-mode"></a>
+<a name="index-mode_002c-View"></a>
 
-<p><a name="index-View-mode-614"></a><a name="index-mode_002c-View-615"></a>
-<a name="index-s-_0040r_007b_0028View-mode_0029_007d-616"></a><a name="index-SPC-_0040r_007b_0028View-mode_0029_007d-617"></a><a name="index-DEL-_0040r_007b_0028View-mode_0029_007d-618"></a>  View mode is a minor mode that lets you scan a buffer by sequential
+<a name="index-s-_0028View-mode_0029"></a>
+<a name="index-SPC-_0028View-mode_0029"></a>
+<a name="index-DEL-_0028View-mode_0029"></a>
+<p>View mode is a minor mode that lets you scan a buffer by sequential
 screenfuls.  It provides commands for scrolling through the buffer
 conveniently but not for changing it.  Apart from the usual Emacs
-cursor motion commands, you can type &lt;SPC&gt; to scroll forward one
-windowful, <kbd>S-&lt;SPC&gt;</kbd> or &lt;DEL&gt; to scroll backward, and <kbd>s</kbd> to
+cursor motion commands, you can type <tt class="key">SPC</tt> to scroll forward one
+windowful, <kbd>S-<span class="key">SPC</span></kbd> or <tt class="key">DEL</tt> to scroll backward, and <kbd>s</kbd> to
 start an incremental search.
-
-   <p><a name="index-q-_0040r_007b_0028View-mode_0029_007d-619"></a><a name="index-e-_0040r_007b_0028View-mode_0029_007d-620"></a><a name="index-View_002dquit-621"></a><a name="index-View_002dexit-622"></a>  Typing <kbd>q</kbd> (<code>View-quit</code>) disables View mode, and switches
+</p>
+<a name="index-q-_0028View-mode_0029"></a>
+<a name="index-e-_0028View-mode_0029"></a>
+<a name="index-View_002dquit"></a>
+<a name="index-View_002dexit"></a>
+<p>Typing <kbd>q</kbd> (<code>View-quit</code>) disables View mode, and switches
 back to the buffer and position before View mode was enabled.  Typing
 <kbd>e</kbd> (<code>View-exit</code>) disables View mode, keeping the current
 buffer and position.
-
-   <p><a name="index-view_002dbuffer-623"></a><a name="index-view_002dfile-624"></a>  <kbd>M-x view-buffer</kbd> prompts for an existing Emacs buffer, switches
+</p>
+<a name="index-view_002dbuffer"></a>
+<a name="index-view_002dfile"></a>
+<p><kbd>M-x view-buffer</kbd> prompts for an existing Emacs buffer, switches
 to it, and enables View mode.  <kbd>M-x view-file</kbd> prompts for a file
 and visits it with View mode enabled.
+</p>
 
-   </body></html>
 
+
+</body>
+</html>

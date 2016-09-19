@@ -1,84 +1,126 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Delayed Warnings - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Delayed Warnings</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Delayed Warnings">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Delayed Warnings">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Warnings.html#Warnings" title="Warnings">
-<link rel="prev" href="Warning-Options.html#Warning-Options" title="Warning Options">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Warnings.html#Warnings" rel="up" title="Warnings">
+<link href="Invisible-Text.html#Invisible-Text" rel="next" title="Invisible Text">
+<link href="Warning-Options.html#Warning-Options" rel="prev" title="Warning Options">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Delayed-Warnings"></a>
+<div class="header">
 <p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Warning-Options.html#Warning-Options">Warning Options</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Warnings.html#Warnings">Warnings</a>
-<hr>
+Previous: <a href="Warning-Options.html#Warning-Options" accesskey="p" rel="prev">Warning Options</a>, Up: <a href="Warnings.html#Warnings" accesskey="u" rel="up">Warnings</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Delayed-Warnings-1"></a>
 <h4 class="subsection">37.5.4 Delayed Warnings</h4>
+<a name="index-delayed-warnings"></a>
 
-<p><a name="index-delayed-warnings-4079"></a>
-Sometimes, you may wish to avoid showing a warning while a command is
+<p>Sometimes, you may wish to avoid showing a warning while a command is
 running, and only show it only after the end of the command.  You can
 use the variable <code>delayed-warnings-list</code> for this.
-
-<div class="defun">
-&mdash; Variable: <b>delayed-warnings-list</b><var><a name="index-delayed_002dwarnings_002dlist-4080"></a></var><br>
-<blockquote><p>The value of this variable is a list of warnings to be displayed after
+</p>
+<dl>
+<dt><a name="index-delayed_002dwarnings_002dlist"></a>Variable: <strong>delayed-warnings-list</strong></dt>
+<dd><p>The value of this variable is a list of warnings to be displayed after
 the current command has finished.  Each element must be a list
+</p>
+<div class="smallexample">
+<pre class="smallexample">(<var>type</var> <var>message</var> [<var>level</var> [<var>buffer-name</var>]])
+</pre></div>
 
-     <pre class="smallexample">          (<var>type</var> <var>message</var> [<var>level</var> [<var>buffer-name</var>]])
-</pre>
-        <p class="noindent">with the same form, and the same meanings, as the argument list of
+<p>with the same form, and the same meanings, as the argument list of
 <code>display-warning</code> (see <a href="Warning-Basics.html#Warning-Basics">Warning Basics</a>).  Immediately after
 running <code>post-command-hook</code> (see <a href="Command-Overview.html#Command-Overview">Command Overview</a>), the Emacs
 command loop displays all the warnings specified by this variable,
-then resets it to <code>nil</code>. 
-</p></blockquote></div>
+then resets it to <code>nil</code>.
+</p></dd></dl>
 
-   <p>Programs which need to further customize the delayed warnings
+<p>Programs which need to further customize the delayed warnings
 mechanism can change the variable <code>delayed-warnings-hook</code>:
-
-<div class="defun">
-&mdash; Variable: <b>delayed-warnings-hook</b><var><a name="index-delayed_002dwarnings_002dhook-4081"></a></var><br>
-<blockquote><p>This is a normal hook which is run by the Emacs command loop, after
+</p>
+<dl>
+<dt><a name="index-delayed_002dwarnings_002dhook"></a>Variable: <strong>delayed-warnings-hook</strong></dt>
+<dd><p>This is a normal hook which is run by the Emacs command loop, after
 <code>post-command-hook</code>, in order to to process and display delayed
 warnings.
+</p>
+<p>Its default value is a list of two functions:
+</p>
+<div class="smallexample">
+<pre class="smallexample">(collapse-delayed-warnings display-delayed-warnings)
+</pre></div>
 
-        <p>Its default value is a list of two functions:
-
-     <pre class="smallexample">          (collapse-delayed-warnings display-delayed-warnings)
-</pre>
-        <p><a name="index-collapse_002ddelayed_002dwarnings-4082"></a><a name="index-display_002ddelayed_002dwarnings-4083"></a>The function <code>collapse-delayed-warnings</code> removes repeated entries
+<a name="index-collapse_002ddelayed_002dwarnings"></a>
+<a name="index-display_002ddelayed_002dwarnings"></a>
+<p>The function <code>collapse-delayed-warnings</code> removes repeated entries
 from <code>delayed-warnings-list</code>.  The function
 <code>display-delayed-warnings</code> calls <code>display-warning</code> on each
 of the entries in <code>delayed-warnings-list</code>, in turn, and then sets
-<code>delayed-warnings-list</code> to <code>nil</code>. 
-</p></blockquote></div>
+<code>delayed-warnings-list</code> to <code>nil</code>.
+</p></dd></dl>
 
-   </body></html>
 
+
+
+</body>
+</html>

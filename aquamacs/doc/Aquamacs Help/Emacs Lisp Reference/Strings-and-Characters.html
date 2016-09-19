@@ -1,69 +1,116 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Strings and Characters - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Strings and Characters</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Strings and Characters">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Strings and Characters">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Numbers.html#Numbers" title="Numbers">
-<link rel="next" href="Lists.html#Lists" title="Lists">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="String-Basics.html#String-Basics" rel="next" title="String Basics">
+<link href="Random-Numbers.html#Random-Numbers" rel="prev" title="Random Numbers">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Strings-and-Characters"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Lists.html#Lists">Lists</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Numbers.html#Numbers">Numbers</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
+Next: <a href="Lists.html#Lists" accesskey="n" rel="next">Lists</a>, Previous: <a href="Numbers.html#Numbers" accesskey="p" rel="prev">Numbers</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Strings-and-Characters-1"></a>
 <h2 class="chapter">4 Strings and Characters</h2>
+<a name="index-strings"></a>
+<a name="index-character-arrays"></a>
+<a name="index-characters"></a>
+<a name="index-bytes"></a>
 
-<p><a name="index-strings-231"></a><a name="index-character-arrays-232"></a><a name="index-characters-233"></a><a name="index-bytes-234"></a>
-  A string in Emacs Lisp is an array that contains an ordered sequence
+<p>A string in Emacs Lisp is an array that contains an ordered sequence
 of characters.  Strings are used as names of symbols, buffers, and
 files; to send messages to users; to hold text being copied between
 buffers; and for many other purposes.  Because strings are so important,
 Emacs Lisp has many functions expressly for manipulating them.  Emacs
 Lisp programs use strings more often than individual characters.
-
-   <p>See <a href="Strings-of-Events.html#Strings-of-Events">Strings of Events</a>, for special considerations for strings of
+</p>
+<p>See <a href="Strings-of-Events.html#Strings-of-Events">Strings of Events</a>, for special considerations for strings of
 keyboard character events.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="String-Basics.html#String-Basics" accesskey="1">Basics</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Basic properties of strings and characters.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Predicates-for-Strings.html#Predicates-for-Strings" accesskey="2">Predicates for Strings</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Testing whether an object is a string or char.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Creating-Strings.html#Creating-Strings" accesskey="3">Creating Strings</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions to allocate new strings.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Modifying-Strings.html#Modifying-Strings" accesskey="4">Modifying Strings</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Altering the contents of an existing string.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Text-Comparison.html#Text-Comparison" accesskey="5">Text Comparison</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Comparing characters or strings.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="String-Conversion.html#String-Conversion" accesskey="6">String Conversion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Converting to and from characters and strings.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Formatting-Strings.html#Formatting-Strings" accesskey="7">Formatting Strings</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top"><code>format</code>: Emacs&rsquo;s analogue of <code>printf</code>.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Case-Conversion.html#Case-Conversion" accesskey="8">Case Conversion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Case conversion functions.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Case-Tables.html#Case-Tables" accesskey="9">Case Tables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Customizing case conversion.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="String-Basics.html#String-Basics">Basics</a>:       Basic properties of strings and characters. 
-<li><a accesskey="2" href="Predicates-for-Strings.html#Predicates-for-Strings">Predicates for Strings</a>:     Testing whether an object is a string or char. 
-<li><a accesskey="3" href="Creating-Strings.html#Creating-Strings">Creating Strings</a>:           Functions to allocate new strings. 
-<li><a accesskey="4" href="Modifying-Strings.html#Modifying-Strings">Modifying Strings</a>:          Altering the contents of an existing string. 
-<li><a accesskey="5" href="Text-Comparison.html#Text-Comparison">Text Comparison</a>:            Comparing characters or strings. 
-<li><a accesskey="6" href="String-Conversion.html#String-Conversion">String Conversion</a>:          Converting to and from characters and strings. 
-<li><a accesskey="7" href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>:         <code>format</code>: Emacs's analogue of <code>printf</code>. 
-<li><a accesskey="8" href="Case-Conversion.html#Case-Conversion">Case Conversion</a>:            Case conversion functions. 
-<li><a accesskey="9" href="Case-Tables.html#Case-Tables">Case Tables</a>:                Customizing case conversion. 
-</ul>
 
-   </body></html>
 
+
+</body>
+</html>

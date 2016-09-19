@@ -1,71 +1,113 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Batch Mode - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Batch Mode</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Batch Mode">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Batch Mode">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="System-Interface.html#System-Interface" title="System Interface">
-<link rel="prev" href="X11-Keysyms.html#X11-Keysyms" title="X11 Keysyms">
-<link rel="next" href="Session-Management.html#Session-Management" title="Session Management">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="System-Interface.html#System-Interface" rel="up" title="System Interface">
+<link href="Session-Management.html#Session-Management" rel="next" title="Session Management">
+<link href="X11-Keysyms.html#X11-Keysyms" rel="prev" title="X11 Keysyms">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Batch-Mode"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Session-Management.html#Session-Management">Session Management</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="X11-Keysyms.html#X11-Keysyms">X11 Keysyms</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="System-Interface.html#System-Interface">System Interface</a>
-<hr>
+Next: <a href="Session-Management.html#Session-Management" accesskey="n" rel="next">Session Management</a>, Previous: <a href="X11-Keysyms.html#X11-Keysyms" accesskey="p" rel="prev">X11 Keysyms</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
+<hr>
+<a name="Batch-Mode-1"></a>
+<h3 class="section">38.17 Batch Mode</h3>
+<a name="index-batch-mode"></a>
 
-<h3 class="section">38.16 Batch Mode</h3>
-
-<p><a name="index-batch-mode-4695"></a>
-  The command-line option &lsquo;<samp><span class="samp">-batch</span></samp>&rsquo; causes Emacs to run
+<p>The command-line option &lsquo;<samp>-batch</samp>&rsquo; causes Emacs to run
 noninteractively.  In this mode, Emacs does not read commands from the
 terminal, it does not alter the terminal modes, and it does not expect
 to be outputting to an erasable screen.  The idea is that you specify
 Lisp programs to run; when they are finished, Emacs should exit.  The
-way to specify the programs to run is with &lsquo;<samp><span class="samp">-l </span><var>file</var></samp>&rsquo;, which
-loads the library named <var>file</var>, or &lsquo;<samp><span class="samp">-f </span><var>function</var></samp>&rsquo;, which
-calls <var>function</var> with no arguments, or &lsquo;<samp><span class="samp">--eval </span><var>form</var></samp>&rsquo;.
+way to specify the programs to run is with &lsquo;<samp>-l <var>file</var></samp>&rsquo;, which
+loads the library named <var>file</var>, or &lsquo;<samp>-f <var>function</var></samp>&rsquo;, which
+calls <var>function</var> with no arguments, or &lsquo;<samp>--eval <var>form</var></samp>&rsquo;.
+</p>
+<p>Any Lisp program output that would normally go to the echo area,
+either using <code>message</code>, or using <code>prin1</code>, etc., with
+<code>t</code> as the stream, goes instead to Emacs&rsquo;s standard descriptors
+when in batch mode: <code>message</code> writes to the standard error
+descriptor, while <code>prin1</code> and other print functions write to the
+standard output.  Similarly, input that would normally come from the
+minibuffer is read from the standard input descriptor.  Thus, Emacs
+behaves much like a noninteractive application program.  (The echo
+area output that Emacs itself normally generates, such as command
+echoing, is suppressed entirely.)
+</p>
+<p>Non-ASCII text written to the standard output or error descriptors is
+by default encoded using <code>locale-coding-system</code> (see <a href="Locales.html#Locales">Locales</a>)
+if it is non-<code>nil</code>; this can be overridden by binding
+<code>coding-system-for-write</code> to a coding system of you choice
+(see <a href="Explicit-Encoding.html#Explicit-Encoding">Explicit Encoding</a>).
+</p>
+<dl>
+<dt><a name="index-noninteractive"></a>Variable: <strong>noninteractive</strong></dt>
+<dd><p>This variable is non-<code>nil</code> when Emacs is running in batch mode.
+</p></dd></dl>
 
-   <p>Any Lisp program output that would normally go to the echo area,
-either using <code>message</code>, or using <code>prin1</code>, etc., with <code>t</code>
-as the stream, goes instead to Emacs's standard error descriptor when
-in batch mode.  Similarly, input that would normally come from the
-minibuffer is read from the standard input descriptor. 
-Thus, Emacs behaves much like a noninteractive
-application program.  (The echo area output that Emacs itself normally
-generates, such as command echoing, is suppressed entirely.)
 
-<div class="defun">
-&mdash; Variable: <b>noninteractive</b><var><a name="index-noninteractive-4696"></a></var><br>
-<blockquote><p>This variable is non-<code>nil</code> when Emacs is running in batch mode. 
-</p></blockquote></div>
 
-   </body></html>
 
+</body>
+</html>

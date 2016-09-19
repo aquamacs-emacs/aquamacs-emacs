@@ -1,82 +1,127 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Auto Save Control - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Auto Save Control</title>
+
+<meta name="description" content="GNU Emacs Manual: Auto Save Control">
+<meta name="keywords" content="GNU Emacs Manual: Auto Save Control">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Auto-Save.html#Auto-Save" title="Auto Save">
-<link rel="prev" href="Auto-Save-Files.html#Auto-Save-Files" title="Auto Save Files">
-<link rel="next" href="Recover.html#Recover" title="Recover">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Auto-Save.html#Auto-Save" rel="up" title="Auto Save">
+<link href="Recover.html#Recover" rel="next" title="Recover">
+<link href="Auto-Save-Files.html#Auto-Save-Files" rel="prev" title="Auto Save Files">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Auto-Save-Control"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Recover.html#Recover">Recover</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Auto-Save-Files.html#Auto-Save-Files">Auto Save Files</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Auto-Save.html#Auto-Save">Auto Save</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Auto-Save-Control"></a>
+<div class="header">
+<p>
+Next: <a href="Recover.html#Recover" accesskey="n" rel="next">Recover</a>, Previous: <a href="Auto-Save-Files.html#Auto-Save-Files" accesskey="p" rel="prev">Auto Save Files</a>, Up: <a href="Auto-Save.html#Auto-Save" accesskey="u" rel="up">Auto Save</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Controlling-Auto_002dSaving"></a>
 <h4 class="subsection">18.6.2 Controlling Auto-Saving</h4>
 
-<p><a name="index-auto_002dsave_002ddefault-1148"></a><a name="index-auto_002dsave_002dmode-1149"></a>  Each time you visit a file, auto-saving is turned on for that file's
+<a name="index-auto_002dsave_002ddefault"></a>
+<a name="index-auto_002dsave_002dmode"></a>
+<p>Each time you visit a file, auto-saving is turned on for that file&rsquo;s
 buffer if the variable <code>auto-save-default</code> is non-<code>nil</code> (but
 not in batch mode; see <a href="Initial-Options.html#Initial-Options">Initial Options</a>).  The default for this
 variable is <code>t</code>, so auto-saving is the usual practice for
 file-visiting buffers.  To toggle auto-saving in the current buffer,
 type <kbd>M-x auto-save-mode</kbd>.  Auto Save mode acts as a buffer-local
 minor mode (see <a href="Minor-Modes.html#Minor-Modes">Minor Modes</a>).
-
-   <p><a name="index-auto_002dsave_002dinterval-1150"></a>  Emacs auto-saves periodically based on how many characters you have
+</p>
+<a name="index-auto_002dsave_002dinterval"></a>
+<p>Emacs auto-saves periodically based on how many characters you have
 typed since the last auto-save.  The variable
 <code>auto-save-interval</code> specifies how many characters there are
-between auto-saves.  By default, it is 300.  Emacs doesn't accept
+between auto-saves.  By default, it is 300.  Emacs doesn&rsquo;t accept
 values that are too small: if you customize <code>auto-save-interval</code>
 to a value less than 20, Emacs will behave as if the value is 20.
-
-   <p><a name="index-auto_002dsave_002dtimeout-1151"></a>  Auto-saving also takes place when you stop typing for a while.  By
+</p>
+<a name="index-auto_002dsave_002dtimeout"></a>
+<p>Auto-saving also takes place when you stop typing for a while.  By
 default, it does this after 30 seconds of idleness (at this time,
-Emacs may also perform garbage collection; see <a href="../elisp/Garbage-Collection.html#Garbage-Collection">Garbage Collection</a>).  To change
+Emacs may also perform garbage collection; see <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Garbage-Collection.html#Garbage-Collection">Garbage
+Collection</a> in <cite>The Emacs Lisp Reference Manual</cite>).  To change
 this interval, customize the variable <code>auto-save-timeout</code>.  The
 actual time period is longer if the current buffer is long; this is a
 heuristic which aims to keep out of your way when you are editing long
-buffers, in which auto-save takes an appreciable amount of time. 
+buffers, in which auto-save takes an appreciable amount of time.
 Auto-saving during idle periods accomplishes two things: first, it
 makes sure all your work is saved if you go away from the terminal for
 a while; second, it may avoid some auto-saving while you are actually
 typing.
-
-   <p>Emacs also does auto-saving whenever it gets a fatal error.  This
-includes killing the Emacs job with a shell command such as &lsquo;<samp><span class="samp">kill
-%emacs</span></samp>&rsquo;, or disconnecting a phone line or network connection.
-
-   <p><a name="index-do_002dauto_002dsave-1152"></a>  You can perform an auto-save explicitly with the command <kbd>M-x
+</p>
+<p>Emacs also does auto-saving whenever it gets a fatal error.  This
+includes killing the Emacs job with a shell command such as &lsquo;<samp>kill
+%emacs</samp>&rsquo;, or disconnecting a phone line or network connection.
+</p>
+<a name="index-do_002dauto_002dsave"></a>
+<p>You can perform an auto-save explicitly with the command <kbd>M-x
 do-auto-save</kbd>.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Recover.html#Recover" accesskey="n" rel="next">Recover</a>, Previous: <a href="Auto-Save-Files.html#Auto-Save-Files" accesskey="p" rel="prev">Auto Save Files</a>, Up: <a href="Auto-Save.html#Auto-Save" accesskey="u" rel="up">Auto Save</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

@@ -6,6 +6,11 @@ maindir=`pwd`/../../..
 #rm emacsver.texi
 #ln -s ../emacs/emacsver.texi .
 
+# makeinfo (as it comes with OSX) has a bug that produces
+# bad index.html files.  We use the homebrew version
+# if available.
+export PATH=/usr/local/Cellar/texinfo/5.2/bin:$PATH
+
 cd "$maindir"/aquamacs/doc/convert
 
 ./convert-emacs-manual ../../../doc/emacs

@@ -1,47 +1,81 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Coding System Basics - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Coding System Basics</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Coding System Basics">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Coding System Basics">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Coding-Systems.html#Coding-Systems" title="Coding Systems">
-<link rel="next" href="Encoding-and-I_002fO.html#Encoding-and-I_002fO" title="Encoding and I/O">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Coding-Systems.html#Coding-Systems" rel="up" title="Coding Systems">
+<link href="Encoding-and-I_002fO.html#Encoding-and-I_002fO" rel="next" title="Encoding and I/O">
+<link href="Coding-Systems.html#Coding-Systems" rel="prev" title="Coding Systems">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Coding-System-Basics"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Encoding-and-I_002fO.html#Encoding-and-I_002fO">Encoding and I/O</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Coding-Systems.html#Coding-Systems">Coding Systems</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Coding-System-Basics"></a>
+<div class="header">
+<p>
+Next: <a href="Encoding-and-I_002fO.html#Encoding-and-I_002fO" accesskey="n" rel="next">Encoding and I/O</a>, Up: <a href="Coding-Systems.html#Coding-Systems" accesskey="u" rel="up">Coding Systems</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Basic-Concepts-of-Coding-Systems"></a>
 <h4 class="subsection">32.10.1 Basic Concepts of Coding Systems</h4>
 
-<p><a name="index-character-code-conversion-3516"></a>  <dfn>Character code conversion</dfn> involves conversion between the
+<a name="index-character-code-conversion"></a>
+<p><em>Character code conversion</em> involves conversion between the
 internal representation of characters used inside Emacs and some other
 encoding.  Emacs supports many different encodings, in that it can
 convert to and from them.  For example, it can convert text to or from
@@ -50,31 +84,34 @@ several variants of ISO 2022.  In some cases, Emacs supports several
 alternative encodings for the same characters; for example, there are
 three coding systems for the Cyrillic (Russian) alphabet: ISO,
 Alternativnyj, and KOI8.
-
-   <p>Every coding system specifies a particular set of character code
+</p>
+<p>Every coding system specifies a particular set of character code
 conversions, but the coding system <code>undecided</code> is special: it
 leaves the choice unspecified, to be chosen heuristically for each
-file, based on the file's data.
-
-   <p>In general, a coding system doesn't guarantee roundtrip identity:
+file, based on the file&rsquo;s data.
+</p>
+<p>In general, a coding system doesn&rsquo;t guarantee roundtrip identity:
 decoding a byte sequence using coding system, then encoding the
 resulting text in the same coding system, can produce a different byte
 sequence.  But some coding systems do guarantee that the byte sequence
 will be the same as what you originally decoded.  Here are a few
 examples:
+</p>
+<blockquote>
+<p>iso-8859-1, utf-8, big5, shift_jis, euc-jp
+</p></blockquote>
 
-   <blockquote>
-iso-8859-1, utf-8, big5, shift_jis, euc-jp
-</blockquote>
-
-   <p>Encoding buffer text and then decoding the result can also fail to
+<p>Encoding buffer text and then decoding the result can also fail to
 reproduce the original text.  For instance, if you encode a character
 with a coding system which does not support that character, the result
 is unpredictable, and thus decoding it using the same coding system
-may produce a different text.  Currently, Emacs can't report errors
+may produce a different text.  Currently, Emacs can&rsquo;t report errors
 that result from encoding unsupported characters.
-
-   <p><a name="index-EOL-conversion-3517"></a><a name="index-end_002dof_002dline-conversion-3518"></a><a name="index-line-end-conversion-3519"></a>  <dfn>End of line conversion</dfn> handles three different conventions
+</p>
+<a name="index-EOL-conversion"></a>
+<a name="index-end_002dof_002dline-conversion"></a>
+<a name="index-line-end-conversion"></a>
+<p><em>End of line conversion</em> handles three different conventions
 used on various systems for representing end of line in files.  The
 Unix convention, used on GNU and Unix systems, is to use the linefeed
 character (also called newline).  The DOS convention, used on
@@ -82,15 +119,18 @@ MS-Windows and MS-DOS systems, is to use a carriage-return and a
 linefeed at the end of a line.  The Mac convention is to use just
 carriage-return.  (This was the convention used on the Macintosh
 system prior to OS X.)
-
-   <p><a name="index-base-coding-system-3520"></a><a name="index-variant-coding-system-3521"></a>  <dfn>Base coding systems</dfn> such as <code>latin-1</code> leave the end-of-line
-conversion unspecified, to be chosen based on the data.  <dfn>Variant
-coding systems</dfn> such as <code>latin-1-unix</code>, <code>latin-1-dos</code> and
+</p>
+<a name="index-base-coding-system"></a>
+<a name="index-variant-coding-system"></a>
+<p><em>Base coding systems</em> such as <code>latin-1</code> leave the end-of-line
+conversion unspecified, to be chosen based on the data.  <em>Variant
+coding systems</em> such as <code>latin-1-unix</code>, <code>latin-1-dos</code> and
 <code>latin-1-mac</code> specify the end-of-line conversion explicitly as
 well.  Most base coding systems have three corresponding variants whose
-names are formed by adding &lsquo;<samp><span class="samp">-unix</span></samp>&rsquo;, &lsquo;<samp><span class="samp">-dos</span></samp>&rsquo; and &lsquo;<samp><span class="samp">-mac</span></samp>&rsquo;.
-
-   <p><a name="index-raw_002dtext_0040r_007b-coding-system_007d-3522"></a>  The coding system <code>raw-text</code> is special in that it prevents
+names are formed by adding &lsquo;<samp>-unix</samp>&rsquo;, &lsquo;<samp>-dos</samp>&rsquo; and &lsquo;<samp>-mac</samp>&rsquo;.
+</p>
+<a name="index-raw_002dtext-coding-system"></a>
+<p>The coding system <code>raw-text</code> is special in that it prevents
 character code conversion, and causes the buffer visited with this
 coding system to be a unibyte buffer.  For historical reasons, you can
 save both unibyte and multibyte text with this coding system.  When
@@ -100,42 +140,55 @@ single-byte external representation.  <code>raw-text</code> does not specify
 the end-of-line conversion, allowing that to be determined as usual by
 the data, and has the usual three variants which specify the
 end-of-line conversion.
-
-   <p><a name="index-no_002dconversion_0040r_007b-coding-system_007d-3523"></a><a name="index-binary_0040r_007b-coding-system_007d-3524"></a>  <code>no-conversion</code> (and its alias <code>binary</code>) is equivalent to
+</p>
+<a name="index-no_002dconversion-coding-system"></a>
+<a name="index-binary-coding-system"></a>
+<p><code>no-conversion</code> (and its alias <code>binary</code>) is equivalent to
 <code>raw-text-unix</code>: it specifies no conversion of either character
 codes or end-of-line.
-
-   <p><a name="index-emacs_002dinternal_0040r_007b-coding-system_007d-3525"></a><a name="index-utf_002d8_002demacs_0040r_007b-coding-system_007d-3526"></a>  The coding system <code>utf-8-emacs</code> specifies that the data is
+</p>
+<a name="index-emacs_002dinternal-coding-system"></a>
+<a name="index-utf_002d8_002demacs-coding-system"></a>
+<p>The coding system <code>utf-8-emacs</code> specifies that the data is
 represented in the internal Emacs encoding (see <a href="Text-Representations.html#Text-Representations">Text Representations</a>).  This is like <code>raw-text</code> in that no code
 conversion happens, but different in that the result is multibyte
 data.  The name <code>emacs-internal</code> is an alias for
 <code>utf-8-emacs</code>.
-
-<div class="defun">
-&mdash; Function: <b>coding-system-get</b><var> coding-system property<a name="index-coding_002dsystem_002dget-3527"></a></var><br>
-<blockquote><p>This function returns the specified property of the coding system
+</p>
+<dl>
+<dt><a name="index-coding_002dsystem_002dget"></a>Function: <strong>coding-system-get</strong> <em>coding-system property</em></dt>
+<dd><p>This function returns the specified property of the coding system
 <var>coding-system</var>.  Most coding system properties exist for internal
-purposes, but one that you might find useful is <code>:mime-charset</code>. 
-That property's value is the name used in MIME for the character coding
+purposes, but one that you might find useful is <code>:mime-charset</code>.
+That property&rsquo;s value is the name used in MIME for the character coding
 which this coding system can read and write.  Examples:
+</p>
+<div class="example">
+<pre class="example">(coding-system-get 'iso-latin-1 :mime-charset)
+     &rArr; iso-8859-1
+(coding-system-get 'iso-2022-cn :mime-charset)
+     &rArr; iso-2022-cn
+(coding-system-get 'cyrillic-koi8 :mime-charset)
+     &rArr; koi8-r
+</pre></div>
 
-     <pre class="example">          (coding-system-get 'iso-latin-1 :mime-charset)
-               &rArr; iso-8859-1
-          (coding-system-get 'iso-2022-cn :mime-charset)
-               &rArr; iso-2022-cn
-          (coding-system-get 'cyrillic-koi8 :mime-charset)
-               &rArr; koi8-r
-</pre>
-        <p>The value of the <code>:mime-charset</code> property is also defined
-as an alias for the coding system. 
-</p></blockquote></div>
+<p>The value of the <code>:mime-charset</code> property is also defined
+as an alias for the coding system.
+</p></dd></dl>
 
-   <p><a name="index-alias_002c-for-coding-systems-3528"></a>
+<a name="index-alias_002c-for-coding-systems"></a>
+<dl>
+<dt><a name="index-coding_002dsystem_002daliases"></a>Function: <strong>coding-system-aliases</strong> <em>coding-system</em></dt>
+<dd><p>This function returns the list of aliases of <var>coding-system</var>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>coding-system-aliases</b><var> coding-system<a name="index-coding_002dsystem_002daliases-3529"></a></var><br>
-<blockquote><p>This function returns the list of aliases of <var>coding-system</var>. 
-</p></blockquote></div>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Encoding-and-I_002fO.html#Encoding-and-I_002fO" accesskey="n" rel="next">Encoding and I/O</a>, Up: <a href="Coding-Systems.html#Coding-Systems" accesskey="u" rel="up">Coding Systems</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

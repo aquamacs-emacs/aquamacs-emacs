@@ -1,250 +1,340 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Process Information - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Process Information</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Process Information">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Process Information">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Processes.html#Processes" title="Processes">
-<link rel="prev" href="Deleting-Processes.html#Deleting-Processes" title="Deleting Processes">
-<link rel="next" href="Input-to-Processes.html#Input-to-Processes" title="Input to Processes">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Processes.html#Processes" rel="up" title="Processes">
+<link href="Input-to-Processes.html#Input-to-Processes" rel="next" title="Input to Processes">
+<link href="Deleting-Processes.html#Deleting-Processes" rel="prev" title="Deleting Processes">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Process-Information"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Input-to-Processes.html#Input-to-Processes">Input to Processes</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Deleting-Processes.html#Deleting-Processes">Deleting Processes</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
-<hr>
+Next: <a href="Input-to-Processes.html#Input-to-Processes" accesskey="n" rel="next">Input to Processes</a>, Previous: <a href="Deleting-Processes.html#Deleting-Processes" accesskey="p" rel="prev">Deleting Processes</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Process-Information-1"></a>
 <h3 class="section">36.6 Process Information</h3>
+<a name="index-process-information"></a>
 
-<p><a name="index-process-information-3911"></a>
-  Several functions return information about processes.
-
-<div class="defun">
-&mdash; Command: <b>list-processes</b><var> &amp;optional query-only buffer<a name="index-list_002dprocesses-3912"></a></var><br>
-<blockquote><p>This command displays a listing of all living processes.  In addition,
-it finally deletes any process whose status was &lsquo;<samp><span class="samp">Exited</span></samp>&rsquo; or
-&lsquo;<samp><span class="samp">Signaled</span></samp>&rsquo;.  It returns <code>nil</code>.
-
-        <p>The processes are shown in a buffer named <samp><span class="file">*Process List*</span></samp>
+<p>Several functions return information about processes.
+</p>
+<dl>
+<dt><a name="index-list_002dprocesses"></a>Command: <strong>list-processes</strong> <em>&amp;optional query-only buffer</em></dt>
+<dd><p>This command displays a listing of all living processes.  In addition,
+it finally deletes any process whose status was &lsquo;<samp>Exited</samp>&rsquo; or
+&lsquo;<samp>Signaled</samp>&rsquo;.  It returns <code>nil</code>.
+</p>
+<p>The processes are shown in a buffer named <samp>*Process List*</samp>
 (unless you specify otherwise using the optional argument <var>buffer</var>),
 whose major mode is Process Menu mode.
+</p>
+<p>If <var>query-only</var> is non-<code>nil</code>, it only lists processes
+whose query flag is non-<code>nil</code>.  See <a href="Query-Before-Exit.html#Query-Before-Exit">Query Before Exit</a>.
+</p></dd></dl>
 
-        <p>If <var>query-only</var> is non-<code>nil</code>, it only lists processes
-whose query flag is non-<code>nil</code>.  See <a href="Query-Before-Exit.html#Query-Before-Exit">Query Before Exit</a>. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-process_002dlist"></a>Function: <strong>process-list</strong></dt>
+<dd><p>This function returns a list of all processes that have not been deleted.
+</p>
+<div class="smallexample">
+<pre class="smallexample">(process-list)
+     &rArr; (#&lt;process display-time&gt; #&lt;process shell&gt;)
+</pre></div>
+</dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>process-list</b><var><a name="index-process_002dlist-3913"></a></var><br>
-<blockquote><p>This function returns a list of all processes that have not been deleted.
+<dl>
+<dt><a name="index-get_002dprocess"></a>Function: <strong>get-process</strong> <em>name</em></dt>
+<dd><p>This function returns the process named <var>name</var> (a string), or
+<code>nil</code> if there is none.  The argument <var>name</var> can also be a
+process object, in which case it is returned.
+</p>
+<div class="smallexample">
+<pre class="smallexample">(get-process &quot;shell&quot;)
+     &rArr; #&lt;process shell&gt;
+</pre></div>
+</dd></dl>
 
-     <pre class="smallexample">          (process-list)
-               &rArr; (#&lt;process display-time&gt; #&lt;process shell&gt;)
-</pre>
-        </blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>get-process</b><var> name<a name="index-get_002dprocess-3914"></a></var><br>
-<blockquote><p>This function returns the process named <var>name</var> (a string), or
-<code>nil</code> if there is none.
-
-     <pre class="smallexample">          (get-process "shell")
-               &rArr; #&lt;process shell&gt;
-</pre>
-        </blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>process-command</b><var> process<a name="index-process_002dcommand-3915"></a></var><br>
-<blockquote><p>This function returns the command that was executed to start
+<dl>
+<dt><a name="index-process_002dcommand"></a>Function: <strong>process-command</strong> <em>process</em></dt>
+<dd><p>This function returns the command that was executed to start
 <var>process</var>.  This is a list of strings, the first string being the
 program executed and the rest of the strings being the arguments that
-were given to the program.
+were given to the program.  For a network, serial, or pipe connection,
+this is either <code>nil</code>, which means the process is running or
+<code>t</code> (process is stopped).
+</p>
+<div class="smallexample">
+<pre class="smallexample">(process-command (get-process &quot;shell&quot;))
+     &rArr; (&quot;bash&quot; &quot;-i&quot;)
+</pre></div>
+</dd></dl>
 
-     <pre class="smallexample">          (process-command (get-process "shell"))
-               &rArr; ("bash" "-i")
-</pre>
-        </blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>process-contact</b><var> process &amp;optional key<a name="index-process_002dcontact-3916"></a></var><br>
-<blockquote>
-        <p>This function returns information about how a network or serial
-process was set up.  When <var>key</var> is <code>nil</code>, it returns
-<code>(</code><var>hostname</var> <var>service</var><code>)</code> for a network process, and
-<code>(</code><var>port</var> <var>speed</var><code>)</code> for a serial process. 
-For an ordinary child process, this function always returns <code>t</code>.
-
-        <p>If <var>key</var> is <code>t</code>, the value is the complete status information
-for the connection, server, or serial port; that is, the list of
-keywords and values specified in <code>make-network-process</code> or
-<code>make-serial-process</code>, except that some of the values represent
-the current status instead of what you specified.
-
-        <p>For a network process, the values include (see
+<dl>
+<dt><a name="index-process_002dcontact"></a>Function: <strong>process-contact</strong> <em>process &amp;optional key</em></dt>
+<dd><p>This function returns information about how a network, a serial, or a
+pipe connection was set up.  When <var>key</var> is <code>nil</code>, it returns
+<code>(<var>hostname</var> <var>service</var>)</code> for a network connection,
+<code>(<var>port</var> <var>speed</var>)</code> for a serial connection, and <code>t</code>
+for a pipe connection.  For an ordinary child process, this function
+always returns <code>t</code> when called with a <code>nil</code> <var>key</var>.
+</p>
+<p>If <var>key</var> is <code>t</code>, the value is the complete status information
+for the connection, server, serial port, or pipe; that is, the list of
+keywords and values specified in <code>make-network-process</code>,
+<code>make-serial-process</code>, or <code>make-pipe-process</code>, except that
+some of the values represent the current status instead of what you
+specified.
+</p>
+<p>For a network process, the values include (see
 <code>make-network-process</code> for a complete list):
-
-          <dl>
-<dt><code>:buffer</code><dd>The associated value is the process buffer. 
-<br><dt><code>:filter</code><dd>The associated value is the process filter function. 
-<br><dt><code>:sentinel</code><dd>The associated value is the process sentinel function. 
-<br><dt><code>:remote</code><dd>In a connection, the address in internal format of the remote peer. 
-<br><dt><code>:local</code><dd>The local address, in internal format. 
-<br><dt><code>:service</code><dd>In a server, if you specified <code>t</code> for <var>service</var>,
-this value is the actual port number. 
+</p>
+<dl compact="compact">
+<dt><code>:buffer</code></dt>
+<dd><p>The associated value is the process buffer.
+</p></dd>
+<dt><code>:filter</code></dt>
+<dd><p>The associated value is the process filter function.  See <a href="Filter-Functions.html#Filter-Functions">Filter Functions</a>.
+</p></dd>
+<dt><code>:sentinel</code></dt>
+<dd><p>The associated value is the process sentinel function.  See <a href="Sentinels.html#Sentinels">Sentinels</a>.
+</p></dd>
+<dt><code>:remote</code></dt>
+<dd><p>In a connection, the address in internal format of the remote peer.
+</p></dd>
+<dt><code>:local</code></dt>
+<dd><p>The local address, in internal format.
+</p></dd>
+<dt><code>:service</code></dt>
+<dd><p>In a server, if you specified <code>t</code> for <var>service</var>,
+this value is the actual port number.
+</p></dd>
 </dl>
 
-        <p><code>:local</code> and <code>:remote</code> are included even if they were not
+<p><code>:local</code> and <code>:remote</code> are included even if they were not
 specified explicitly in <code>make-network-process</code>.
+</p>
+<p>For a serial connection, see <code>make-serial-process</code> and
+<code>serial-process-configure</code> for the list of keys.  For a pipe
+connection, see <code>make-pipe-process</code> for the list of keys.
+</p>
+<p>If <var>key</var> is a keyword, the function returns the value corresponding
+to that keyword.
+</p></dd></dl>
 
-        <p>For a serial process, see <code>make-serial-process</code> and
-<code>serial-process-configure</code> for a list of keys.
+<dl>
+<dt><a name="index-process_002did"></a>Function: <strong>process-id</strong> <em>process</em></dt>
+<dd><p>This function returns the <acronym>PID</acronym> of <var>process</var>.  This is an
+integral number that distinguishes the process <var>process</var> from all
+other processes running on the same computer at the current time.  The
+<acronym>PID</acronym> of a process is chosen by the operating system kernel
+when the process is started and remains constant as long as the
+process exists.  For network, serial, and pipe connections, this
+function returns <code>nil</code>.
+</p></dd></dl>
 
-        <p>If <var>key</var> is a keyword, the function returns the value corresponding
-to that keyword. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-process_002dname"></a>Function: <strong>process-name</strong> <em>process</em></dt>
+<dd><p>This function returns the name of <var>process</var>, as a string.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>process-id</b><var> process<a name="index-process_002did-3917"></a></var><br>
-<blockquote><p>This function returns the <acronym>PID</acronym> of <var>process</var>.  This is an
-integer that distinguishes the process <var>process</var> from all other
-processes running on the same computer at the current time.  The
-<acronym>PID</acronym> of a process is chosen by the operating system kernel when the
-process is started and remains constant as long as the process exists. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>process-name</b><var> process<a name="index-process_002dname-3918"></a></var><br>
-<blockquote><p>This function returns the name of <var>process</var>, as a string. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>process-status</b><var> process-name<a name="index-process_002dstatus-3919"></a></var><br>
-<blockquote><p>This function returns the status of <var>process-name</var> as a symbol. 
+<dl>
+<dt><a name="index-process_002dstatus"></a>Function: <strong>process-status</strong> <em>process-name</em></dt>
+<dd><p>This function returns the status of <var>process-name</var> as a symbol.
 The argument <var>process-name</var> must be a process, a buffer, or a
 process name (a string).
-
-        <p>The possible values for an actual subprocess are:
-
-          <dl>
-<dt><code>run</code><dd>for a process that is running. 
-<br><dt><code>stop</code><dd>for a process that is stopped but continuable. 
-<br><dt><code>exit</code><dd>for a process that has exited. 
-<br><dt><code>signal</code><dd>for a process that has received a fatal signal. 
-<br><dt><code>open</code><dd>for a network connection that is open. 
-<br><dt><code>closed</code><dd>for a network connection that is closed.  Once a connection
-is closed, you cannot reopen it, though you might be able to open
-a new connection to the same place. 
-<br><dt><code>connect</code><dd>for a non-blocking connection that is waiting to complete. 
-<br><dt><code>failed</code><dd>for a non-blocking connection that has failed to complete. 
-<br><dt><code>listen</code><dd>for a network server that is listening. 
-<br><dt><code>nil</code><dd>if <var>process-name</var> is not the name of an existing process. 
+</p>
+<p>The possible values for an actual subprocess are:
+</p>
+<dl compact="compact">
+<dt><code>run</code></dt>
+<dd><p>for a process that is running.
+</p></dd>
+<dt><code>stop</code></dt>
+<dd><p>for a process that is stopped but continuable.
+</p></dd>
+<dt><code>exit</code></dt>
+<dd><p>for a process that has exited.
+</p></dd>
+<dt><code>signal</code></dt>
+<dd><p>for a process that has received a fatal signal.
+</p></dd>
+<dt><code>open</code></dt>
+<dd><p>for a network, serial, or pipe connection that is open.
+</p></dd>
+<dt><code>closed</code></dt>
+<dd><p>for a network, serial, or pipe connection that is closed.  Once a
+connection is closed, you cannot reopen it, though you might be able
+to open a new connection to the same place.
+</p></dd>
+<dt><code>connect</code></dt>
+<dd><p>for a non-blocking connection that is waiting to complete.
+</p></dd>
+<dt><code>failed</code></dt>
+<dd><p>for a non-blocking connection that has failed to complete.
+</p></dd>
+<dt><code>listen</code></dt>
+<dd><p>for a network server that is listening.
+</p></dd>
+<dt><code>nil</code></dt>
+<dd><p>if <var>process-name</var> is not the name of an existing process.
+</p></dd>
 </dl>
 
-     <pre class="smallexample">          (process-status (get-buffer "*shell*"))
-               &rArr; run
-</pre>
-        <p>For a network connection, <code>process-status</code> returns one of the symbols
-<code>open</code> or <code>closed</code>.  The latter means that the other side
-closed the connection, or Emacs did <code>delete-process</code>. 
-</p></blockquote></div>
+<div class="smallexample">
+<pre class="smallexample">(process-status (get-buffer &quot;*shell*&quot;))
+     &rArr; run
+</pre></div>
 
-<div class="defun">
-&mdash; Function: <b>process-live-p</b><var> process<a name="index-process_002dlive_002dp-3920"></a></var><br>
-<blockquote><p>This function returns non-<code>nil</code> if <var>process</var> is alive.  A
+<p>For a network, serial, or pipe connection, <code>process-status</code>
+returns one of the symbols <code>open</code>, <code>stop</code>, or <code>closed</code>.
+The latter means that the other side closed the connection, or Emacs
+did <code>delete-process</code>.  The value <code>stop</code> means that
+<code>stop-process</code> was called on the connection.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-process_002dlive_002dp"></a>Function: <strong>process-live-p</strong> <em>process</em></dt>
+<dd><p>This function returns non-<code>nil</code> if <var>process</var> is alive.  A
 process is considered alive if its status is <code>run</code>, <code>open</code>,
-<code>listen</code>, <code>connect</code> or <code>stop</code>. 
-</p></blockquote></div>
+<code>listen</code>, <code>connect</code> or <code>stop</code>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>process-type</b><var> process<a name="index-process_002dtype-3921"></a></var><br>
-<blockquote><p>This function returns the symbol <code>network</code> for a network
-connection or server, <code>serial</code> for a serial port connection, or
-<code>real</code> for a real subprocess. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-process_002dtype"></a>Function: <strong>process-type</strong> <em>process</em></dt>
+<dd><p>This function returns the symbol <code>network</code> for a network
+connection or server, <code>serial</code> for a serial port connection,
+<code>pipe</code> for a pipe connection, or <code>real</code> for a subprocess
+created for running a program.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>process-exit-status</b><var> process<a name="index-process_002dexit_002dstatus-3922"></a></var><br>
-<blockquote><p>This function returns the exit status of <var>process</var> or the signal
+<dl>
+<dt><a name="index-process_002dexit_002dstatus"></a>Function: <strong>process-exit-status</strong> <em>process</em></dt>
+<dd><p>This function returns the exit status of <var>process</var> or the signal
 number that killed it.  (Use the result of <code>process-status</code> to
 determine which of those it is.)  If <var>process</var> has not yet
-terminated, the value is 0. 
-</p></blockquote></div>
+terminated, the value is 0.  For network, serial, and pipe connections
+that are already closed, the value is either 0 or 256, depending on
+whether the connection was closed normally or abnormally.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>process-tty-name</b><var> process<a name="index-process_002dtty_002dname-3923"></a></var><br>
-<blockquote><p>This function returns the terminal name that <var>process</var> is using for
+<dl>
+<dt><a name="index-process_002dtty_002dname"></a>Function: <strong>process-tty-name</strong> <em>process</em></dt>
+<dd><p>This function returns the terminal name that <var>process</var> is using for
 its communication with Emacs&mdash;or <code>nil</code> if it is using pipes
-instead of a terminal (see <code>process-connection-type</code> in
+instead of a pty (see <code>process-connection-type</code> in
 <a href="Asynchronous-Processes.html#Asynchronous-Processes">Asynchronous Processes</a>).  If <var>process</var> represents a program
 running on a remote host, the terminal name used by that program on
-the remote host is provided as process property <code>remote-tty</code>. 
-</p></blockquote></div>
+the remote host is provided as process property <code>remote-tty</code>.  If
+<var>process</var> represents a network, serial, or pipe connection, the
+value is <code>nil</code>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>process-coding-system</b><var> process<a name="index-process_002dcoding_002dsystem-3924"></a></var><br>
-<blockquote><p><a name="Coding-systems-for-a-subprocess"></a>This function returns a cons cell <code>(</code><var>decode</var><code> . </code><var>encode</var><code>)</code>,
+<dl>
+<dt><a name="index-process_002dcoding_002dsystem"></a>Function: <strong>process-coding-system</strong> <em>process</em></dt>
+<dd><a name="Coding-systems-for-a-subprocess"></a><p>This function returns a cons cell <code>(<var>decode</var> . <var>encode</var>)</code>,
 describing the coding systems in use for decoding output from, and
-encoding input to, <var>process</var> (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>). 
-</p></blockquote></div>
+encoding input to, <var>process</var> (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>).
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>set-process-coding-system</b><var> process &amp;optional decoding-system encoding-system<a name="index-set_002dprocess_002dcoding_002dsystem-3925"></a></var><br>
-<blockquote><p>This function specifies the coding systems to use for subsequent output
+<dl>
+<dt><a name="index-set_002dprocess_002dcoding_002dsystem"></a>Function: <strong>set-process-coding-system</strong> <em>process &amp;optional decoding-system encoding-system</em></dt>
+<dd><p>This function specifies the coding systems to use for subsequent output
 from and input to <var>process</var>.  It will use <var>decoding-system</var> to
 decode subprocess output, and <var>encoding-system</var> to encode subprocess
-input. 
-</p></blockquote></div>
+input.
+</p></dd></dl>
 
-   <p>Every process also has a property list that you can use to store
+<p>Every process also has a property list that you can use to store
 miscellaneous values associated with the process.
+</p>
+<dl>
+<dt><a name="index-process_002dget"></a>Function: <strong>process-get</strong> <em>process propname</em></dt>
+<dd><p>This function returns the value of the <var>propname</var> property
+of <var>process</var>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>process-get</b><var> process propname<a name="index-process_002dget-3926"></a></var><br>
-<blockquote><p>This function returns the value of the <var>propname</var> property
-of <var>process</var>. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-process_002dput"></a>Function: <strong>process-put</strong> <em>process propname value</em></dt>
+<dd><p>This function sets the value of the <var>propname</var> property
+of <var>process</var> to <var>value</var>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>process-put</b><var> process propname value<a name="index-process_002dput-3927"></a></var><br>
-<blockquote><p>This function sets the value of the <var>propname</var> property
-of <var>process</var> to <var>value</var>. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-process_002dplist"></a>Function: <strong>process-plist</strong> <em>process</em></dt>
+<dd><p>This function returns the process plist of <var>process</var>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>process-plist</b><var> process<a name="index-process_002dplist-3928"></a></var><br>
-<blockquote><p>This function returns the process plist of <var>process</var>. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-set_002dprocess_002dplist"></a>Function: <strong>set-process-plist</strong> <em>process plist</em></dt>
+<dd><p>This function sets the process plist of <var>process</var> to <var>plist</var>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>set-process-plist</b><var> process plist<a name="index-set_002dprocess_002dplist-3929"></a></var><br>
-<blockquote><p>This function sets the process plist of <var>process</var> to <var>plist</var>. 
-</p></blockquote></div>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Input-to-Processes.html#Input-to-Processes" accesskey="n" rel="next">Input to Processes</a>, Previous: <a href="Deleting-Processes.html#Deleting-Processes" accesskey="p" rel="prev">Deleting Processes</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

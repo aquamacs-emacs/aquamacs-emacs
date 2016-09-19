@@ -1,102 +1,146 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Creating Buffers - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Creating Buffers</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Creating Buffers">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Creating Buffers">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Buffers.html#Buffers" title="Buffers">
-<link rel="prev" href="Buffer-List.html#Buffer-List" title="Buffer List">
-<link rel="next" href="Killing-Buffers.html#Killing-Buffers" title="Killing Buffers">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Buffers.html#Buffers" rel="up" title="Buffers">
+<link href="Killing-Buffers.html#Killing-Buffers" rel="next" title="Killing Buffers">
+<link href="Buffer-List.html#Buffer-List" rel="prev" title="Buffer List">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Creating-Buffers"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Killing-Buffers.html#Killing-Buffers">Killing Buffers</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Buffer-List.html#Buffer-List">Buffer List</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
-<hr>
+Next: <a href="Killing-Buffers.html#Killing-Buffers" accesskey="n" rel="next">Killing Buffers</a>, Previous: <a href="Buffer-List.html#Buffer-List" accesskey="p" rel="prev">Buffer List</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Creating-Buffers-1"></a>
 <h3 class="section">26.9 Creating Buffers</h3>
+<a name="index-creating-buffers"></a>
+<a name="index-buffers_002c-creating"></a>
 
-<p><a name="index-creating-buffers-2354"></a><a name="index-buffers_002c-creating-2355"></a>
-  This section describes the two primitives for creating buffers. 
+<p>This section describes the two primitives for creating buffers.
 <code>get-buffer-create</code> creates a buffer if it finds no existing buffer
 with the specified name; <code>generate-new-buffer</code> always creates a new
 buffer and gives it a unique name.
-
-   <p>Other functions you can use to create buffers include
+</p>
+<p>Other functions you can use to create buffers include
 <code>with-output-to-temp-buffer</code> (see <a href="Temporary-Displays.html#Temporary-Displays">Temporary Displays</a>) and
 <code>create-file-buffer</code> (see <a href="Visiting-Files.html#Visiting-Files">Visiting Files</a>).  Starting a
 subprocess can also create a buffer (see <a href="Processes.html#Processes">Processes</a>).
-
-<div class="defun">
-&mdash; Function: <b>get-buffer-create</b><var> buffer-or-name<a name="index-get_002dbuffer_002dcreate-2356"></a></var><br>
-<blockquote><p>This function returns a buffer named <var>buffer-or-name</var>.  The buffer
+</p>
+<dl>
+<dt><a name="index-get_002dbuffer_002dcreate"></a>Function: <strong>get-buffer-create</strong> <em>buffer-or-name</em></dt>
+<dd><p>This function returns a buffer named <var>buffer-or-name</var>.  The buffer
 returned does not become the current buffer&mdash;this function does not
 change which buffer is current.
-
-        <p><var>buffer-or-name</var> must be either a string or an existing buffer.  If
+</p>
+<p><var>buffer-or-name</var> must be either a string or an existing buffer.  If
 it is a string and a live buffer with that name already exists,
 <code>get-buffer-create</code> returns that buffer.  If no such buffer exists,
 it creates a new buffer.  If <var>buffer-or-name</var> is a buffer instead of
 a string, it is returned as given, even if it is dead.
+</p>
+<div class="example">
+<pre class="example">(get-buffer-create &quot;foo&quot;)
+     &rArr; #&lt;buffer foo&gt;
+</pre></div>
 
-     <pre class="example">          (get-buffer-create "foo")
-               &rArr; #&lt;buffer foo&gt;
-</pre>
-        <p>The major mode for a newly created buffer is set to Fundamental mode. 
+<p>The major mode for a newly created buffer is set to Fundamental mode.
 (The default value of the variable <code>major-mode</code> is handled at a higher
 level; see <a href="Auto-Major-Mode.html#Auto-Major-Mode">Auto Major Mode</a>.)  If the name begins with a space, the
-buffer initially disables undo information recording (see <a href="Undo.html#Undo">Undo</a>). 
-</p></blockquote></div>
+buffer initially disables undo information recording (see <a href="Undo.html#Undo">Undo</a>).
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>generate-new-buffer</b><var> name<a name="index-generate_002dnew_002dbuffer-2357"></a></var><br>
-<blockquote><p>This function returns a newly created, empty buffer, but does not make
+<dl>
+<dt><a name="index-generate_002dnew_002dbuffer"></a>Function: <strong>generate-new-buffer</strong> <em>name</em></dt>
+<dd><p>This function returns a newly created, empty buffer, but does not make
 it current.  The name of the buffer is generated by passing <var>name</var>
 to the function <code>generate-new-buffer-name</code> (see <a href="Buffer-Names.html#Buffer-Names">Buffer Names</a>).  Thus, if there is no buffer named <var>name</var>, then that is
 the name of the new buffer; if that name is in use, a suffix of the
-form &lsquo;<samp><span class="samp">&lt;</span><var>n</var><span class="samp">&gt;</span></samp>&rsquo;, where <var>n</var> is an integer, is appended to
+form &lsquo;<samp>&lt;<var>n</var>&gt;</samp>&rsquo;, where <var>n</var> is an integer, is appended to
 <var>name</var>.
+</p>
+<p>An error is signaled if <var>name</var> is not a string.
+</p>
+<div class="example">
+<pre class="example">(generate-new-buffer &quot;bar&quot;)
+     &rArr; #&lt;buffer bar&gt;
+</pre><pre class="example">(generate-new-buffer &quot;bar&quot;)
+     &rArr; #&lt;buffer bar&lt;2&gt;&gt;
+</pre><pre class="example">(generate-new-buffer &quot;bar&quot;)
+     &rArr; #&lt;buffer bar&lt;3&gt;&gt;
+</pre></div>
 
-        <p>An error is signaled if <var>name</var> is not a string.
+<p>The major mode for the new buffer is set to Fundamental mode.  The default
+value of the variable <code>major-mode</code> is handled at a higher level.
+See <a href="Auto-Major-Mode.html#Auto-Major-Mode">Auto Major Mode</a>.
+</p></dd></dl>
 
-     <pre class="example">          (generate-new-buffer "bar")
-               &rArr; #&lt;buffer bar&gt;
-          (generate-new-buffer "bar")
-               &rArr; #&lt;buffer bar&lt;2&gt;&gt;
-          (generate-new-buffer "bar")
-               &rArr; #&lt;buffer bar&lt;3&gt;&gt;
-</pre>
-        <p>The major mode for the new buffer is set to Fundamental mode.  The default
-value of the variable <code>major-mode</code> is handled at a higher level. 
-See <a href="Auto-Major-Mode.html#Auto-Major-Mode">Auto Major Mode</a>. 
-</p></blockquote></div>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Killing-Buffers.html#Killing-Buffers" accesskey="n" rel="next">Killing Buffers</a>, Previous: <a href="Buffer-List.html#Buffer-List" accesskey="p" rel="prev">Buffer List</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

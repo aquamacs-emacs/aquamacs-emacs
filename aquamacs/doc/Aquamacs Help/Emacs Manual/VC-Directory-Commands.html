@@ -1,138 +1,219 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>VC Directory Commands - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: VC Directory Commands</title>
+
+<meta name="description" content="GNU Emacs Manual: VC Directory Commands">
+<meta name="keywords" content="GNU Emacs Manual: VC Directory Commands">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="VC-Directory-Mode.html#VC-Directory-Mode" title="VC Directory Mode">
-<link rel="prev" href="VC-Directory-Buffer.html#VC-Directory-Buffer" title="VC Directory Buffer">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="VC-Directory-Mode.html#VC-Directory-Mode" rel="up" title="VC Directory Mode">
+<link href="Branches.html#Branches" rel="next" title="Branches">
+<link href="VC-Directory-Buffer.html#VC-Directory-Buffer" rel="prev" title="VC Directory Buffer">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="VC-Directory-Commands"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="VC-Directory-Buffer.html#VC-Directory-Buffer">VC Directory Buffer</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="VC-Directory-Mode.html#VC-Directory-Mode">VC Directory Mode</a>
-<hr>
-</div>
 
-<h5 class="subsubsection">28.1.10.2 VC Directory Commands</h5>
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="VC-Directory-Commands"></a>
+<div class="header">
+<p>
+Previous: <a href="VC-Directory-Buffer.html#VC-Directory-Buffer" accesskey="p" rel="prev">VC Directory Buffer</a>, Up: <a href="VC-Directory-Mode.html#VC-Directory-Mode" accesskey="u" rel="up">VC Directory Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="VC-Directory-Commands-1"></a>
+<h4 class="subsubsection">28.1.10.2 VC Directory Commands</h4>
 
 <p>Emacs provides several commands for navigating the VC Directory
 buffer, and for marking files as belonging to the current VC
 fileset.
-
-     <dl>
-<dt><kbd>n</kbd><dt><kbd>&lt;SPC&gt;</kbd><dd>Move point to the next entry (<code>vc-dir-next-line</code>).
-
-     <br><dt><kbd>p</kbd><dd>Move point to the previous entry (<code>vc-dir-previous-line</code>).
-
-     <br><dt><kbd>&lt;TAB&gt;</kbd><dd>Move to the next directory entry (<code>vc-dir-next-directory</code>).
-
-     <br><dt><kbd>S-&lt;TAB&gt;</kbd><dd>Move to the previous directory entry
+</p>
+<dl compact="compact">
+<dt><kbd>n</kbd></dt>
+<dt><kbd><span class="key">SPC</span></kbd></dt>
+<dd><p>Move point to the next entry (<code>vc-dir-next-line</code>).
+</p>
+</dd>
+<dt><kbd>p</kbd></dt>
+<dd><p>Move point to the previous entry (<code>vc-dir-previous-line</code>).
+</p>
+</dd>
+<dt><kbd><span class="key">TAB</span></kbd></dt>
+<dd><p>Move to the next directory entry (<code>vc-dir-next-directory</code>).
+</p>
+</dd>
+<dt><kbd>S-<span class="key">TAB</span></kbd></dt>
+<dd><p>Move to the previous directory entry
 (<code>vc-dir-previous-directory</code>).
-
-     <br><dt><kbd>&lt;RET&gt;</kbd><dt><kbd>f</kbd><dd>Visit the file or directory listed on the current line
+</p>
+</dd>
+<dt><kbd><span class="key">RET</span></kbd></dt>
+<dt><kbd>f</kbd></dt>
+<dd><p>Visit the file or directory listed on the current line
 (<code>vc-dir-find-file</code>).
-
-     <br><dt><kbd>o</kbd><dd>Visit the file or directory on the current line, in a separate window
+</p>
+</dd>
+<dt><kbd>o</kbd></dt>
+<dd><p>Visit the file or directory on the current line, in a separate window
 (<code>vc-dir-find-file-other-window</code>).
-
-     <br><dt><kbd>m</kbd><dd>Mark the file or directory on the current line (<code>vc-dir-mark</code>),
+</p>
+</dd>
+<dt><kbd>m</kbd></dt>
+<dd><p>Mark the file or directory on the current line (<code>vc-dir-mark</code>),
 putting it in the current VC fileset.  If the region is active, mark
 all files in the region.
-
-     <p>A file cannot be marked with this command if it is already in a marked
+</p>
+<p>A file cannot be marked with this command if it is already in a marked
 directory, or one of its subdirectories.  Similarly, a directory
 cannot be marked with this command if any file in its tree is marked.
-
-     <br><dt><kbd>M</kbd><dd>If point is on a file entry, mark all files with the same status; if
+</p>
+</dd>
+<dt><kbd>M</kbd></dt>
+<dd><p>If point is on a file entry, mark all files with the same status; if
 point is on a directory entry, mark all files in that directory tree
 (<code>vc-dir-mark-all-files</code>).  With a prefix argument, mark all
 listed files and directories.
-
-     <br><dt><kbd>q</kbd><dd>Quit the VC Directory buffer, and bury it (<code>quit-window</code>).
-
-     <br><dt><kbd>u</kbd><dd>Unmark the file or directory on the current line.  If the region is
+</p>
+</dd>
+<dt><kbd>q</kbd></dt>
+<dd><p>Quit the VC Directory buffer, and bury it (<code>quit-window</code>).
+</p>
+</dd>
+<dt><kbd>u</kbd></dt>
+<dd><p>Unmark the file or directory on the current line.  If the region is
 active, unmark all the files in the region (<code>vc-dir-unmark</code>).
-
-     <br><dt><kbd>U</kbd><dd>If point is on a file entry, unmark all files with the same status; if
+</p>
+</dd>
+<dt><kbd>U</kbd></dt>
+<dd><p>If point is on a file entry, unmark all files with the same status; if
 point is on a directory entry, unmark all files in that directory tree
 (<code>vc-dir-unmark-all-files</code>).  With a prefix argument, unmark all
 files and directories.
-
-     <br><dt><kbd>x</kbd><dd>Hide files with &lsquo;<samp><span class="samp">up-to-date</span></samp>&rsquo; status
+</p>
+</dd>
+<dt><kbd>x</kbd></dt>
+<dd><p>Hide files with &lsquo;<samp>up-to-date</samp>&rsquo; status
 (<code>vc-dir-hide-up-to-date</code>).  With a prefix argument, hide items
-whose state is that of the item at point. 
+whose state is that of the item at point.
+</p></dd>
 </dl>
 
-   <p><a name="index-vc_002ddir_002dmark-2960"></a><a name="index-vc_002ddir_002dmark_002dall_002dfiles-2961"></a>  While in the VC Directory buffer, all the files that you mark with
-<kbd>m</kbd> (<code>vc-dir-mark</code>) or <kbd>M</kbd> (<code>vc-dir-mark</code>) are in
-the current VC fileset.  If you mark a directory entry with <kbd>m</kbd>,
-all the listed files in that directory tree are in the current VC
-fileset.  The files and directories that belong to the current VC
-fileset are indicated with a &lsquo;<samp><span class="samp">*</span></samp>&rsquo; character in the VC Directory
-buffer, next to their VC status.  In this way, you can set up a
-multi-file VC fileset to be acted on by VC commands like <kbd>C-x&nbsp;v&nbsp;v</kbd><!-- /@w --> (see <a href="Basic-VC-Editing.html#Basic-VC-Editing">Basic VC Editing</a>), <kbd>C-x&nbsp;v&nbsp;=</kbd><!-- /@w --> (see <a href="Old-Revisions.html#Old-Revisions">Old Revisions</a>), and <kbd>C-x&nbsp;v&nbsp;u</kbd><!-- /@w --> (see <a href="VC-Undo.html#VC-Undo">VC Undo</a>).
-
-   <p>The VC Directory buffer also defines some single-key shortcuts for
+<a name="index-vc_002ddir_002dmark"></a>
+<a name="index-vc_002ddir_002dmark_002dall_002dfiles"></a>
+<p>While in the VC Directory buffer, all the files that you mark with
+<kbd>m</kbd> (<code>vc-dir-mark</code>) or <kbd>M</kbd> (<code>vc-dir-mark-all-files</code>)
+are in the current VC fileset.  If you mark a directory entry with
+<kbd>m</kbd>, all the listed files in that directory tree are in the
+current VC fileset.  The files and directories that belong to the
+current VC fileset are indicated with a &lsquo;<samp>*</samp>&rsquo; character in the VC
+Directory buffer, next to their VC status.  In this way, you can set
+up a multi-file VC fileset to be acted on by VC commands like
+<kbd><span class="nolinebreak">C-x</span>&nbsp;v&nbsp;v</kbd><!-- /@w --> (see <a href="Basic-VC-Editing.html#Basic-VC-Editing">Basic VC Editing</a>), <kbd><span class="nolinebreak">C-x</span>&nbsp;v&nbsp;=</kbd><!-- /@w -->
+(see <a href="Old-Revisions.html#Old-Revisions">Old Revisions</a>), and <kbd><span class="nolinebreak">C-x</span>&nbsp;v&nbsp;u</kbd><!-- /@w --> (see <a href="VC-Undo.html#VC-Undo">VC Undo</a>).
+</p>
+<p>The VC Directory buffer also defines some single-key shortcuts for
 VC commands with the <kbd>C-x v</kbd> prefix: <kbd>=</kbd>, <kbd>+</kbd>, <kbd>l</kbd>,
 <kbd>i</kbd>, <kbd>D</kbd>, <kbd>L</kbd>, <kbd>G</kbd>, <kbd>I</kbd> and <kbd>v</kbd>.
-
-   <p>For example, you can commit a set of edited files by opening a VC
-Directory buffer, where the files are listed with the &lsquo;<samp><span class="samp">edited</span></samp>&rsquo;
+</p>
+<p>For example, you can commit a set of edited files by opening a VC
+Directory buffer, where the files are listed with the &lsquo;<samp>edited</samp>&rsquo;
 status; marking the files; and typing <kbd>v</kbd> or <kbd>C-x v v</kbd>
 (<code>vc-next-action</code>).  If the version control system is
 changeset-based, Emacs will commit the files in a single revision.
-
-   <p>While in the VC Directory buffer, you can also perform search and
+</p>
+<p>While in the VC Directory buffer, you can also perform search and
 replace on the current VC fileset, with the following commands:
-
-     <dl>
-<dt><kbd>S</kbd><dd>Search the fileset (<code>vc-dir-search</code>).
-
-     <br><dt><kbd>Q</kbd><dd>Do a regular expression query replace on the fileset
+</p>
+<dl compact="compact">
+<dt><kbd>S</kbd></dt>
+<dd><p>Search the fileset (<code>vc-dir-search</code>).
+</p>
+</dd>
+<dt><kbd>Q</kbd></dt>
+<dd><p>Do a regular expression query replace on the fileset
 (<code>vc-dir-query-replace-regexp</code>).
-
-     <br><dt><kbd>M-s a C-s</kbd><dd>Do an incremental search on the fileset (<code>vc-dir-isearch</code>).
-
-     <br><dt><kbd>M-s a C-M-s</kbd><dd>Do an incremental regular expression search on the fileset
-(<code>vc-dir-isearch-regexp</code>). 
+</p>
+</dd>
+<dt><kbd>M-s a C-s</kbd></dt>
+<dd><p>Do an incremental search on the fileset (<code>vc-dir-isearch</code>).
+</p>
+</dd>
+<dt><kbd>M-s a C-M-s</kbd></dt>
+<dd><p>Do an incremental regular expression search on the fileset
+(<code>vc-dir-isearch-regexp</code>).
+</p></dd>
 </dl>
 
-<p class="noindent">Apart from acting on multiple files, these commands behave much like
+<p>Apart from acting on multiple files, these commands behave much like
 their single-buffer counterparts (see <a href="Search.html#Search">Search</a>).
-
-   <p><a name="index-stashes-in-version-control-2962"></a><a name="index-shelves-in-version-control-2963"></a>  The above commands are also available via the menu bar, and via a
-context menu invoked by <kbd>Mouse-2</kbd>.  Furthermore, some VC backends
+</p>
+<a name="index-stashes-in-version-control"></a>
+<a name="index-shelves-in-version-control"></a>
+<p>The above commands are also available via the menu bar, and via a
+context menu invoked by <kbd>mouse-2</kbd>.  Furthermore, some VC backends
 use the menu to provide extra backend-specific commands.  For example,
-Git and Bazaar allow you to manipulate <dfn>stashes</dfn> and <dfn>shelves</dfn>
+Git and Bazaar allow you to manipulate <em>stashes</em> and <em>shelves</em>
 (where are a way to temporarily put aside uncommitted changes, and
 bring them back at a later time).
+</p>
+<hr>
+<div class="header">
+<p>
+Previous: <a href="VC-Directory-Buffer.html#VC-Directory-Buffer" accesskey="p" rel="prev">VC Directory Buffer</a>, Up: <a href="VC-Directory-Mode.html#VC-Directory-Mode" accesskey="u" rel="up">VC Directory Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

@@ -1,85 +1,126 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Buffer Basics - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Buffer Basics</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Buffer Basics">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Buffer Basics">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Buffers.html#Buffers" title="Buffers">
-<link rel="next" href="Current-Buffer.html#Current-Buffer" title="Current Buffer">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Buffers.html#Buffers" rel="up" title="Buffers">
+<link href="Current-Buffer.html#Current-Buffer" rel="next" title="Current Buffer">
+<link href="Buffers.html#Buffers" rel="prev" title="Buffers">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Buffer-Basics"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Current-Buffer.html#Current-Buffer">Current Buffer</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Buffer-Basics"></a>
+<div class="header">
+<p>
+Next: <a href="Current-Buffer.html#Current-Buffer" accesskey="n" rel="next">Current Buffer</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Buffer-Basics-1"></a>
 <h3 class="section">26.1 Buffer Basics</h3>
 
-<p>A <dfn>buffer</dfn> is a Lisp object containing text to be edited.  Buffers
+<p>A <em>buffer</em> is a Lisp object containing text to be edited.  Buffers
 are used to hold the contents of files that are being visited; there may
 also be buffers that are not visiting files.  Although several buffers
-normally exist, only one buffer is designated the <dfn>current
-buffer</dfn> at any time.  Most editing commands act on the contents of the
+normally exist, only one buffer is designated the <em>current
+buffer</em> at any time.  Most editing commands act on the contents of the
 current buffer.  Each buffer, including the current buffer, may or may
 not be displayed in any windows.
-
+</p>
 <p>Buffers in Emacs editing are objects that have distinct names and hold
 text that can be edited.  Buffers appear to Lisp programs as a special
 data type.  You can think of the contents of a buffer as a string that
 you can extend; insertions and deletions may occur in any part of the
 buffer.  See <a href="Text.html#Text">Text</a>.
-
-   <p>A Lisp buffer object contains numerous pieces of information.  Some of
+</p>
+<p>A Lisp buffer object contains numerous pieces of information.  Some of
 this information is directly accessible to the programmer through
 variables, while other information is accessible only through
 special-purpose functions.  For example, the visited file name is
 directly accessible through a variable, while the value of point is
 accessible only through a primitive function.
-
-   <p>Buffer-specific information that is directly accessible is stored in
-<dfn>buffer-local</dfn> variable bindings, which are variable values that are
+</p>
+<p>Buffer-specific information that is directly accessible is stored in
+<em>buffer-local</em> variable bindings, which are variable values that are
 effective only in a particular buffer.  This feature allows each buffer
 to override the values of certain variables.  Most major modes override
 variables such as <code>fill-column</code> or <code>comment-column</code> in this
 way.  For more information about buffer-local variables and functions
 related to them, see <a href="Buffer_002dLocal-Variables.html#Buffer_002dLocal-Variables">Buffer-Local Variables</a>.
-
-   <p>For functions and variables related to visiting files in buffers, see
+</p>
+<p>For functions and variables related to visiting files in buffers, see
 <a href="Visiting-Files.html#Visiting-Files">Visiting Files</a> and <a href="Saving-Buffers.html#Saving-Buffers">Saving Buffers</a>.  For functions and
 variables related to the display of buffers in windows, see
 <a href="Buffers-and-Windows.html#Buffers-and-Windows">Buffers and Windows</a>.
+</p>
+<dl>
+<dt><a name="index-bufferp"></a>Function: <strong>bufferp</strong> <em>object</em></dt>
+<dd><p>This function returns <code>t</code> if <var>object</var> is a buffer,
+<code>nil</code> otherwise.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>bufferp</b><var> object<a name="index-bufferp-2297"></a></var><br>
-<blockquote><p>This function returns <code>t</code> if <var>object</var> is a buffer,
-<code>nil</code> otherwise. 
-</p></blockquote></div>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Current-Buffer.html#Current-Buffer" accesskey="n" rel="next">Current Buffer</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

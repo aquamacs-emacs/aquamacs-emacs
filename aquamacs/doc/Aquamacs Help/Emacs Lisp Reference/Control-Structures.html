@@ -1,81 +1,129 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Control Structures - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Control Structures</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Control Structures">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Control Structures">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Evaluation.html#Evaluation" title="Evaluation">
-<link rel="next" href="Variables.html#Variables" title="Variables">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Sequencing.html#Sequencing" rel="next" title="Sequencing">
+<link href="Eval.html#Eval" rel="prev" title="Eval">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Control-Structures"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Variables.html#Variables">Variables</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Evaluation.html#Evaluation">Evaluation</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
+Next: <a href="Variables.html#Variables" accesskey="n" rel="next">Variables</a>, Previous: <a href="Evaluation.html#Evaluation" accesskey="p" rel="prev">Evaluation</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Control-Structures-1"></a>
 <h2 class="chapter">10 Control Structures</h2>
+<a name="index-special-forms-for-control-structures"></a>
+<a name="index-control-structures"></a>
 
-<p><a name="index-special-forms-for-control-structures-632"></a><a name="index-control-structures-633"></a>
-  A Lisp program consists of a set of <dfn>expressions</dfn>, or
-<dfn>forms</dfn> (see <a href="Forms.html#Forms">Forms</a>).  We control the order of execution of
-these forms by enclosing them in <dfn>control structures</dfn>.  Control
+<p>A Lisp program consists of a set of <em>expressions</em>, or
+<em>forms</em> (see <a href="Forms.html#Forms">Forms</a>).  We control the order of execution of
+these forms by enclosing them in <em>control structures</em>.  Control
 structures are special forms which control when, whether, or how many
 times to execute the forms they contain.
-
-   <p><a name="index-textual-order-634"></a>  The simplest order of execution is sequential execution: first form
+</p>
+<a name="index-textual-order"></a>
+<p>The simplest order of execution is sequential execution: first form
 <var>a</var>, then form <var>b</var>, and so on.  This is what happens when you
 write several forms in succession in the body of a function, or at top
 level in a file of Lisp code&mdash;the forms are executed in the order
-written.  We call this <dfn>textual order</dfn>.  For example, if a function
+written.  We call this <em>textual order</em>.  For example, if a function
 body consists of two forms <var>a</var> and <var>b</var>, evaluation of the
 function evaluates first <var>a</var> and then <var>b</var>.  The result of
 evaluating <var>b</var> becomes the value of the function.
-
-   <p>Explicit control structures make possible an order of execution other
+</p>
+<p>Explicit control structures make possible an order of execution other
 than sequential.
-
-   <p>Emacs Lisp provides several kinds of control structure, including
+</p>
+<p>Emacs Lisp provides several kinds of control structure, including
 other varieties of sequencing, conditionals, iteration, and (controlled)
 jumps&mdash;all discussed below.  The built-in control structures are
 special forms since their subforms are not necessarily evaluated or not
 evaluated sequentially.  You can use macros to define your own control
 structure constructs (see <a href="Macros.html#Macros">Macros</a>).
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Sequencing.html#Sequencing" accesskey="1">Sequencing</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Evaluation in textual order.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Conditionals.html#Conditionals" accesskey="2">Conditionals</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top"><code>if</code>, <code>cond</code>, <code>when</code>, <code>unless</code>.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Combining-Conditions.html#Combining-Conditions" accesskey="3">Combining Conditions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top"><code>and</code>, <code>or</code>, <code>not</code>.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Iteration.html#Iteration" accesskey="4">Iteration</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top"><code>while</code> loops.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Generators.html#Generators" accesskey="5">Generators</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Generic sequences and coroutines.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Nonlocal-Exits.html#Nonlocal-Exits" accesskey="6">Nonlocal Exits</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Jumping out of a sequence.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Sequencing.html#Sequencing">Sequencing</a>:              Evaluation in textual order. 
-<li><a accesskey="2" href="Conditionals.html#Conditionals">Conditionals</a>:            <code>if</code>, <code>cond</code>, <code>when</code>, <code>unless</code>. 
-<li><a accesskey="3" href="Combining-Conditions.html#Combining-Conditions">Combining Conditions</a>:    <code>and</code>, <code>or</code>, <code>not</code>. 
-<li><a accesskey="4" href="Iteration.html#Iteration">Iteration</a>:               <code>while</code> loops. 
-<li><a accesskey="5" href="Generators.html#Generators">Generators</a>:              Generic sequences and coroutines. 
-<li><a accesskey="6" href="Nonlocal-Exits.html#Nonlocal-Exits">Nonlocal Exits</a>:          Jumping out of a sequence. 
-</ul>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Variables.html#Variables" accesskey="n" rel="next">Variables</a>, Previous: <a href="Evaluation.html#Evaluation" accesskey="p" rel="prev">Evaluation</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

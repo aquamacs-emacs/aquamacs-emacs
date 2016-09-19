@@ -1,76 +1,110 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Indent Tabs - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Indent Tabs</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Indent Tabs">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Indent Tabs">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Indentation.html#Indentation" title="Indentation">
-<link rel="prev" href="Relative-Indent.html#Relative-Indent" title="Relative Indent">
-<link rel="next" href="Motion-by-Indent.html#Motion-by-Indent" title="Motion by Indent">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Indentation.html#Indentation" rel="up" title="Indentation">
+<link href="Motion-by-Indent.html#Motion-by-Indent" rel="next" title="Motion by Indent">
+<link href="Relative-Indent.html#Relative-Indent" rel="prev" title="Relative Indent">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Indent-Tabs"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Motion-by-Indent.html#Motion-by-Indent">Motion by Indent</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Relative-Indent.html#Relative-Indent">Relative Indent</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Indentation.html#Indentation">Indentation</a>
-<hr>
+Next: <a href="Motion-by-Indent.html#Motion-by-Indent" accesskey="n" rel="next">Motion by Indent</a>, Previous: <a href="Relative-Indent.html#Relative-Indent" accesskey="p" rel="prev">Relative Indent</a>, Up: <a href="Indentation.html#Indentation" accesskey="u" rel="up">Indentation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Adjustable-Tab-Stops"></a>
 <h4 class="subsection">31.17.5 Adjustable Tab Stops</h4>
+<a name="index-tabs-stops-for-indentation"></a>
 
-<p><a name="index-tabs-stops-for-indentation-3281"></a>
-  This section explains the mechanism for user-specified tab stops
+<p>This section explains the mechanism for user-specified tab stops
 and the mechanisms that use and set them.  The name &ldquo;tab stops&rdquo; is
 used because the feature is similar to that of the tab stops on a
 typewriter.  The feature works by inserting an appropriate number of
 spaces and tab characters to reach the next tab stop column; it does not
-affect the display of tab characters in the buffer (see <a href="Usual-Display.html#Usual-Display">Usual Display</a>).  Note that the &lt;TAB&gt; character as input uses this tab
-stop feature only in a few major modes, such as Text mode. 
-See <a href="../emacs/Tab-Stops.html#Tab-Stops">Tab Stops</a>.
+affect the display of tab characters in the buffer (see <a href="Usual-Display.html#Usual-Display">Usual Display</a>).  Note that the <tt class="key">TAB</tt> character as input uses this tab
+stop feature only in a few major modes, such as Text mode.
+See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Tab-Stops.html#Tab-Stops">Tab Stops</a> in <cite>The GNU Emacs Manual</cite>.
+</p>
+<dl>
+<dt><a name="index-tab_002dto_002dtab_002dstop"></a>Command: <strong>tab-to-tab-stop</strong></dt>
+<dd><p>This command inserts spaces or tabs before point, up to the next tab
+stop column defined by <code>tab-stop-list</code>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Command: <b>tab-to-tab-stop</b><var><a name="index-tab_002dto_002dtab_002dstop-3282"></a></var><br>
-<blockquote><p>This command inserts spaces or tabs before point, up to the next tab
-stop column defined by <code>tab-stop-list</code>. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; User Option: <b>tab-stop-list</b><var><a name="index-tab_002dstop_002dlist-3283"></a></var><br>
-<blockquote><p>This variable defines the tab stop columns used by <code>tab-to-tab-stop</code>. 
+<dl>
+<dt><a name="index-tab_002dstop_002dlist"></a>User Option: <strong>tab-stop-list</strong></dt>
+<dd><p>This variable defines the tab stop columns used by <code>tab-to-tab-stop</code>.
 It should be either <code>nil</code>, or a list of increasing integers,
 which need not be evenly spaced.  The list is implicitly
 extended to infinity through repetition of the interval between the
 last and penultimate elements (or <code>tab-width</code> if the list has
 fewer than two elements).  A value of <code>nil</code> means a tab stop
 every <code>tab-width</code> columns.
+</p>
+<p>Use <kbd>M-x edit-tab-stops</kbd> to edit the location of tab stops interactively.
+</p></dd></dl>
 
-        <p>Use <kbd>M-x edit-tab-stops</kbd> to edit the location of tab stops interactively. 
-</p></blockquote></div>
 
-   </body></html>
 
+
+</body>
+</html>

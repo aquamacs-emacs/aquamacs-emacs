@@ -1,67 +1,110 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Coding Systems - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Coding Systems</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Coding Systems">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Coding Systems">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" title="Non-ASCII Characters">
-<link rel="prev" href="Translation-of-Characters.html#Translation-of-Characters" title="Translation of Characters">
-<link rel="next" href="Input-Methods.html#Input-Methods" title="Input Methods">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="up" title="Non-ASCII Characters">
+<link href="Coding-System-Basics.html#Coding-System-Basics" rel="next" title="Coding System Basics">
+<link href="Translation-of-Characters.html#Translation-of-Characters" rel="prev" title="Translation of Characters">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Coding-Systems"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Input-Methods.html#Input-Methods">Input Methods</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Translation-of-Characters.html#Translation-of-Characters">Translation of Characters</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII Characters</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Coding-Systems"></a>
+<div class="header">
+<p>
+Next: <a href="Input-Methods.html#Input-Methods" accesskey="n" rel="next">Input Methods</a>, Previous: <a href="Translation-of-Characters.html#Translation-of-Characters" accesskey="p" rel="prev">Translation of Characters</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Coding-Systems-1"></a>
 <h3 class="section">32.10 Coding Systems</h3>
 
-<p><a name="index-coding-system-3515"></a>  When Emacs reads or writes a file, and when Emacs sends text to a
+<a name="index-coding-system"></a>
+<p>When Emacs reads or writes a file, and when Emacs sends text to a
 subprocess or receives text from a subprocess, it normally performs
 character code conversion and end-of-line conversion as specified
-by a particular <dfn>coding system</dfn>.
-
-   <p>How to define a coding system is an arcane matter, and is not
+by a particular <em>coding system</em>.
+</p>
+<p>How to define a coding system is an arcane matter, and is not
 documented here.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Coding-System-Basics.html#Coding-System-Basics" accesskey="1">Coding System Basics</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Basic concepts.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Encoding-and-I_002fO.html#Encoding-and-I_002fO" accesskey="2">Encoding and I/O</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How file I/O functions handle coding systems.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems" accesskey="3">Lisp and Coding Systems</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions to operate on coding system names.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems" accesskey="4">User-Chosen Coding Systems</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Asking the user to choose a coding system.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Default-Coding-Systems.html#Default-Coding-Systems" accesskey="5">Default Coding Systems</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Controlling the default choices.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Specifying-Coding-Systems.html#Specifying-Coding-Systems" accesskey="6">Specifying Coding Systems</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Requesting a particular coding system
+                                    for a single file operation.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Explicit-Encoding.html#Explicit-Encoding" accesskey="7">Explicit Encoding</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Encoding or decoding text without doing I/O.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding" accesskey="8">Terminal I/O Encoding</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Use of encoding for terminal I/O.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Coding-System-Basics.html#Coding-System-Basics">Coding System Basics</a>:         Basic concepts. 
-<li><a accesskey="2" href="Encoding-and-I_002fO.html#Encoding-and-I_002fO">Encoding and I/O</a>:             How file I/O functions handle coding systems. 
-<li><a accesskey="3" href="Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems">Lisp and Coding Systems</a>:      Functions to operate on coding system names. 
-<li><a accesskey="4" href="User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems">User-Chosen Coding Systems</a>:   Asking the user to choose a coding system. 
-<li><a accesskey="5" href="Default-Coding-Systems.html#Default-Coding-Systems">Default Coding Systems</a>:       Controlling the default choices. 
-<li><a accesskey="6" href="Specifying-Coding-Systems.html#Specifying-Coding-Systems">Specifying Coding Systems</a>:    Requesting a particular coding system
-                                    for a single file operation. 
-<li><a accesskey="7" href="Explicit-Encoding.html#Explicit-Encoding">Explicit Encoding</a>:            Encoding or decoding text without doing I/O. 
-<li><a accesskey="8" href="Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding">Terminal I/O Encoding</a>:        Use of encoding for terminal I/O. 
-</ul>
 
-   </body></html>
 
+
+</body>
+</html>

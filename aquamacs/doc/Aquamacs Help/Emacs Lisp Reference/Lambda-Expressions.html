@@ -1,72 +1,112 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Lambda Expressions - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Lambda Expressions</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Lambda Expressions">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Lambda Expressions">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Functions.html#Functions" title="Functions">
-<link rel="prev" href="What-Is-a-Function.html#What-Is-a-Function" title="What Is a Function">
-<link rel="next" href="Function-Names.html#Function-Names" title="Function Names">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Functions.html#Functions" rel="up" title="Functions">
+<link href="Lambda-Components.html#Lambda-Components" rel="next" title="Lambda Components">
+<link href="What-Is-a-Function.html#What-Is-a-Function" rel="prev" title="What Is a Function">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Lambda-Expressions"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Function-Names.html#Function-Names">Function Names</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="What-Is-a-Function.html#What-Is-a-Function">What Is a Function</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
-<hr>
+Next: <a href="Function-Names.html#Function-Names" accesskey="n" rel="next">Function Names</a>, Previous: <a href="What-Is-a-Function.html#What-Is-a-Function" accesskey="p" rel="prev">What Is a Function</a>, Up: <a href="Functions.html#Functions" accesskey="u" rel="up">Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Lambda-Expressions-1"></a>
 <h3 class="section">12.2 Lambda Expressions</h3>
+<a name="index-lambda-expression"></a>
 
-<p><a name="index-lambda-expression-827"></a>
-  A lambda expression is a function object written in Lisp.  Here is
+<p>A lambda expression is a function object written in Lisp.  Here is
 an example:
+</p>
+<div class="example">
+<pre class="example">(lambda (x)
+  &quot;Return the hyperbolic cosine of X.&quot;
+  (* 0.5 (+ (exp x) (exp (- x)))))
+</pre></div>
 
-<pre class="example">     (lambda (x)
-       "Return the hyperbolic cosine of X."
-       (* 0.5 (+ (exp x) (exp (- x)))))
-</pre>
-   <p class="noindent">In Emacs Lisp, such a list is a valid expression which evaluates to
+<p>In Emacs Lisp, such a list is a valid expression which evaluates to
 a function object.
-
-   <p>A lambda expression, by itself, has no name; it is an <dfn>anonymous
-function</dfn>.  Although lambda expressions can be used this way
+</p>
+<p>A lambda expression, by itself, has no name; it is an <em>anonymous
+function</em>.  Although lambda expressions can be used this way
 (see <a href="Anonymous-Functions.html#Anonymous-Functions">Anonymous Functions</a>), they are more commonly associated with
-symbols to make <dfn>named functions</dfn> (see <a href="Function-Names.html#Function-Names">Function Names</a>). 
+symbols to make <em>named functions</em> (see <a href="Function-Names.html#Function-Names">Function Names</a>).
 Before going into these details, the following subsections describe
 the components of a lambda expression and what they do.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Lambda-Components.html#Lambda-Components" accesskey="1">Lambda Components</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The parts of a lambda expression.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Simple-Lambda.html#Simple-Lambda" accesskey="2">Simple Lambda</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A simple example.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Argument-List.html#Argument-List" accesskey="3">Argument List</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Details and special features of argument lists.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Function-Documentation.html#Function-Documentation" accesskey="4">Function Documentation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to put documentation in a function.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Lambda-Components.html#Lambda-Components">Lambda Components</a>:            The parts of a lambda expression. 
-<li><a accesskey="2" href="Simple-Lambda.html#Simple-Lambda">Simple Lambda</a>:                A simple example. 
-<li><a accesskey="3" href="Argument-List.html#Argument-List">Argument List</a>:                Details and special features of argument lists. 
-<li><a accesskey="4" href="Function-Documentation.html#Function-Documentation">Function Documentation</a>:       How to put documentation in a function. 
-</ul>
 
-   </body></html>
 
+
+</body>
+</html>

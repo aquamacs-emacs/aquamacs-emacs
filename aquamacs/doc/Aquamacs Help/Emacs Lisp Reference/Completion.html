@@ -1,86 +1,132 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Completion - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Completion</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Completion">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Completion">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Minibuffers.html#Minibuffers" title="Minibuffers">
-<link rel="prev" href="Initial-Input.html#Initial-Input" title="Initial Input">
-<link rel="next" href="Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries" title="Yes-or-No Queries">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Minibuffers.html#Minibuffers" rel="up" title="Minibuffers">
+<link href="Basic-Completion.html#Basic-Completion" rel="next" title="Basic Completion">
+<link href="Initial-Input.html#Initial-Input" rel="prev" title="Initial Input">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Completion"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries">Yes-or-No Queries</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Initial-Input.html#Initial-Input">Initial Input</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffers.html#Minibuffers">Minibuffers</a>
-<hr>
+Next: <a href="Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries" accesskey="n" rel="next">Yes-or-No Queries</a>, Previous: <a href="Initial-Input.html#Initial-Input" accesskey="p" rel="prev">Initial Input</a>, Up: <a href="Minibuffers.html#Minibuffers" accesskey="u" rel="up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Completion-1"></a>
 <h3 class="section">19.6 Completion</h3>
+<a name="index-completion"></a>
 
-<p><a name="index-completion-1295"></a>
-  <dfn>Completion</dfn> is a feature that fills in the rest of a name
+<p><em>Completion</em> is a feature that fills in the rest of a name
 starting from an abbreviation for it.  Completion works by comparing the
-user's input against a list of valid names and determining how much of
+user&rsquo;s input against a list of valid names and determining how much of
 the name is determined uniquely by what the user has typed.  For
 example, when you type <kbd>C-x b</kbd> (<code>switch-to-buffer</code>) and then
-<!-- "This is the sort of English up with which I will not put." -->
 type the first few letters of the name of the buffer to which you wish
-to switch, and then type &lt;TAB&gt; (<code>minibuffer-complete</code>), Emacs
+to switch, and then type <tt class="key">TAB</tt> (<code>minibuffer-complete</code>), Emacs
 extends the name as far as it can.
-
-   <p>Standard Emacs commands offer completion for names of symbols, files,
+</p>
+<p>Standard Emacs commands offer completion for names of symbols, files,
 buffers, and processes; with the functions in this section, you can
 implement completion for other kinds of names.
-
-   <p>The <code>try-completion</code> function is the basic primitive for
+</p>
+<p>The <code>try-completion</code> function is the basic primitive for
 completion: it returns the longest determined completion of a given
 initial string, with a given set of strings to match against.
-
-   <p>The function <code>completing-read</code> provides a higher-level interface
+</p>
+<p>The function <code>completing-read</code> provides a higher-level interface
 for completion.  A call to <code>completing-read</code> specifies how to
 determine the list of valid names.  The function then activates the
 minibuffer with a local keymap that binds a few keys to commands useful
 for completion.  Other functions provide convenient simple interfaces
 for reading certain kinds of names with completion.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Basic-Completion.html#Basic-Completion" accesskey="1">Basic Completion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Low-level functions for completing strings.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Minibuffer-Completion.html#Minibuffer-Completion" accesskey="2">Minibuffer Completion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Invoking the minibuffer with completion.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Completion-Commands.html#Completion-Commands" accesskey="3">Completion Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Minibuffer commands that do completion.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="High_002dLevel-Completion.html#High_002dLevel-Completion" accesskey="4">High-Level Completion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Convenient special cases of completion
+                             (reading buffer names, variable names, etc.).
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Reading-File-Names.html#Reading-File-Names" accesskey="5">Reading File Names</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using completion to read file names and
+                             shell commands.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Completion-Variables.html#Completion-Variables" accesskey="6">Completion Variables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Variables controlling completion behavior.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Programmed-Completion.html#Programmed-Completion" accesskey="7">Programmed Completion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Writing your own completion function.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Completion-in-Buffers.html#Completion-in-Buffers" accesskey="8">Completion in Buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Completing text in ordinary buffers.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Basic-Completion.html#Basic-Completion">Basic Completion</a>:        Low-level functions for completing strings. 
-<li><a accesskey="2" href="Minibuffer-Completion.html#Minibuffer-Completion">Minibuffer Completion</a>:   Invoking the minibuffer with completion. 
-<li><a accesskey="3" href="Completion-Commands.html#Completion-Commands">Completion Commands</a>:     Minibuffer commands that do completion. 
-<li><a accesskey="4" href="High_002dLevel-Completion.html#High_002dLevel-Completion">High-Level Completion</a>:   Convenient special cases of completion
-                             (reading buffer names, variable names, etc.). 
-<li><a accesskey="5" href="Reading-File-Names.html#Reading-File-Names">Reading File Names</a>:      Using completion to read file names and
-                             shell commands. 
-<li><a accesskey="6" href="Completion-Variables.html#Completion-Variables">Completion Variables</a>:    Variables controlling completion behavior. 
-<li><a accesskey="7" href="Programmed-Completion.html#Programmed-Completion">Programmed Completion</a>:   Writing your own completion function. 
-<li><a accesskey="8" href="Completion-in-Buffers.html#Completion-in-Buffers">Completion in Buffers</a>:   Completing text in ordinary buffers. 
-</ul>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Yes_002dor_002dNo-Queries.html#Yes_002dor_002dNo-Queries" accesskey="n" rel="next">Yes-or-No Queries</a>, Previous: <a href="Initial-Input.html#Initial-Input" accesskey="p" rel="prev">Initial Input</a>, Up: <a href="Minibuffers.html#Minibuffers" accesskey="u" rel="up">Minibuffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

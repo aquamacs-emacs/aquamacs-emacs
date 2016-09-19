@@ -1,73 +1,126 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Buffers - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Buffers</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Buffers">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Buffers">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving" title="Backups and Auto-Saving">
-<link rel="next" href="Windows.html#Windows" title="Windows">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Buffer-Basics.html#Buffer-Basics" rel="next" title="Buffer Basics">
+<link href="Reverting.html#Reverting" rel="prev" title="Reverting">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Buffers"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Windows.html#Windows">Windows</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving">Backups and Auto-Saving</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
+Next: <a href="Windows.html#Windows" accesskey="n" rel="next">Windows</a>, Previous: <a href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving" accesskey="p" rel="prev">Backups and Auto-Saving</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Buffers-1"></a>
 <h2 class="chapter">26 Buffers</h2>
+<a name="index-buffer"></a>
 
-<p><a name="index-buffer-2296"></a>
-  A <dfn>buffer</dfn> is a Lisp object containing text to be edited.  Buffers
+<p>A <em>buffer</em> is a Lisp object containing text to be edited.  Buffers
 are used to hold the contents of files that are being visited; there may
 also be buffers that are not visiting files.  While several buffers may
-exist at one time, only one buffer is designated the <dfn>current
-buffer</dfn> at any time.  Most editing commands act on the contents of the
+exist at one time, only one buffer is designated the <em>current
+buffer</em> at any time.  Most editing commands act on the contents of the
 current buffer.  Each buffer, including the current buffer, may or may
 not be displayed in any windows.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Buffer-Basics.html#Buffer-Basics" accesskey="1">Buffer Basics</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What is a buffer?
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Current-Buffer.html#Current-Buffer" accesskey="2">Current Buffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Designating a buffer as current
+                          so that primitives will access its contents.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Buffer-Names.html#Buffer-Names" accesskey="3">Buffer Names</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Accessing and changing buffer names.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Buffer-File-Name.html#Buffer-File-Name" accesskey="4">Buffer File Name</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The buffer file name indicates which file is visited.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Buffer-Modification.html#Buffer-Modification" accesskey="5">Buffer Modification</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A buffer is <em>modified</em> if it needs to be saved.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Modification-Time.html#Modification-Time" accesskey="6">Modification Time</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Determining whether the visited file was changed
+                         behind Emacs&rsquo;s back.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Read-Only-Buffers.html#Read-Only-Buffers" accesskey="7">Read Only Buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Modifying text is not allowed in a read-only buffer.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Buffer-List.html#Buffer-List" accesskey="8">Buffer List</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to look at all the existing buffers.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Creating-Buffers.html#Creating-Buffers" accesskey="9">Creating Buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions that create buffers.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Killing-Buffers.html#Killing-Buffers">Killing Buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Buffers exist until explicitly killed.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Indirect-Buffers.html#Indirect-Buffers">Indirect Buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">An indirect buffer shares text with some other buffer.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Swapping-Text.html#Swapping-Text">Swapping Text</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Swapping text between two buffers.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Buffer-Gap.html#Buffer-Gap">Buffer Gap</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The gap in the buffer.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Buffer-Basics.html#Buffer-Basics">Buffer Basics</a>:        What is a buffer? 
-<li><a accesskey="2" href="Current-Buffer.html#Current-Buffer">Current Buffer</a>:       Designating a buffer as current
-                          so that primitives will access its contents. 
-<li><a accesskey="3" href="Buffer-Names.html#Buffer-Names">Buffer Names</a>:         Accessing and changing buffer names. 
-<li><a accesskey="4" href="Buffer-File-Name.html#Buffer-File-Name">Buffer File Name</a>:     The buffer file name indicates which file is visited. 
-<li><a accesskey="5" href="Buffer-Modification.html#Buffer-Modification">Buffer Modification</a>:  A buffer is <dfn>modified</dfn> if it needs to be saved. 
-<li><a accesskey="6" href="Modification-Time.html#Modification-Time">Modification Time</a>:    Determining whether the visited file was changed
-                         behind Emacs's back. 
-<li><a accesskey="7" href="Read-Only-Buffers.html#Read-Only-Buffers">Read Only Buffers</a>:    Modifying text is not allowed in a read-only buffer. 
-<li><a accesskey="8" href="Buffer-List.html#Buffer-List">Buffer List</a>:          How to look at all the existing buffers. 
-<li><a accesskey="9" href="Creating-Buffers.html#Creating-Buffers">Creating Buffers</a>:     Functions that create buffers. 
-<li><a href="Killing-Buffers.html#Killing-Buffers">Killing Buffers</a>:      Buffers exist until explicitly killed. 
-<li><a href="Indirect-Buffers.html#Indirect-Buffers">Indirect Buffers</a>:     An indirect buffer shares text with some other buffer. 
-<li><a href="Swapping-Text.html#Swapping-Text">Swapping Text</a>:        Swapping text between two buffers. 
-<li><a href="Buffer-Gap.html#Buffer-Gap">Buffer Gap</a>:           The gap in the buffer. 
-</ul>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Windows.html#Windows" accesskey="n" rel="next">Windows</a>, Previous: <a href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving" accesskey="p" rel="prev">Backups and Auto-Saving</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

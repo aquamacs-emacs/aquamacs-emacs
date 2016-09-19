@@ -1,143 +1,204 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Special Diary Entries - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Special Diary Entries</title>
+
+<meta name="description" content="GNU Emacs Manual: Special Diary Entries">
+<meta name="keywords" content="GNU Emacs Manual: Special Diary Entries">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Diary.html#Diary" title="Diary">
-<link rel="prev" href="Adding-to-Diary.html#Adding-to-Diary" title="Adding to Diary">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Diary.html#Diary" rel="up" title="Diary">
+<link href="Appointments.html#Appointments" rel="next" title="Appointments">
+<link href="Adding-to-Diary.html#Adding-to-Diary" rel="prev" title="Adding to Diary">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Special-Diary-Entries"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Adding-to-Diary.html#Adding-to-Diary">Adding to Diary</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Diary.html#Diary">Diary</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Special-Diary-Entries"></a>
+<div class="header">
+<p>
+Previous: <a href="Adding-to-Diary.html#Adding-to-Diary" accesskey="p" rel="prev">Adding to Diary</a>, Up: <a href="Diary.html#Diary" accesskey="u" rel="up">Diary</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Special-Diary-Entries-1"></a>
 <h4 class="subsection">31.10.5 Special Diary Entries</h4>
 
 <p>In addition to entries based on calendar dates, the diary file can
-contain <dfn>sexp entries</dfn> for regular events such as anniversaries. 
+contain <em>sexp entries</em> for regular events such as anniversaries.
 These entries are based on Lisp expressions (sexps) that Emacs evaluates
 as it scans the diary file.  Instead of a date, a sexp entry contains
-&lsquo;<samp><span class="samp">%%</span></samp>&rsquo; followed by a Lisp expression which must begin and end with
+&lsquo;<samp>%%</samp>&rsquo; followed by a Lisp expression which must begin and end with
 parentheses.  The Lisp expression determines which dates the entry
 applies to.
-
-   <p>Calendar mode provides commands to insert certain commonly used
+</p>
+<p>Calendar mode provides commands to insert certain commonly used
 sexp entries:
-
-     <dl>
-<dt><kbd>i a</kbd><dd>Add an anniversary diary entry for the selected date
-(<code>diary-insert-anniversary-entry</code>). 
-<br><dt><kbd>i b</kbd><dd>Add a block diary entry for the current region
-(<code>diary-insert-block-entry</code>). 
-<br><dt><kbd>i c</kbd><dd>Add a cyclic diary entry starting at the date
-(<code>diary-insert-cyclic-entry</code>). 
+</p>
+<dl compact="compact">
+<dt><kbd>i a</kbd></dt>
+<dd><p>Add an anniversary diary entry for the selected date
+(<code>diary-insert-anniversary-entry</code>).
+</p></dd>
+<dt><kbd>i b</kbd></dt>
+<dd><p>Add a block diary entry for the current region
+(<code>diary-insert-block-entry</code>).
+</p></dd>
+<dt><kbd>i c</kbd></dt>
+<dd><p>Add a cyclic diary entry starting at the date
+(<code>diary-insert-cyclic-entry</code>).
+</p></dd>
 </dl>
 
-   <p><a name="index-i-a-_0040r_007b_0028Calendar-mode_0029_007d-3550"></a><a name="index-diary_002dinsert_002danniversary_002dentry-3551"></a>  If you want to make a diary entry that applies to the anniversary of a
-specific date, move point to that date and use the <kbd>i a</kbd> command. 
+<a name="index-i-a-_0028Calendar-mode_0029"></a>
+<a name="index-diary_002dinsert_002danniversary_002dentry"></a>
+<p>If you want to make a diary entry that applies to the anniversary of a
+specific date, move point to that date and use the <kbd>i a</kbd> command.
 This displays the end of your diary file in another window and inserts
 the anniversary description; you can then type the rest of the diary
 entry.  The entry looks like this:
+</p>
+<a name="index-diary_002danniversary"></a>
+<div class="example">
+<pre class="example">%%(diary-anniversary 10 31 1988) Arthur's birthday
+</pre></div>
 
-   <p><a name="index-diary_002danniversary-3552"></a>
-<pre class="example">     %%(diary-anniversary 10 31 1988) Arthur's birthday
-</pre>
-   <p class="noindent">This entry applies to October 31 in any year after 1988; &lsquo;<samp><span class="samp">10 31
-1988</span></samp>&rsquo; specifies the date.  (If you are using the European or ISO
-calendar style, the input order of month, day and year is different.) 
+<p>This entry applies to October 31 in any year after 1988; &lsquo;<samp>10 31
+1988</samp>&rsquo; specifies the date.  (If you are using the European or ISO
+calendar style, the input order of month, day and year is different.)
 The reason this expression requires a beginning year is that advanced
 diary functions can use it to calculate the number of elapsed years.
-
-   <p>A <dfn>block</dfn> diary entry applies to a specified range of consecutive
+</p>
+<p>A <em>block</em> diary entry applies to a specified range of consecutive
 dates.  Here is a block diary entry that applies to all dates from June
 24, 2012 through July 10, 2012:
+</p>
+<a name="index-diary_002dblock"></a>
+<div class="example">
+<pre class="example">%%(diary-block 6 24 2012 7 10 2012) Vacation
+</pre></div>
 
-   <p><a name="index-diary_002dblock-3553"></a>
-<pre class="example">     %%(diary-block 6 24 2012 7 10 2012) Vacation
-</pre>
-   <p class="noindent">The &lsquo;<samp><span class="samp">6 24 2012</span></samp>&rsquo; indicates the starting date and the &lsquo;<samp><span class="samp">7 10 2012</span></samp>&rsquo;
+<p>The &lsquo;<samp>6 24 2012</samp>&rsquo; indicates the starting date and the &lsquo;<samp>7 10 2012</samp>&rsquo;
 indicates the stopping date.  (Again, if you are using the European or ISO
 calendar style, the input order of month, day and year is different.)
-
-   <p><a name="index-i-b-_0040r_007b_0028Calendar-mode_0029_007d-3554"></a><a name="index-diary_002dinsert_002dblock_002dentry-3555"></a>  To insert a block entry, place point and the mark on the two
+</p>
+<a name="index-i-b-_0028Calendar-mode_0029"></a>
+<a name="index-diary_002dinsert_002dblock_002dentry"></a>
+<p>To insert a block entry, place point and the mark on the two
 dates that begin and end the range, and type <kbd>i b</kbd>.  This command
 displays the end of your diary file in another window and inserts the
 block description; you can then type the diary entry.
-
-   <p><a name="index-i-c-_0040r_007b_0028Calendar-mode_0029_007d-3556"></a><a name="index-diary_002dinsert_002dcyclic_002dentry-3557"></a>   <dfn>Cyclic</dfn> diary entries repeat after a fixed interval of days.  To
+</p>
+<a name="index-i-c-_0028Calendar-mode_0029"></a>
+<a name="index-diary_002dinsert_002dcyclic_002dentry"></a>
+<p><em>Cyclic</em> diary entries repeat after a fixed interval of days.  To
 create one, select the starting date and use the <kbd>i c</kbd> command.  The
 command prompts for the length of interval, then inserts the entry,
 which looks like this:
+</p>
+<a name="index-diary_002dcyclic"></a>
+<div class="example">
+<pre class="example">%%(diary-cyclic 50 3 1 2012) Renew medication
+</pre></div>
 
-   <p><a name="index-diary_002dcyclic-3558"></a>
-<pre class="example">     %%(diary-cyclic 50 3 1 2012) Renew medication
-</pre>
-   <p class="noindent">This entry applies to March 1, 2012 and every 50th day following;
-&lsquo;<samp><span class="samp">3 1 2012</span></samp>&rsquo; specifies the starting date.  (If you are using the
+<p>This entry applies to March 1, 2012 and every 50th day following;
+&lsquo;<samp>3 1 2012</samp>&rsquo; specifies the starting date.  (If you are using the
 European or ISO calendar style, the input order of month, day and year
 is different.)
-
-   <p>All three of these commands make marking diary entries.  To insert a
+</p>
+<p>All three of these commands make marking diary entries.  To insert a
 nonmarking entry, give a prefix argument to the command.  For example,
 <kbd>C-u i a</kbd> makes a nonmarking anniversary diary entry.
-
-   <p>Marking sexp diary entries in the calendar can be time-consuming,
+</p>
+<p>Marking sexp diary entries in the calendar can be time-consuming,
 since every date visible in the calendar window must be individually
-checked.  So it's a good idea to make sexp diary entries nonmarking
-(with &lsquo;<samp><span class="samp">&amp;</span></samp>&rsquo;) when possible.
-
-   <p>Another sophisticated kind of sexp entry, a <dfn>floating</dfn> diary entry,
+checked.  So it&rsquo;s a good idea to make sexp diary entries nonmarking
+(with &lsquo;<samp>&amp;</samp>&rsquo;) when possible.
+</p>
+<p>Another sophisticated kind of sexp entry, a <em>floating</em> diary entry,
 specifies a regularly occurring event by offsets specified in days,
 weeks, and months.  It is comparable to a crontab entry interpreted by
 the <code>cron</code> utility.  Here is a nonmarking, floating diary entry
 that applies to the fourth Thursday in November:
+</p>
+<a name="index-diary_002dfloat"></a>
+<div class="example">
+<pre class="example">&amp;%%(diary-float 11 4 4) American Thanksgiving
+</pre></div>
 
-   <p><a name="index-diary_002dfloat-3559"></a>
-<pre class="example">     &amp;%%(diary-float 11 4 4) American Thanksgiving
-</pre>
-   <p class="noindent">The 11 specifies November (the eleventh month), the 4 specifies Thursday
+<p>The 11 specifies November (the eleventh month), the 4 specifies Thursday
 (the fourth day of the week, where Sunday is numbered zero), and the
 second 4 specifies the fourth Thursday (1 would mean &ldquo;first&rdquo;, 2 would
-mean &ldquo;second&rdquo;, &minus;2 would mean &ldquo;second-to-last&rdquo;, and so on). 
+mean &ldquo;second&rdquo;, −2 would mean &ldquo;second-to-last&rdquo;, and so on).
 The month can be a single month or a list of months.  Thus you could change
-the 11 above to &lsquo;<samp><span class="samp">'(1 2 3)</span></samp>&rsquo; and have the entry apply to the last
+the 11 above to &lsquo;<samp>'(1 2 3)</samp>&rsquo; and have the entry apply to the last
 Thursday of January, February, and March.  If the month is <code>t</code>, the
 entry applies to all months of the year.
-
-   <p>Each of the standard sexp diary entries takes an optional parameter
+</p>
+<p>Each of the standard sexp diary entries takes an optional parameter
 specifying the name of a face or a single-character string to use when
 marking the entry in the calendar.  Most generally, sexp diary entries
-can perform arbitrary computations to determine when they apply. 
+can perform arbitrary computations to determine when they apply.
 See <a href="Sexp-Diary-Entries.html#Sexp-Diary-Entries">Sexp Diary Entries</a>.
+</p>
+<hr>
+<div class="header">
+<p>
+Previous: <a href="Adding-to-Diary.html#Adding-to-Diary" accesskey="p" rel="prev">Adding to Diary</a>, Up: <a href="Diary.html#Diary" accesskey="u" rel="up">Diary</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

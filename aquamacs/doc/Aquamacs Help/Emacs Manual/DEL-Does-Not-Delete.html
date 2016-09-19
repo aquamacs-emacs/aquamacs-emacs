@@ -1,90 +1,139 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>DEL Does Not Delete - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: DEL Does Not Delete</title>
+
+<meta name="description" content="GNU Emacs Manual: DEL Does Not Delete">
+<meta name="keywords" content="GNU Emacs Manual: DEL Does Not Delete">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Lossage.html#Lossage" title="Lossage">
-<link rel="next" href="Stuck-Recursive.html#Stuck-Recursive" title="Stuck Recursive">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Lossage.html#Lossage" rel="up" title="Lossage">
+<link href="Stuck-Recursive.html#Stuck-Recursive" rel="next" title="Stuck Recursive">
+<link href="Lossage.html#Lossage" rel="prev" title="Lossage">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="DEL-Does-Not-Delete"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Stuck-Recursive.html#Stuck-Recursive">Stuck Recursive</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Lossage.html#Lossage">Lossage</a>
-<hr>
+Next: <a href="Stuck-Recursive.html#Stuck-Recursive" accesskey="n" rel="next">Stuck Recursive</a>, Up: <a href="Lossage.html#Lossage" accesskey="u" rel="up">Lossage</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
+<hr>
+<a name="If-DEL-Fails-to-Delete"></a>
+<h3 class="section">53.1 If <tt class="key">DEL</tt> Fails to Delete</h3>
+<a name="index-DEL-vs-BACKSPACE"></a>
+<a name="index-BACKSPACE-vs-DEL"></a>
+<a name="index-DEL-does-not-delete"></a>
 
-<h3 class="section">51.1 If &lt;DEL&gt; Fails to Delete</h3>
-
-<p><a name="index-g_t_0040key_007bDEL_007d-vs-_0040key_007bBACKSPACE_007d-4643"></a><a name="index-g_t_0040key_007bBACKSPACE_007d-vs-_0040key_007bDEL_007d-4644"></a><a name="index-g_t_0040key_007bDEL_007d-does-not-delete-4645"></a>
-  Every keyboard has a large key, usually labeled &lt;BACKSPACE&gt;,
-which is ordinarily used to erase the last character that you typed. 
-In Emacs, this key is supposed to be equivalent to &lt;DEL&gt;.
-
-   <p>When Emacs starts up on a graphical display, it determines
-automatically which key should be &lt;DEL&gt;.  In some unusual cases,
-Emacs gets the wrong information from the system, and &lt;BACKSPACE&gt;
+<p>Every keyboard has a large key, usually labeled <tt class="key">BACKSPACE</tt>,
+which is ordinarily used to erase the last character that you typed.
+In Emacs, this key is supposed to be equivalent to <tt class="key">DEL</tt>.
+</p>
+<p>When Emacs starts up on a graphical display, it determines
+automatically which key should be <tt class="key">DEL</tt>.  In some unusual cases,
+Emacs gets the wrong information from the system, and <tt class="key">BACKSPACE</tt>
 ends up deleting forwards instead of backwards.
-
-   <p>Some keyboards also have a &lt;Delete&gt; key, which is ordinarily
+</p>
+<p>Some keyboards also have a <tt class="key">Delete</tt> key, which is ordinarily
 used to delete forwards.  If this key deletes backward in Emacs, that
 too suggests Emacs got the wrong information&mdash;but in the opposite
 sense.
-
-   <p>On a text terminal, if you find that &lt;BACKSPACE&gt; prompts for a
+</p>
+<p>On a text terminal, if you find that <tt class="key">BACKSPACE</tt> prompts for a
 Help command, like <kbd>Control-h</kbd>, instead of deleting a character,
-it means that key is actually sending the &lsquo;<samp><span class="samp">BS</span></samp>&rsquo; character.  Emacs
-ought to be treating &lt;BS&gt; as &lt;DEL&gt;, but it isn't.
-
-   <p><a name="index-normal_002derase_002dis_002dbackspace_002dmode-4646"></a>  In all of those cases, the immediate remedy is the same: use the
+it means that key is actually sending the &lsquo;<samp>BS</samp>&rsquo; character.  Emacs
+ought to be treating <tt class="key">BS</tt> as <tt class="key">DEL</tt>, but it isn&rsquo;t.
+</p>
+<a name="index-normal_002derase_002dis_002dbackspace_002dmode"></a>
+<p>In all of those cases, the immediate remedy is the same: use the
 command <kbd>M-x normal-erase-is-backspace-mode</kbd>.  This toggles
-between the two modes that Emacs supports for handling &lt;DEL&gt;, so
+between the two modes that Emacs supports for handling <tt class="key">DEL</tt>, so
 if Emacs starts in the wrong mode, this should switch to the right
-mode.  On a text terminal, if you want to ask for help when &lt;BS&gt;
-is treated as &lt;DEL&gt;, use &lt;F1&gt;; <kbd>C-?</kbd> may also work, if it
+mode.  On a text terminal, if you want to ask for help when <tt class="key">BS</tt>
+is treated as <tt class="key">DEL</tt>, use <tt class="key">F1</tt>; <kbd>C-?</kbd> may also work, if it
 sends character code 127.
-
-   <p>To fix the problem in every Emacs session, put one of the following
+</p>
+<p>To fix the problem in every Emacs session, put one of the following
 lines into your initialization file (see <a href="Init-File.html#Init-File">Init File</a>).  For the
-first case above, where &lt;BACKSPACE&gt; deletes forwards instead of
-backwards, use this line to make &lt;BACKSPACE&gt; act as &lt;DEL&gt;:
+first case above, where <tt class="key">BACKSPACE</tt> deletes forwards instead of
+backwards, use this line to make <tt class="key">BACKSPACE</tt> act as <tt class="key">DEL</tt>:
+</p>
+<div class="lisp">
+<pre class="lisp">(normal-erase-is-backspace-mode 0)
+</pre></div>
 
-<pre class="lisp">     (normal-erase-is-backspace-mode 0)
-</pre>
-   <p class="noindent">For the other two cases, use this line:
+<p>For the other two cases, use this line:
+</p>
+<div class="lisp">
+<pre class="lisp">(normal-erase-is-backspace-mode 1)
+</pre></div>
 
-<pre class="lisp">     (normal-erase-is-backspace-mode 1)
-</pre>
-   <p><a name="index-normal_002derase_002dis_002dbackspace-4647"></a>  Another way to fix the problem for every Emacs session is to
+<a name="index-normal_002derase_002dis_002dbackspace"></a>
+<p>Another way to fix the problem for every Emacs session is to
 customize the variable <code>normal-erase-is-backspace</code>: the value
-<code>t</code> specifies the mode where &lt;BS&gt; or &lt;BACKSPACE&gt; is
-&lt;DEL&gt;, and <code>nil</code> specifies the other mode.  See <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>.
+<code>t</code> specifies the mode where <tt class="key">BS</tt> or <tt class="key">BACKSPACE</tt> is
+<tt class="key">DEL</tt>, and <code>nil</code> specifies the other mode.  See <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Stuck-Recursive.html#Stuck-Recursive" accesskey="n" rel="next">Stuck Recursive</a>, Up: <a href="Lossage.html#Lossage" accesskey="u" rel="up">Lossage</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

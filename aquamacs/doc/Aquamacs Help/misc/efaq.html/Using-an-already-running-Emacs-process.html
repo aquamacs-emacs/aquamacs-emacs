@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Copyright (C) 2001-2016 Free Software Foundation, Inc.
+
+Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
+Reuven M. Lerner
+
+Copyright (C) 1992, 1993 Steven Byrnes
+
+Copyright (C) 1990, 1991, 1992 Joseph Brian Wells
+
+
+This list of frequently asked questions about GNU Emacs with answers
+("FAQ") may be translated into other languages, transformed into other
+formats (e.g., Texinfo, Info, WWW, WAIS), and updated with new information.
+
+The same conditions apply to any derivative of the FAQ as apply to the FAQ
+itself.  Every copy of the FAQ must include this notice or an approved
+translation, information on who is currently maintaining the FAQ and how to
+contact them (including their e-mail address), and information on where the
+latest version of the FAQ is archived (including FTP information).
+
+The FAQ may be copied and redistributed under these conditions, except that
+the FAQ may not be embedded in a larger literary work unless that work
+itself allows free copying and redistribution.
+
+[This version has been heavily edited since it was included in the Emacs
+distribution.] -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>GNU Emacs FAQ: Using an already running Emacs process</title>
+
+<meta name="description" content="GNU Emacs FAQ: Using an already running Emacs process">
+<meta name="keywords" content="GNU Emacs FAQ: Using an already running Emacs process">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Common-requests.html#Common-requests" rel="up" title="Common requests">
+<link href="Compiler-error-messages.html#Compiler-error-messages" rel="next" title="Compiler error messages">
+<link href="Changing-load_002dpath.html#Changing-load_002dpath" rel="prev" title="Changing load-path">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Using-an-already-running-Emacs-process"></a>
+<div class="header">
+<p>
+Next: <a href="Compiler-error-messages.html#Compiler-error-messages" accesskey="n" rel="next">Compiler error messages</a>, Previous: <a href="Changing-load_002dpath.html#Changing-load_002dpath" accesskey="p" rel="prev">Changing load-path</a>, Up: <a href="Common-requests.html#Common-requests" accesskey="u" rel="up">Common requests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="How-do-I-use-an-already-running-Emacs-from-another-window_003f"></a>
+<h3 class="section">5.18 How do I use an already running Emacs from another window?</h3>
+<a name="index-emacsclient"></a>
+<a name="index-Emacs-server-functions"></a>
+<a name="index-Using-an-existing-Emacs-process"></a>
+
+<p><code>emacsclient</code>, which comes with Emacs, is for editing a file using
+an already running Emacs rather than starting up a new Emacs.  It does
+this by sending a request to the already running Emacs, which must be
+expecting the request.
+</p>
+<ul>
+<li> Setup:
+
+<p>Emacs must have executed the <code>server-start</code> function for
+&lsquo;<samp>emacsclient</samp>&rsquo; to work.  This can be done either by a command line
+option:
+</p>
+<div class="example">
+<pre class="example">emacs -f server-start
+</pre></div>
+
+<p>or by invoking <code>server-start</code> from <samp>.emacs</samp>:
+</p>
+<div class="lisp">
+<pre class="lisp">(if (<var>some conditions are met</var>) (server-start))
+</pre></div>
+
+<p>When this is done, Emacs creates a Unix domain socket named
+<samp>server</samp> in <samp>/tmp/emacs<var>userid</var></samp>. See
+<code>server-socket-dir</code>.
+</p>
+<p>To get your news reader, mail reader, etc., to invoke
+&lsquo;<samp>emacsclient</samp>&rsquo;, try setting the environment variable <code>EDITOR</code>
+(or sometimes <code>VISUAL</code>) to the value &lsquo;<samp>emacsclient</samp>&rsquo;.  You may
+have to specify the full pathname of the &lsquo;<samp>emacsclient</samp>&rsquo; program
+instead.  Examples:
+</p>
+<div class="example">
+<pre class="example"># csh commands:
+setenv EDITOR emacsclient
+
+# using full pathname
+setenv EDITOR /usr/local/emacs/etc/emacsclient
+
+# sh command:
+EDITOR=emacsclient ; export EDITOR
+</pre></div>
+
+</li><li> Normal use:
+
+<p>When &lsquo;<samp>emacsclient</samp>&rsquo; is run, it connects to the socket and passes its
+command line options to Emacs, which at the next opportunity will visit
+the files specified.  (Line numbers can be specified just like with
+Emacs.)  The user will have to switch to the Emacs window by hand.  When
+the user is done editing a file, the user can type <kbd>C-x #</kbd> (or
+<kbd>M-x server-edit</kbd>) to indicate this.  If there is another buffer
+requested by <code>emacsclient</code>, Emacs will switch to it; otherwise
+<code>emacsclient</code> will exit, signaling the calling program to continue.
+</p>
+<a name="index-gnuserv"></a>
+<p>There is an alternative version of &lsquo;<samp>emacsclient</samp>&rsquo; called
+&lsquo;<samp>gnuserv</samp>&rsquo;, written by Andy Norman
+(see <a href="Packages-that-do-not-come-with-Emacs.html#Packages-that-do-not-come-with-Emacs">Packages that do not come with Emacs</a>).  &lsquo;<samp>gnuserv</samp>&rsquo; uses
+Internet domain sockets, so it can work across most network connections.
+</p>
+<p>The most recent &lsquo;<samp>gnuserv</samp>&rsquo; package is available at
+</p>
+<p><a href="http://meltin.net/hacks/emacs/">http://meltin.net/hacks/emacs/</a>
+</p>
+</li></ul>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="Compiler-error-messages.html#Compiler-error-messages" accesskey="n" rel="next">Compiler error messages</a>, Previous: <a href="Changing-load_002dpath.html#Changing-load_002dpath" accesskey="p" rel="prev">Changing load-path</a>, Up: <a href="Common-requests.html#Common-requests" accesskey="u" rel="up">Common requests</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

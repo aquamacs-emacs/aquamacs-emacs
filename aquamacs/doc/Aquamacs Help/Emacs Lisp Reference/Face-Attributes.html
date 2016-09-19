@@ -1,244 +1,344 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Face Attributes - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Face Attributes</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Face Attributes">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Face Attributes">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Faces.html#Faces" title="Faces">
-<link rel="next" href="Defining-Faces.html#Defining-Faces" title="Defining Faces">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Faces.html#Faces" rel="up" title="Faces">
+<link href="Defining-Faces.html#Defining-Faces" rel="next" title="Defining Faces">
+<link href="Faces.html#Faces" rel="prev" title="Faces">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Face-Attributes"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Defining-Faces.html#Defining-Faces">Defining Faces</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Faces.html#Faces">Faces</a>
-<hr>
+Next: <a href="Defining-Faces.html#Defining-Faces" accesskey="n" rel="next">Defining Faces</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel="up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Face-Attributes-1"></a>
 <h4 class="subsection">37.12.1 Face Attributes</h4>
+<a name="index-face-attributes"></a>
 
-<p><a name="index-face-attributes-4170"></a>
-  <dfn>Face attributes</dfn> determine the visual appearance of a face. 
+<p><em>Face attributes</em> determine the visual appearance of a face.
 The following table lists all the face attributes, their possible
 values, and their effects.
-
-   <p>Apart from the values given below, each face attribute can have the
+</p>
+<p>Apart from the values given below, each face attribute can have the
 value <code>unspecified</code>.  This special value means that the face
-doesn't specify that attribute directly.  An <code>unspecified</code>
+doesn&rsquo;t specify that attribute directly.  An <code>unspecified</code>
 attribute tells Emacs to refer instead to a parent face (see the
 description <code>:inherit</code> attribute below); or, failing that, to an
 underlying face (see <a href="Displaying-Faces.html#Displaying-Faces">Displaying Faces</a>).  The <code>default</code> face
 must specify all attributes.
-
-   <p>Some of these attributes are meaningful only on certain kinds of
+</p>
+<p>Some of these attributes are meaningful only on certain kinds of
 displays.  If your display cannot handle a certain attribute, the
 attribute is ignored.
-
-     <dl>
-<dt><code>:family</code><dd>Font family or fontset (a string).  See <a href="../emacs/Fonts.html#Fonts">Fonts</a>, for more information about font families.  The function
+</p>
+<dl compact="compact">
+<dt><code>:family</code></dt>
+<dd><p>Font family or fontset (a string).  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Fonts.html#Fonts">Fonts</a> in <cite>The GNU
+Emacs Manual</cite>, for more information about font families.  The function
 <code>font-family-list</code> (see below) returns a list of available family
 names.  See <a href="Fontsets.html#Fontsets">Fontsets</a>, for information about fontsets.
-
-     <br><dt><code>:foundry</code><dd>The name of the <dfn>font foundry</dfn> for the font family specified by
-the <code>:family</code> attribute (a string).  See <a href="../emacs/Fonts.html#Fonts">Fonts</a>.
-
-     <br><dt><code>:width</code><dd>Relative character width.  This should be one of the symbols
+</p>
+</dd>
+<dt><code>:foundry</code></dt>
+<dd><p>The name of the <em>font foundry</em> for the font family specified by
+the <code>:family</code> attribute (a string).  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Fonts.html#Fonts">Fonts</a> in <cite>The
+GNU Emacs Manual</cite>.
+</p>
+</dd>
+<dt><code>:width</code></dt>
+<dd><p>Relative character width.  This should be one of the symbols
 <code>ultra-condensed</code>, <code>extra-condensed</code>, <code>condensed</code>,
 <code>semi-condensed</code>, <code>normal</code>, <code>semi-expanded</code>,
 <code>expanded</code>, <code>extra-expanded</code>, or <code>ultra-expanded</code>.
-
-     <br><dt><code>:height</code><dd>The height of the font.  In the simplest case, this is an integer in
+</p>
+</dd>
+<dt><code>:height</code></dt>
+<dd><p>The height of the font.  In the simplest case, this is an integer in
 units of 1/10 point.
-
-     <p>The value can also be floating point or a function, which
-specifies the height relative to an <dfn>underlying face</dfn>
+</p>
+<p>The value can also be floating point or a function, which
+specifies the height relative to an <em>underlying face</em>
 (see <a href="Displaying-Faces.html#Displaying-Faces">Displaying Faces</a>).  A floating-point value
 specifies the amount by which to scale the height of the
 underlying face.  A function value is called
 with one argument, the height of the underlying face, and returns the
 height of the new face.  If the function is passed an integer
 argument, it must return an integer.
-
-     <p>The height of the default face must be specified using an integer;
+</p>
+<p>The height of the default face must be specified using an integer;
 floating point and function values are not allowed.
-
-     <br><dt><code>:weight</code><dd>Font weight&mdash;one of the symbols (from densest to faintest)
+</p>
+</dd>
+<dt><code>:weight</code></dt>
+<dd><p>Font weight&mdash;one of the symbols (from densest to faintest)
 <code>ultra-bold</code>, <code>extra-bold</code>, <code>bold</code>, <code>semi-bold</code>,
 <code>normal</code>, <code>semi-light</code>, <code>light</code>, <code>extra-light</code>, or
 <code>ultra-light</code>.  On text terminals which support
 variable-brightness text, any weight greater than normal is displayed
 as extra bright, and any weight less than normal is displayed as
 half-bright.
-
-     <p><a name="index-italic-text-4171"></a><br><dt><code>:slant</code><dd>Font slant&mdash;one of the symbols <code>italic</code>, <code>oblique</code>,
+</p>
+<a name="index-italic-text"></a>
+</dd>
+<dt><code>:slant</code></dt>
+<dd><p>Font slant&mdash;one of the symbols <code>italic</code>, <code>oblique</code>,
 <code>normal</code>, <code>reverse-italic</code>, or <code>reverse-oblique</code>.  On
 text terminals that support variable-brightness text, slanted text is
 displayed as half-bright.
-
-     <br><dt><code>:foreground</code><dd>Foreground color, a string.  The value can be a system-defined color
+</p>
+</dd>
+<dt><code>:foreground</code></dt>
+<dd><p>Foreground color, a string.  The value can be a system-defined color
 name, or a hexadecimal color specification.  See <a href="Color-Names.html#Color-Names">Color Names</a>.  On
 black-and-white displays, certain shades of gray are implemented by
 stipple patterns.
-
-     <br><dt><code>:distant-foreground</code><dd>Alternative foreground color, a string.  This is like <code>:foreground</code>
+</p>
+</dd>
+<dt><code>:distant-foreground</code></dt>
+<dd><p>Alternative foreground color, a string.  This is like <code>:foreground</code>
 but the color is only used as a foreground when the background color is
 near to the foreground that would have been used.  This is useful for
 example when marking text (i.e., the region face).  If the text has a foreground
-that is visible with the region face, that foreground is used. 
+that is visible with the region face, that foreground is used.
 If the foreground is near the region face background,
 <code>:distant-foreground</code> is used instead so the text is readable.
-
-     <br><dt><code>:background</code><dd>Background color, a string.  The value can be a system-defined color
+</p>
+</dd>
+<dt><code>:background</code></dt>
+<dd><p>Background color, a string.  The value can be a system-defined color
 name, or a hexadecimal color specification.  See <a href="Color-Names.html#Color-Names">Color Names</a>.
-
-     <p><a name="index-underlined-text-4172"></a><br><dt><code>:underline</code><dd>Whether or not characters should be underlined, and in what
+</p>
+<a name="index-underlined-text"></a>
+</dd>
+<dt><code>:underline</code></dt>
+<dd><p>Whether or not characters should be underlined, and in what
 way.  The possible values of the <code>:underline</code> attribute are:
-
-          <dl>
-<dt><code>nil</code><dd>Don't underline.
-
-          <br><dt><code>t</code><dd>Underline with the foreground color of the face.
-
-          <br><dt><var>color</var><dd>Underline in color <var>color</var>, a string specifying a color.
-
-          <br><dt><code>(:color </code><var>color</var><code> :style </code><var>style</var><code>)</code><dd><var>color</var> is either a string, or the symbol <code>foreground-color</code>,
+</p>
+<dl compact="compact">
+<dt><code>nil</code></dt>
+<dd><p>Don&rsquo;t underline.
+</p>
+</dd>
+<dt><code>t</code></dt>
+<dd><p>Underline with the foreground color of the face.
+</p>
+</dd>
+<dt><var>color</var></dt>
+<dd><p>Underline in color <var>color</var>, a string specifying a color.
+</p>
+</dd>
+<dt><code>(:color <var>color</var> :style <var>style</var>)</code></dt>
+<dd><p><var>color</var> is either a string, or the symbol <code>foreground-color</code>,
 meaning the foreground color of the face.  Omitting the attribute
-<code>:color</code> means to use the foreground color of the face. 
+<code>:color</code> means to use the foreground color of the face.
 <var>style</var> should be a symbol <code>line</code> or <code>wave</code>, meaning to
 use a straight or wavy line.  Omitting the attribute <code>:style</code>
-means to use a straight line. 
+means to use a straight line.
+</p></dd>
 </dl>
 
-     <p><a name="index-overlined-text-4173"></a><br><dt><code>:overline</code><dd>Whether or not characters should be overlined, and in what color. 
+<a name="index-overlined-text"></a>
+</dd>
+<dt><code>:overline</code></dt>
+<dd><p>Whether or not characters should be overlined, and in what color.
 If the value is <code>t</code>, overlining uses the foreground color of the
 face.  If the value is a string, overlining uses that color.  The
 value <code>nil</code> means do not overline.
-
-     <p><a name="index-strike_002dthrough-text-4174"></a><br><dt><code>:strike-through</code><dd>Whether or not characters should be strike-through, and in what
+</p>
+<a name="index-strike_002dthrough-text"></a>
+</dd>
+<dt><code>:strike-through</code></dt>
+<dd><p>Whether or not characters should be strike-through, and in what
 color.  The value is used like that of <code>:overline</code>.
-
-     <p><a name="index-g_t2D-box-4175"></a><a name="index-g_t3D-box-4176"></a><br><dt><code>:box</code><dd>Whether or not a box should be drawn around characters, its color, the
+</p>
+<a name="index-2D-box"></a>
+<a name="index-3D-box"></a>
+</dd>
+<dt><code>:box</code></dt>
+<dd><p>Whether or not a box should be drawn around characters, its color, the
 width of the box lines, and 3D appearance.  Here are the possible
 values of the <code>:box</code> attribute, and what they mean:
-
-          <dl>
-<dt><code>nil</code><dd>Don't draw a box.
-
-          <br><dt><code>t</code><dd>Draw a box with lines of width 1, in the foreground color.
-
-          <br><dt><var>color</var><dd>Draw a box with lines of width 1, in color <var>color</var>.
-
-          <br><dt><code>(:line-width </code><var>width</var><code> :color </code><var>color</var><code> :style </code><var>style</var><code>)</code><dd>This way you can explicitly specify all aspects of the box.  The value
+</p>
+<dl compact="compact">
+<dt><code>nil</code></dt>
+<dd><p>Don&rsquo;t draw a box.
+</p>
+</dd>
+<dt><code>t</code></dt>
+<dd><p>Draw a box with lines of width 1, in the foreground color.
+</p>
+</dd>
+<dt><var>color</var></dt>
+<dd><p>Draw a box with lines of width 1, in color <var>color</var>.
+</p>
+</dd>
+<dt><code>(:line-width <var>width</var> :color <var>color</var> :style <var>style</var>)</code></dt>
+<dd><p>This way you can explicitly specify all aspects of the box.  The value
 <var>width</var> specifies the width of the lines to draw; it defaults to
 1.  A negative width <var>-n</var> means to draw a line of width <var>n</var>
 that occupies the space of the underlying text, thus avoiding any
 increase in the character height or width.
-
-          <p>The value <var>color</var> specifies the color to draw with.  The default is
+</p>
+<p>The value <var>color</var> specifies the color to draw with.  The default is
 the foreground color of the face for simple boxes, and the background
 color of the face for 3D boxes.
-
-          <p>The value <var>style</var> specifies whether to draw a 3D box.  If it is
+</p>
+<p>The value <var>style</var> specifies whether to draw a 3D box.  If it is
 <code>released-button</code>, the box looks like a 3D button that is not being
 pressed.  If it is <code>pressed-button</code>, the box looks like a 3D button
 that is being pressed.  If it is <code>nil</code> or omitted, a plain 2D box
-is used. 
+is used.
+</p></dd>
 </dl>
 
-     <br><dt><code>:inverse-video</code><dd>Whether or not characters should be displayed in inverse video.  The
+</dd>
+<dt><code>:inverse-video</code></dt>
+<dd><p>Whether or not characters should be displayed in inverse video.  The
 value should be <code>t</code> (yes) or <code>nil</code> (no).
-
-     <br><dt><code>:stipple</code><dd>The background stipple, a bitmap.
-
-     <p>The value can be a string; that should be the name of a file containing
+</p>
+</dd>
+<dt><code>:stipple</code></dt>
+<dd><p>The background stipple, a bitmap.
+</p>
+<p>The value can be a string; that should be the name of a file containing
 external-format X bitmap data.  The file is found in the directories
 listed in the variable <code>x-bitmap-file-path</code>.
-
-     <p>Alternatively, the value can specify the bitmap directly, with a list
-of the form <code>(</code><var>width</var> <var>height</var> <var>data</var><code>)</code>.  Here,
+</p>
+<p>Alternatively, the value can specify the bitmap directly, with a list
+of the form <code>(<var>width</var> <var>height</var> <var>data</var>)</code>.  Here,
 <var>width</var> and <var>height</var> specify the size in pixels, and
 <var>data</var> is a string containing the raw bits of the bitmap, row by
-row.  Each row occupies (<var>width</var> + 7) / 8 consecutive bytes
-in the string (which should be a unibyte string for best results). 
+row.  Each row occupies <em>(<var>width</var> + 7) / 8</em> consecutive bytes
+in the string (which should be a unibyte string for best results).
 This means that each row always occupies at least one whole byte.
-
-     <p>If the value is <code>nil</code>, that means use no stipple pattern.
-
-     <p>Normally you do not need to set the stipple attribute, because it is
+</p>
+<p>If the value is <code>nil</code>, that means use no stipple pattern.
+</p>
+<p>Normally you do not need to set the stipple attribute, because it is
 used automatically to handle certain shades of gray.
-
-     <br><dt><code>:font</code><dd>The font used to display the face.  Its value should be a font object. 
+</p>
+</dd>
+<dt><code>:font</code></dt>
+<dd><p>The font used to display the face.  Its value should be a font object.
 See <a href="Low_002dLevel-Font.html#Low_002dLevel-Font">Low-Level Font</a>, for information about font objects, font specs,
 and font entities.
-
-     <p>When specifying this attribute using <code>set-face-attribute</code>
+</p>
+<p>When specifying this attribute using <code>set-face-attribute</code>
 (see <a href="Attribute-Functions.html#Attribute-Functions">Attribute Functions</a>), you may also supply a font spec, a font
 entity, or a string.  Emacs converts such values to an appropriate
 font object, and stores that font object as the actual attribute
 value.  If you specify a string, the contents of the string should be
-a font name (see <a href="../emacs/Fonts.html#Fonts">Fonts</a>); if the
+a font name (see <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Fonts.html#Fonts">Fonts</a> in <cite>The GNU Emacs Manual</cite>); if the
 font name is an XLFD containing wildcards, Emacs chooses the first
 font matching those wildcards.  Specifying this attribute also changes
 the values of the <code>:family</code>, <code>:foundry</code>, <code>:width</code>,
 <code>:height</code>, <code>:weight</code>, and <code>:slant</code> attributes.
-
-     <p><a name="index-inheritance_002c-for-faces-4177"></a><br><dt><code>:inherit</code><dd>The name of a face from which to inherit attributes, or a list of face
+</p>
+<a name="index-inheritance_002c-for-faces"></a>
+</dd>
+<dt><code>:inherit</code></dt>
+<dd><p>The name of a face from which to inherit attributes, or a list of face
 names.  Attributes from inherited faces are merged into the face like
 an underlying face would be, with higher priority than underlying
 faces (see <a href="Displaying-Faces.html#Displaying-Faces">Displaying Faces</a>).  If a list of faces is used,
 attributes from faces earlier in the list override those from later
-faces. 
+faces.
+</p></dd>
 </dl>
 
-<div class="defun">
-&mdash; Function: <b>font-family-list</b><var> &amp;optional frame<a name="index-font_002dfamily_002dlist-4178"></a></var><br>
-<blockquote><p>This function returns a list of available font family names.  The
+<dl>
+<dt><a name="index-font_002dfamily_002dlist"></a>Function: <strong>font-family-list</strong> <em>&amp;optional frame</em></dt>
+<dd><p>This function returns a list of available font family names.  The
 optional argument <var>frame</var> specifies the frame on which the text is
-to be displayed; if it is <code>nil</code>, the selected frame is used. 
-</p></blockquote></div>
+to be displayed; if it is <code>nil</code>, the selected frame is used.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; User Option: <b>underline-minimum-offset</b><var><a name="index-underline_002dminimum_002doffset-4179"></a></var><br>
-<blockquote><p>This variable specifies the minimum distance between the baseline and
-the underline, in pixels, when displaying underlined text. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-underline_002dminimum_002doffset"></a>User Option: <strong>underline-minimum-offset</strong></dt>
+<dd><p>This variable specifies the minimum distance between the baseline and
+the underline, in pixels, when displaying underlined text.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; User Option: <b>x-bitmap-file-path</b><var><a name="index-x_002dbitmap_002dfile_002dpath-4180"></a></var><br>
-<blockquote><p>This variable specifies a list of directories for searching
-for bitmap files, for the <code>:stipple</code> attribute. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-x_002dbitmap_002dfile_002dpath"></a>User Option: <strong>x-bitmap-file-path</strong></dt>
+<dd><p>This variable specifies a list of directories for searching
+for bitmap files, for the <code>:stipple</code> attribute.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>bitmap-spec-p</b><var> object<a name="index-bitmap_002dspec_002dp-4181"></a></var><br>
-<blockquote><p>This returns <code>t</code> if <var>object</var> is a valid bitmap specification,
+<dl>
+<dt><a name="index-bitmap_002dspec_002dp"></a>Function: <strong>bitmap-spec-p</strong> <em>object</em></dt>
+<dd><p>This returns <code>t</code> if <var>object</var> is a valid bitmap specification,
 suitable for use with <code>:stipple</code> (see above).  It returns
-<code>nil</code> otherwise. 
-</p></blockquote></div>
+<code>nil</code> otherwise.
+</p></dd></dl>
 
-   </body></html>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Defining-Faces.html#Defining-Faces" accesskey="n" rel="next">Defining Faces</a>, Up: <a href="Faces.html#Faces" accesskey="u" rel="up">Faces</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
+
+
+</body>
+</html>

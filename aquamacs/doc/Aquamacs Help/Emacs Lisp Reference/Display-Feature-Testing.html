@@ -1,264 +1,303 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Display Feature Testing - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Display Feature Testing</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Display Feature Testing">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Display Feature Testing">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Frames.html#Frames" title="Frames">
-<link rel="prev" href="Resources.html#Resources" title="Resources">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Frames.html#Frames" rel="up" title="Frames">
+<link href="Positions.html#Positions" rel="next" title="Positions">
+<link href="Resources.html#Resources" rel="prev" title="Resources">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Display-Feature-Testing"></a>
+<div class="header">
 <p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Resources.html#Resources">Resources</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
-<hr>
+Previous: <a href="Resources.html#Resources" accesskey="p" rel="prev">Resources</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Display-Feature-Testing-1"></a>
 <h3 class="section">28.24 Display Feature Testing</h3>
+<a name="index-display-feature-testing"></a>
 
-<p><a name="index-display-feature-testing-2970"></a>
-  The functions in this section describe the basic capabilities of a
+<p>The functions in this section describe the basic capabilities of a
 particular display.  Lisp programs can use them to adapt their behavior
 to what the display can do.  For example, a program that ordinarily uses
 a popup menu could use the minibuffer if popup menus are not supported.
-
-   <p>The optional argument <var>display</var> in these functions specifies which
+</p>
+<p>The optional argument <var>display</var> in these functions specifies which
 display to ask the question about.  It can be a display name, a frame
 (which designates the display that frame is on), or <code>nil</code> (which
-refers to the selected frame's display, see <a href="Input-Focus.html#Input-Focus">Input Focus</a>).
-
-   <p>See <a href="Color-Names.html#Color-Names">Color Names</a>, <a href="Text-Terminal-Colors.html#Text-Terminal-Colors">Text Terminal Colors</a>, for other functions to
+refers to the selected frame&rsquo;s display, see <a href="Input-Focus.html#Input-Focus">Input Focus</a>).
+</p>
+<p>See <a href="Color-Names.html#Color-Names">Color Names</a>, <a href="Text-Terminal-Colors.html#Text-Terminal-Colors">Text Terminal Colors</a>, for other functions to
 obtain information about displays.
-
-<div class="defun">
-&mdash; Function: <b>display-popup-menus-p</b><var> &amp;optional display<a name="index-display_002dpopup_002dmenus_002dp-2971"></a></var><br>
-<blockquote><p>This function returns <code>t</code> if popup menus are supported on
+</p>
+<dl>
+<dt><a name="index-display_002dpopup_002dmenus_002dp"></a>Function: <strong>display-popup-menus-p</strong> <em>&amp;optional display</em></dt>
+<dd><p>This function returns <code>t</code> if popup menus are supported on
 <var>display</var>, <code>nil</code> if not.  Support for popup menus requires
 that the mouse be available, since the menu is popped up by clicking
-the mouse on some portion of the Emacs display. 
-</p></blockquote></div>
+the mouse on some portion of the Emacs display.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>display-graphic-p</b><var> &amp;optional display<a name="index-display_002dgraphic_002dp-2972"></a></var><br>
-<blockquote><p>This function returns <code>t</code> if <var>display</var> is a graphic display
+<dl>
+<dt><a name="index-display_002dgraphic_002dp"></a>Function: <strong>display-graphic-p</strong> <em>&amp;optional display</em></dt>
+<dd><p>This function returns <code>t</code> if <var>display</var> is a graphic display
 capable of displaying several frames and several different fonts at
 once.  This is true for displays that use a window system such as X,
-and false for text terminals. 
-</p></blockquote></div>
+and false for text terminals.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>display-mouse-p</b><var> &amp;optional display<a name="index-display_002dmouse_002dp-2973"></a></var><br>
-<blockquote><p><a name="index-mouse_002c-availability-2974"></a>This function returns <code>t</code> if <var>display</var> has a mouse available,
-<code>nil</code> if not. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-display_002dmouse_002dp"></a>Function: <strong>display-mouse-p</strong> <em>&amp;optional display</em></dt>
+<dd><a name="index-mouse_002c-availability"></a>
+<p>This function returns <code>t</code> if <var>display</var> has a mouse available,
+<code>nil</code> if not.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>display-color-p</b><var> &amp;optional display<a name="index-display_002dcolor_002dp-2975"></a></var><br>
-<blockquote><p><a name="index-x_002ddisplay_002dcolor_002dp-2976"></a>This function returns <code>t</code> if the screen is a color screen. 
+<dl>
+<dt><a name="index-display_002dcolor_002dp"></a>Function: <strong>display-color-p</strong> <em>&amp;optional display</em></dt>
+<dd><a name="index-x_002ddisplay_002dcolor_002dp"></a>
+<p>This function returns <code>t</code> if the screen is a color screen.
 It used to be called <code>x-display-color-p</code>, and that name
-is still supported as an alias. 
-</p></blockquote></div>
+is still supported as an alias.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>display-grayscale-p</b><var> &amp;optional display<a name="index-display_002dgrayscale_002dp-2977"></a></var><br>
-<blockquote><p>This function returns <code>t</code> if the screen can display shades of gray. 
-(All color displays can do this.) 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-display_002dgrayscale_002dp"></a>Function: <strong>display-grayscale-p</strong> <em>&amp;optional display</em></dt>
+<dd><p>This function returns <code>t</code> if the screen can display shades of gray.
+(All color displays can do this.)
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>display-supports-face-attributes-p</b><var> attributes &amp;optional display<a name="index-display_002dsupports_002dface_002dattributes_002dp-2978"></a></var><br>
-<blockquote><p><a name="Display-Face-Attribute-Testing"></a>This function returns non-<code>nil</code> if all the face attributes in
+<dl>
+<dt><a name="index-display_002dsupports_002dface_002dattributes_002dp"></a>Function: <strong>display-supports-face-attributes-p</strong> <em>attributes &amp;optional display</em></dt>
+<dd><a name="Display-Face-Attribute-Testing"></a><p>This function returns non-<code>nil</code> if all the face attributes in
 <var>attributes</var> are supported (see <a href="Face-Attributes.html#Face-Attributes">Face Attributes</a>).
-
-        <p>The definition of &ldquo;supported&rdquo; is somewhat heuristic, but basically
+</p>
+<p>The definition of &ldquo;supported&rdquo; is somewhat heuristic, but basically
 means that a face containing all the attributes in <var>attributes</var>,
 when merged with the default face for display, can be represented in a
-way that's
+way that&rsquo;s
+</p>
+<ol>
+<li> different in appearance than the default face, and
 
-          <ol type=1 start=1>
-<li>different in appearance than the default face, and
+</li><li> close in spirit to what the attributes specify, if not exact.
+</li></ol>
 
-          <li>close in spirit to what the attributes specify, if not exact.
-             </ol>
-
-        <p>Point (2) implies that a <code>:weight black</code> attribute will be
+<p>Point (2) implies that a <code>:weight black</code> attribute will be
 satisfied by any display that can display bold, as will
-<code>:foreground "yellow"</code> as long as some yellowish color can be
+<code>:foreground &quot;yellow&quot;</code> as long as some yellowish color can be
 displayed, but <code>:slant italic</code> will <em>not</em> be satisfied by
-the tty display code's automatic substitution of a dim face for
-italic. 
-</p></blockquote></div>
+the tty display code&rsquo;s automatic substitution of a dim face for
+italic.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>display-selections-p</b><var> &amp;optional display<a name="index-display_002dselections_002dp-2979"></a></var><br>
-<blockquote><p>This function returns <code>t</code> if <var>display</var> supports selections. 
+<dl>
+<dt><a name="index-display_002dselections_002dp"></a>Function: <strong>display-selections-p</strong> <em>&amp;optional display</em></dt>
+<dd><p>This function returns <code>t</code> if <var>display</var> supports selections.
 Windowed displays normally support selections, but they may also be
-supported in some other cases. 
-</p></blockquote></div>
+supported in some other cases.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>display-images-p</b><var> &amp;optional display<a name="index-display_002dimages_002dp-2980"></a></var><br>
-<blockquote><p>This function returns <code>t</code> if <var>display</var> can display images. 
+<dl>
+<dt><a name="index-display_002dimages_002dp"></a>Function: <strong>display-images-p</strong> <em>&amp;optional display</em></dt>
+<dd><p>This function returns <code>t</code> if <var>display</var> can display images.
 Windowed displays ought in principle to handle images, but some
 systems lack the support for that.  On a display that does not support
-images, Emacs cannot display a tool bar. 
-</p></blockquote></div>
+images, Emacs cannot display a tool bar.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>display-screens</b><var> &amp;optional display<a name="index-display_002dscreens-2981"></a></var><br>
-<blockquote><p>This function returns the number of screens associated with the display. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-display_002dscreens"></a>Function: <strong>display-screens</strong> <em>&amp;optional display</em></dt>
+<dd><p>This function returns the number of screens associated with the display.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>display-pixel-height</b><var> &amp;optional display<a name="index-display_002dpixel_002dheight-2982"></a></var><br>
-<blockquote><p>This function returns the height of the screen in pixels. 
+<dl>
+<dt><a name="index-display_002dpixel_002dheight"></a>Function: <strong>display-pixel-height</strong> <em>&amp;optional display</em></dt>
+<dd><p>This function returns the height of the screen in pixels.
 On a character terminal, it gives the height in characters.
-
-        <p>For graphical terminals, note that on multi-monitor setups this
+</p>
+<p>For graphical terminals, note that on multi-monitor setups this
 refers to the pixel height for all physical monitors associated with
-<var>display</var>.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>. 
-</p></blockquote></div>
+<var>display</var>.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>display-pixel-width</b><var> &amp;optional display<a name="index-display_002dpixel_002dwidth-2983"></a></var><br>
-<blockquote><p>This function returns the width of the screen in pixels. 
+<dl>
+<dt><a name="index-display_002dpixel_002dwidth"></a>Function: <strong>display-pixel-width</strong> <em>&amp;optional display</em></dt>
+<dd><p>This function returns the width of the screen in pixels.
 On a character terminal, it gives the width in characters.
-
-        <p>For graphical terminals, note that on multi-monitor setups this
+</p>
+<p>For graphical terminals, note that on multi-monitor setups this
 refers to the pixel width for all physical monitors associated with
-<var>display</var>.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>. 
-</p></blockquote></div>
+<var>display</var>.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>display-mm-height</b><var> &amp;optional display<a name="index-display_002dmm_002dheight-2984"></a></var><br>
-<blockquote><p>This function returns the height of the screen in millimeters,
+<dl>
+<dt><a name="index-display_002dmm_002dheight"></a>Function: <strong>display-mm-height</strong> <em>&amp;optional display</em></dt>
+<dd><p>This function returns the height of the screen in millimeters,
 or <code>nil</code> if Emacs cannot get that information.
-
-        <p>For graphical terminals, note that on multi-monitor setups this
+</p>
+<p>For graphical terminals, note that on multi-monitor setups this
 refers to the height for all physical monitors associated with
-<var>display</var>.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>. 
-</p></blockquote></div>
+<var>display</var>.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>display-mm-width</b><var> &amp;optional display<a name="index-display_002dmm_002dwidth-2985"></a></var><br>
-<blockquote><p>This function returns the width of the screen in millimeters,
+<dl>
+<dt><a name="index-display_002dmm_002dwidth"></a>Function: <strong>display-mm-width</strong> <em>&amp;optional display</em></dt>
+<dd><p>This function returns the width of the screen in millimeters,
 or <code>nil</code> if Emacs cannot get that information.
-
-        <p>For graphical terminals, note that on multi-monitor setups this
+</p>
+<p>For graphical terminals, note that on multi-monitor setups this
 refers to the width for all physical monitors associated with
-<var>display</var>.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>. 
-</p></blockquote></div>
+<var>display</var>.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; User Option: <b>display-mm-dimensions-alist</b><var><a name="index-display_002dmm_002ddimensions_002dalist-2986"></a></var><br>
-<blockquote><p>This variable allows the user to specify the dimensions of graphical
+<dl>
+<dt><a name="index-display_002dmm_002ddimensions_002dalist"></a>User Option: <strong>display-mm-dimensions-alist</strong></dt>
+<dd><p>This variable allows the user to specify the dimensions of graphical
 displays returned by <code>display-mm-height</code> and
-<code>display-mm-width</code> in case the system provides incorrect values. 
-</p></blockquote></div>
+<code>display-mm-width</code> in case the system provides incorrect values.
+</p></dd></dl>
 
-   <p><a name="index-backing-store-2987"></a>
-
-<div class="defun">
-&mdash; Function: <b>display-backing-store</b><var> &amp;optional display<a name="index-display_002dbacking_002dstore-2988"></a></var><br>
-<blockquote><p>This function returns the backing store capability of the display. 
+<a name="index-backing-store"></a>
+<dl>
+<dt><a name="index-display_002dbacking_002dstore"></a>Function: <strong>display-backing-store</strong> <em>&amp;optional display</em></dt>
+<dd><p>This function returns the backing store capability of the display.
 Backing store means recording the pixels of windows (and parts of
 windows) that are not exposed, so that when exposed they can be
 displayed very quickly.
-
-        <p>Values can be the symbols <code>always</code>, <code>when-mapped</code>, or
+</p>
+<p>Values can be the symbols <code>always</code>, <code>when-mapped</code>, or
 <code>not-useful</code>.  The function can also return <code>nil</code>
-when the question is inapplicable to a certain kind of display. 
-</p></blockquote></div>
+when the question is inapplicable to a certain kind of display.
+</p></dd></dl>
 
-   <p><a name="index-SaveUnder-feature-2989"></a>
-
-<div class="defun">
-&mdash; Function: <b>display-save-under</b><var> &amp;optional display<a name="index-display_002dsave_002dunder-2990"></a></var><br>
-<blockquote><p>This function returns non-<code>nil</code> if the display supports the
+<a name="index-SaveUnder-feature"></a>
+<dl>
+<dt><a name="index-display_002dsave_002dunder"></a>Function: <strong>display-save-under</strong> <em>&amp;optional display</em></dt>
+<dd><p>This function returns non-<code>nil</code> if the display supports the
 SaveUnder feature.  That feature is used by pop-up windows
 to save the pixels they obscure, so that they can pop down
-quickly. 
-</p></blockquote></div>
+quickly.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>display-planes</b><var> &amp;optional display<a name="index-display_002dplanes-2991"></a></var><br>
-<blockquote><p>This function returns the number of planes the display supports. 
-This is typically the number of bits per pixel. 
-For a tty display, it is log to base two of the number of colors supported. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-display_002dplanes"></a>Function: <strong>display-planes</strong> <em>&amp;optional display</em></dt>
+<dd><p>This function returns the number of planes the display supports.
+This is typically the number of bits per pixel.
+For a tty display, it is log to base two of the number of colors supported.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>display-visual-class</b><var> &amp;optional display<a name="index-display_002dvisual_002dclass-2992"></a></var><br>
-<blockquote><p>This function returns the visual class for the screen.  The value is
+<dl>
+<dt><a name="index-display_002dvisual_002dclass"></a>Function: <strong>display-visual-class</strong> <em>&amp;optional display</em></dt>
+<dd><p>This function returns the visual class for the screen.  The value is
 one of the symbols <code>static-gray</code> (a limited, unchangeable number
 of grays), <code>gray-scale</code> (a full range of grays),
 <code>static-color</code> (a limited, unchangeable number of colors),
 <code>pseudo-color</code> (a limited number of colors), <code>true-color</code> (a
 full range of colors), and <code>direct-color</code> (a full range of
-colors). 
-</p></blockquote></div>
+colors).
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>display-color-cells</b><var> &amp;optional display<a name="index-display_002dcolor_002dcells-2993"></a></var><br>
-<blockquote><p>This function returns the number of color cells the screen supports. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-display_002dcolor_002dcells"></a>Function: <strong>display-color-cells</strong> <em>&amp;optional display</em></dt>
+<dd><p>This function returns the number of color cells the screen supports.
+</p></dd></dl>
 
-   <p>These functions obtain additional information about the window
+<p>These functions obtain additional information about the window
 system in use where Emacs shows the specified <var>display</var>.  (Their
 names begin with <code>x-</code> for historical reasons.)
-
-<div class="defun">
-&mdash; Function: <b>x-server-version</b><var> &amp;optional display<a name="index-x_002dserver_002dversion-2994"></a></var><br>
-<blockquote><p>This function returns the list of version numbers of the GUI window
+</p>
+<dl>
+<dt><a name="index-x_002dserver_002dversion"></a>Function: <strong>x-server-version</strong> <em>&amp;optional display</em></dt>
+<dd><p>This function returns the list of version numbers of the GUI window
 system running on <var>display</var>, such as the X server on GNU and Unix
 systems.  The value is a list of three integers: the major and minor
 version numbers of the protocol, and the distributor-specific release
 number of the window system software itself.  On GNU and Unix systems,
 these are normally the version of the X protocol and the
 distributor-specific release number of the X server software.  On
-MS-Windows, this is the version of the Windows OS. 
-</p></blockquote></div>
+MS-Windows, this is the version of the Windows OS.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>x-server-vendor</b><var> &amp;optional display<a name="index-x_002dserver_002dvendor-2995"></a></var><br>
-<blockquote><p>This function returns the vendor that provided the window system
+<dl>
+<dt><a name="index-x_002dserver_002dvendor"></a>Function: <strong>x-server-vendor</strong> <em>&amp;optional display</em></dt>
+<dd><p>This function returns the vendor that provided the window system
 software (as a string).  On GNU and Unix systems this really means
 whoever distributes the X server.  On MS-Windows this is the vendor ID
 string of the Windows OS (Microsoft).
-
-        <p>When the developers of X labeled software distributors as
+</p>
+<p>When the developers of X labeled software distributors as
 &ldquo;vendors&rdquo;, they showed their false assumption that no system could
-ever be developed and distributed noncommercially. 
-</p></blockquote></div>
+ever be developed and distributed noncommercially.
+</p></dd></dl>
 
-<!-- *- mode: texinfo; coding: utf-8 -*- -->
-<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1990-1995, 1998-2015 Free Software Foundation, Inc. -->
-<!-- See the file elisp.texi for copying conditions. -->
-   </body></html>
 
+
+<hr>
+<div class="header">
+<p>
+Previous: <a href="Resources.html#Resources" accesskey="p" rel="prev">Resources</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

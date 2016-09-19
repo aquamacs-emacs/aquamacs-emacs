@@ -1,98 +1,149 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Buffers - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Buffers</title>
+
+<meta name="description" content="GNU Emacs Manual: Buffers">
+<meta name="keywords" content="GNU Emacs Manual: Buffers">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Files.html#Files" title="Files">
-<link rel="next" href="Windows.html#Windows" title="Windows">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Select-Buffer.html#Select-Buffer" rel="next" title="Select Buffer">
+<link href="Filesets.html#Filesets" rel="prev" title="Filesets">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Buffers"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Windows.html#Windows">Windows</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Files.html#Files">Files</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Buffers"></a>
+<div class="header">
+<p>
+Next: <a href="Windows.html#Windows" accesskey="n" rel="next">Windows</a>, Previous: <a href="Files.html#Files" accesskey="p" rel="prev">Files</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Using-Multiple-Buffers"></a>
 <h2 class="chapter">19 Using Multiple Buffers</h2>
 
-<p><a name="index-buffers-1317"></a>  The text you are editing in Emacs resides in an object called a
-<dfn>buffer</dfn>.  Each time you visit a file, a buffer is used to hold
-the file's text.  Each time you invoke Dired, a buffer is used to hold
+<a name="index-buffers"></a>
+<p>The text you are editing in Emacs resides in an object called a
+<em>buffer</em>.  Each time you visit a file, a buffer is used to hold
+the file&rsquo;s text.  Each time you invoke Dired, a buffer is used to hold
 the directory listing.  If you send a message with <kbd>C-x m</kbd>, a
 buffer is used to hold the text of the message.  When you ask for a
-command's documentation, that appears in a buffer named <samp><span class="file">*Help*</span></samp>.
-
-   <p>Each buffer has a unique name, which can be of any length.  When a
+command&rsquo;s documentation, that appears in a buffer named <samp>*Help*</samp>.
+</p>
+<p>Each buffer has a unique name, which can be of any length.  When a
 buffer is displayed in a window, its name is shown in the mode line
 (see <a href="Mode-Line.html#Mode-Line">Mode Line</a>).  The distinction between upper and lower case
 matters in buffer names.  Most buffers are made by visiting files, and
-their names are derived from the files' names; however, you can also
+their names are derived from the files&rsquo; names; however, you can also
 create an empty buffer with any name you want.  A newly started Emacs
-has several buffers, including one named <samp><span class="file">*scratch*</span></samp>, which can
+has several buffers, including one named <samp>*scratch*</samp>, which can
 be used for evaluating Lisp expressions and is not associated with any
 file (see <a href="Lisp-Interaction.html#Lisp-Interaction">Lisp Interaction</a>).
-
-   <p><a name="index-selected-buffer-1318"></a><a name="index-current-buffer-1319"></a>  At any time, one and only one buffer is <dfn>selected</dfn>; we call it
-the <dfn>current buffer</dfn>.  We sometimes say that a command operates on
+</p>
+<a name="index-selected-buffer"></a>
+<a name="index-current-buffer"></a>
+<p>At any time, one and only one buffer is <em>selected</em>; we call it
+the <em>current buffer</em>.  We sometimes say that a command operates on
 &ldquo;the buffer&rdquo;; this really means that it operates on the current
 buffer.  When there is only one Emacs window, the buffer displayed in
 that window is current.  When there are multiple windows, the buffer
-displayed in the <dfn>selected window</dfn> is current.  See <a href="Windows.html#Windows">Windows</a>.
-
-   <p>Aside from its textual contents, each buffer records several pieces
+displayed in the <em>selected window</em> is current.  See <a href="Windows.html#Windows">Windows</a>.
+</p>
+<p>Aside from its textual contents, each buffer records several pieces
 of information, such as what file it is visiting (if any), whether it
 is modified, and what major mode and minor modes are in effect
-(see <a href="Modes.html#Modes">Modes</a>).  These are stored in <dfn>buffer-local
-variables</dfn>&mdash;variables that can have a different value in each buffer. 
+(see <a href="Modes.html#Modes">Modes</a>).  These are stored in <em>buffer-local
+variables</em>&mdash;variables that can have a different value in each buffer.
 See <a href="Locals.html#Locals">Locals</a>.
-
-   <p><a name="index-buffer-size_002c-maximum-1320"></a>  A buffer's size cannot be larger than some maximum, which is defined
-by the largest buffer position representable by <dfn>Emacs integers</dfn>. 
-This is because Emacs tracks buffer positions using that data type. 
-For typical 64-bit machines, this maximum buffer size is 2^61 - 2
+</p>
+<a name="index-buffer-size_002c-maximum"></a>
+<p>A buffer&rsquo;s size cannot be larger than some maximum, which is defined
+by the largest buffer position representable by <em>Emacs integers</em>.
+This is because Emacs tracks buffer positions using that data type.
+For typical 64-bit machines, this maximum buffer size is <em>2^{61} - 2</em>
 bytes, or about 2 EiB.  For typical 32-bit machines, the maximum is
-usually 2^29 - 2 bytes, or about 512 MiB.  Buffer sizes are
+usually <em>2^{29} - 2</em> bytes, or about 512 MiB.  Buffer sizes are
 also limited by the amount of memory in the system.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Select-Buffer.html#Select-Buffer" accesskey="1">Select Buffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Creating a new buffer or reselecting an old one.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="List-Buffers.html#List-Buffers" accesskey="2">List Buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Getting a list of buffers that exist.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Misc-Buffer.html#Misc-Buffer" accesskey="3">Misc Buffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Renaming; changing read-only status; copying text.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Kill-Buffer.html#Kill-Buffer" accesskey="4">Kill Buffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Killing buffers you no longer need.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Several-Buffers.html#Several-Buffers" accesskey="5">Several Buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to go through the list of all buffers
+                          and operate variously on several of them.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Indirect-Buffers.html#Indirect-Buffers" accesskey="6">Indirect Buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">An indirect buffer shares the text of another buffer.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Buffer-Convenience.html#Buffer-Convenience" accesskey="7">Buffer Convenience</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Convenience and customization features for
+                          buffer handling.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Select-Buffer.html#Select-Buffer">Select Buffer</a>:        Creating a new buffer or reselecting an old one. 
-<li><a accesskey="2" href="List-Buffers.html#List-Buffers">List Buffers</a>:         Getting a list of buffers that exist. 
-<li><a accesskey="3" href="Misc-Buffer.html#Misc-Buffer">Misc Buffer</a>:          Renaming; changing read-only status; copying text. 
-<li><a accesskey="4" href="Kill-Buffer.html#Kill-Buffer">Kill Buffer</a>:          Killing buffers you no longer need. 
-<li><a accesskey="5" href="Several-Buffers.html#Several-Buffers">Several Buffers</a>:      How to go through the list of all buffers
-                          and operate variously on several of them. 
-<li><a accesskey="6" href="Indirect-Buffers.html#Indirect-Buffers">Indirect Buffers</a>:     An indirect buffer shares the text of another buffer. 
-<li><a accesskey="7" href="Buffer-Convenience.html#Buffer-Convenience">Buffer Convenience</a>:   Convenience and customization features for
-                          buffer handling. 
-</ul>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Windows.html#Windows" accesskey="n" rel="next">Windows</a>, Previous: <a href="Files.html#Files" accesskey="p" rel="prev">Files</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

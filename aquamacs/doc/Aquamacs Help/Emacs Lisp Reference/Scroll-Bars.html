@@ -1,213 +1,254 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Scroll Bars - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Scroll Bars</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Scroll Bars">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Scroll Bars">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Display.html#Display" title="Display">
-<link rel="prev" href="Fringes.html#Fringes" title="Fringes">
-<link rel="next" href="Window-Dividers.html#Window-Dividers" title="Window Dividers">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Display.html#Display" rel="up" title="Display">
+<link href="Window-Dividers.html#Window-Dividers" rel="next" title="Window Dividers">
+<link href="Overlay-Arrow.html#Overlay-Arrow" rel="prev" title="Overlay Arrow">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Scroll-Bars"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Window-Dividers.html#Window-Dividers">Window Dividers</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Fringes.html#Fringes">Fringes</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
-<hr>
+Next: <a href="Window-Dividers.html#Window-Dividers" accesskey="n" rel="next">Window Dividers</a>, Previous: <a href="Fringes.html#Fringes" accesskey="p" rel="prev">Fringes</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Scroll-Bars-1"></a>
 <h3 class="section">37.14 Scroll Bars</h3>
+<a name="index-scroll-bars"></a>
 
-<p><a name="index-scroll-bars-4293"></a>
-Normally the frame parameter <code>vertical-scroll-bars</code> controls
+<p>Normally the frame parameter <code>vertical-scroll-bars</code> controls
 whether the windows in the frame have vertical scroll bars, and whether
 they are on the left or right.  The frame parameter
 <code>scroll-bar-width</code> specifies how wide they are (<code>nil</code> meaning
 the default).
-
-   <p>The frame parameter <code>horizontal-scroll-bars</code> controls whether
+</p>
+<p>The frame parameter <code>horizontal-scroll-bars</code> controls whether
 the windows in the frame have horizontal scroll bars.  The frame
 parameter <code>scroll-bar-height</code> specifies how high they are
 (<code>nil</code> meaning the default).  See <a href="Layout-Parameters.html#Layout-Parameters">Layout Parameters</a>.
-
-   <p><a name="index-horizontal_002dscroll_002dbars_002davailable_002dp-4294"></a>   Horizontal scroll bars are not available on all platforms.  The
+</p>
+<a name="index-horizontal_002dscroll_002dbars_002davailable_002dp"></a>
+<p>Horizontal scroll bars are not available on all platforms.  The
 function <code>horizontal-scroll-bars-available-p</code> which takes no
 argument returns non-<code>nil</code> if they are available on your system.
-
-   <p>The following three functions take as argument a live frame which
+</p>
+<p>The following three functions take as argument a live frame which
 defaults to the selected one.
-
-<div class="defun">
-&mdash; Function: <b>frame-current-scroll-bars</b><var> &amp;optional frame<a name="index-frame_002dcurrent_002dscroll_002dbars-4295"></a></var><br>
-<blockquote><p>This function reports the scroll bar types for frame <var>frame</var>.  The
-value is a cons cell <code>(</code><var>vertical-type</var><code> . 
-</code><var>horizontal-type</var><code>)</code>, where <var>vertical-type</var> is either
+</p>
+<dl>
+<dt><a name="index-frame_002dcurrent_002dscroll_002dbars"></a>Function: <strong>frame-current-scroll-bars</strong> <em>&amp;optional frame</em></dt>
+<dd><p>This function reports the scroll bar types for frame <var>frame</var>.  The
+value is a cons cell <code>(<var>vertical-type</var> .
+<var>horizontal-type</var>)</code>, where <var>vertical-type</var> is either
 <code>left</code>, <code>right</code>, or <code>nil</code> (which means no vertical scroll
 bar.)  <var>horizontal-type</var> is either <code>bottom</code> or <code>nil</code>
-(which means no horizontal scroll bar). 
-</p></blockquote></div>
+(which means no horizontal scroll bar).
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>frame-scroll-bar-width</b><var> &amp;optional Lisp_Object &amp;optional frame<a name="index-frame_002dscroll_002dbar_002dwidth-4296"></a></var><br>
-<blockquote><p>This function returns the width of vertical scroll bars of <var>frame</var>
-in pixels. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-frame_002dscroll_002dbar_002dwidth"></a>Function: <strong>frame-scroll-bar-width</strong> <em>&amp;optional Lisp_Object &amp;optional frame</em></dt>
+<dd><p>This function returns the width of vertical scroll bars of <var>frame</var>
+in pixels.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>frame-scroll-bar-height</b><var> &amp;optional Lisp_Object &amp;optional frame<a name="index-frame_002dscroll_002dbar_002dheight-4297"></a></var><br>
-<blockquote><p>This function returns the height of horizontal scroll bars of
-<var>frame</var> in pixels. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-frame_002dscroll_002dbar_002dheight"></a>Function: <strong>frame-scroll-bar-height</strong> <em>&amp;optional Lisp_Object &amp;optional frame</em></dt>
+<dd><p>This function returns the height of horizontal scroll bars of
+<var>frame</var> in pixels.
+</p></dd></dl>
 
-   <p>You can override the frame specific settings for individual windows by
+<p>You can override the frame specific settings for individual windows by
 using the following function:
-
-<div class="defun">
-&mdash; Function: <b>set-window-scroll-bars</b><var> window &amp;optional width vertical-type height horizontal-type<a name="index-set_002dwindow_002dscroll_002dbars-4298"></a></var><br>
-<blockquote><p>This function sets the width and/or height and the types of scroll bars
+</p>
+<dl>
+<dt><a name="index-set_002dwindow_002dscroll_002dbars"></a>Function: <strong>set-window-scroll-bars</strong> <em>window &amp;optional width vertical-type height horizontal-type</em></dt>
+<dd><p>This function sets the width and/or height and the types of scroll bars
 for window <var>window</var>.
-
-        <p><var>width</var> specifies the width of the vertical scroll bar in pixels
-(<code>nil</code> means use the width specified for the frame). 
+</p>
+<p><var>width</var> specifies the width of the vertical scroll bar in pixels
+(<code>nil</code> means use the width specified for the frame).
 <var>vertical-type</var> specifies whether to have a vertical scroll bar and,
 if so, where.  The possible values are <code>left</code>, <code>right</code>,
-<code>t</code>, which means to use the frame's default, and <code>nil</code> for no
+<code>t</code>, which means to use the frame&rsquo;s default, and <code>nil</code> for no
 vertical scroll bar.
-
-        <p><var>height</var> specifies the height of the horizontal scroll bar in pixels
-(<code>nil</code> means use the height specified for the frame). 
-<var>horizontal-type</var> specifies whether to have a horizontal scroll bar. 
+</p>
+<p><var>height</var> specifies the height of the horizontal scroll bar in pixels
+(<code>nil</code> means use the height specified for the frame).
+<var>horizontal-type</var> specifies whether to have a horizontal scroll bar.
 The possible values are <code>bottom</code>, <code>t</code>, which means to use the
-frame's default, and <code>nil</code> for no horizontal scroll bar.
+frame&rsquo;s default, and <code>nil</code> for no horizontal scroll bar.
+</p>
+<p>If <var>window</var> is <code>nil</code>, the selected window is used.
+</p></dd></dl>
 
-        <p>If <var>window</var> is <code>nil</code>, the selected window is used. 
-</p></blockquote></div>
-
-   <p>The following four functions take as argument a live window which
+<p>The following four functions take as argument a live window which
 defaults to the selected one.
-
-<div class="defun">
-&mdash; Function: <b>window-scroll-bars</b><var> &amp;optional window<a name="index-window_002dscroll_002dbars-4299"></a></var><br>
-<blockquote><p>This function returns a list of the form <code>(</code><var>width</var>
+</p>
+<dl>
+<dt><a name="index-window_002dscroll_002dbars"></a>Function: <strong>window-scroll-bars</strong> <em>&amp;optional window</em></dt>
+<dd><p>This function returns a list of the form <code>(<var>width</var>
 <var>columns</var> <var>vertical-type</var> <var>height</var> <var>lines</var>
-<var>horizontal-type</var><code>)</code>.
-
-        <p>The value <var>width</var> is the value that was specified for the width of
+<var>horizontal-type</var>)</code>.
+</p>
+<p>The value <var>width</var> is the value that was specified for the width of
 the vertical scroll bar (which may be <code>nil</code>); <var>columns</var> is the
 (possibly rounded) number of columns that the vertical scroll bar
 actually occupies.
-
-        <p>The value <var>height</var> is the value that was specified for the height of
+</p>
+<p>The value <var>height</var> is the value that was specified for the height of
 the horizontal scroll bar (which may be <code>nil</code>); <var>lines</var> is the
 (possibly rounded) number of lines that the horizontally scroll bar
-actually occupies. 
-</p></blockquote></div>
+actually occupies.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>window-current-scroll-bars</b><var> &amp;optional window<a name="index-window_002dcurrent_002dscroll_002dbars-4300"></a></var><br>
-<blockquote><p>This function reports the scroll bar type for window <var>window</var>.  The
-value is a cons cell <code>(</code><var>vertical-type</var><code> . 
-</code><var>horizontal-type</var><code>)</code>.  Unlike <code>window-scroll-bars</code>, this reports
+<dl>
+<dt><a name="index-window_002dcurrent_002dscroll_002dbars"></a>Function: <strong>window-current-scroll-bars</strong> <em>&amp;optional window</em></dt>
+<dd><p>This function reports the scroll bar type for window <var>window</var>.  The
+value is a cons cell <code>(<var>vertical-type</var> .
+<var>horizontal-type</var>)</code>.  Unlike <code>window-scroll-bars</code>, this reports
 the scroll bar type actually used, once frame defaults and
-<code>scroll-bar-mode</code> are taken into account. 
-</p></blockquote></div>
+<code>scroll-bar-mode</code> are taken into account.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>window-scroll-bar-width</b><var> &amp;optional window<a name="index-window_002dscroll_002dbar_002dwidth-4301"></a></var><br>
-<blockquote><p>This function returns the width in pixels of <var>window</var>'s vertical
-scrollbar. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-window_002dscroll_002dbar_002dwidth"></a>Function: <strong>window-scroll-bar-width</strong> <em>&amp;optional window</em></dt>
+<dd><p>This function returns the width in pixels of <var>window</var>&rsquo;s vertical
+scrollbar.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>window-scroll-bar-height</b><var> &amp;optional window<a name="index-window_002dscroll_002dbar_002dheight-4302"></a></var><br>
-<blockquote><p>This function returns the height in pixels of <var>window</var>'s horizontal
-scrollbar. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-window_002dscroll_002dbar_002dheight"></a>Function: <strong>window-scroll-bar-height</strong> <em>&amp;optional window</em></dt>
+<dd><p>This function returns the height in pixels of <var>window</var>&rsquo;s horizontal
+scrollbar.
+</p></dd></dl>
 
-   <p>If you don't specify these values for a window with
+<p>If you don&rsquo;t specify these values for a window with
 <code>set-window-scroll-bars</code>, the buffer-local variables
 <code>vertical-scroll-bar</code>, <code>horizontal-scroll-bar</code>,
 <code>scroll-bar-width</code> and <code>scroll-bar-height</code> in the buffer being
-displayed control the window's scroll bars.  The function
+displayed control the window&rsquo;s scroll bars.  The function
 <code>set-window-buffer</code> examines these variables.  If you change them
 in a buffer that is already visible in a window, you can make the window
 take note of the new values by calling <code>set-window-buffer</code>
 specifying the same buffer that is already displayed.
-
-   <p>You can control the appearance of scroll bars for a particular buffer by
+</p>
+<p>You can control the appearance of scroll bars for a particular buffer by
 setting the following variables which automatically become buffer-local
 when set.
-
-<div class="defun">
-&mdash; Variable: <b>vertical-scroll-bar</b><var><a name="index-vertical_002dscroll_002dbar-4303"></a></var><br>
-<blockquote><p>This variable specifies the location of the vertical scroll bar.  The
+</p>
+<dl>
+<dt><a name="index-vertical_002dscroll_002dbar"></a>Variable: <strong>vertical-scroll-bar</strong></dt>
+<dd><p>This variable specifies the location of the vertical scroll bar.  The
 possible values are <code>left</code>, <code>right</code>, <code>t</code>, which means to
-use the frame's default, and <code>nil</code> for no scroll bar. 
-</p></blockquote></div>
+use the frame&rsquo;s default, and <code>nil</code> for no scroll bar.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Variable: <b>horizontal-scroll-bar</b><var><a name="index-horizontal_002dscroll_002dbar-4304"></a></var><br>
-<blockquote><p>This variable specifies the location of the horizontal scroll bar.  The
+<dl>
+<dt><a name="index-horizontal_002dscroll_002dbar"></a>Variable: <strong>horizontal-scroll-bar</strong></dt>
+<dd><p>This variable specifies the location of the horizontal scroll bar.  The
 possible values are <code>bottom</code>, <code>t</code>, which means to use the
-frame's default, and <code>nil</code> for no scroll bar. 
-</p></blockquote></div>
+frame&rsquo;s default, and <code>nil</code> for no scroll bar.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Variable: <b>scroll-bar-width</b><var><a name="index-scroll_002dbar_002dwidth-4305"></a></var><br>
-<blockquote><p>This variable specifies the width of the buffer's vertical scroll bars,
+<dl>
+<dt><a name="index-scroll_002dbar_002dwidth"></a>Variable: <strong>scroll-bar-width</strong></dt>
+<dd><p>This variable specifies the width of the buffer&rsquo;s vertical scroll bars,
 measured in pixels.  A value of <code>nil</code> means to use the value
-specified by the frame. 
-</p></blockquote></div>
+specified by the frame.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Variable: <b>scroll-bar-height</b><var><a name="index-scroll_002dbar_002dheight-4306"></a></var><br>
-<blockquote><p>This variable specifies the height of the buffer's horizontal scroll
+<dl>
+<dt><a name="index-scroll_002dbar_002dheight"></a>Variable: <strong>scroll-bar-height</strong></dt>
+<dd><p>This variable specifies the height of the buffer&rsquo;s horizontal scroll
 bar, measured in pixels.  A value of <code>nil</code> means to use the value
-specified by the frame. 
-</p></blockquote></div>
+specified by the frame.
+</p></dd></dl>
 
-   <p>Finally you can toggle the display of scroll bars on all frames by
+<p>Finally you can toggle the display of scroll bars on all frames by
 customizing the variables <code>scroll-bar-mode</code> and
 <code>horizontal-scroll-bar-mode</code>.
-
-<div class="defun">
-&mdash; User Option: <b>scroll-bar-mode</b><var><a name="index-scroll_002dbar_002dmode-4307"></a></var><br>
-<blockquote><p>This variable controls whether and where to put vertical scroll bars in
+</p>
+<dl>
+<dt><a name="index-scroll_002dbar_002dmode"></a>User Option: <strong>scroll-bar-mode</strong></dt>
+<dd><p>This variable controls whether and where to put vertical scroll bars in
 all frames.  The possible values are <code>nil</code> for no scroll bars,
 <code>left</code> to put scroll bars on the left and <code>right</code> to put
-scroll bars on the right. 
-</p></blockquote></div>
+scroll bars on the right.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; User Option: <b>horizontal-scroll-bar-mode</b><var><a name="index-horizontal_002dscroll_002dbar_002dmode-4308"></a></var><br>
-<blockquote><p>This variable controls whether to display horizontal scroll bars on all
-frames. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-horizontal_002dscroll_002dbar_002dmode"></a>User Option: <strong>horizontal-scroll-bar-mode</strong></dt>
+<dd><p>This variable controls whether to display horizontal scroll bars on all
+frames.
+</p></dd></dl>
 
-   </body></html>
 
+<hr>
+<div class="header">
+<p>
+Next: <a href="Window-Dividers.html#Window-Dividers" accesskey="n" rel="next">Window Dividers</a>, Previous: <a href="Fringes.html#Fringes" accesskey="p" rel="prev">Fringes</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

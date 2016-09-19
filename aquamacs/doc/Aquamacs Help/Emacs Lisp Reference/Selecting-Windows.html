@@ -1,147 +1,190 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Selecting Windows - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Selecting Windows</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Selecting Windows">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Selecting Windows">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Windows.html#Windows" title="Windows">
-<link rel="prev" href="Recombining-Windows.html#Recombining-Windows" title="Recombining Windows">
-<link rel="next" href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering" title="Cyclic Window Ordering">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Windows.html#Windows" rel="up" title="Windows">
+<link href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering" rel="next" title="Cyclic Window Ordering">
+<link href="Recombining-Windows.html#Recombining-Windows" rel="prev" title="Recombining Windows">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Selecting-Windows"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Recombining-Windows.html#Recombining-Windows">Recombining Windows</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
-<hr>
+Next: <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering" accesskey="n" rel="next">Cyclic Window Ordering</a>, Previous: <a href="Recombining-Windows.html#Recombining-Windows" accesskey="p" rel="prev">Recombining Windows</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Selecting-Windows-1"></a>
 <h3 class="section">27.9 Selecting Windows</h3>
+<a name="index-selecting-a-window"></a>
 
-<p><a name="index-selecting-a-window-2502"></a>
-
-<div class="defun">
-&mdash; Function: <b>select-window</b><var> window &amp;optional norecord<a name="index-select_002dwindow-2503"></a></var><br>
-<blockquote><p>This function makes <var>window</var> the selected window and the window
+<dl>
+<dt><a name="index-select_002dwindow"></a>Function: <strong>select-window</strong> <em>window &amp;optional norecord</em></dt>
+<dd><p>This function makes <var>window</var> the selected window and the window
 selected within its frame (see <a href="Basic-Windows.html#Basic-Windows">Basic Windows</a>) and selects that
-frame.  It also makes <var>window</var>'s buffer (see <a href="Buffers-and-Windows.html#Buffers-and-Windows">Buffers and Windows</a>) current and sets that buffer's value of <code>point</code> to the
-value of <code>window-point</code> (see <a href="Window-Point.html#Window-Point">Window Point</a>) in <var>window</var>. 
+frame.  It also makes <var>window</var>&rsquo;s buffer (see <a href="Buffers-and-Windows.html#Buffers-and-Windows">Buffers and Windows</a>) current and sets that buffer&rsquo;s value of <code>point</code> to the
+value of <code>window-point</code> (see <a href="Window-Point.html#Window-Point">Window Point</a>) in <var>window</var>.
 <var>window</var> must be a live window.  The return value is <var>window</var>.
-
-        <p>By default, this function also moves <var>window</var>'s buffer to the front
+</p>
+<p>By default, this function also moves <var>window</var>&rsquo;s buffer to the front
 of the buffer list (see <a href="Buffer-List.html#Buffer-List">Buffer List</a>), and makes <var>window</var> the
 most recently selected window.  However, if the optional argument
 <var>norecord</var> is non-<code>nil</code>, these additional actions are omitted.
-
-        <p>This function runs <code>buffer-list-update-hook</code> (see <a href="Buffer-List.html#Buffer-List">Buffer List</a>)
+</p>
+<p>This function runs <code>buffer-list-update-hook</code> (see <a href="Buffer-List.html#Buffer-List">Buffer List</a>)
 unless <var>norecord</var> is non-<code>nil</code>.  Note that applications and
 internal routines often temporarily select a window in order to simplify
 coding.  As a rule, such selections (including those made by the macros
 <code>save-selected-window</code> and <code>with-selected-window</code> below) are
-not recorded thus avoiding to pollute <code>buffer-list-update-hook</code>. 
+not recorded thus avoiding to pollute <code>buffer-list-update-hook</code>.
 Selections that really count are those causing a visible change in
-the next redisplay of <var>window</var>'s frame and should be always
+the next redisplay of <var>window</var>&rsquo;s frame and should be always
 recorded.  This also means that to run a function each time a window
 gets selected, putting it on <code>buffer-list-update-hook</code> should be
-the right choice. 
-</p></blockquote></div>
+the right choice.
+</p></dd></dl>
 
-   <p><a name="index-most-recently-selected-windows-2504"></a>  The sequence of calls to <code>select-window</code> with a non-<code>nil</code>
+<a name="index-most-recently-selected-windows"></a>
+<p>The sequence of calls to <code>select-window</code> with a non-<code>nil</code>
 <var>norecord</var> argument determines an ordering of windows by their
 selection time.  The function <code>get-lru-window</code> can be used to
 retrieve the least recently selected live window (see <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>).
-
-<div class="defun">
-&mdash; Macro: <b>save-selected-window</b><var> forms<small class="dots">...</small><a name="index-save_002dselected_002dwindow-2505"></a></var><br>
-<blockquote><p>This macro records the selected frame, as well as the selected window
+</p>
+<dl>
+<dt><a name="index-save_002dselected_002dwindow"></a>Macro: <strong>save-selected-window</strong> <em>forms&hellip;</em></dt>
+<dd><p>This macro records the selected frame, as well as the selected window
 of each frame, executes <var>forms</var> in sequence, then restores the
 earlier selected frame and windows.  It also saves and restores the
 current buffer.  It returns the value of the last form in <var>forms</var>.
-
-        <p>This macro does not save or restore anything about the sizes,
+</p>
+<p>This macro does not save or restore anything about the sizes,
 arrangement or contents of windows; therefore, if <var>forms</var> change
 them, the change persists.  If the previously selected window of some
 frame is no longer live at the time of exit from <var>forms</var>, that
-frame's selected window is left alone.  If the previously selected
+frame&rsquo;s selected window is left alone.  If the previously selected
 window is no longer live, then whatever window is selected at the end of
 <var>forms</var> remains selected.  The current buffer is restored if and
 only if it is still live when exiting <var>forms</var>.
+</p>
+<p>This macro changes neither the ordering of recently selected windows nor
+the buffer list.
+</p></dd></dl>
 
-        <p>This macro changes neither the ordering of recently selected windows nor
-the buffer list. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Macro: <b>with-selected-window</b><var> window forms<small class="dots">...</small><a name="index-with_002dselected_002dwindow-2506"></a></var><br>
-<blockquote><p>This macro selects <var>window</var>, executes <var>forms</var> in sequence, then
+<dl>
+<dt><a name="index-with_002dselected_002dwindow"></a>Macro: <strong>with-selected-window</strong> <em>window forms&hellip;</em></dt>
+<dd><p>This macro selects <var>window</var>, executes <var>forms</var> in sequence, then
 restores the previously selected window and current buffer.  The ordering
 of recently selected windows and the buffer list remain unchanged unless
 you deliberately change them within <var>forms</var>; for example, by calling
 <code>select-window</code> with argument <var>norecord</var> <code>nil</code>.
+</p>
+<p>This macro does not change the order of recently selected windows or
+the buffer list.
+</p></dd></dl>
 
-        <p>This macro does not change the order of recently selected windows or
-the buffer list. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>frame-selected-window</b><var> &amp;optional frame<a name="index-frame_002dselected_002dwindow-2507"></a></var><br>
-<blockquote><p>This function returns the window on <var>frame</var> that is selected
+<dl>
+<dt><a name="index-frame_002dselected_002dwindow"></a>Function: <strong>frame-selected-window</strong> <em>&amp;optional frame</em></dt>
+<dd><p>This function returns the window on <var>frame</var> that is selected
 within that frame.  <var>frame</var> should be a live frame; if omitted or
-<code>nil</code>, it defaults to the selected frame. 
-</p></blockquote></div>
+<code>nil</code>, it defaults to the selected frame.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>set-frame-selected-window</b><var> frame window &amp;optional norecord<a name="index-set_002dframe_002dselected_002dwindow-2508"></a></var><br>
-<blockquote><p>This function makes <var>window</var> the window selected within the frame
+<dl>
+<dt><a name="index-set_002dframe_002dselected_002dwindow"></a>Function: <strong>set-frame-selected-window</strong> <em>frame window &amp;optional norecord</em></dt>
+<dd><p>This function makes <var>window</var> the window selected within the frame
 <var>frame</var>.  <var>frame</var> should be a live frame; if <code>nil</code>, it
 defaults to the selected frame.  <var>window</var> should be a live window;
 if <code>nil</code>, it defaults to the selected window.
-
-        <p>If <var>frame</var> is the selected frame, this makes <var>window</var> the
+</p>
+<p>If <var>frame</var> is the selected frame, this makes <var>window</var> the
 selected window.
-
-        <p>If the optional argument <var>norecord</var> is non-<code>nil</code>, this
+</p>
+<p>If the optional argument <var>norecord</var> is non-<code>nil</code>, this
 function does not alter the list of most recently selected windows,
-nor the buffer list. 
-</p></blockquote></div>
+nor the buffer list.
+</p></dd></dl>
 
-   <p><a name="index-window-use-time-2509"></a><a name="index-use-time-of-window-2510"></a><a name="index-window-order-by-time-of-last-use-2511"></a>
+<a name="index-window-use-time"></a>
+<a name="index-use-time-of-window"></a>
+<a name="index-window-order-by-time-of-last-use"></a>
+<dl>
+<dt><a name="index-window_002duse_002dtime"></a>Function: <strong>window-use-time</strong> <em>&amp;optional window</em></dt>
+<dd><p>This functions returns the use time of window <var>window</var>.
+<var>window</var> must be a live window and defaults to the selected one.
+</p>
+<p>The <em>use time</em> of a window is not really a time value, but an
+integer that does increase monotonically with each call of
+<code>select-window</code> with a <code>nil</code> <var>norecord</var> argument.  The
+window with the lowest use time is usually called the least recently
+used window while the window with the highest use time is called the
+most recently used one (see <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>).
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>window-use-time</b><var> &amp;optional window<a name="index-window_002duse_002dtime-2512"></a></var><br>
-<blockquote><p>This functions returns the use time of window <var>window</var>. 
-<var>window</var> must be a live window and defaults to the selected one. 
-The <dfn>use time</dfn> of a window is not really a time value, but it does
-increase monotonically with each window selection, so the window with
-the lowest use time is the least recently selected one, and the
-window with the highest use time is the most recently selected
-one. 
-</p></blockquote></div>
 
-   </body></html>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering" accesskey="n" rel="next">Cyclic Window Ordering</a>, Previous: <a href="Recombining-Windows.html#Recombining-Windows" accesskey="p" rel="prev">Recombining Windows</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
+
+
+</body>
+</html>

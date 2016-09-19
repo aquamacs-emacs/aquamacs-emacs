@@ -1,64 +1,104 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Compressed Files - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Compressed Files</title>
+
+<meta name="description" content="GNU Emacs Manual: Compressed Files">
+<meta name="keywords" content="GNU Emacs Manual: Compressed Files">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Files.html#Files" title="Files">
-<link rel="prev" href="Misc-File-Ops.html#Misc-File-Ops" title="Misc File Ops">
-<link rel="next" href="File-Archives.html#File-Archives" title="File Archives">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Files.html#Files" rel="up" title="Files">
+<link href="File-Archives.html#File-Archives" rel="next" title="File Archives">
+<link href="Misc-File-Ops.html#Misc-File-Ops" rel="prev" title="Misc File Ops">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Compressed-Files"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="File-Archives.html#File-Archives">File Archives</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Misc-File-Ops.html#Misc-File-Ops">Misc File Ops</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
-<hr>
+Next: <a href="File-Archives.html#File-Archives" accesskey="n" rel="next">File Archives</a>, Previous: <a href="Misc-File-Ops.html#Misc-File-Ops" accesskey="p" rel="prev">Misc File Ops</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Accessing-Compressed-Files"></a>
 <h3 class="section">18.12 Accessing Compressed Files</h3>
+<a name="index-compression"></a>
+<a name="index-uncompression"></a>
+<a name="index-Auto-Compression-mode"></a>
+<a name="index-mode_002c-Auto-Compression"></a>
+<a name="index-gzip"></a>
 
-<p><a name="index-compression-1236"></a><a name="index-uncompression-1237"></a><a name="index-Auto-Compression-mode-1238"></a><a name="index-mode_002c-Auto-Compression-1239"></a><a name="index-gzip-1240"></a>
-  Emacs automatically uncompresses compressed files when you visit
+<p>Emacs automatically uncompresses compressed files when you visit
 them, and automatically recompresses them if you alter them and save
 them.  Emacs recognizes compressed files by their file names.  File
-names ending in &lsquo;<samp><span class="samp">.gz</span></samp>&rsquo; indicate a file compressed with
+names ending in &lsquo;<samp>.gz</samp>&rsquo; indicate a file compressed with
 <code>gzip</code>.  Other endings indicate other compression programs.
-
-   <p>Automatic uncompression and compression apply to all the operations in
+</p>
+<p>Automatic uncompression and compression apply to all the operations in
 which Emacs uses the contents of a file.  This includes visiting it,
 saving it, inserting its contents into a buffer, loading it, and byte
 compiling it.
-
-   <p><a name="index-auto_002dcompression_002dmode-1241"></a><a name="index-auto_002dcompression_002dmode-1242"></a>  To disable this feature, type the command <kbd>M-x
+</p>
+<a name="index-auto_002dcompression_002dmode"></a>
+<a name="index-auto_002dcompression_002dmode-1"></a>
+<p>To disable this feature, type the command <kbd>M-x
 auto-compression-mode</kbd>.  You can disable it permanently by
 customizing the variable <code>auto-compression-mode</code>.
+</p>
 
-   </body></html>
 
+
+</body>
+</html>

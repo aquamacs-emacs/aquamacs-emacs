@@ -1,61 +1,110 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Output from Processes - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Output from Processes</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Output from Processes">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Output from Processes">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Processes.html#Processes" title="Processes">
-<link rel="prev" href="Signals-to-Processes.html#Signals-to-Processes" title="Signals to Processes">
-<link rel="next" href="Sentinels.html#Sentinels" title="Sentinels">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Processes.html#Processes" rel="up" title="Processes">
+<link href="Process-Buffers.html#Process-Buffers" rel="next" title="Process Buffers">
+<link href="Signals-to-Processes.html#Signals-to-Processes" rel="prev" title="Signals to Processes">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Output-from-Processes"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Sentinels.html#Sentinels">Sentinels</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Signals-to-Processes.html#Signals-to-Processes">Signals to Processes</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
-<hr>
+Next: <a href="Sentinels.html#Sentinels" accesskey="n" rel="next">Sentinels</a>, Previous: <a href="Signals-to-Processes.html#Signals-to-Processes" accesskey="p" rel="prev">Signals to Processes</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Receiving-Output-from-Processes"></a>
 <h3 class="section">36.9 Receiving Output from Processes</h3>
+<a name="index-process-output"></a>
+<a name="index-output-from-processes"></a>
 
-<p><a name="index-process-output-3944"></a><a name="index-output-from-processes-3945"></a>
-  The output that a subprocess writes to its standard output stream
-is passed to a function called the <dfn>filter function</dfn>.  The default
-filter function simply inserts the output into a buffer, which is
-called the associated buffer of the process (see <a href="Process-Buffers.html#Process-Buffers">Process Buffers</a>).  If the process has no buffer then the default filter
-discards the output.
-
-   <p>When a subprocess terminates, Emacs reads any pending output,
+<p>The output that an asynchronous subprocess writes to its standard
+output stream is passed to a function called the <em>filter
+function</em>.  The default filter function simply inserts the output into
+a buffer, which is called the associated buffer of the process
+(see <a href="Process-Buffers.html#Process-Buffers">Process Buffers</a>).  If the process has no buffer then the
+default filter discards the output.
+</p>
+<p>If the subprocess writes to its standard error stream, by default
+the error output is also passed to the process filter function.  If
+Emacs uses a pseudo-TTY (pty) for communication with the subprocess,
+then it is impossible to separate the standard output and standard
+error streams of the subprocess, because a pseudo-TTY has only one
+output channel.  In that case, if you want to keep the output to those
+streams separate, you should redirect one of them to a file&mdash;for
+example, by using an appropriate shell command via
+<code>start-process-shell-command</code> or a similar function.
+</p>
+<p>Alternatively, you could use the <code>:stderr</code> parameter with a
+non-<code>nil</code> value in a call to <code>make-process</code>
+(see <a href="Asynchronous-Processes.html#Asynchronous-Processes">make-process</a>) to make the destination
+of the error output separate from the standard output; in that case,
+Emacs will use pipes for communicating with the subprocess.
+</p>
+<p>When a subprocess terminates, Emacs reads any pending output,
 then stops reading output from that subprocess.  Therefore, if the
 subprocess has children that are still live and still producing
-output, Emacs won't receive that output.
-
-   <p>Output from a subprocess can arrive only while Emacs is waiting: when
+output, Emacs won&rsquo;t receive that output.
+</p>
+<p>Output from a subprocess can arrive only while Emacs is waiting: when
 reading terminal input (see the function <code>waiting-for-user-input-p</code>),
 in <code>sit-for</code> and <code>sleep-for</code> (see <a href="Waiting.html#Waiting">Waiting</a>), and in
 <code>accept-process-output</code> (see <a href="Accepting-Output.html#Accepting-Output">Accepting Output</a>).  This
@@ -64,31 +113,36 @@ programming.  For example, you can safely create a process and only
 then specify its buffer or filter function; no output can arrive
 before you finish, if the code in between does not call any primitive
 that waits.
-
-<div class="defun">
-&mdash; Variable: <b>process-adaptive-read-buffering</b><var><a name="index-process_002dadaptive_002dread_002dbuffering-3946"></a></var><br>
-<blockquote><p>On some systems, when Emacs reads the output from a subprocess, the
+</p>
+<dl>
+<dt><a name="index-process_002dadaptive_002dread_002dbuffering"></a>Variable: <strong>process-adaptive-read-buffering</strong></dt>
+<dd><p>On some systems, when Emacs reads the output from a subprocess, the
 output data is read in very small blocks, potentially resulting in
 very poor performance.  This behavior can be remedied to some extent
 by setting the variable <code>process-adaptive-read-buffering</code> to a
 non-<code>nil</code> value (the default), as it will automatically delay reading
 from such processes, thus allowing them to produce more output before
-Emacs tries to read it. 
-</p></blockquote></div>
+Emacs tries to read it.
+</p></dd></dl>
 
-   <p>It is impossible to separate the standard output and standard error
-streams of the subprocess, because Emacs normally spawns the subprocess
-inside a pseudo-TTY, and a pseudo-TTY has only one output channel.  If
-you want to keep the output to those streams separate, you should
-redirect one of them to a file&mdash;for example, by using an appropriate
-shell command.
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Process-Buffers.html#Process-Buffers" accesskey="1">Process Buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">By default, output is put in a buffer.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Filter-Functions.html#Filter-Functions" accesskey="2">Filter Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Filter functions accept output from the process.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Decoding-Output.html#Decoding-Output" accesskey="3">Decoding Output</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Filters can get unibyte or multibyte strings.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Accepting-Output.html#Accepting-Output" accesskey="4">Accepting Output</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to wait until process output arrives.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Process-Buffers.html#Process-Buffers">Process Buffers</a>:          By default, output is put in a buffer. 
-<li><a accesskey="2" href="Filter-Functions.html#Filter-Functions">Filter Functions</a>:         Filter functions accept output from the process. 
-<li><a accesskey="3" href="Decoding-Output.html#Decoding-Output">Decoding Output</a>:          Filters can get unibyte or multibyte strings. 
-<li><a accesskey="4" href="Accepting-Output.html#Accepting-Output">Accepting Output</a>:         How to wait until process output arrives. 
-</ul>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Sentinels.html#Sentinels" accesskey="n" rel="next">Sentinels</a>, Previous: <a href="Signals-to-Processes.html#Signals-to-Processes" accesskey="p" rel="prev">Signals to Processes</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

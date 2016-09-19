@@ -1,89 +1,136 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>External Lisp - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: External Lisp</title>
+
+<meta name="description" content="GNU Emacs Manual: External Lisp">
+<meta name="keywords" content="GNU Emacs Manual: External Lisp">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Building.html#Building" title="Building">
-<link rel="prev" href="Lisp-Interaction.html#Lisp-Interaction" title="Lisp Interaction">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Building.html#Building" rel="up" title="Building">
+<link href="Maintaining.html#Maintaining" rel="next" title="Maintaining">
+<link href="Lisp-Interaction.html#Lisp-Interaction" rel="prev" title="Lisp Interaction">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="External-Lisp"></a>
+<div class="header">
 <p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Lisp-Interaction.html#Lisp-Interaction">Lisp Interaction</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Building.html#Building">Building</a>
-<hr>
+Previous: <a href="Lisp-Interaction.html#Lisp-Interaction" accesskey="p" rel="prev">Lisp Interaction</a>, Up: <a href="Building.html#Building" accesskey="u" rel="up">Building</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Running-an-External-Lisp"></a>
 <h3 class="section">27.11 Running an External Lisp</h3>
+<a name="index-Lisp-mode"></a>
+<a name="index-mode_002c-Lisp"></a>
+<a name="index-Common-Lisp"></a>
 
-<p><a name="index-Lisp-mode-2859"></a><a name="index-mode_002c-Lisp-2860"></a><a name="index-Common-Lisp-2861"></a>
-  Lisp mode is the major mode for editing programs written in
+<p>Lisp mode is the major mode for editing programs written in
 general-purpose Lisp dialects, such as Common Lisp.  Its mode command
 is <kbd>M-x lisp-mode</kbd>.  Emacs uses Lisp mode automatically for files
-whose names end in <samp><span class="file">.l</span></samp>, <samp><span class="file">.lsp</span></samp>, or <samp><span class="file">.lisp</span></samp>.
-
-   <p><a name="index-run_002dlisp-2862"></a><a name="index-inferior_002dlisp_002dprogram-2863"></a><a name="index-C_002dx-C_002dz-2864"></a>  You can run an external Lisp session as a subprocess or
-<dfn>inferior process</dfn> of Emacs, and pass expressions to it to be
+whose names end in <samp>.l</samp>, <samp>.lsp</samp>, or <samp>.lisp</samp>.
+</p>
+<a name="index-run_002dlisp"></a>
+<a name="index-inferior_002dlisp_002dprogram"></a>
+<a name="index-C_002dx-C_002dz"></a>
+<p>You can run an external Lisp session as a subprocess or
+<em>inferior process</em> of Emacs, and pass expressions to it to be
 evaluated.  To begin an external Lisp session, type <kbd>M-x
-run-lisp</kbd>.  This runs the program named <samp><span class="command">lisp</span></samp>, and sets it up
+run-lisp</kbd>.  This runs the program named <code>lisp</code>, and sets it up
 so that both input and output go through an Emacs buffer named
-<samp><span class="file">*inferior-lisp*</span></samp>.  To change the name of the Lisp program run by
+<samp>*inferior-lisp*</samp>.  To change the name of the Lisp program run by
 <kbd>M-x run-lisp</kbd>, change the variable <code>inferior-lisp-program</code>.
-
-   <p>The major mode for the <samp><span class="file">*lisp*</span></samp> buffer is Inferior Lisp mode,
+</p>
+<p>The major mode for the <samp>*lisp*</samp> buffer is Inferior Lisp mode,
 which combines the characteristics of Lisp mode and Shell mode
 (see <a href="Shell-Mode.html#Shell-Mode">Shell Mode</a>).  To send input to the Lisp session, go to the
-end of the <samp><span class="file">*lisp*</span></samp> buffer and type the input, followed by
-&lt;RET&gt;.  Terminal output from the Lisp session is automatically
+end of the <samp>*lisp*</samp> buffer and type the input, followed by
+<tt class="key">RET</tt>.  Terminal output from the Lisp session is automatically
 inserted in the buffer.
-
-   <p><a name="index-C_002dM_002dx-_0040r_007b_0028Lisp-mode_0029_007d-2865"></a><a name="index-lisp_002deval_002ddefun-2866"></a>  When you edit a Lisp program in Lisp mode, you can type <kbd>C-M-x</kbd>
+</p>
+<a name="index-C_002dM_002dx-_0028Lisp-mode_0029"></a>
+<a name="index-lisp_002deval_002ddefun"></a>
+<p>When you edit a Lisp program in Lisp mode, you can type <kbd>C-M-x</kbd>
 (<code>lisp-eval-defun</code>) to send an expression from the Lisp mode
-buffer to a Lisp session that you had started with <kbd>M-x run-lisp</kbd>. 
+buffer to a Lisp session that you had started with <kbd>M-x run-lisp</kbd>.
 The expression sent is the top-level Lisp expression at or following
 point.  The resulting value goes as usual into the
-<samp><span class="file">*inferior-lisp*</span></samp> buffer.  Note that the effect of <kbd>C-M-x</kbd> in
+<samp>*inferior-lisp*</samp> buffer.  Note that the effect of <kbd>C-M-x</kbd> in
 Lisp mode is thus very similar to its effect in Emacs Lisp mode
 (see <a href="Lisp-Eval.html#Lisp-Eval">Lisp Eval</a>), except that the expression is sent to a different
 Lisp environment instead of being evaluated in Emacs.
-
-   <p><a name="index-scheme_002dmode-2867"></a><a name="index-run_002dscheme-2868"></a><a name="index-Scheme-mode-2869"></a><a name="index-mode_002c-Scheme-2870"></a><a name="index-C_002dM_002dx-_0040r_007b_0028Scheme-mode_0029_007d-2871"></a>  The facilities for editing Scheme code, and for sending expressions
+</p>
+<a name="index-scheme_002dmode"></a>
+<a name="index-run_002dscheme"></a>
+<a name="index-Scheme-mode"></a>
+<a name="index-mode_002c-Scheme"></a>
+<a name="index-C_002dM_002dx-_0028Scheme-mode_0029"></a>
+<p>The facilities for editing Scheme code, and for sending expressions
 to a Scheme subprocess, are very similar.  Scheme source files are
 edited in Scheme mode, which can be explicitly enabled with <kbd>M-x
 scheme-mode</kbd>.  You can initiate a Scheme session by typing <kbd>M-x
 run-scheme</kbd> (the buffer for interacting with Scheme is named
-<samp><span class="file">*scheme*</span></samp>), and send expressions to it by typing <kbd>C-M-x</kbd>. 
-<!-- Includes vc1-xtra, emerge-xtra. -->
+<samp>*scheme*</samp>), and send expressions to it by typing <kbd>C-M-x</kbd>.
+</p><hr>
+<div class="header">
+<p>
+Previous: <a href="Lisp-Interaction.html#Lisp-Interaction" accesskey="p" rel="prev">Lisp Interaction</a>, Up: <a href="Building.html#Building" accesskey="u" rel="up">Building</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-<!-- This is part of the Emacs manual., Abbrevs, This is part of the Emacs manual., Top -->
-<!-- Copyright (C) 1985-1987, 1993-1995, 1997, 1999-2015 Free Software -->
-<!-- Foundation, Inc. -->
-<!-- See file emacs.texi for copying conditions. -->
-   </body></html>
 
+
+</body>
+</html>

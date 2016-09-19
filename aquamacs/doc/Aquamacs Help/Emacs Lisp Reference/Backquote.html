@@ -1,95 +1,148 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Backquote - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Backquote</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Backquote">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Backquote">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Evaluation.html#Evaluation" title="Evaluation">
-<link rel="prev" href="Quoting.html#Quoting" title="Quoting">
-<link rel="next" href="Eval.html#Eval" title="Eval">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Evaluation.html#Evaluation" rel="up" title="Evaluation">
+<link href="Eval.html#Eval" rel="next" title="Eval">
+<link href="Quoting.html#Quoting" rel="prev" title="Quoting">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Backquote"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Eval.html#Eval">Eval</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Quoting.html#Quoting">Quoting</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Evaluation.html#Evaluation">Evaluation</a>
-<hr>
+Next: <a href="Eval.html#Eval" accesskey="n" rel="next">Eval</a>, Previous: <a href="Quoting.html#Quoting" accesskey="p" rel="prev">Quoting</a>, Up: <a href="Evaluation.html#Evaluation" accesskey="u" rel="up">Evaluation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Backquote-1"></a>
 <h3 class="section">9.4 Backquote</h3>
+<a name="index-backquote-_0028list-substitution_0029"></a>
+<a name="index-_0060-_0028list-substitution_0029"></a>
+<a name="index-_0060"></a>
 
-<p><a name="index-backquote-_0028list-substitution_0029-618"></a><a name="index-g_t_0060-_0028list-substitution_0029-619"></a><a name="index-g_t_0060-620"></a>
-  <dfn>Backquote constructs</dfn> allow you to quote a list, but
+<p><em>Backquote constructs</em> allow you to quote a list, but
 selectively evaluate elements of that list.  In the simplest case, it
 is identical to the special form <code>quote</code>
-(described in the previous section; see <a href="Quoting.html#Quoting">Quoting</a>). 
+(described in the previous section; see <a href="Quoting.html#Quoting">Quoting</a>).
 For example, these two forms yield identical results:
+</p>
+<div class="example">
+<pre class="example">`(a list of (+ 2 3) elements)
+     &rArr; (a list of (+ 2 3) elements)
+</pre><pre class="example">'(a list of (+ 2 3) elements)
+     &rArr; (a list of (+ 2 3) elements)
+</pre></div>
 
-<pre class="example">     `(a list of (+ 2 3) elements)
-          &rArr; (a list of (+ 2 3) elements)
-     '(a list of (+ 2 3) elements)
-          &rArr; (a list of (+ 2 3) elements)
-</pre>
-   <p><a name="index-g_t_002c-_0040r_007b_0028with-backquote_0029_007d-621"></a>  The special marker &lsquo;<samp><span class="samp">,</span></samp>&rsquo; inside of the argument to backquote
-indicates a value that isn't constant.  The Emacs Lisp evaluator
-evaluates the argument of &lsquo;<samp><span class="samp">,</span></samp>&rsquo;, and puts the value in the list
+<a name="index-_002c-_0028with-backquote_0029"></a>
+<p>The special marker &lsquo;<samp>,</samp>&rsquo; inside of the argument to backquote
+indicates a value that isn&rsquo;t constant.  The Emacs Lisp evaluator
+evaluates the argument of &lsquo;<samp>,</samp>&rsquo;, and puts the value in the list
 structure:
+</p>
+<div class="example">
+<pre class="example">`(a list of ,(+ 2 3) elements)
+     &rArr; (a list of 5 elements)
+</pre></div>
 
-<pre class="example">     `(a list of ,(+ 2 3) elements)
-          &rArr; (a list of 5 elements)
-</pre>
-   <p class="noindent">Substitution with &lsquo;<samp><span class="samp">,</span></samp>&rsquo; is allowed at deeper levels of the list
+<p>Substitution with &lsquo;<samp>,</samp>&rsquo; is allowed at deeper levels of the list
 structure also.  For example:
+</p>
+<div class="example">
+<pre class="example">`(1 2 (3 ,(+ 4 5)))
+     &rArr; (1 2 (3 9))
+</pre></div>
 
-<pre class="example">     `(1 2 (3 ,(+ 4 5)))
-          &rArr; (1 2 (3 9))
-</pre>
-   <p><a name="index-g_t_002c_0040_0040-_0040r_007b_0028with-backquote_0029_007d-622"></a><a name="index-splicing-_0028with-backquote_0029-623"></a>  You can also <dfn>splice</dfn> an evaluated value into the resulting list,
-using the special marker &lsquo;<samp><span class="samp">,@</span></samp>&rsquo;.  The elements of the spliced list
+<a name="index-_002c_0040-_0028with-backquote_0029"></a>
+<a name="index-splicing-_0028with-backquote_0029"></a>
+<p>You can also <em>splice</em> an evaluated value into the resulting list,
+using the special marker &lsquo;<samp>,@</samp>&rsquo;.  The elements of the spliced list
 become elements at the same level as the other elements of the resulting
-list.  The equivalent code without using &lsquo;<samp><span class="samp">`</span></samp>&rsquo; is often unreadable. 
+list.  The equivalent code without using &lsquo;<samp>`</samp>&rsquo; is often unreadable.
 Here are some examples:
+</p>
+<div class="example">
+<pre class="example">(setq some-list '(2 3))
+     &rArr; (2 3)
+</pre><pre class="example">(cons 1 (append some-list '(4) some-list))
+     &rArr; (1 2 3 4 2 3)
+</pre><pre class="example">`(1 ,@some-list 4 ,@some-list)
+     &rArr; (1 2 3 4 2 3)
+</pre><pre class="example">
+</pre><pre class="example">(setq list '(hack foo bar))
+     &rArr; (hack foo bar)
+</pre><pre class="example">(cons 'use
+  (cons 'the
+    (cons 'words (append (cdr list) '(as elements)))))
+     &rArr; (use the words foo bar as elements)
+</pre><pre class="example">`(use the words ,@(cdr list) as elements)
+     &rArr; (use the words foo bar as elements)
+</pre></div>
 
-<pre class="example">     (setq some-list '(2 3))
-          &rArr; (2 3)
-     (cons 1 (append some-list '(4) some-list))
-          &rArr; (1 2 3 4 2 3)
-     `(1 ,@some-list 4 ,@some-list)
-          &rArr; (1 2 3 4 2 3)
-     
-     (setq list '(hack foo bar))
-          &rArr; (hack foo bar)
-     (cons 'use
-       (cons 'the
-         (cons 'words (append (cdr list) '(as elements)))))
-          &rArr; (use the words foo bar as elements)
-     `(use the words ,@(cdr list) as elements)
-          &rArr; (use the words foo bar as elements)
-</pre>
-   </body></html>
 
+<hr>
+<div class="header">
+<p>
+Next: <a href="Eval.html#Eval" accesskey="n" rel="next">Eval</a>, Previous: <a href="Quoting.html#Quoting" accesskey="p" rel="prev">Quoting</a>, Up: <a href="Evaluation.html#Evaluation" accesskey="u" rel="up">Evaluation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

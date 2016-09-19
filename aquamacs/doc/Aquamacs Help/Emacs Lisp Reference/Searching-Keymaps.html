@@ -1,73 +1,106 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Searching Keymaps - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Searching Keymaps</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Searching Keymaps">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Searching Keymaps">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Keymaps.html#Keymaps" title="Keymaps">
-<link rel="prev" href="Active-Keymaps.html#Active-Keymaps" title="Active Keymaps">
-<link rel="next" href="Controlling-Active-Maps.html#Controlling-Active-Maps" title="Controlling Active Maps">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Keymaps.html#Keymaps" rel="up" title="Keymaps">
+<link href="Controlling-Active-Maps.html#Controlling-Active-Maps" rel="next" title="Controlling Active Maps">
+<link href="Active-Keymaps.html#Active-Keymaps" rel="prev" title="Active Keymaps">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Searching-Keymaps"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Controlling-Active-Maps.html#Controlling-Active-Maps">Controlling Active Maps</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Active-Keymaps.html#Active-Keymaps">Active Keymaps</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
-<hr>
+Next: <a href="Controlling-Active-Maps.html#Controlling-Active-Maps" accesskey="n" rel="next">Controlling Active Maps</a>, Previous: <a href="Active-Keymaps.html#Active-Keymaps" accesskey="p" rel="prev">Active Keymaps</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Searching-the-Active-Keymaps"></a>
 <h3 class="section">21.8 Searching the Active Keymaps</h3>
+<a name="index-searching-active-keymaps-for-keys"></a>
 
-<p><a name="index-searching-active-keymaps-for-keys-1711"></a>
-Here is a pseudo-Lisp summary of how Emacs searches the active
+<p>Here is a pseudo-Lisp summary of how Emacs searches the active
 keymaps:
+</p>
+<div class="lisp">
+<pre class="lisp">(or (if overriding-terminal-local-map
+        (<var>find-in</var> overriding-terminal-local-map))
+    (if overriding-local-map
+        (<var>find-in</var> overriding-local-map)
+      (or (<var>find-in</var> (get-char-property (point) 'keymap))
+          (<var>find-in-any</var> emulation-mode-map-alists)
+          (<var>find-in-any</var> minor-mode-overriding-map-alist)
+          (<var>find-in-any</var> minor-mode-map-alist)
+          (if (get-text-property (point) 'local-map)
+              (<var>find-in</var> (get-char-property (point) 'local-map))
+            (<var>find-in</var> (current-local-map)))))
+    (<var>find-in</var> (current-global-map)))
+</pre></div>
 
-<pre class="lisp">     (or (if overriding-terminal-local-map
-             (<var>find-in</var> overriding-terminal-local-map))
-         (if overriding-local-map
-             (<var>find-in</var> overriding-local-map)
-           (or (<var>find-in</var> (get-char-property (point) 'keymap))
-               (<var>find-in-any</var> emulation-mode-map-alists)
-               (<var>find-in-any</var> minor-mode-overriding-map-alist)
-               (<var>find-in-any</var> minor-mode-map-alist)
-               (if (get-text-property (point) 'local-map)
-                   (<var>find-in</var> (get-char-property (point) 'local-map))
-                 (<var>find-in</var> (current-local-map)))))
-         (<var>find-in</var> (current-global-map)))
-</pre>
-   <p class="noindent">Here, <var>find-in</var> and <var>find-in-any</var> are pseudo functions that
+<p>Here, <var>find-in</var> and <var>find-in-any</var> are pseudo functions that
 search in one keymap and in an alist of keymaps, respectively.  Note
 that the <code>set-transient-map</code> function works by setting
 <code>overriding-terminal-local-map</code> (see <a href="Controlling-Active-Maps.html#Controlling-Active-Maps">Controlling Active Maps</a>).
-
-   <p>In the above pseudo-code, if a key sequence starts with a mouse
-event (see <a href="Mouse-Events.html#Mouse-Events">Mouse Events</a>), that event's position is used instead of
-point, and the event's buffer is used instead of the current buffer. 
+</p>
+<p>In the above pseudo-code, if a key sequence starts with a mouse
+event (see <a href="Mouse-Events.html#Mouse-Events">Mouse Events</a>), that event&rsquo;s position is used instead of
+point, and the event&rsquo;s buffer is used instead of the current buffer.
 In particular, this affects how the <code>keymap</code> and <code>local-map</code>
 properties are looked up.  If a mouse event occurs on a string
 embedded with a <code>display</code>, <code>before-string</code>, or
@@ -76,15 +109,23 @@ string has a non-<code>nil</code> <code>keymap</code> or <code>local-map</code>
 property, that overrides the corresponding property in the underlying
 buffer text (i.e., the property specified by the underlying text is
 ignored).
-
-   <p>When a key binding is found in one of the active keymaps, and that
-binding is a command, the search is over&mdash;the command is executed. 
+</p>
+<p>When a key binding is found in one of the active keymaps, and that
+binding is a command, the search is over&mdash;the command is executed.
 However, if the binding is a symbol with a value or a string, Emacs
-replaces the input key sequences with the variable's value or the
+replaces the input key sequences with the variable&rsquo;s value or the
 string, and restarts the search of the active keymaps.  See <a href="Key-Lookup.html#Key-Lookup">Key Lookup</a>.
-
-   <p>The command which is finally found might also be remapped. 
+</p>
+<p>The command which is finally found might also be remapped.
 See <a href="Remapping-Commands.html#Remapping-Commands">Remapping Commands</a>.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Controlling-Active-Maps.html#Controlling-Active-Maps" accesskey="n" rel="next">Controlling Active Maps</a>, Previous: <a href="Active-Keymaps.html#Active-Keymaps" accesskey="p" rel="prev">Active Keymaps</a>, Up: <a href="Keymaps.html#Keymaps" accesskey="u" rel="up">Keymaps</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

@@ -1,70 +1,109 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Cut and Paste - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Cut and Paste</title>
+
+<meta name="description" content="GNU Emacs Manual: Cut and Paste">
+<meta name="keywords" content="GNU Emacs Manual: Cut and Paste">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Killing.html#Killing" title="Killing">
-<link rel="prev" href="Yanking.html#Yanking" title="Yanking">
-<link rel="next" href="Accumulating-Text.html#Accumulating-Text" title="Accumulating Text">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Killing.html#Killing" rel="up" title="Killing">
+<link href="Clipboard.html#Clipboard" rel="next" title="Clipboard">
+<link href="Appending-Kills.html#Appending-Kills" rel="prev" title="Appending Kills">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Cut-and-Paste"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Accumulating-Text.html#Accumulating-Text">Accumulating Text</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Yanking.html#Yanking">Yanking</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Killing.html#Killing">Killing</a>
-<hr>
+Next: <a href="Accumulating-Text.html#Accumulating-Text" accesskey="n" rel="next">Accumulating Text</a>, Previous: <a href="Yanking.html#Yanking" accesskey="p" rel="prev">Yanking</a>, Up: <a href="Killing.html#Killing" accesskey="u" rel="up">Killing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="g_t_0060_0060Cut-and-Paste_0027_0027-Operations-on-Graphical-Displays"></a>
 <h3 class="section">12.3 &ldquo;Cut and Paste&rdquo; Operations on Graphical Displays</h3>
+<a name="index-cut"></a>
+<a name="index-copy"></a>
+<a name="index-paste"></a>
 
-<p><a name="index-cut-445"></a><a name="index-copy-446"></a><a name="index-paste-447"></a>
-  In most graphical desktop environments, you can transfer data
+<p>In most graphical desktop environments, you can transfer data
 (usually text) between different applications using a system facility
-called the <dfn>clipboard</dfn>.  On X, two other similar facilities are
+called the <em>clipboard</em>.  On X, two other similar facilities are
 available: the primary selection and the secondary selection.  When
 Emacs is run on a graphical display, its kill and yank commands
 integrate with these facilities, so that you can easily transfer text
 between Emacs and other graphical applications.
-
-   <p>By default, Emacs uses UTF-8 as the coding system for inter-program
+</p>
+<p>By default, Emacs uses UTF-8 as the coding system for inter-program
 text transfers.  If you find that the pasted text is not what you
 expected, you can specify another coding system by typing <kbd>C-x
-&lt;RET&gt; x</kbd> or <kbd>C-x &lt;RET&gt; X</kbd>.  You can also request a
-different data type by customizing <code>x-select-request-type</code>. 
+<span class="key">RET</span> x</kbd> or <kbd>C-x <span class="key">RET</span> X</kbd>.  You can also request a
+different data type by customizing <code>x-select-request-type</code>.
 See <a href="Communication-Coding.html#Communication-Coding">Communication Coding</a>.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Clipboard.html#Clipboard" accesskey="1">Clipboard</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How Emacs uses the system clipboard.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Primary-Selection.html#Primary-Selection" accesskey="2">Primary Selection</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The temporarily selected text selection.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Secondary-Selection.html#Secondary-Selection" accesskey="3">Secondary Selection</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Cutting without altering point and mark.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Clipboard.html#Clipboard">Clipboard</a>:            How Emacs uses the system clipboard. 
-<li><a accesskey="2" href="Primary-Selection.html#Primary-Selection">Primary Selection</a>:    The temporarily selected text selection. 
-<li><a accesskey="3" href="Secondary-Selection.html#Secondary-Selection">Secondary Selection</a>:  Cutting without altering point and mark. 
-</ul>
 
-   </body></html>
 
+
+</body>
+</html>

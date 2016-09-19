@@ -1,134 +1,300 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Pattern matching case statement - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Pattern matching case statement</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Pattern matching case statement">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Pattern matching case statement">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Conditionals.html#Conditionals" title="Conditionals">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Conditionals.html#Conditionals" rel="up" title="Conditionals">
+<link href="Combining-Conditions.html#Combining-Conditions" rel="next" title="Combining Conditions">
+<link href="Conditionals.html#Conditionals" rel="prev" title="Conditionals">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Pattern-matching-case-statement"></a>
+<div class="header">
 <p>
-Up:&nbsp;<a rel="up" accesskey="u" href="Conditionals.html#Conditionals">Conditionals</a>
+Up: <a href="Conditionals.html#Conditionals" accesskey="u" rel="up">Conditionals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 <hr>
+<a name="Pattern-matching-case-statement-1"></a>
+<h4 class="subsection">10.2.1 Pattern matching case statement</h4>
+<a name="index-pcase"></a>
+<a name="index-pattern-matching"></a>
+
+<p>The <code>cond</code> form lets you choose between alternatives using
+predicate conditions that compare values of expressions against
+specific values known and written in advance.  However, sometimes it
+is useful to select alternatives based on more general conditions that
+distinguish between broad classes of values.  The <code>pcase</code> macro
+allows you to choose between alternatives based on matching the value
+of an expression against a series of patterns.  A pattern can be a
+literal value (for comparisons to literal values you&rsquo;d use
+<code>cond</code>), or it can be a more general description of the expected
+structure of the expression&rsquo;s value.
+</p>
+<dl>
+<dt><a name="index-pcase-1"></a>Macro: <strong>pcase</strong> <em>expression &amp;rest clauses</em></dt>
+<dd><p>Evaluate <var>expression</var> and choose among an arbitrary number of
+alternatives based on the value of <var>expression</var>.  The possible
+alternatives are specified by <var>clauses</var>, each of which must be a
+list of the form <code>(<var>pattern</var> <var>body-forms</var>&hellip;)</code>.
+<code>pcase</code> tries to match the value of <var>expression</var> to the
+<var>pattern</var> of each clause, in textual order.  If the value matches,
+the clause succeeds; <code>pcase</code> then evaluates its <var>body-forms</var>,
+and returns the value of the last of <var>body-forms</var>.  Any remaining
+<var>clauses</var> are ignored.
+</p>
+<p>The <var>pattern</var> part of a clause can be of one of two types:
+<em>QPattern</em>, a pattern quoted with a backquote; or a
+<em>UPattern</em>, which is not quoted.  UPatterns are simpler, so we
+describe them first.
+</p>
+<p>Note: In the description of the patterns below, we use &ldquo;the value
+being matched&rdquo; to refer to the value of the <var>expression</var> that is
+the first argument of <code>pcase</code>.
+</p>
+<p>A UPattern can have the following forms:
+</p>
+<dl compact="compact">
+<dt><code>'<var>val</var></code></dt>
+<dd><p>Matches if the value being matched is <code>equal</code> to <var>val</var>.
+</p></dd>
+<dt><code><var>atom</var></code></dt>
+<dd><p>Matches any <var>atom</var>, which can be a keyword, a number, or a string.
+(These are self-quoting, so this kind of UPattern is actually a
+shorthand for <code>'<var>atom</var></code>.)  Note that a string or a float
+matches any string or float with the same contents/value.
+</p></dd>
+<dt><code>_</code></dt>
+<dd><p>Matches any value.  This is known as <em>don&rsquo;t care</em> or <em>wildcard</em>.
+</p></dd>
+<dt><code><var>symbol</var></code></dt>
+<dd><p>Matches any value, and additionally let-binds <var>symbol</var> to the
+value it matched, so that you can later refer to it, either in the
+<var>body-forms</var> or also later in the pattern.
+</p></dd>
+<dt><code>(pred <var>predfun</var>)</code></dt>
+<dd><p>Matches if the predicate function <var>predfun</var> returns non-<code>nil</code>
+when called with the value being matched as its argument.
+<var>predfun</var> can be one of the possible forms described below.
+</p></dd>
+<dt><code>(guard <var>boolean-expression</var>)</code></dt>
+<dd><p>Matches if <var>boolean-expression</var> evaluates to non-<code>nil</code>.  This
+allows you to include in a UPattern boolean conditions that refer to
+symbols bound to values (including the value being matched) by
+previous UPatterns.  Typically used inside an <code>and</code> UPattern, see
+below.  For example, <code>(and&nbsp;x&nbsp;(guard&nbsp;(&lt;&nbsp;x&nbsp;10)))</code><!-- /@w --> is a pattern
+which matches any number smaller than 10 and let-binds the variable
+<code>x</code> to that number.
+</p></dd>
+<dt><code>(let <var>upattern</var> <var>expression</var>)</code></dt>
+<dd><p>Matches if the specified <var>expression</var> matches the specified
+<var>upattern</var>.  This allows matching a pattern against the value of
+an <em>arbitrary</em> expression, not just the expression that is the
+first argument to <code>pcase</code>.  (It is called <code>let</code> because
+<var>upattern</var> can bind symbols to values using the <var>symbol</var>
+UPattern.  For example:
+<code>((or&nbsp;`(key&nbsp;.&nbsp;,val)&nbsp;(let&nbsp;val&nbsp;5))&nbsp;val)</code><!-- /@w -->.)
+</p></dd>
+<dt><code>(app <var>function</var> <var>upattern</var>)</code></dt>
+<dd><p>Matches if <var>function</var> applied to the value being matched returns a
+value that matches <var>upattern</var>.  This is like the <code>pred</code>
+UPattern, except that it tests the result against <var>UPattern</var>,
+rather than against a boolean truth value.  The <var>function</var> call can
+use one of the forms described below.
+</p></dd>
+<dt><code>(or <var>upattern1</var> <var>upattern2</var>&hellip;)</code></dt>
+<dd><p>Matches if one the argument UPatterns matches.  As soon as the first
+matching UPattern is found, the rest are not tested.  For this reason,
+if any of the UPatterns let-bind symbols to the matched value, they
+should all bind the same symbols.
+</p></dd>
+<dt><code>(and <var>upattern1</var> <var>upattern2</var>&hellip;)</code></dt>
+<dd><p>Matches if all the argument UPatterns match.
+</p></dd>
+</dl>
+
+<p>The function calls used in the <code>pred</code> and <code>app</code> UPatterns
+can have one of the following forms:
+</p>
+<dl compact="compact">
+<dt>function symbol, like <code>integerp</code></dt>
+<dd><p>In this case, the named function is applied to the value being
+matched.
+</p></dd>
+<dt>lambda-function <code>(lambda (<var>arg</var>) <var>body</var>)</code></dt>
+<dd><p>In this case, the lambda-function is called with one argument, the
+value being matched.
+</p></dd>
+<dt><code>(<var>func</var> <var>args</var>&hellip;)</code></dt>
+<dd><p>This is a function call with <var>n</var> specified arguments; the function
+is called with these <var>n</var> arguments and an additional <var>n</var>+1-th
+argument that is the value being matched.
+</p></dd>
+</dl>
+
+<p>Here&rsquo;s an illustrative example of using UPatterns:
+</p>
+<div class="example">
+<pre class="example">(pcase (get-return-code x)
+  ('success       (message &quot;Done!&quot;))
+  ('would-block   (message &quot;Sorry, can't do it now&quot;))
+  ('read-only     (message &quot;The shmliblick is read-only&quot;))
+  ('access-denied (message &quot;You do not have the needed rights&quot;))
+  (code           (message &quot;Unknown return code %S&quot; code)))
+</pre></div>
+
+<p>In addition, you can use backquoted patterns that are more powerful.
+They allow matching the value of the <var>expression</var> that is the
+first argument of <code>pcase</code> against specifications of its
+<em>structure</em>.  For example, you can specify that the value must be
+a list of 2 elements whose first element is a specific string and the
+second element is any value with a backquoted pattern like
+<code>`(&quot;first&quot; ,second-elem)</code>.
+</p>
+<p>Backquoted patterns have the form <code>`<var>qpattern</var></code> where
+<var>qpattern</var> can have the following forms:
+</p>
+<dl compact="compact">
+<dt><code>(<var>qpattern1</var> . <var>qpattern2</var>)</code></dt>
+<dd><p>Matches if the value being matched is a cons cell whose <code>car</code>
+matches <var>qpattern1</var> and whose <code>cdr</code> matches <var>qpattern2</var>.
+This readily generalizes to backquoted lists as in
+<code>(<var>qpattern1</var>&nbsp;<var>qpattern2</var>&nbsp;&hellip;)</code><!-- /@w -->.
+</p></dd>
+<dt><code>[<var>qpattern1</var> <var>qpattern2</var> &hellip; <var>qpatternm</var>]</code></dt>
+<dd><p>Matches if the value being matched is a vector of length <var>m</var> whose
+<code>0</code>..<code>(<var>m</var>-1)</code>th elements match <var>qpattern1</var>,
+<var>qpattern2</var> &hellip; <var>qpatternm</var>, respectively.
+</p></dd>
+<dt><code><var>atom</var></code></dt>
+<dd><p>Matches if corresponding element of the value being matched is
+<code>equal</code> to the specified <var>atom</var>.
+</p></dd>
+<dt><code>,<var>upattern</var></code></dt>
+<dd><p>Matches if the corresponding element of the value being matched
+matches the specified <var>upattern</var>.
+</p></dd>
+</dl>
+
+<p>Note that uses of QPatterns can be expressed using only UPatterns, as
+QPatterns are implemented on top of UPatterns using
+<code>pcase-defmacro</code>, described below.  However, using QPatterns will
+in many cases lead to a more readable code.
+</p>
+</dd></dl>
+
+<p>Here is an example of using <code>pcase</code> to implement a simple
+interpreter for a little expression language (note that this example
+requires lexical binding, see <a href="Lexical-Binding.html#Lexical-Binding">Lexical Binding</a>):
+</p>
+<div class="example">
+<pre class="example">(defun evaluate (exp env)
+  (pcase exp
+    (`(add ,x ,y)       (+ (evaluate x env) (evaluate y env)))
+    (`(call ,fun ,arg)  (funcall (evaluate fun env) (evaluate arg env)))
+    (`(fn ,arg ,body)   (lambda (val)
+                          (evaluate body (cons (cons arg val) env))))
+    ((pred numberp)     exp)
+    ((pred symbolp)     (cdr (assq exp env)))
+    (_                  (error &quot;Unknown expression %S&quot; exp))))
+</pre></div>
+
+<p>Here <code>`(add ,x ,y)</code> is a pattern that checks that <code>exp</code> is a
+three-element list starting with the literal symbol <code>add</code>, then
+extracts the second and third elements and binds them to the variables
+<code>x</code> and <code>y</code>.  Then it evaluates <code>x</code> and <code>y</code> and
+adds the results.  The <code>call</code> and <code>fn</code> patterns similarly
+implement two flavors of function calls.  <code>(pred numberp)</code> is a
+pattern that simply checks that <code>exp</code> is a number and if so,
+evaluates it.  <code>(pred symbolp)</code> matches symbols, and returns
+their association.  Finally, <code>_</code> is the catch-all pattern that
+matches anything, so it&rsquo;s suitable for reporting syntax errors.
+</p>
+<p>Here are some sample programs in this small language, including their
+evaluation results:
+</p>
+<div class="example">
+<pre class="example">(evaluate '(add 1 2) nil)                 ;=&gt; 3
+(evaluate '(add x y) '((x . 1) (y . 2)))  ;=&gt; 3
+(evaluate '(call (fn x (add 1 x)) 2) nil) ;=&gt; 3
+(evaluate '(sub 1 2) nil)                 ;=&gt; error
+</pre></div>
+
+<p>Additional UPatterns can be defined using the <code>pcase-defmacro</code>
+macro.
+</p>
+<dl>
+<dt><a name="index-pcase_002ddefmacro"></a>Macro: <strong>pcase-defmacro</strong> <em>name args &amp;rest body</em></dt>
+<dd><p>Define a new kind of UPattern for <code>pcase</code>.  The new UPattern will
+be invoked as <code>(<var>name</var> <var>actual-args</var>)</code>.  The <var>body</var>
+should describe how to rewrite the UPattern <var>name</var> into some other
+UPattern.  The rewriting will be the result of evaluating <var>body</var>
+in an environment where <var>args</var> are bound to <var>actual-args</var>.
+</p></dd></dl>
+
+<hr>
+<div class="header">
+<p>
+Up: <a href="Conditionals.html#Conditionals" accesskey="u" rel="up">Conditionals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 
-<h4 class="subsection">10.2.1 Pattern matching case statement</h4>
 
-<p><a name="index-pcase-646"></a><a name="index-pattern-matching-647"></a>
-To compare a particular value against various possible cases, the macro
-<code>pcase</code> can come handy.  It takes the following form:
 
-<pre class="example">     (pcase <var>exp</var> <var>branch</var>1 <var>branch</var>2 <var>branch</var>3 ...)
-</pre>
-   <p>where each <var>branch</var> takes the form <code>(</code><var>upattern</var>
-<var>body-forms</var><code>...)</code>.
-
-   <p>It will first evaluate <var>exp</var> and then compare the value against each
-<var>upattern</var> to see which <var>branch</var> to use, after which it will run the
-corresponding <var>body-forms</var>.  A common use case is to distinguish
-between a few different constant values:
-
-<pre class="example">     (pcase (get-return-code x)
-       (`success       (message "Done!"))
-       (`would-block   (message "Sorry, can't do it now"))
-       (`read-only     (message "The shmliblick is read-only"))
-       (`access-denied (message "You do not have the needed rights"))
-       (code           (message "Unknown return code %S" code)))
-</pre>
-   <p>In the last clause, <code>code</code> is a variable that gets bound to the value that
-was returned by <code>(get-return-code x)</code>.
-
-   <p>To give a more complex example, a simple interpreter for a little
-expression language could look like (note that this example requires
-lexical binding):
-
-<pre class="example">     (defun evaluate (exp env)
-       (pcase exp
-         (`(add ,x ,y)       (+ (evaluate x env) (evaluate y env)))
-         (`(call ,fun ,arg)  (funcall (evaluate fun env) (evaluate arg env)))
-         (`(fn ,arg ,body)   (lambda (val)
-                               (evaluate body (cons (cons arg val) env))))
-         ((pred numberp)     exp)
-         ((pred symbolp)     (cdr (assq exp env)))
-         (_                  (error "Unknown expression %S" exp))))
-</pre>
-   <p>Where <code>`(add ,x ,y)</code> is a pattern that checks that <code>exp</code> is a three
-element list starting with the symbol <code>add</code>, then extracts the second and
-third elements and binds them to the variables <code>x</code> and <code>y</code>. 
-<code>(pred numberp)</code> is a pattern that simply checks that <code>exp</code>
-is a number, and <code>_</code> is the catch-all pattern that matches anything.
-
-   <p>Here are some sample programs including their evaluation results:
-
-<pre class="example">     (evaluate '(add 1 2) nil)                 ;=&gt; 3
-     (evaluate '(add x y) '((x . 1) (y . 2)))  ;=&gt; 3
-     (evaluate '(call (fn x (add 1 x)) 2) nil) ;=&gt; 3
-     (evaluate '(sub 1 2) nil)                 ;=&gt; error
-</pre>
-   <p>There are two kinds of patterns involved in <code>pcase</code>, called
-<em>U-patterns</em> and <em>Q-patterns</em>.  The <var>upattern</var> mentioned above
-are U-patterns and can take the following forms:
-
-     <dl>
-<dt><code>`</code><var>qpattern</var><dd>This is one of the most common form of patterns.  The intention is to mimic the
-backquote macro: this pattern matches those values that could have been built
-by such a backquote expression.  Since we're pattern matching rather than
-building a value, the unquote does not indicate where to plug an expression,
-but instead it lets one specify a U-pattern that should match the value at
-that location.
-
-     <p>More specifically, a Q-pattern can take the following forms:
-          <dl>
-<dt><code>(</code><var>qpattern1</var><code> . </code><var>qpattern2</var><code>)</code><dd>This pattern matches any cons cell whose <code>car</code> matches <var>qpattern1</var> and
-whose <code>cdr</code> matches <var>qpattern2</var>. 
-<br><dt><code>[</code><var>qpattern1</var> <var>qpattern2</var><code> ... </code><var>qpatternm</var><code>]</code><dd>This pattern matches a vector of length <var>M</var> whose 0..(<var>M</var>-1)th
-elements match <var>qpattern1</var>, <var>qpattern2</var> <small class="dots">...</small> <var>qpatternm</var>,
-respectively. 
-<br><dt><var>atom</var><dd>This pattern matches any atom <code>equal</code> to <var>atom</var>. 
-<br><dt><code>,</code><var>upattern</var><dd>This pattern matches any object that matches the <var>upattern</var>. 
-</dl>
-
-     <br><dt><var>symbol</var><dd>A mere symbol in a U-pattern matches anything, and additionally let-binds this
-symbol to the value that it matched, so that you can later refer to it, either
-in the <var>body-forms</var> or also later in the pattern. 
-<br><dt><code>_</code><dd>This so-called <em>don't care</em> pattern matches anything, like the previous
-one, but unlike symbol patterns it does not bind any variable. 
-<br><dt><code>(pred </code><var>pred</var><code>)</code><dd>This pattern matches if the function <var>pred</var> returns non-<code>nil</code> when
-called with the object being matched. 
-<br><dt><code>(or </code><var>upattern1</var> <var>upattern2</var><code>...)</code><dd>This pattern matches as soon as one of the argument patterns succeeds. 
-All argument patterns should let-bind the same variables. 
-<br><dt><code>(and </code><var>upattern1</var> <var>upattern2</var><code>...)</code><dd>This pattern matches only if all the argument patterns succeed. 
-<br><dt><code>(guard </code><var>exp</var><code>)</code><dd>This pattern ignores the object being examined and simply succeeds if <var>exp</var>
-evaluates to non-<code>nil</code> and fails otherwise.  It is typically used inside
-an <code>and</code> pattern.  For example, <code>(and x (guard (&lt; x 10)))</code>
-is a pattern which matches any number smaller than 10 and let-binds it to
-the variable <code>x</code>. 
-</dl>
-
-   </body></html>
-
+</body>
+</html>

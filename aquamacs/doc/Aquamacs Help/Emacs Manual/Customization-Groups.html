@@ -1,96 +1,143 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Customization Groups - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Customization Groups</title>
+
+<meta name="description" content="GNU Emacs Manual: Customization Groups">
+<meta name="keywords" content="GNU Emacs Manual: Customization Groups">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Easy-Customization.html#Easy-Customization" title="Easy Customization">
-<link rel="next" href="Browsing-Custom.html#Browsing-Custom" title="Browsing Custom">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Easy-Customization.html#Easy-Customization" rel="up" title="Easy Customization">
+<link href="Browsing-Custom.html#Browsing-Custom" rel="next" title="Browsing Custom">
+<link href="Easy-Customization.html#Easy-Customization" rel="prev" title="Easy Customization">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Customization-Groups"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Browsing-Custom.html#Browsing-Custom">Browsing Custom</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Easy-Customization.html#Easy-Customization">Easy Customization</a>
+Next: <a href="Browsing-Custom.html#Browsing-Custom" accesskey="n" rel="next">Browsing Custom</a>, Up: <a href="Easy-Customization.html#Easy-Customization" accesskey="u" rel="up">Easy Customization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 <hr>
+<a name="Customization-Groups-1"></a>
+<h4 class="subsection">51.1.1 Customization Groups</h4>
+<a name="index-customization-groups"></a>
+
+<p>Customization settings are organized into <em>customization
+groups</em>.  These groups are collected into bigger groups, all the way
+up to a master group called <code>Emacs</code>.
+</p>
+<p><kbd>M-x customize</kbd> creates a customization buffer that shows the
+top-level <code>Emacs</code> group.  It looks like this, in part:
+</p>
+<div class="smallexample">
+<pre class="smallexample">For help, see [Easy Customization] in the [Emacs manual].
+
+________________________________________ [ Search ]
+
+ Operate on all settings in this buffer:
+ [ Revert... ] [ Apply ] [ Apply and Save ]
+
+
+Emacs group: Customization of the One True Editor.
+      [State]: visible group members are all at standard values.
+      See also [Manual].
+
+[Editing] : Basic text editing facilities.
+[Convenience] : Convenience features for faster editing.
+
+<var>more second-level groups</var>
+</pre></div>
+
+<p>The main part of this buffer shows the &lsquo;<samp>Emacs</samp>&rsquo; customization
+group, which contains several other groups (&lsquo;<samp>Editing</samp>&rsquo;,
+&lsquo;<samp>Convenience</samp>&rsquo;, etc.).  The contents of those groups are not
+listed here, only one line of documentation each.
+</p>
+<p>The <em>state</em> of the group indicates whether setting in that group
+has been edited, set or saved.  See <a href="Changing-a-Variable.html#Changing-a-Variable">Changing a Variable</a>.
+</p>
+<a name="index-editable-fields-_0028customization-buffer_0029"></a>
+<a name="index-buttons-_0028customization-buffer_0029"></a>
+<a name="index-links-_0028customization-buffer_0029"></a>
+<p>Most of the customization buffer is read-only, but it includes some
+<em>editable fields</em> that you can edit.  For example, at the top of
+the customization buffer is an editable field for searching for
+settings (see <a href="Browsing-Custom.html#Browsing-Custom">Browsing Custom</a>).  There are also <em>buttons</em> and
+<em>links</em>, which you can activate by either clicking with the mouse,
+or moving point there and typing <tt class="key">RET</tt>.  For example, the group
+names like &lsquo;<samp>[Editing]</samp>&rsquo; are links; activating one of these links
+brings up the customization buffer for that group.
+</p>
+<a name="index-TAB-_0028customization-buffer_0029"></a>
+<a name="index-S_002dTAB-_0028customization-buffer_0029"></a>
+<a name="index-widget_002dforward"></a>
+<a name="index-widget_002dbackward"></a>
+<p>In the customizable buffer, you can type <tt class="key">TAB</tt>
+(<code>widget-forward</code>) to move forward to the next button or editable
+field.  <kbd>S-<span class="key">TAB</span></kbd> (<code>widget-backward</code>) moves back to the
+previous button or editable field.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Browsing-Custom.html#Browsing-Custom" accesskey="n" rel="next">Browsing Custom</a>, Up: <a href="Easy-Customization.html#Easy-Customization" accesskey="u" rel="up">Easy Customization</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
 
-<h4 class="subsection">49.1.1 Customization Groups</h4>
 
-<p><a name="index-customization-groups-4468"></a>
-  Customization settings are organized into <dfn>customization
-groups</dfn>.  These groups are collected into bigger groups, all the way
-up to a master group called <code>Emacs</code>.
 
-   <p><kbd>M-x customize</kbd> creates a customization buffer that shows the
-top-level <code>Emacs</code> group.  It looks like this, in part:
-
-<!-- we want the buffer example to all be on one page, but unfortunately -->
-<!-- that's quite a bit of text, so force all space to the bottom. -->
-<!-- @page -->
-<pre class="smallexample">     For help, see [Easy Customization] in the [Emacs manual].
-     
-     ________________________________________ [ Search ]
-     
-      Operate on all settings in this buffer:
-      [ Revert... ] [ Apply ] [ Apply and Save ]
-     
-     
-     Emacs group: Customization of the One True Editor.
-           [State]: visible group members are all at standard values.
-           See also [Manual].
-     
-     [Editing] : Basic text editing facilities.
-     [Convenience] : Convenience features for faster editing.
-     
-     <var>more second-level groups</var>
-</pre>
-   <p class="noindent">The main part of this buffer shows the &lsquo;<samp><span class="samp">Emacs</span></samp>&rsquo; customization
-group, which contains several other groups (&lsquo;<samp><span class="samp">Editing</span></samp>&rsquo;,
-&lsquo;<samp><span class="samp">Convenience</span></samp>&rsquo;, etc.).  The contents of those groups are not
-listed here, only one line of documentation each.
-
-   <p>The <dfn>state</dfn> of the group indicates whether setting in that group
-has been edited, set or saved.  See <a href="Changing-a-Variable.html#Changing-a-Variable">Changing a Variable</a>.
-
-   <p><a name="index-editable-fields-_0028customization-buffer_0029-4469"></a><a name="index-buttons-_0028customization-buffer_0029-4470"></a><a name="index-links-_0028customization-buffer_0029-4471"></a>  Most of the customization buffer is read-only, but it includes some
-<dfn>editable fields</dfn> that you can edit.  For example, at the top of
-the customization buffer is an editable field for searching for
-settings (see <a href="Browsing-Custom.html#Browsing-Custom">Browsing Custom</a>).  There are also <dfn>buttons</dfn> and
-<dfn>links</dfn>, which you can activate by either clicking with the mouse,
-or moving point there and typing &lt;RET&gt;.  For example, the group
-names like &lsquo;<samp><span class="samp">[Editing]</span></samp>&rsquo; are links; activating one of these links
-brings up the customization buffer for that group.
-
-   <p><a name="index-TAB-_0040r_007b_0028customization-buffer_0029_007d-4472"></a><a name="index-S_002dTAB-_0040r_007b_0028customization-buffer_0029_007d-4473"></a><a name="index-widget_002dforward-4474"></a><a name="index-widget_002dbackward-4475"></a>  In the customizable buffer, you can type &lt;TAB&gt;
-(<code>widget-forward</code>) to move forward to the next button or editable
-field.  <kbd>S-&lt;TAB&gt;</kbd> (<code>widget-backward</code>) moves back to the
-previous button or editable field.
-
-   </body></html>
-
+</body>
+</html>

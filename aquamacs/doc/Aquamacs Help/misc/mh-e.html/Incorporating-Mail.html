@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is version 8.6 of The MH-E
+Manual, last updated 2016-04-29.
+
+Copyright (C) 1995, 2001-2003, 2005-2016 Free Software
+Foundation, Inc.
+
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of either:
+
+a. the GNU Free Documentation License, Version 1.3 or any later version
+published by the Free Software Foundation; with no Invariant Sections,
+with the Front-Cover Texts being "A GNU Manual," and with the
+Back-Cover Texts as in (a) below. A copy of the license is included in
+the section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual."
+
+b. the GNU General Public License as published by the Free Software
+Foundation; either version 3, or (at your option) any later version. A
+copy of the license is included in the section entitled "GNU General
+Public License."
+ -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>The MH-E Manual: Incorporating Mail</title>
+
+<meta name="description" content="The MH-E Manual: Incorporating Mail">
+<meta name="keywords" content="The MH-E Manual: Incorporating Mail">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Reading-Mail.html#Reading-Mail" rel="next" title="Reading Mail">
+<link href="Folder-Selection.html#Folder-Selection" rel="prev" title="Folder Selection">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Incorporating-Mail"></a>
+<div class="header">
+<p>
+Next: <a href="Reading-Mail.html#Reading-Mail" accesskey="n" rel="next">Reading Mail</a>, Previous: <a href="Using-This-Manual.html#Using-This-Manual" accesskey="p" rel="prev">Using This Manual</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Incorporating-Your-Mail"></a>
+<h2 class="chapter">5 Incorporating Your Mail</h2>
+
+<a name="index-Folder-menu"></a>
+<a name="index-incorporating"></a>
+<a name="index-menu_002c-Folder"></a>
+
+<p>This chapter talks about getting mail from your system mailbox into
+your MH &lsquo;<samp>+inbox</samp>&rsquo; folder. The following command accomplishes that
+and is found in the &lsquo;<samp>Folder</samp>&rsquo; menu.
+</p>
+<dl compact="compact">
+<dd><a name="index-Folder-_003e-Incorporate-New-Mail-menu-item"></a>
+<a name="index-menu-item_002c-Folder-_003e-Incorporate-New-Mail"></a>
+<a name="index-mh_002dinc_002dfolder"></a>
+<a name="index-i-1"></a>
+</dd>
+<dt><kbd>i</kbd></dt>
+<dd><p>Incorporate new mail into a folder (<code>mh-inc-folder</code>).
+</p></dd>
+</dl>
+
+<a name="index-mh_002dinc-customization-group"></a>
+<a name="index-customization-group_002c-mh_002dinc"></a>
+
+<p>The following options in the &lsquo;<samp>mh-inc</samp>&rsquo; customization group are
+used.
+</p>
+<dl compact="compact">
+<dt><code>mh-inc-prog</code>
+<a name="index-mh_002dinc_002dprog"></a>
+</dt>
+<dd><p>Program to incorporate mail (default: <code>&quot;inc&quot;</code>).
+</p></dd>
+<dt><code>mh-inc-spool-list</code>
+<a name="index-mh_002dinc_002dspool_002dlist"></a>
+</dt>
+<dd><p>Alternate spool files (default: <code>nil</code>).
+</p></dd>
+</dl>
+
+<p>The following hook is available.
+</p>
+<dl compact="compact">
+<dd><a name="index-mh_002dinc_002dfolder-1"></a>
+</dd>
+<dt><code>mh-inc-folder-hook</code>
+<a name="index-mh_002dinc_002dfolder_002dhook"></a>
+</dt>
+<dd><p>Hook run by <code>mh-inc-folder</code> after incorporating mail into a
+folder (default: <code>nil</code>).
+</p></dd>
+</dl>
+
+<a name="index-_002binbox"></a>
+<a name="index-mh_002dinc_002dfolder-2"></a>
+<a name="index-i-2"></a>
+
+<p>If at any time you receive new mail, incorporate the new mail into
+your &lsquo;<samp>+inbox</samp>&rsquo; buffer with <kbd>i</kbd> (<code>mh-inc-folder</code>). Note
+that <kbd>i</kbd> will display the &lsquo;<samp>+inbox</samp>&rsquo; buffer, even if there
+isn&rsquo;t any new mail. You can incorporate mail from any file into the
+current folder by specifying a prefix argument; you&rsquo;ll be prompted for
+the name of the file to use as well as the destination folder (for
+example, <kbd>C-u i ~/mbox <span class="key">RET</span> +tmp <span class="key">RET</span></kbd>).
+</p>
+<a name="index-_002eemacs-2"></a>
+<a name="index-Emacs_002c-notification-of-new-mail"></a>
+<a name="index-files_002c-_002eemacs-2"></a>
+<a name="index-new-mail"></a>
+<a name="index-notification-of-new-mail"></a>
+
+<p>Emacs can notify you when you have new mail by displaying &lsquo;<samp>Mail</samp>&rsquo;
+in the mode line. To enable this behavior, and to have a clock in the
+mode line as well, add the following to <samp>~/.emacs</samp>:
+</p>
+<a name="index-display_002dtime"></a>
+
+<div class="smalllisp">
+<pre class="smalllisp">(display-time)
+</pre></div>
+
+<a name="index-inc-1"></a>
+<a name="index-incorporating-1"></a>
+<a name="index-MH-commands_002c-inc-1"></a>
+<a name="index-mh_002dinc_002dprog-1"></a>
+<a name="index-mh_002dprogs-1"></a>
+
+<p>The name of the program that incorporates new mail is stored in
+<code>mh-inc-prog</code>; it is <code>&quot;inc&quot;</code> by default. This program
+generates a one-line summary for each of the new messages. Unless it
+is an absolute pathname, the file is assumed to be in the
+<code>mh-progs</code> directory (see <a href="Getting-Started.html#Getting-Started">Getting Started</a>). You may also link
+a file to <code>inc</code> that uses a different format (see
+&lsquo;<samp>mh-profile</samp>&rsquo;(5), and sections
+<a href="http://rand-mh.sourceforge.net/book/mh/reapre.html">Reading Mail: inc show next
+prev</a> and <a href="http://rand-mh.sourceforge.net/book/mh/mhstr.html">MH Format Strings</a> in
+the MH book). You&rsquo;ll then need to modify several variables
+appropriately (see <a href="Scan-Line-Formats.html#Scan-Line-Formats">Scan Line Formats</a>).
+</p>
+<a name="index-mh_002dinc_002dspool_002dlist-1"></a>
+
+<p>You can use the <code>mh-inc-spool-list</code> variable to direct MH-E to
+retrieve mail from arbitrary spool files other than your system
+mailbox, file it in folders other than your &lsquo;<samp>+inbox</samp>&rsquo;, and assign
+key bindings to incorporate this mail.
+</p>
+<a name="index-procmail"></a>
+<a name="index-_002eprocmailrc"></a>
+<a name="index-Unix-commands_002c-procmail"></a>
+<a name="index-files_002c-_002eprocmailrc"></a>
+
+<p>Suppose you are subscribed to the <i>mh-e-devel</i> mailing list and you
+use <code>procmail</code> to filter this mail into <samp>~/mail/mh-e</samp>
+with the following recipe in <samp>.procmailrc</samp>:
+</p>
+<div class="smallexample">
+<pre class="smallexample">PATH=$PATH:/usr/bin/mh
+MAILDIR=$HOME/`mhparam Path`
+:0:
+* ^From mh-e-devel-admin@stop.mail-abuse.org
+mh-e
+</pre></div>
+
+<a name="index-mh_002dinc_002dspool_002d_002a"></a>
+<a name="index-I-_002a"></a>
+
+<p>In order to incorporate <samp>~/mail/mh-e</samp> into &lsquo;<samp>+mh-e</samp>&rsquo; with an
+<kbd>I m</kbd> (<code>mh-inc-spool-mh-e</code>) command, customize this option,
+and click on the &lsquo;<samp>INS</samp>&rsquo; button. Enter a &lsquo;<samp>Spool File</samp>&rsquo; of
+&lsquo;<samp>~/mail/mh-e</samp>&rsquo;, a &lsquo;<samp>Folder</samp>&rsquo; of &lsquo;<samp>mh-e</samp>&rsquo;, and a &lsquo;<samp>Key
+Binding</samp>&rsquo; of &lsquo;<samp>m</samp>&rsquo;.
+</p>
+<a name="index-emacsclient"></a>
+<a name="index-gnuclient"></a>
+<a name="index-xbuffy"></a>
+<a name="index-gnuserv"></a>
+<a name="index-Unix-commands_002c-emacsclient"></a>
+<a name="index-Unix-commands_002c-gnuclient"></a>
+<a name="index-Unix-commands_002c-xbuffy"></a>
+
+<p>You can use <code>xbuffy</code> to automate the incorporation of this
+mail using the Emacs 23 command <code>emacsclient</code> as follows:
+</p>
+<div class="smallexample">
+<pre class="smallexample">box ~/mail/mh-e
+    title mh-e
+    origMode
+    polltime 10
+    headertime 0
+    command emacsclient --eval '(mh-inc-spool-mh-e)'
+</pre></div>
+
+<p>In XEmacs, the command <code>gnuclient</code> is used in a similar
+fashion.
+</p>
+<a name="index-mh_002dinc_002dfolder-3"></a>
+<a name="index-i-3"></a>
+<a name="index-mh_002dinc_002dfolder_002dhook-1"></a>
+
+<p>You can set the hook <code>mh-inc-folder-hook</code>, which is called after
+new mail is incorporated by the <kbd>i</kbd> (<code>mh-inc-folder</code>)
+command. A good use of this hook is to rescan the whole folder either
+after running <kbd>M-x mh-rmail</kbd> the first time or when you&rsquo;ve changed
+the message numbers from outside of MH-E.
+</p>
+<a name="index-mh_002dexecute_002dcommands"></a>
+<a name="index-mh_002drescan_002dfolder_002c-example"></a>
+<a name="index-mh_002dshow_002c-example"></a>
+<a name="index-mh_002dinc_002dfolder_002dhook_002c-example"></a>
+
+<div class="smalllisp">
+<pre class="smalllisp">(defun my-mh-inc-folder-hook ()
+  &quot;Hook to rescan folder after incorporating mail.&quot;
+  (if (buffer-modified-p)            ; <span class="roman">if outstanding refiles and deletes,</span>
+      (mh-execute-commands))         ;   <span class="roman">carry them out</span>
+  (mh-rescan-folder)                 ; <span class="roman">synchronize with +inbox</span>
+  (mh-show))                         ; <span class="roman">show the current message</span>
+
+(add-hook 'mh-inc-folder-hook 'my-mh-inc-folder-hook)
+
+<i>Rescan folder after incorporating new mail via mh-inc-folder-hook</i>
+
+</pre></div>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="Reading-Mail.html#Reading-Mail" accesskey="n" rel="next">Reading Mail</a>, Previous: <a href="Using-This-Manual.html#Using-This-Manual" accesskey="p" rel="prev">Using This Manual</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

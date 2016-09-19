@@ -1,109 +1,150 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Image Cache - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Image Cache</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Image Cache">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Image Cache">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Images.html#Images" title="Images">
-<link rel="prev" href="Multi_002dFrame-Images.html#Multi_002dFrame-Images" title="Multi-Frame Images">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Images.html#Images" rel="up" title="Images">
+<link href="Xwidgets.html#Xwidgets" rel="next" title="Xwidgets">
+<link href="Multi_002dFrame-Images.html#Multi_002dFrame-Images" rel="prev" title="Multi-Frame Images">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Image-Cache"></a>
+<div class="header">
 <p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Multi_002dFrame-Images.html#Multi_002dFrame-Images">Multi-Frame Images</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Images.html#Images">Images</a>
-<hr>
+Previous: <a href="Multi_002dFrame-Images.html#Multi_002dFrame-Images" accesskey="p" rel="prev">Multi-Frame Images</a>, Up: <a href="Images.html#Images" accesskey="u" rel="up">Images</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Image-Cache-1"></a>
 <h4 class="subsection">37.17.11 Image Cache</h4>
+<a name="index-image-cache"></a>
 
-<p><a name="index-image-cache-4372"></a>
-  Emacs caches images so that it can display them again more
+<p>Emacs caches images so that it can display them again more
 efficiently.  When Emacs displays an image, it searches the image
 cache for an existing image specification <code>equal</code> to the desired
 specification.  If a match is found, the image is displayed from the
 cache.  Otherwise, Emacs loads the image normally.
-
-<div class="defun">
-&mdash; Function: <b>image-flush</b><var> spec &amp;optional frame<a name="index-image_002dflush-4373"></a></var><br>
-<blockquote><p>This function removes the image with specification <var>spec</var> from the
+</p>
+<dl>
+<dt><a name="index-image_002dflush"></a>Function: <strong>image-flush</strong> <em>spec &amp;optional frame</em></dt>
+<dd><p>This function removes the image with specification <var>spec</var> from the
 image cache of frame <var>frame</var>.  Image specifications are compared
 using <code>equal</code>.  If <var>frame</var> is <code>nil</code>, it defaults to the
 selected frame.  If <var>frame</var> is <code>t</code>, the image is flushed on
 all existing frames.
-
-        <p>In Emacs's current implementation, each graphical terminal possesses an
+</p>
+<p>In Emacs&rsquo;s current implementation, each graphical terminal possesses an
 image cache, which is shared by all the frames on that terminal
 (see <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>).  Thus, refreshing an image in one frame
-also refreshes it in all other frames on the same terminal. 
-</p></blockquote></div>
+also refreshes it in all other frames on the same terminal.
+</p></dd></dl>
 
-   <p>One use for <code>image-flush</code> is to tell Emacs about a change in an
+<p>One use for <code>image-flush</code> is to tell Emacs about a change in an
 image file.  If an image specification contains a <code>:file</code>
-property, the image is cached based on the file's contents when the
+property, the image is cached based on the file&rsquo;s contents when the
 image is first displayed.  Even if the file subsequently changes,
 Emacs continues displaying the old version of the image.  Calling
 <code>image-flush</code> flushes the image from the cache, forcing Emacs to
 re-read the file the next time it needs to display that image.
-
-   <p>Another use for <code>image-flush</code> is for memory conservation.  If
+</p>
+<p>Another use for <code>image-flush</code> is for memory conservation.  If
 your Lisp program creates a large number of temporary images over a
 period much shorter than <code>image-cache-eviction-delay</code> (see
 below), you can opt to flush unused images yourself, instead of
 waiting for Emacs to do it automatically.
-
-<div class="defun">
-&mdash; Function: <b>clear-image-cache</b><var> &amp;optional filter<a name="index-clear_002dimage_002dcache-4374"></a></var><br>
-<blockquote><p>This function clears an image cache, removing all the images stored in
+</p>
+<dl>
+<dt><a name="index-clear_002dimage_002dcache"></a>Function: <strong>clear-image-cache</strong> <em>&amp;optional filter</em></dt>
+<dd><p>This function clears an image cache, removing all the images stored in
 it.  If <var>filter</var> is omitted or <code>nil</code>, it clears the cache for
 the selected frame.  If <var>filter</var> is a frame, it clears the cache
 for that frame.  If <var>filter</var> is <code>t</code>, all image caches are
 cleared.  Otherwise, <var>filter</var> is taken to be a file name, and all
 images associated with that file name are removed from all image
-caches. 
-</p></blockquote></div>
+caches.
+</p></dd></dl>
 
-   <p>If an image in the image cache has not been displayed for a specified
+<p>If an image in the image cache has not been displayed for a specified
 period of time, Emacs removes it from the cache and frees the
 associated memory.
-
-<div class="defun">
-&mdash; Variable: <b>image-cache-eviction-delay</b><var><a name="index-image_002dcache_002deviction_002ddelay-4375"></a></var><br>
-<blockquote><p>This variable specifies the number of seconds an image can remain in
+</p>
+<dl>
+<dt><a name="index-image_002dcache_002deviction_002ddelay"></a>Variable: <strong>image-cache-eviction-delay</strong></dt>
+<dd><p>This variable specifies the number of seconds an image can remain in
 the cache without being displayed.  When an image is not displayed for
 this length of time, Emacs removes it from the image cache.
-
-        <p>Under some circumstances, if the number of images in the cache grows
+</p>
+<p>Under some circumstances, if the number of images in the cache grows
 too large, the actual eviction delay may be shorter than this.
-
-        <p>If the value is <code>nil</code>, Emacs does not remove images from the cache
+</p>
+<p>If the value is <code>nil</code>, Emacs does not remove images from the cache
 except when you explicitly clear it.  This mode can be useful for
-debugging. 
-</p></blockquote></div>
+debugging.
+</p></dd></dl>
 
-   </body></html>
+<hr>
+<div class="header">
+<p>
+Previous: <a href="Multi_002dFrame-Images.html#Multi_002dFrame-Images" accesskey="p" rel="prev">Multi-Frame Images</a>, Up: <a href="Images.html#Images" accesskey="u" rel="up">Images</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
+
+
+</body>
+</html>

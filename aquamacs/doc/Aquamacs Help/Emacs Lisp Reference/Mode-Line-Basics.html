@@ -1,55 +1,88 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Mode Line Basics - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Mode Line Basics</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Mode Line Basics">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Mode Line Basics">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Mode-Line-Format.html#Mode-Line-Format" title="Mode Line Format">
-<link rel="next" href="Mode-Line-Data.html#Mode-Line-Data" title="Mode Line Data">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Mode-Line-Format.html#Mode-Line-Format" rel="up" title="Mode Line Format">
+<link href="Mode-Line-Data.html#Mode-Line-Data" rel="next" title="Mode Line Data">
+<link href="Mode-Line-Format.html#Mode-Line-Format" rel="prev" title="Mode Line Format">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Mode-Line-Basics"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Mode-Line-Data.html#Mode-Line-Data">Mode Line Data</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Mode-Line-Format.html#Mode-Line-Format">Mode Line Format</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Mode-Line-Basics"></a>
+<div class="header">
+<p>
+Next: <a href="Mode-Line-Data.html#Mode-Line-Data" accesskey="n" rel="next">Mode Line Data</a>, Up: <a href="Mode-Line-Format.html#Mode-Line-Format" accesskey="u" rel="up">Mode Line Format</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Mode-Line-Basics-1"></a>
 <h4 class="subsection">22.4.1 Mode Line Basics</h4>
 
 <p>The contents of each mode line are specified by the buffer-local
 variable <code>mode-line-format</code> (see <a href="Mode-Line-Top.html#Mode-Line-Top">Mode Line Top</a>).  This variable
-holds a <dfn>mode line construct</dfn>: a template that controls what is
-displayed on the buffer's mode line.  The value of
-<code>header-line-format</code> specifies the buffer's header line in the same
+holds a <em>mode line construct</em>: a template that controls what is
+displayed on the buffer&rsquo;s mode line.  The value of
+<code>header-line-format</code> specifies the buffer&rsquo;s header line in the same
 way.  All windows for the same buffer use the same
 <code>mode-line-format</code> and <code>header-line-format</code>.
-
-   <p>For efficiency, Emacs does not continuously recompute each window's
+</p>
+<p>For efficiency, Emacs does not continuously recompute each window&rsquo;s
 mode line and header line.  It does so when circumstances appear to call
 for it&mdash;for instance, if you change the window configuration, switch
 buffers, narrow or widen the buffer, scroll, or modify the buffer.  If
@@ -58,20 +91,23 @@ you alter any of the variables referenced by <code>mode-line-format</code> or
 data structures that affect how text is displayed (see <a href="Display.html#Display">Display</a>), you
 should use the function <code>force-mode-line-update</code> to update the
 display.
-
-<div class="defun">
-&mdash; Function: <b>force-mode-line-update</b><var> &amp;optional all<a name="index-force_002dmode_002dline_002dupdate-1885"></a></var><br>
-<blockquote><p>This function forces Emacs to update the current buffer's mode line and
+</p>
+<dl>
+<dt><a name="index-force_002dmode_002dline_002dupdate"></a>Function: <strong>force-mode-line-update</strong> <em>&amp;optional all</em></dt>
+<dd><p>This function forces Emacs to update the current buffer&rsquo;s mode line and
 header line, based on the latest values of all relevant variables,
 during its next redisplay cycle.  If the optional argument <var>all</var> is
 non-<code>nil</code>, it forces an update for all mode lines and header lines.
+</p>
+<p>This function also forces an update of the menu bar and frame title.
+</p></dd></dl>
 
-        <p>This function also forces an update of the menu bar and frame title. 
-</p></blockquote></div>
-
-   <p>The selected window's mode line is usually displayed in a different
-color using the face <code>mode-line</code>.  Other windows' mode lines appear
+<p>The selected window&rsquo;s mode line is usually displayed in a different
+color using the face <code>mode-line</code>.  Other windows&rsquo; mode lines appear
 in the face <code>mode-line-inactive</code> instead.  See <a href="Faces.html#Faces">Faces</a>.
+</p>
 
-   </body></html>
 
+
+</body>
+</html>

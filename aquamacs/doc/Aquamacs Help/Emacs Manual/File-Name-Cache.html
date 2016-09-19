@@ -1,78 +1,132 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>File Name Cache - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: File Name Cache</title>
+
+<meta name="description" content="GNU Emacs Manual: File Name Cache">
+<meta name="keywords" content="GNU Emacs Manual: File Name Cache">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Files.html#Files" title="Files">
-<link rel="prev" href="Quoted-File-Names.html#Quoted-File-Names" title="Quoted File Names">
-<link rel="next" href="File-Conveniences.html#File-Conveniences" title="File Conveniences">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Files.html#Files" rel="up" title="Files">
+<link href="File-Conveniences.html#File-Conveniences" rel="next" title="File Conveniences">
+<link href="Quoted-File-Names.html#Quoted-File-Names" rel="prev" title="Quoted File Names">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="File-Name-Cache"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="File-Conveniences.html#File-Conveniences">File Conveniences</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Quoted-File-Names.html#Quoted-File-Names">Quoted File Names</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Files.html#Files">Files</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="File-Name-Cache"></a>
+<div class="header">
+<p>
+Next: <a href="File-Conveniences.html#File-Conveniences" accesskey="n" rel="next">File Conveniences</a>, Previous: <a href="Quoted-File-Names.html#Quoted-File-Names" accesskey="p" rel="prev">Quoted File Names</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="File-Name-Cache-1"></a>
 <h3 class="section">18.16 File Name Cache</h3>
 
-<p><a name="index-file-name-caching-1281"></a><a name="index-cache-of-file-names-1282"></a><a name="index-find-1283"></a><a name="index-C_002dTAB-1284"></a><a name="index-file_002dcache_002dminibuffer_002dcomplete-1285"></a>  You can use the <dfn>file name cache</dfn> to make it easy to locate a
-file by name, without having to remember exactly where it is located. 
-When typing a file name in the minibuffer, <kbd>C-&lt;TAB&gt;</kbd>
+<a name="index-file-name-caching"></a>
+<a name="index-cache-of-file-names"></a>
+<a name="index-find"></a>
+<a name="index-C_002dTAB"></a>
+<a name="index-file_002dcache_002dminibuffer_002dcomplete"></a>
+<p>You can use the <em>file name cache</em> to make it easy to locate a
+file by name, without having to remember exactly where it is located.
+When typing a file name in the minibuffer, <kbd>C-<span class="key">TAB</span></kbd>
 (<code>file-cache-minibuffer-complete</code>) completes it using the file
-name cache.  If you repeat <kbd>C-&lt;TAB&gt;</kbd>, that cycles through the
+name cache.  If you repeat <kbd>C-<span class="key">TAB</span></kbd>, that cycles through the
 possible completions of what you had originally typed.  (However, note
-that the <kbd>C-&lt;TAB&gt;</kbd> character cannot be typed on most text
+that the <kbd>C-<span class="key">TAB</span></kbd> character cannot be typed on most text
 terminals.)
-
-   <p>The file name cache does not fill up automatically.  Instead, you
+</p>
+<p>The file name cache does not fill up automatically.  Instead, you
 load file names into the cache using these commands:
-
-   <p><a name="index-file_002dcache_002dadd_002ddirectory-1286"></a>
-     <dl>
-<dt><kbd>M-x file-cache-add-directory &lt;RET&gt; </kbd><var>directory</var><kbd> &lt;RET&gt;</kbd><dd>Add each file name in <var>directory</var> to the file name cache. 
-<br><dt><kbd>M-x file-cache-add-directory-using-find &lt;RET&gt; </kbd><var>directory</var><kbd> &lt;RET&gt;</kbd><dd>Add each file name in <var>directory</var> and all of its nested
-subdirectories to the file name cache. 
-<br><dt><kbd>M-x file-cache-add-directory-using-locate &lt;RET&gt; </kbd><var>directory</var><kbd> &lt;RET&gt;</kbd><dd>Add each file name in <var>directory</var> and all of its nested
-subdirectories to the file name cache, using <samp><span class="command">locate</span></samp> to find
-them all. 
-<br><dt><kbd>M-x file-cache-add-directory-list &lt;RET&gt; </kbd><var>variable</var><kbd> &lt;RET&gt;</kbd><dd>Add each file name in each directory listed in <var>variable</var> to the
+</p>
+<a name="index-file_002dcache_002dadd_002ddirectory"></a>
+<dl compact="compact">
+<dt><kbd>M-x file-cache-add-directory <span class="key">RET</span> <var>directory</var> <span class="key">RET</span></kbd></dt>
+<dd><p>Add each file name in <var>directory</var> to the file name cache.
+</p></dd>
+<dt><kbd>M-x file-cache-add-directory-using-find <span class="key">RET</span> <var>directory</var> <span class="key">RET</span></kbd></dt>
+<dd><p>Add each file name in <var>directory</var> and all of its nested
+subdirectories to the file name cache.
+</p></dd>
+<dt><kbd>M-x file-cache-add-directory-using-locate <span class="key">RET</span> <var>directory</var> <span class="key">RET</span></kbd></dt>
+<dd><p>Add each file name in <var>directory</var> and all of its nested
+subdirectories to the file name cache, using <code>locate</code> to find
+them all.
+</p></dd>
+<dt><kbd>M-x file-cache-add-directory-list <span class="key">RET</span> <var>variable</var> <span class="key">RET</span></kbd></dt>
+<dd><p>Add each file name in each directory listed in <var>variable</var> to the
 file name cache.  <var>variable</var> should be a Lisp variable whose value
-is a list of directory names, like <code>load-path</code>. 
-<br><dt><kbd>M-x file-cache-clear-cache &lt;RET&gt;</kbd><dd>Clear the cache; that is, remove all file names from it. 
+is a list of directory names, like <code>load-path</code>.
+</p></dd>
+<dt><kbd>M-x file-cache-clear-cache <span class="key">RET</span></kbd></dt>
+<dd><p>Clear the cache; that is, remove all file names from it.
+</p></dd>
 </dl>
 
-   <p>The file name cache is not persistent: it is kept and maintained
+<p>The file name cache is not persistent: it is kept and maintained
 only for the duration of the Emacs session.  You can view the contents
 of the cache with the <code>file-cache-display</code> command.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="File-Conveniences.html#File-Conveniences" accesskey="n" rel="next">File Conveniences</a>, Previous: <a href="Quoted-File-Names.html#Quoted-File-Names" accesskey="p" rel="prev">Quoted File Names</a>, Up: <a href="Files.html#Files" accesskey="u" rel="up">Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

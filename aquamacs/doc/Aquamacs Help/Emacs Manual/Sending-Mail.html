@@ -1,91 +1,157 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Sending Mail - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Sending Mail</title>
+
+<meta name="description" content="GNU Emacs Manual: Sending Mail">
+<meta name="keywords" content="GNU Emacs Manual: Sending Mail">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Calendar_002fDiary.html#Calendar_002fDiary" title="Calendar/Diary">
-<link rel="next" href="Rmail.html#Rmail" title="Rmail">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Mail-Format.html#Mail-Format" rel="next" title="Mail Format">
+<link href="Sexp-Diary-Entries.html#Sexp-Diary-Entries" rel="prev" title="Sexp Diary Entries">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Sending-Mail"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Rmail.html#Rmail">Rmail</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Calendar_002fDiary.html#Calendar_002fDiary">Calendar/Diary</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
+Next: <a href="Rmail.html#Rmail" accesskey="n" rel="next">Rmail</a>, Previous: <a href="Calendar_002fDiary.html#Calendar_002fDiary" accesskey="p" rel="prev">Calendar/Diary</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Sending-Mail-1"></a>
 <h2 class="chapter">32 Sending Mail</h2>
+<a name="index-sending-mail"></a>
+<a name="index-mail"></a>
+<a name="index-email"></a>
+<a name="index-message"></a>
 
-<p><a name="index-sending-mail-3720"></a><a name="index-mail-3721"></a><a name="index-email-3722"></a><a name="index-message-3723"></a>
-<a name="index-C_002dx-m-3724"></a><a name="index-compose_002dmail-3725"></a>  To send an email message from Emacs, type <kbd>C-x m</kbd>.  This
-switches to a buffer named <samp><span class="file">*unsent mail*</span></samp>, where you can edit
+<a name="index-C_002dx-m"></a>
+<a name="index-compose_002dmail"></a>
+<p>To send an email message from Emacs, type <kbd>C-x m</kbd>.  This
+switches to a buffer named <samp>*unsent mail*</samp>, where you can edit
 the text and headers of the message.  When done, type <kbd>C-c C-s</kbd> or
 <kbd>C-c C-c</kbd> to send it.
-
-     <dl>
-<dt><kbd>C-x m</kbd><dd>Begin composing mail (<code>compose-mail</code>). 
-<br><dt><kbd>C-x 4 m</kbd><dd>Likewise, in another window (<code>compose-mail-other-window</code>). 
-<br><dt><kbd>C-x 5 m</kbd><dd>Likewise, but in a new frame (<code>compose-mail-other-frame</code>). 
-<br><dt><kbd>C-c C-s</kbd><dd>In the mail buffer, send the message (<code>message-send</code>). 
-<br><dt><kbd>C-c C-c</kbd><dd>In the mail buffer, send the message and bury the buffer
-(<code>message-send-and-exit</code>). 
+</p>
+<dl compact="compact">
+<dt><kbd>C-x m</kbd></dt>
+<dd><p>Begin composing mail (<code>compose-mail</code>).
+</p></dd>
+<dt><kbd>C-x 4 m</kbd></dt>
+<dd><p>Likewise, in another window (<code>compose-mail-other-window</code>).
+</p></dd>
+<dt><kbd>C-x 5 m</kbd></dt>
+<dd><p>Likewise, but in a new frame (<code>compose-mail-other-frame</code>).
+</p></dd>
+<dt><kbd>C-c C-s</kbd></dt>
+<dd><p>In the mail buffer, send the message (<code>message-send</code>).
+</p></dd>
+<dt><kbd>C-c C-c</kbd></dt>
+<dd><p>In the mail buffer, send the message and bury the buffer
+(<code>message-send-and-exit</code>).
+</p></dd>
 </dl>
 
-   <p>The mail buffer is an ordinary Emacs buffer, so you can switch to
+<p>The mail buffer is an ordinary Emacs buffer, so you can switch to
 other buffers while composing the mail.  If you want to send another
 mail before finishing the current one, type <kbd>C-x m</kbd> again to open
 a new mail buffer whose name has a different numeric suffix
 (see <a href="Misc-Buffer.html#Misc-Buffer">Misc Buffer</a>).  If you invoke the command with a prefix
-argument, <kbd>C-u&nbsp;C-x&nbsp;m</kbd><!-- /@w -->, Emacs switches back to the last mail
+argument, <kbd><span class="nolinebreak">C-u</span>&nbsp;<span class="nolinebreak">C-x</span>&nbsp;m</kbd><!-- /@w -->, Emacs switches back to the last mail
 buffer, and asks if you want to erase the message in that buffer; if
 you answer no, this lets you pick up editing the message where you
 left off.
-
-   <p><a name="index-C_002dx-4-m-3726"></a><a name="index-compose_002dmail_002dother_002dwindow-3727"></a><a name="index-C_002dx-5-m-3728"></a><a name="index-compose_002dmail_002dother_002dframe-3729"></a>  The command <kbd>C-x 4 m</kbd> (<code>compose-mail-other-window</code>) does
+</p>
+<a name="index-C_002dx-4-m"></a>
+<a name="index-compose_002dmail_002dother_002dwindow"></a>
+<a name="index-C_002dx-5-m"></a>
+<a name="index-compose_002dmail_002dother_002dframe"></a>
+<p>The command <kbd>C-x 4 m</kbd> (<code>compose-mail-other-window</code>) does
 the same as <kbd>C-x m</kbd>, except it displays the mail buffer in a
 different window.  The command <kbd>C-x 5 m</kbd>
 (<code>compose-mail-other-frame</code>) does it in a new frame.
-
-   <p>When you type <kbd>C-c C-c</kbd> or <kbd>C-c C-s</kbd> to send the mail, Emacs
+</p>
+<p>When you type <kbd>C-c C-c</kbd> or <kbd>C-c C-s</kbd> to send the mail, Emacs
 may ask you how it should deliver the mail&mdash;either directly via SMTP,
 or using some other method.  See <a href="Mail-Sending.html#Mail-Sending">Mail Sending</a>, for details.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Mail-Format.html#Mail-Format" accesskey="1">Format</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Format of a mail message.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Mail-Headers.html#Mail-Headers" accesskey="2">Headers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Details of some standard mail header fields.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Mail-Aliases.html#Mail-Aliases" accesskey="3">Aliases</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Abbreviating and grouping mail addresses.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Mail-Commands.html#Mail-Commands" accesskey="4">Commands</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Special commands for editing mail being composed.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Mail-Signature.html#Mail-Signature" accesskey="5">Signature</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Adding a signature to every message.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Mail-Amusements.html#Mail-Amusements" accesskey="6">Amuse</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Distracting the NSA; adding fortune messages.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Mail-Methods.html#Mail-Methods" accesskey="7">Methods</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using alternative mail-composition methods.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Mail-Format.html#Mail-Format">Format</a>:         Format of a mail message. 
-<li><a accesskey="2" href="Mail-Headers.html#Mail-Headers">Headers</a>:       Details of some standard mail header fields. 
-<li><a accesskey="3" href="Mail-Aliases.html#Mail-Aliases">Aliases</a>:       Abbreviating and grouping mail addresses. 
-<li><a accesskey="4" href="Mail-Commands.html#Mail-Commands">Commands</a>:     Special commands for editing mail being composed. 
-<li><a accesskey="5" href="Mail-Signature.html#Mail-Signature">Signature</a>:   Adding a signature to every message. 
-<li><a accesskey="6" href="Mail-Amusements.html#Mail-Amusements">Amuse</a>:      Distracting the NSA; adding fortune messages. 
-<li><a accesskey="7" href="Mail-Methods.html#Mail-Methods">Methods</a>:       Using alternative mail-composition methods. 
-</ul>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Rmail.html#Rmail" accesskey="n" rel="next">Rmail</a>, Previous: <a href="Calendar_002fDiary.html#Calendar_002fDiary" accesskey="p" rel="prev">Calendar/Diary</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

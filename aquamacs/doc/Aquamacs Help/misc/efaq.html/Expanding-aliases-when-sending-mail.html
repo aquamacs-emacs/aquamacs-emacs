@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Copyright (C) 2001-2016 Free Software Foundation, Inc.
+
+Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000
+Reuven M. Lerner
+
+Copyright (C) 1992, 1993 Steven Byrnes
+
+Copyright (C) 1990, 1991, 1992 Joseph Brian Wells
+
+
+This list of frequently asked questions about GNU Emacs with answers
+("FAQ") may be translated into other languages, transformed into other
+formats (e.g., Texinfo, Info, WWW, WAIS), and updated with new information.
+
+The same conditions apply to any derivative of the FAQ as apply to the FAQ
+itself.  Every copy of the FAQ must include this notice or an approved
+translation, information on who is currently maintaining the FAQ and how to
+contact them (including their e-mail address), and information on where the
+latest version of the FAQ is archived (including FTP information).
+
+The FAQ may be copied and redistributed under these conditions, except that
+the FAQ may not be embedded in a larger literary work unless that work
+itself allows free copying and redistribution.
+
+[This version has been heavily edited since it was included in the Emacs
+distribution.] -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>GNU Emacs FAQ: Expanding aliases when sending mail</title>
+
+<meta name="description" content="GNU Emacs FAQ: Expanding aliases when sending mail">
+<meta name="keywords" content="GNU Emacs FAQ: Expanding aliases when sending mail">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Mail-and-news.html#Mail-and-news" rel="up" title="Mail and news">
+<link href="Sorting-the-messages-in-an-Rmail-folder.html#Sorting-the-messages-in-an-Rmail-folder" rel="next" title="Sorting the messages in an Rmail folder">
+<link href="Saving-a-copy-of-outgoing-mail.html#Saving-a-copy-of-outgoing-mail" rel="prev" title="Saving a copy of outgoing mail">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Expanding-aliases-when-sending-mail"></a>
+<div class="header">
+<p>
+Next: <a href="Sorting-the-messages-in-an-Rmail-folder.html#Sorting-the-messages-in-an-Rmail-folder" accesskey="n" rel="next">Sorting the messages in an Rmail folder</a>, Previous: <a href="Saving-a-copy-of-outgoing-mail.html#Saving-a-copy-of-outgoing-mail" accesskey="p" rel="prev">Saving a copy of outgoing mail</a>, Up: <a href="Mail-and-news.html#Mail-and-news" accesskey="u" rel="up">Mail and news</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Why-doesn_0027t-Emacs-expand-my-aliases-when-sending-mail_003f"></a>
+<h3 class="section">11.3 Why doesn&rsquo;t Emacs expand my aliases when sending mail?</h3>
+<a name="index-Expanding-aliases-when-sending-mail"></a>
+<a name="index-Mail-alias-expansion"></a>
+<a name="index-Sending-mail-with-aliases"></a>
+
+<p>See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Mail-Aliases.html#Mail-Aliases">The Emacs Manual</a> in <cite>The Emacs Manual</cite>.
+</p>
+<ul>
+<li> Normally, Emacs expands aliases when you send the message.
+To expand them before this, use <kbd>M-x expand-mail-aliases</kbd>.
+
+</li><li> Emacs normally only reads the <samp>.mailrc</samp> file once per session, when
+you start to compose your first mail message.  If you edit the file
+after this, you can use <kbd>M-x build-mail-aliases</kbd> to make Emacs
+reread it.  Prior to Emacs 24.1, this is not an interactive command, so
+you must instead type <kbd>M-: (build-mail-aliases) <span class="key">RET</span></kbd>.
+
+</li><li> If you like, you can expand mail aliases as abbrevs, as soon as you
+type them in.  To enable this feature, execute the following:
+
+<div class="lisp">
+<pre class="lisp">(add-hook 'mail-mode-hook 'mail-abbrevs-setup)
+</pre></div>
+
+<p>Note that the aliases are expanded automatically only after you type
+a word-separator character (e.g., <tt class="key">RET</tt> or <kbd>,</kbd>).  You can force their
+expansion by moving point to the end of the alias and typing <kbd>C-x a e</kbd>
+(<kbd>M-x expand-abbrev</kbd>).
+</p></li></ul>
+
+
+
+
+</body>
+</html>

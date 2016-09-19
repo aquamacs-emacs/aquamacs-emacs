@@ -1,92 +1,135 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Finding All Frames - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Finding All Frames</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Finding All Frames">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Finding All Frames">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Frames.html#Frames" title="Frames">
-<link rel="prev" href="Deleting-Frames.html#Deleting-Frames" title="Deleting Frames">
-<link rel="next" href="Minibuffers-and-Frames.html#Minibuffers-and-Frames" title="Minibuffers and Frames">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Frames.html#Frames" rel="up" title="Frames">
+<link href="Minibuffers-and-Frames.html#Minibuffers-and-Frames" rel="next" title="Minibuffers and Frames">
+<link href="Deleting-Frames.html#Deleting-Frames" rel="prev" title="Deleting Frames">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Finding-All-Frames"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Minibuffers-and-Frames.html#Minibuffers-and-Frames">Minibuffers and Frames</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Deleting-Frames.html#Deleting-Frames">Deleting Frames</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
-<hr>
+Next: <a href="Minibuffers-and-Frames.html#Minibuffers-and-Frames" accesskey="n" rel="next">Minibuffers and Frames</a>, Previous: <a href="Deleting-Frames.html#Deleting-Frames" accesskey="p" rel="prev">Deleting Frames</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Finding-All-Frames-1"></a>
 <h3 class="section">28.8 Finding All Frames</h3>
+<a name="index-frames_002c-scanning-all"></a>
 
-<p><a name="index-frames_002c-scanning-all-2878"></a>
-
-<div class="defun">
-&mdash; Function: <b>frame-list</b><var><a name="index-frame_002dlist-2879"></a></var><br>
-<blockquote><p>This function returns a list of all the live frames, i.e., those that
+<dl>
+<dt><a name="index-frame_002dlist"></a>Function: <strong>frame-list</strong></dt>
+<dd><p>This function returns a list of all the live frames, i.e., those that
 have not been deleted.  It is analogous to <code>buffer-list</code> for
 buffers, and includes frames on all terminals.  The list that you get
-is newly created, so modifying the list doesn't have any effect on the
-internals of Emacs. 
-</p></blockquote></div>
+is newly created, so modifying the list doesn&rsquo;t have any effect on the
+internals of Emacs.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>visible-frame-list</b><var><a name="index-visible_002dframe_002dlist-2880"></a></var><br>
-<blockquote><p>This function returns a list of just the currently visible frames. 
+<dl>
+<dt><a name="index-visible_002dframe_002dlist"></a>Function: <strong>visible-frame-list</strong></dt>
+<dd><p>This function returns a list of just the currently visible frames.
 See <a href="Visibility-of-Frames.html#Visibility-of-Frames">Visibility of Frames</a>.  Frames on text terminals always count as
-visible, even though only the selected one is actually displayed. 
-</p></blockquote></div>
+visible, even though only the selected one is actually displayed.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>next-frame</b><var> &amp;optional frame minibuf<a name="index-next_002dframe-2881"></a></var><br>
-<blockquote><p>This function lets you cycle conveniently through all the frames on
+<dl>
+<dt><a name="index-next_002dframe"></a>Function: <strong>next-frame</strong> <em>&amp;optional frame minibuf</em></dt>
+<dd><p>This function lets you cycle conveniently through all the frames on
 the current display from an arbitrary starting point.  It returns the
 next frame after <var>frame</var> in the cycle.  If <var>frame</var> is
 omitted or <code>nil</code>, it defaults to the selected frame (see <a href="Input-Focus.html#Input-Focus">Input Focus</a>).
-
-        <p>The second argument, <var>minibuf</var>, says which frames to consider:
-
-          <dl>
-<dt><code>nil</code><dd>Exclude minibuffer-only frames. 
-<br><dt><code>visible</code><dd>Consider all visible frames. 
-<br><dt>0<dd>Consider all visible or iconified frames. 
-<br><dt>a window<dd>Consider only the frames using that particular window as their
-minibuffer. 
-<br><dt>anything else<dd>Consider all frames. 
+</p>
+<p>The second argument, <var>minibuf</var>, says which frames to consider:
+</p>
+<dl compact="compact">
+<dt><code>nil</code></dt>
+<dd><p>Exclude minibuffer-only frames.
+</p></dd>
+<dt><code>visible</code></dt>
+<dd><p>Consider all visible frames.
+</p></dd>
+<dt>0</dt>
+<dd><p>Consider all visible or iconified frames.
+</p></dd>
+<dt>a window</dt>
+<dd><p>Consider only the frames using that particular window as their
+minibuffer.
+</p></dd>
+<dt>anything else</dt>
+<dd><p>Consider all frames.
+</p></dd>
 </dl>
-        </p></blockquote></div>
+</dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>previous-frame</b><var> &amp;optional frame minibuf<a name="index-previous_002dframe-2882"></a></var><br>
-<blockquote><p>Like <code>next-frame</code>, but cycles through all frames in the opposite
-direction. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-previous_002dframe"></a>Function: <strong>previous-frame</strong> <em>&amp;optional frame minibuf</em></dt>
+<dd><p>Like <code>next-frame</code>, but cycles through all frames in the opposite
+direction.
+</p></dd></dl>
 
-   <p>See also <code>next-window</code> and <code>previous-window</code>, in <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>.
+<p>See also <code>next-window</code> and <code>previous-window</code>, in <a href="Cyclic-Window-Ordering.html#Cyclic-Window-Ordering">Cyclic Window Ordering</a>.
+</p>
 
-   </body></html>
 
+
+</body>
+</html>

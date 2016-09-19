@@ -1,78 +1,146 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Display - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Display</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Display">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Display">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Processes.html#Processes" title="Processes">
-<link rel="next" href="System-Interface.html#System-Interface" title="System Interface">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Refresh-Screen.html#Refresh-Screen" rel="next" title="Refresh Screen">
+<link href="Bindat-Examples.html#Bindat-Examples" rel="prev" title="Bindat Examples">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Display"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="System-Interface.html#System-Interface">System Interface</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Processes.html#Processes">Processes</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Display"></a>
+<div class="header">
+<p>
+Next: <a href="System-Interface.html#System-Interface" accesskey="n" rel="next">System Interface</a>, Previous: <a href="Processes.html#Processes" accesskey="p" rel="prev">Processes</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Emacs-Display"></a>
 <h2 class="chapter">37 Emacs Display</h2>
 
 <p>This chapter describes a number of features related to the display
 that Emacs presents to the user.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Refresh-Screen.html#Refresh-Screen" accesskey="1">Refresh Screen</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Clearing the screen and redrawing everything on it.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Forcing-Redisplay.html#Forcing-Redisplay" accesskey="2">Forcing Redisplay</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Forcing redisplay.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Truncation.html#Truncation" accesskey="3">Truncation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Folding or wrapping long text lines.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="The-Echo-Area.html#The-Echo-Area" accesskey="4">The Echo Area</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Displaying messages at the bottom of the screen.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Warnings.html#Warnings" accesskey="5">Warnings</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Displaying warning messages for the user.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Invisible-Text.html#Invisible-Text" accesskey="6">Invisible Text</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Hiding part of the buffer text.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Selective-Display.html#Selective-Display" accesskey="7">Selective Display</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Hiding part of the buffer text (the old way).
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Temporary-Displays.html#Temporary-Displays" accesskey="8">Temporary Displays</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Displays that go away automatically.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Overlays.html#Overlays" accesskey="9">Overlays</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Use overlays to highlight parts of the buffer.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Size-of-Displayed-Text.html#Size-of-Displayed-Text">Size of Displayed Text</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How large displayed text is.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Line-Height.html#Line-Height">Line Height</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Controlling the height of lines.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Faces.html#Faces">Faces</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A face defines a graphics style for text characters:
+                          font, colors, etc.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Fringes.html#Fringes">Fringes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Controlling window fringes.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Scroll-Bars.html#Scroll-Bars">Scroll Bars</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Controlling scroll bars.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Window-Dividers.html#Window-Dividers">Window Dividers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Separating windows visually.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Display-Property.html#Display-Property">Display Property</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Enabling special display features.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Images.html#Images">Images</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Displaying images in Emacs buffers.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Xwidgets.html#Xwidgets">Xwidgets</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Displaying native widgets in Emacs buffers.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Buttons.html#Buttons">Buttons</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Adding clickable buttons to Emacs buffers.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Abstract-Display.html#Abstract-Display">Abstract Display</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Emacs&rsquo;s Widget for Object Collections.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Blinking.html#Blinking">Blinking</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How Emacs shows the matching open parenthesis.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Character-Display.html#Character-Display">Character Display</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How Emacs displays individual characters.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Beeping.html#Beeping">Beeping</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Audible signal to the user.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Window-Systems.html#Window-Systems">Window Systems</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Which window system is being used.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Tooltips.html#Tooltips">Tooltips</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Tooltip display in Emacs.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Bidirectional-Display.html#Bidirectional-Display">Bidirectional Display</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Display of bidirectional scripts, such as
+                             Arabic and Farsi.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Refresh-Screen.html#Refresh-Screen">Refresh Screen</a>:       Clearing the screen and redrawing everything on it. 
-<li><a accesskey="2" href="Forcing-Redisplay.html#Forcing-Redisplay">Forcing Redisplay</a>:    Forcing redisplay. 
-<li><a accesskey="3" href="Truncation.html#Truncation">Truncation</a>:           Folding or wrapping long text lines. 
-<li><a accesskey="4" href="The-Echo-Area.html#The-Echo-Area">The Echo Area</a>:        Displaying messages at the bottom of the screen. 
-<li><a accesskey="5" href="Warnings.html#Warnings">Warnings</a>:             Displaying warning messages for the user. 
-<li><a accesskey="6" href="Invisible-Text.html#Invisible-Text">Invisible Text</a>:       Hiding part of the buffer text. 
-<li><a accesskey="7" href="Selective-Display.html#Selective-Display">Selective Display</a>:    Hiding part of the buffer text (the old way). 
-<li><a accesskey="8" href="Temporary-Displays.html#Temporary-Displays">Temporary Displays</a>:   Displays that go away automatically. 
-<li><a accesskey="9" href="Overlays.html#Overlays">Overlays</a>:             Use overlays to highlight parts of the buffer. 
-<li><a href="Size-of-Displayed-Text.html#Size-of-Displayed-Text">Size of Displayed Text</a>:   How large displayed text is. 
-<li><a href="Line-Height.html#Line-Height">Line Height</a>:          Controlling the height of lines. 
-<li><a href="Faces.html#Faces">Faces</a>:                A face defines a graphics style for text characters:
-                          font, colors, etc. 
-<li><a href="Fringes.html#Fringes">Fringes</a>:              Controlling window fringes. 
-<li><a href="Scroll-Bars.html#Scroll-Bars">Scroll Bars</a>:          Controlling scroll bars. 
-<li><a href="Window-Dividers.html#Window-Dividers">Window Dividers</a>:      Separating windows visually. 
-<li><a href="Display-Property.html#Display-Property">Display Property</a>:     Enabling special display features. 
-<li><a href="Images.html#Images">Images</a>:               Displaying images in Emacs buffers. 
-<li><a href="Buttons.html#Buttons">Buttons</a>:              Adding clickable buttons to Emacs buffers. 
-<li><a href="Abstract-Display.html#Abstract-Display">Abstract Display</a>:     Emacs's Widget for Object Collections. 
-<li><a href="Blinking.html#Blinking">Blinking</a>:             How Emacs shows the matching open parenthesis. 
-<li><a href="Character-Display.html#Character-Display">Character Display</a>:    How Emacs displays individual characters. 
-<li><a href="Beeping.html#Beeping">Beeping</a>:              Audible signal to the user. 
-<li><a href="Window-Systems.html#Window-Systems">Window Systems</a>:       Which window system is being used. 
-<li><a href="Bidirectional-Display.html#Bidirectional-Display">Bidirectional Display</a>:  Display of bidirectional scripts, such as
-                             Arabic and Farsi. 
-</ul>
+<hr>
+<div class="header">
+<p>
+Next: <a href="System-Interface.html#System-Interface" accesskey="n" rel="next">System Interface</a>, Previous: <a href="Processes.html#Processes" accesskey="p" rel="prev">Processes</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

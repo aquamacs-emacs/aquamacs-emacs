@@ -1,64 +1,98 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Autoload Type - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Autoload Type</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Autoload Type">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Autoload Type">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Programming-Types.html#Programming-Types" title="Programming Types">
-<link rel="prev" href="Byte_002dCode-Type.html#Byte_002dCode-Type" title="Byte-Code Type">
-<link rel="next" href="Finalizer-Type.html#Finalizer-Type" title="Finalizer Type">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Programming-Types.html#Programming-Types" rel="up" title="Programming Types">
+<link href="Finalizer-Type.html#Finalizer-Type" rel="next" title="Finalizer Type">
+<link href="Byte_002dCode-Type.html#Byte_002dCode-Type" rel="prev" title="Byte-Code Type">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Autoload-Type"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Finalizer-Type.html#Finalizer-Type">Finalizer Type</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Byte_002dCode-Type.html#Byte_002dCode-Type">Byte-Code Type</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Programming-Types.html#Programming-Types">Programming Types</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Autoload-Type"></a>
+<div class="header">
+<p>
+Next: <a href="Finalizer-Type.html#Finalizer-Type" accesskey="n" rel="next">Finalizer Type</a>, Previous: <a href="Byte_002dCode-Type.html#Byte_002dCode-Type" accesskey="p" rel="prev">Byte-Code Type</a>, Up: <a href="Programming-Types.html#Programming-Types" accesskey="u" rel="up">Programming Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Autoload-Type-1"></a>
 <h4 class="subsection">2.3.17 Autoload Type</h4>
 
-<p>An <dfn>autoload object</dfn> is a list whose first element is the symbol
+<p>An <em>autoload object</em> is a list whose first element is the symbol
 <code>autoload</code>.  It is stored as the function definition of a symbol,
 where it serves as a placeholder for the real definition.  The autoload
 object says that the real definition is found in a file of Lisp code
 that should be loaded when necessary.  It contains the name of the file,
 plus some other information about the real definition.
-
-   <p>After the file has been loaded, the symbol should have a new function
+</p>
+<p>After the file has been loaded, the symbol should have a new function
 definition that is not an autoload object.  The new definition is then
-called as if it had been there to begin with.  From the user's point of
+called as if it had been there to begin with.  From the user&rsquo;s point of
 view, the function call works as expected, using the function definition
 in the loaded file.
-
-   <p>An autoload object is usually created with the function
+</p>
+<p>An autoload object is usually created with the function
 <code>autoload</code>, which stores the object in the function cell of a
 symbol.  See <a href="Autoload.html#Autoload">Autoload</a>, for more details.
+</p>
 
-   </body></html>
 
+
+</body>
+</html>

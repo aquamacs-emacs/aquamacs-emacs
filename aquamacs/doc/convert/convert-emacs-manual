@@ -8,6 +8,7 @@ rm -r /tmp/emanual 2>/dev/null
 
 echo "Using $1 as input file."
 cd "$1"
+rm -r *.html
 make html HTML_OPTS='--html'  # avoid the "--no-split".  HTML_OPTS must be defined with :=
 cp -r emacs.html /tmp/emanual  # it's a directory
 cp "$1"/index.html /tmp/manual.html # needed for GNU head / last change
@@ -28,7 +29,7 @@ perl -i -p -e 's/<\/head>/<link rel="stylesheet" href="aquamacs.css" type="text\
 
 $P/convert-emacs-manual-pages /tmp/emanual/*.html
 version=`$P/convert-emacs-manual-title /tmp/emanual/index.html`
-sed 's|<body>|<body><a name="EmacsManualIndex"></a>|' </tmp/emanual/index.html >/tmp/emanual/index2.html
+sed -E 's|<body(.*)>|<body\1><a name="EmacsManualIndex"></a>|' </tmp/emanual/index.html >/tmp/emanual/index2.html
 mv /tmp/emanual/index2.html /tmp/emanual/index.html
 
 echo $version >/tmp/emanual/VERSION

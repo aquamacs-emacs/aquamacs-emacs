@@ -1,84 +1,119 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Core Advising Primitives - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Core Advising Primitives</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Core Advising Primitives">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Core Advising Primitives">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Advising-Functions.html#Advising-Functions" title="Advising Functions">
-<link rel="next" href="Advising-Named-Functions.html#Advising-Named-Functions" title="Advising Named Functions">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Advising-Functions.html#Advising-Functions" rel="up" title="Advising Functions">
+<link href="Advising-Named-Functions.html#Advising-Named-Functions" rel="next" title="Advising Named Functions">
+<link href="Advising-Functions.html#Advising-Functions" rel="prev" title="Advising Functions">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Core-Advising-Primitives"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Advising-Named-Functions.html#Advising-Named-Functions">Advising Named Functions</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Advising-Functions.html#Advising-Functions">Advising Functions</a>
-<hr>
+Next: <a href="Advising-Named-Functions.html#Advising-Named-Functions" accesskey="n" rel="next">Advising Named Functions</a>, Up: <a href="Advising-Functions.html#Advising-Functions" accesskey="u" rel="up">Advising Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
+<hr>
+<a name="Primitives-to-manipulate-advices"></a>
+<h4 class="subsection">12.11.1 Primitives to manipulate advices</h4>
+<a name="index-advice_002c-add-and-remove"></a>
 
-<h4 class="subsection">12.10.1 Primitives to manipulate advices</h4>
-
-<p><a name="index-advice_002c-add-and-remove-877"></a>
-
-<div class="defun">
-&mdash; Macro: <b>add-function</b><var> where place function &amp;optional props<a name="index-add_002dfunction-878"></a></var><br>
-<blockquote><p>This macro is the handy way to add the advice <var>function</var> to the function
+<dl>
+<dt><a name="index-add_002dfunction"></a>Macro: <strong>add-function</strong> <em>where place function &amp;optional props</em></dt>
+<dd><p>This macro is the handy way to add the advice <var>function</var> to the function
 stored in <var>place</var> (see <a href="Generalized-Variables.html#Generalized-Variables">Generalized Variables</a>).
-
-        <p><var>where</var> determines how <var>function</var> is composed with the
+</p>
+<p><var>where</var> determines how <var>function</var> is composed with the
 existing function, e.g., whether <var>function</var> should be called before, or
 after the original function.  See <a href="Advice-combinators.html#Advice-combinators">Advice combinators</a>, for the list of
 available ways to compose the two functions.
-
-        <p>When modifying a variable (whose name will usually end with <code>-function</code>),
+</p>
+<p>When modifying a variable (whose name will usually end with <code>-function</code>),
 you can choose whether <var>function</var> is used globally or only in the current
 buffer: if <var>place</var> is just a symbol, then <var>function</var> is added to the
 global value of <var>place</var>.  Whereas if <var>place</var> is of the form
-<code>(local </code><var>symbol</var><code>)</code>, where <var>symbol</var> is an expression which returns
+<code>(local <var>symbol</var>)</code>, where <var>symbol</var> is an expression which returns
 the variable name, then <var>function</var> will only be added in the
 current buffer.  Finally, if you want to modify a lexical variable, you will
-have to use <code>(var </code><var>variable</var><code>)</code>.
-
-        <p>Every function added with <code>add-function</code> can be accompanied by an
+have to use <code>(var <var>variable</var>)</code>.
+</p>
+<p>Every function added with <code>add-function</code> can be accompanied by an
 association list of properties <var>props</var>.  Currently only two of those
 properties have a special meaning:
-
-          <dl>
-<dt><code>name</code><dd>This gives a name to the advice, which <code>remove-function</code> can use to
+</p>
+<dl compact="compact">
+<dt><code>name</code></dt>
+<dd><p>This gives a name to the advice, which <code>remove-function</code> can use to
 identify which function to remove.  Typically used when <var>function</var> is an
 anonymous function.
-
-          <br><dt><code>depth</code><dd>This specifies how to order the advice, should several pieces of
+</p>
+</dd>
+<dt><code>depth</code></dt>
+<dd><p>This specifies how to order the advice, should several pieces of
 advice be present.  By default, the depth is 0.  A depth of 100
 indicates that this piece of advice should be kept as deep as
 possible, whereas a depth of -100 indicates that it should stay as the
 outermost piece.  When two pieces of advice specify the same depth,
 the most recently added one will be outermost.
-
-          <p>For <code>:before</code> advice, being outermost means that this advice will
+</p>
+<p>For <code>:before</code> advice, being outermost means that this advice will
 be run first, before any other advice, whereas being innermost means
 that it will run right before the original function, with no other
 advice run between itself and the original function.  Similarly, for
@@ -89,10 +124,11 @@ advice.  An innermost <code>:override</code> piece of advice will only
 override the original function and other pieces of advice will apply
 to it, whereas an outermost <code>:override</code> piece of advice will
 override not only the original function but all other advice applied
-to it as well. 
+to it as well.
+</p></dd>
 </dl>
 
-        <p>If <var>function</var> is not interactive, then the combined function will inherit
+<p>If <var>function</var> is not interactive, then the combined function will inherit
 the interactive spec, if any, of the original function.  Else, the combined
 function will be interactive and will use the interactive spec of
 <var>function</var>.  One exception: if the interactive spec of <var>function</var>
@@ -100,49 +136,57 @@ is a function (rather than an expression or a string), then the interactive
 spec of the combined function will be a call to that function with as sole
 argument the interactive spec of the original function.  To interpret the spec
 received as argument, use <code>advice-eval-interactive-spec</code>.
-
-        <p>Note: The interactive spec of <var>function</var> will apply to the combined
+</p>
+<p>Note: The interactive spec of <var>function</var> will apply to the combined
 function and should hence obey the calling convention of the combined function
 rather than that of <var>function</var>.  In many cases, it makes no difference
 since they are identical, but it does matter for <code>:around</code>,
-<code>:filter-args</code>, and <code>filter-return</code>, where <var>function</var>. 
-</p></blockquote></div>
+<code>:filter-args</code>, and <code>filter-return</code>, where <var>function</var>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Macro: <b>remove-function</b><var> place function<a name="index-remove_002dfunction-879"></a></var><br>
-<blockquote><p>This macro removes <var>function</var> from the function stored in
+<dl>
+<dt><a name="index-remove_002dfunction"></a>Macro: <strong>remove-function</strong> <em>place function</em></dt>
+<dd><p>This macro removes <var>function</var> from the function stored in
 <var>place</var>.  This only works if <var>function</var> was added to <var>place</var>
 using <code>add-function</code>.
-
-        <p><var>function</var> is compared with functions added to <var>place</var> using
+</p>
+<p><var>function</var> is compared with functions added to <var>place</var> using
 <code>equal</code>, to try and make it work also with lambda expressions.  It is
 additionally compared also with the <code>name</code> property of the functions added
 to <var>place</var>, which can be more reliable than comparing lambda expressions
-using <code>equal</code>. 
-</p></blockquote></div>
+using <code>equal</code>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>advice-function-member-p</b><var> advice function-def<a name="index-advice_002dfunction_002dmember_002dp-880"></a></var><br>
-<blockquote><p>Return non-<code>nil</code> if <var>advice</var> is already in <var>function-def</var>. 
+<dl>
+<dt><a name="index-advice_002dfunction_002dmember_002dp"></a>Function: <strong>advice-function-member-p</strong> <em>advice function-def</em></dt>
+<dd><p>Return non-<code>nil</code> if <var>advice</var> is already in <var>function-def</var>.
 Like for <code>remove-function</code> above, instead of <var>advice</var> being the actual
-function, it can also be the <code>name</code> of the piece of advice. 
-</p></blockquote></div>
+function, it can also be the <code>name</code> of the piece of advice.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>advice-function-mapc</b><var> f function-def<a name="index-advice_002dfunction_002dmapc-881"></a></var><br>
-<blockquote><p>Call the function <var>f</var> for every piece of advice that was added to
+<dl>
+<dt><a name="index-advice_002dfunction_002dmapc"></a>Function: <strong>advice-function-mapc</strong> <em>f function-def</em></dt>
+<dd><p>Call the function <var>f</var> for every piece of advice that was added to
 <var>function-def</var>.  <var>f</var> is called with two arguments: the advice function
-and its properties. 
-</p></blockquote></div>
+and its properties.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>advice-eval-interactive-spec</b><var> spec<a name="index-advice_002deval_002dinteractive_002dspec-882"></a></var><br>
-<blockquote><p>Evaluate the interactive <var>spec</var> just like an interactive call to a function
+<dl>
+<dt><a name="index-advice_002deval_002dinteractive_002dspec"></a>Function: <strong>advice-eval-interactive-spec</strong> <em>spec</em></dt>
+<dd><p>Evaluate the interactive <var>spec</var> just like an interactive call to a function
 with such a spec would, and then return the corresponding list of arguments
-that was built.  E.g., <code>(advice-eval-interactive-spec "r\nP")</code> will
+that was built.  E.g., <code>(advice-eval-interactive-spec &quot;r\nP&quot;)</code> will
 return a list of three elements, containing the boundaries of the region and
-the current prefix argument. 
-</p></blockquote></div>
+the current prefix argument.
+</p></dd></dl>
 
-   </body></html>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Advising-Named-Functions.html#Advising-Named-Functions" accesskey="n" rel="next">Advising Named Functions</a>, Up: <a href="Advising-Functions.html#Advising-Functions" accesskey="u" rel="up">Advising Functions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
+
+
+</body>
+</html>

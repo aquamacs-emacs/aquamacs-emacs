@@ -1,226 +1,267 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Cyclic Window Ordering - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Cyclic Window Ordering</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Cyclic Window Ordering">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Cyclic Window Ordering">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Windows.html#Windows" title="Windows">
-<link rel="prev" href="Selecting-Windows.html#Selecting-Windows" title="Selecting Windows">
-<link rel="next" href="Buffers-and-Windows.html#Buffers-and-Windows" title="Buffers and Windows">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Windows.html#Windows" rel="up" title="Windows">
+<link href="Buffers-and-Windows.html#Buffers-and-Windows" rel="next" title="Buffers and Windows">
+<link href="Selecting-Windows.html#Selecting-Windows" rel="prev" title="Selecting Windows">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Cyclic-Window-Ordering"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Buffers-and-Windows.html#Buffers-and-Windows">Buffers and Windows</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Selecting-Windows.html#Selecting-Windows">Selecting Windows</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
-<hr>
+Next: <a href="Buffers-and-Windows.html#Buffers-and-Windows" accesskey="n" rel="next">Buffers and Windows</a>, Previous: <a href="Selecting-Windows.html#Selecting-Windows" accesskey="p" rel="prev">Selecting Windows</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Cyclic-Ordering-of-Windows"></a>
 <h3 class="section">27.10 Cyclic Ordering of Windows</h3>
+<a name="index-cyclic-ordering-of-windows"></a>
+<a name="index-ordering-of-windows_002c-cyclic"></a>
+<a name="index-window-ordering_002c-cyclic"></a>
 
-<p><a name="index-cyclic-ordering-of-windows-2513"></a><a name="index-ordering-of-windows_002c-cyclic-2514"></a><a name="index-window-ordering_002c-cyclic-2515"></a>
-  When you use the command <kbd>C-x o</kbd> (<code>other-window</code>) to select
-some other window, it moves through live windows in a specific order. 
+<p>When you use the command <kbd>C-x o</kbd> (<code>other-window</code>) to select
+some other window, it moves through live windows in a specific order.
 For any given configuration of windows, this order never varies.  It
-is called the <dfn>cyclic ordering of windows</dfn>.
-
-   <p>The ordering is determined by a depth-first traversal of the frame's
-window tree, retrieving the live windows which are the leaf nodes of
-the tree (see <a href="Windows-and-Frames.html#Windows-and-Frames">Windows and Frames</a>).  If the minibuffer is active,
-the minibuffer window is included too.  The ordering is cyclic, so the
-last window in the sequence is followed by the first one.
-
-<div class="defun">
-&mdash; Function: <b>next-window</b><var> &amp;optional window minibuf all-frames<a name="index-next_002dwindow-2516"></a></var><br>
-<blockquote><p><a name="index-minibuffer-window_002c-and-_0040code_007bnext_002dwindow_007d-2517"></a>This function returns a live window, the one following <var>window</var> in
+is called the <em>cyclic ordering of windows</em>.
+</p>
+<p>The ordering is determined by a depth-first traversal of each frame&rsquo;s
+window tree, retrieving the live windows which are the leaf nodes of the
+tree (see <a href="Windows-and-Frames.html#Windows-and-Frames">Windows and Frames</a>).  If the minibuffer is active, the
+minibuffer window is included too.  The ordering is cyclic, so the last
+window in the sequence is followed by the first one.
+</p>
+<dl>
+<dt><a name="index-next_002dwindow"></a>Function: <strong>next-window</strong> <em>&amp;optional window minibuf all-frames</em></dt>
+<dd><a name="index-minibuffer-window_002c-and-next_002dwindow"></a>
+<p>This function returns a live window, the one following <var>window</var> in
 the cyclic ordering of windows.  <var>window</var> should be a live window;
 if omitted or <code>nil</code>, it defaults to the selected window.
-
-        <p>The optional argument <var>minibuf</var> specifies whether minibuffer windows
+</p>
+<p>The optional argument <var>minibuf</var> specifies whether minibuffer windows
 should be included in the cyclic ordering.  Normally, when <var>minibuf</var>
 is <code>nil</code>, a minibuffer window is included only if it is currently
 active; this matches the behavior of <kbd>C-x o</kbd>.  (Note that a
 minibuffer window is active as long as its minibuffer is in use; see
 <a href="Minibuffers.html#Minibuffers">Minibuffers</a>).
-
-        <p>If <var>minibuf</var> is <code>t</code>, the cyclic ordering includes all
+</p>
+<p>If <var>minibuf</var> is <code>t</code>, the cyclic ordering includes all
 minibuffer windows.  If <var>minibuf</var> is neither <code>t</code> nor
 <code>nil</code>, minibuffer windows are not included even if they are active.
-
-        <p>The optional argument <var>all-frames</var> specifies which frames to
+</p>
+<p>The optional argument <var>all-frames</var> specifies which frames to
 consider:
-
-          <ul>
-<li><code>nil</code>
-means to consider windows on <var>window</var>'s frame.  If the minibuffer
+</p>
+<ul>
+<li> <code>nil</code>
+means to consider windows on <var>window</var>&rsquo;s frame.  If the minibuffer
 window is considered (as specified by the <var>minibuf</var> argument),
 then frames that share the minibuffer window are considered too.
 
-          <li><code>t</code>
+</li><li> <code>t</code>
 means to consider windows on all existing frames.
 
-          <li><code>visible</code>
+</li><li> <code>visible</code>
 means to consider windows on all visible frames.
 
-          <li>0
+</li><li> 0
 means to consider windows on all visible or iconified frames.
 
-          <li>A frame
+</li><li> A frame
 means to consider windows on that specific frame.
 
-          <li>Anything else
-means to consider windows on <var>window</var>'s frame, and no others. 
-</ul>
+</li><li> Anything else
+means to consider windows on <var>window</var>&rsquo;s frame, and no others.
+</li></ul>
 
-        <p>If more than one frame is considered, the cyclic ordering is obtained
+<p>If more than one frame is considered, the cyclic ordering is obtained
 by appending the orderings for those frames, in the same order as the
-list of all live frames (see <a href="Finding-All-Frames.html#Finding-All-Frames">Finding All Frames</a>). 
-</p></blockquote></div>
+list of all live frames (see <a href="Finding-All-Frames.html#Finding-All-Frames">Finding All Frames</a>).
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>previous-window</b><var> &amp;optional window minibuf all-frames<a name="index-previous_002dwindow-2518"></a></var><br>
-<blockquote><p>This function returns a live window, the one preceding <var>window</var> in
+<dl>
+<dt><a name="index-previous_002dwindow"></a>Function: <strong>previous-window</strong> <em>&amp;optional window minibuf all-frames</em></dt>
+<dd><p>This function returns a live window, the one preceding <var>window</var> in
 the cyclic ordering of windows.  The other arguments are handled like
-in <code>next-window</code>. 
-</p></blockquote></div>
+in <code>next-window</code>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Command: <b>other-window</b><var> count &amp;optional all-frames<a name="index-other_002dwindow-2519"></a></var><br>
-<blockquote><p>This function selects a live window, one <var>count</var> places from the
+<dl>
+<dt><a name="index-other_002dwindow"></a>Command: <strong>other-window</strong> <em>count &amp;optional all-frames</em></dt>
+<dd><p>This function selects a live window, one <var>count</var> places from the
 selected window in the cyclic ordering of windows.  If <var>count</var> is
 a positive number, it skips <var>count</var> windows forwards; if
-<var>count</var> is negative, it skips &minus;<var>count</var> windows
+<var>count</var> is negative, it skips −<var>count</var> windows
 backwards; if <var>count</var> is zero, that simply re-selects the selected
 window.  When called interactively, <var>count</var> is the numeric prefix
 argument.
-
-        <p>The optional argument <var>all-frames</var> has the same meaning as in
+</p>
+<p>The optional argument <var>all-frames</var> has the same meaning as in
 <code>next-window</code>, like a <code>nil</code> <var>minibuf</var> argument to
 <code>next-window</code>.
+</p>
+<p>This function does not select a window that has a non-<code>nil</code>
+<code>no-other-window</code> window parameter (see <a href="Window-Parameters.html#Window-Parameters">Window Parameters</a>).
+</p></dd></dl>
 
-        <p>This function does not select a window that has a non-<code>nil</code>
-<code>no-other-window</code> window parameter (see <a href="Window-Parameters.html#Window-Parameters">Window Parameters</a>). 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>walk-windows</b><var> fun &amp;optional minibuf all-frames<a name="index-walk_002dwindows-2520"></a></var><br>
-<blockquote><p>This function calls the function <var>fun</var> once for each live window,
+<dl>
+<dt><a name="index-walk_002dwindows"></a>Function: <strong>walk-windows</strong> <em>fun &amp;optional minibuf all-frames</em></dt>
+<dd><p>This function calls the function <var>fun</var> once for each live window,
 with the window as the argument.
-
-        <p>It follows the cyclic ordering of windows.  The optional arguments
+</p>
+<p>It follows the cyclic ordering of windows.  The optional arguments
 <var>minibuf</var> and <var>all-frames</var> specify the set of windows
 included; these have the same arguments as in <code>next-window</code>.  If
 <var>all-frames</var> specifies a frame, the first window walked is the
 first window on that frame (the one returned by
 <code>frame-first-window</code>), not necessarily the selected window.
-
-        <p>If <var>fun</var> changes the window configuration by splitting or deleting
+</p>
+<p>If <var>fun</var> changes the window configuration by splitting or deleting
 windows, that does not alter the set of windows walked, which is
-determined prior to calling <var>fun</var> for the first time. 
-</p></blockquote></div>
+determined prior to calling <var>fun</var> for the first time.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>one-window-p</b><var> &amp;optional no-mini all-frames<a name="index-one_002dwindow_002dp-2521"></a></var><br>
-<blockquote><p>This function returns <code>t</code> if the selected window is the only live
+<dl>
+<dt><a name="index-one_002dwindow_002dp"></a>Function: <strong>one-window-p</strong> <em>&amp;optional no-mini all-frames</em></dt>
+<dd><p>This function returns <code>t</code> if the selected window is the only live
 window, and <code>nil</code> otherwise.
-
-        <p>If the minibuffer window is active, it is normally considered (so that
+</p>
+<p>If the minibuffer window is active, it is normally considered (so that
 this function returns <code>nil</code>).  However, if the optional argument
 <var>no-mini</var> is non-<code>nil</code>, the minibuffer window is ignored even
 if active.  The optional argument <var>all-frames</var> has the same
-meaning as for <code>next-window</code>. 
-</p></blockquote></div>
+meaning as for <code>next-window</code>.
+</p></dd></dl>
 
-   <p><a name="index-finding-windows-2522"></a>  The following functions return a window which satisfies some
+<a name="index-finding-windows"></a>
+<p>The following functions return a window which satisfies some
 criterion, without selecting it:
-
-   <p><a name="index-least-recently-used-window-2523"></a>
-
-<div class="defun">
-&mdash; Function: <b>get-lru-window</b><var> &amp;optional all-frames dedicated not-selected<a name="index-get_002dlru_002dwindow-2524"></a></var><br>
-<blockquote><p>This function returns a live window which is heuristically the least
+</p>
+<a name="index-least-recently-used-window"></a>
+<dl>
+<dt><a name="index-get_002dlru_002dwindow"></a>Function: <strong>get-lru-window</strong> <em>&amp;optional all-frames dedicated not-selected</em></dt>
+<dd><p>This function returns a live window which is heuristically the least
 recently used.  The optional argument <var>all-frames</var> has
 the same meaning as in <code>next-window</code>.
-
-        <p>If any full-width windows are present, only those windows are
+</p>
+<p>If any full-width windows are present, only those windows are
 considered.  A minibuffer window is never a candidate.  A dedicated
 window (see <a href="Dedicated-Windows.html#Dedicated-Windows">Dedicated Windows</a>) is never a candidate unless the
 optional argument <var>dedicated</var> is non-<code>nil</code>.  The selected
 window is never returned, unless it is the only candidate.  However, if
 the optional argument <var>not-selected</var> is non-<code>nil</code>, this
-function returns <code>nil</code> in that case. 
-</p></blockquote></div>
+function returns <code>nil</code> in that case.
+</p></dd></dl>
 
-   <p><a name="index-most-recently-used-window-2525"></a>
-
-<div class="defun">
-&mdash; Function: <b>get-mru-window</b><var> &amp;optional all-frames dedicated not-selected<a name="index-get_002dmru_002dwindow-2526"></a></var><br>
-<blockquote><p>This function is like <code>get-lru-window</code>, but it returns the most
+<a name="index-most-recently-used-window"></a>
+<dl>
+<dt><a name="index-get_002dmru_002dwindow"></a>Function: <strong>get-mru-window</strong> <em>&amp;optional all-frames dedicated not-selected</em></dt>
+<dd><p>This function is like <code>get-lru-window</code>, but it returns the most
 recently used window instead.  The meaning of the arguments is the
-same as described for <code>get-lru-window</code>. 
-</p></blockquote></div>
+same as described for <code>get-lru-window</code>.
+</p></dd></dl>
 
-   <p><a name="index-largest-window-2527"></a>
-
-<div class="defun">
-&mdash; Function: <b>get-largest-window</b><var> &amp;optional all-frames dedicated not-selected<a name="index-get_002dlargest_002dwindow-2528"></a></var><br>
-<blockquote><p>This function returns the window with the largest area (height times
+<a name="index-largest-window"></a>
+<dl>
+<dt><a name="index-get_002dlargest_002dwindow"></a>Function: <strong>get-largest-window</strong> <em>&amp;optional all-frames dedicated not-selected</em></dt>
+<dd><p>This function returns the window with the largest area (height times
 width).  The optional argument <var>all-frames</var> specifies the windows to
 search, and has the same meaning as in <code>next-window</code>.
-
-        <p>A minibuffer window is never a candidate.  A dedicated window
+</p>
+<p>A minibuffer window is never a candidate.  A dedicated window
 (see <a href="Dedicated-Windows.html#Dedicated-Windows">Dedicated Windows</a>) is never a candidate unless the optional
 argument <var>dedicated</var> is non-<code>nil</code>.  The selected window is not
 a candidate if the optional argument <var>not-selected</var> is
 non-<code>nil</code>.  If the optional argument <var>not-selected</var> is
 non-<code>nil</code> and the selected window is the only candidate, this
 function returns <code>nil</code>.
-
-        <p>If there are two candidate windows of the same size, this function
+</p>
+<p>If there are two candidate windows of the same size, this function
 prefers the one that comes first in the cyclic ordering of windows,
-starting from the selected window. 
-</p></blockquote></div>
+starting from the selected window.
+</p></dd></dl>
 
-   <p><a name="index-window-that-satisfies-a-predicate-2529"></a><a name="index-conditional-selection-of-windows-2530"></a>
-
-<div class="defun">
-&mdash; Function: <b>get-window-with-predicate</b><var> predicate &amp;optional minibuf all-frames default<a name="index-get_002dwindow_002dwith_002dpredicate-2531"></a></var><br>
-<blockquote><p>This function calls the function <var>predicate</var> for each of the
+<a name="index-window-that-satisfies-a-predicate"></a>
+<a name="index-conditional-selection-of-windows"></a>
+<dl>
+<dt><a name="index-get_002dwindow_002dwith_002dpredicate"></a>Function: <strong>get-window-with-predicate</strong> <em>predicate &amp;optional minibuf all-frames default</em></dt>
+<dd><p>This function calls the function <var>predicate</var> for each of the
 windows in the cyclic order of windows in turn, passing it the window
 as an argument.  If the predicate returns non-<code>nil</code> for any
 window, this function stops and returns that window.  If no such
 window is found, the return value is <var>default</var> (which defaults to
 <code>nil</code>).
-
-        <p>The optional arguments <var>minibuf</var> and <var>all-frames</var> specify the
+</p>
+<p>The optional arguments <var>minibuf</var> and <var>all-frames</var> specify the
 windows to search, and have the same meanings as in
-<code>next-window</code>. 
-</p></blockquote></div>
+<code>next-window</code>.
+</p></dd></dl>
 
-   </body></html>
 
+<hr>
+<div class="header">
+<p>
+Next: <a href="Buffers-and-Windows.html#Buffers-and-Windows" accesskey="n" rel="next">Buffers and Windows</a>, Previous: <a href="Selecting-Windows.html#Selecting-Windows" accesskey="p" rel="prev">Selecting Windows</a>, Up: <a href="Windows.html#Windows" accesskey="u" rel="up">Windows</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

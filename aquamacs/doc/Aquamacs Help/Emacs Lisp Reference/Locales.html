@@ -1,107 +1,152 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Locales - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Locales</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Locales">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Locales">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" title="Non-ASCII Characters">
-<link rel="prev" href="Input-Methods.html#Input-Methods" title="Input Methods">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="up" title="Non-ASCII Characters">
+<link href="Searching-and-Matching.html#Searching-and-Matching" rel="next" title="Searching and Matching">
+<link href="Input-Methods.html#Input-Methods" rel="prev" title="Input Methods">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Locales"></a>
+<div class="header">
 <p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Input-Methods.html#Input-Methods">Input Methods</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII Characters</a>
-<hr>
+Previous: <a href="Input-Methods.html#Input-Methods" accesskey="p" rel="prev">Input Methods</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Locales-1"></a>
 <h3 class="section">32.12 Locales</h3>
+<a name="index-locale"></a>
 
-<p><a name="index-locale-3617"></a>
-  In POSIX, locales control which language
+<p>In POSIX, locales control which language
 to use in language-related features.  These Emacs variables control
 how Emacs interacts with these features.
-
-<div class="defun">
-&mdash; Variable: <b>locale-coding-system</b><var><a name="index-locale_002dcoding_002dsystem-3618"></a></var><br>
-<blockquote><p><a name="index-keyboard-input-decoding-on-X-3619"></a>This variable specifies the coding system to use for decoding system
+</p>
+<dl>
+<dt><a name="index-locale_002dcoding_002dsystem"></a>Variable: <strong>locale-coding-system</strong></dt>
+<dd><a name="index-keyboard-input-decoding-on-X"></a>
+<p>This variable specifies the coding system to use for decoding system
 error messages and&mdash;on X Window system only&mdash;keyboard input, for
 sending batch output to the standard output and error streams, for
 encoding the format argument to <code>format-time-string</code>, and for
-decoding the return value of <code>format-time-string</code>. 
-</p></blockquote></div>
+decoding the return value of <code>format-time-string</code>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Variable: <b>system-messages-locale</b><var><a name="index-system_002dmessages_002dlocale-3620"></a></var><br>
-<blockquote><p>This variable specifies the locale to use for generating system error
+<dl>
+<dt><a name="index-system_002dmessages_002dlocale"></a>Variable: <strong>system-messages-locale</strong></dt>
+<dd><p>This variable specifies the locale to use for generating system error
 messages.  Changing the locale can cause messages to come out in a
 different language or in a different orthography.  If the variable is
 <code>nil</code>, the locale is specified by environment variables in the
-usual POSIX fashion. 
-</p></blockquote></div>
+usual POSIX fashion.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Variable: <b>system-time-locale</b><var><a name="index-system_002dtime_002dlocale-3621"></a></var><br>
-<blockquote><p>This variable specifies the locale to use for formatting time values. 
+<dl>
+<dt><a name="index-system_002dtime_002dlocale"></a>Variable: <strong>system-time-locale</strong></dt>
+<dd><p>This variable specifies the locale to use for formatting time values.
 Changing the locale can cause messages to appear according to the
 conventions of a different language.  If the variable is <code>nil</code>, the
-locale is specified by environment variables in the usual POSIX fashion. 
-</p></blockquote></div>
+locale is specified by environment variables in the usual POSIX fashion.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>locale-info</b><var> item<a name="index-locale_002dinfo-3622"></a></var><br>
-<blockquote><p>This function returns locale data <var>item</var> for the current POSIX
+<dl>
+<dt><a name="index-locale_002dinfo"></a>Function: <strong>locale-info</strong> <em>item</em></dt>
+<dd><p>This function returns locale data <var>item</var> for the current POSIX
 locale, if available.  <var>item</var> should be one of these symbols:
-
-          <dl>
-<dt><code>codeset</code><dd>Return the character set as a string (locale item <code>CODESET</code>).
-
-          <br><dt><code>days</code><dd>Return a 7-element vector of day names (locale items
+</p>
+<dl compact="compact">
+<dt><code>codeset</code></dt>
+<dd><p>Return the character set as a string (locale item <code>CODESET</code>).
+</p>
+</dd>
+<dt><code>days</code></dt>
+<dd><p>Return a 7-element vector of day names (locale items
 <code>DAY_1</code> through <code>DAY_7</code>);
-
-          <br><dt><code>months</code><dd>Return a 12-element vector of month names (locale items <code>MON_1</code>
+</p>
+</dd>
+<dt><code>months</code></dt>
+<dd><p>Return a 12-element vector of month names (locale items <code>MON_1</code>
 through <code>MON_12</code>).
-
-          <br><dt><code>paper</code><dd>Return a list <code>(</code><var>width</var> <var>height</var><code>)</code> for the default paper
+</p>
+</dd>
+<dt><code>paper</code></dt>
+<dd><p>Return a list <code>(<var>width</var> <var>height</var>)</code> for the default paper
 size measured in millimeters (locale items <code>PAPER_WIDTH</code> and
-<code>PAPER_HEIGHT</code>). 
+<code>PAPER_HEIGHT</code>).
+</p></dd>
 </dl>
 
-        <p>If the system can't provide the requested information, or if
+<p>If the system can&rsquo;t provide the requested information, or if
 <var>item</var> is not one of those symbols, the value is <code>nil</code>.  All
 strings in the return value are decoded using
-<code>locale-coding-system</code>.  See <a href="../libc/Locales.html#Locales">Locales</a>,
-for more information about locales and locale items. 
-</p></blockquote></div>
+<code>locale-coding-system</code>.  See <a href="http://www.gnu.org/software/libc/manual/html_node/Locales.html#Locales">Locales</a> in <cite>The GNU Libc Manual</cite>,
+for more information about locales and locale items.
+</p></dd></dl>
 
-<!-- *-texinfo-*- -->
-<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
-<!-- Copyright (C) 1990-1995, 1998-1999, 2001-2015 Free Software -->
-<!-- Foundation, Inc. -->
-<!-- See the file elisp.texi for copying conditions. -->
-   </body></html>
+<hr>
+<div class="header">
+<p>
+Previous: <a href="Input-Methods.html#Input-Methods" accesskey="p" rel="prev">Input Methods</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
+
+
+</body>
+</html>

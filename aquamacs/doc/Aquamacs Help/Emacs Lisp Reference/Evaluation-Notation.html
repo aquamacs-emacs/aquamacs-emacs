@@ -1,72 +1,114 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Evaluation Notation - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Evaluation Notation</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Evaluation Notation">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Evaluation Notation">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Conventions.html#Conventions" title="Conventions">
-<link rel="prev" href="nil-and-t.html#nil-and-t" title="nil and t">
-<link rel="next" href="Printing-Notation.html#Printing-Notation" title="Printing Notation">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Conventions.html#Conventions" rel="up" title="Conventions">
+<link href="Printing-Notation.html#Printing-Notation" rel="next" title="Printing Notation">
+<link href="nil-and-t.html#nil-and-t" rel="prev" title="nil and t">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Evaluation-Notation"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Printing-Notation.html#Printing-Notation">Printing Notation</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="nil-and-t.html#nil-and-t">nil and t</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Conventions.html#Conventions">Conventions</a>
-<hr>
+Next: <a href="Printing-Notation.html#Printing-Notation" accesskey="n" rel="next">Printing Notation</a>, Previous: <a href="nil-and-t.html#nil-and-t" accesskey="p" rel="prev">nil and t</a>, Up: <a href="Conventions.html#Conventions" accesskey="u" rel="up">Conventions</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Evaluation-Notation-1"></a>
 <h4 class="subsection">1.3.3 Evaluation Notation</h4>
+<a name="index-evaluation-notation"></a>
+<a name="index-documentation-notation"></a>
+<a name="index-notation"></a>
 
-<p><a name="index-evaluation-notation-16"></a><a name="index-documentation-notation-17"></a><a name="index-notation-18"></a>
-  A Lisp expression that you can evaluate is called a <dfn>form</dfn>. 
+<p>A Lisp expression that you can evaluate is called a <em>form</em>.
 Evaluating a form always produces a result, which is a Lisp object.  In
-the examples in this manual, this is indicated with &lsquo;<samp><span class="samp">&rArr;</span></samp>&rsquo;:
+the examples in this manual, this is indicated with &lsquo;<samp>&rArr;</samp>&rsquo;:
+</p>
+<div class="example">
+<pre class="example">(car '(1 2))
+     &rArr; 1
+</pre></div>
 
-<pre class="example">     (car '(1 2))
-          &rArr; 1
-</pre>
-   <p class="noindent">You can read this as &ldquo;<code>(car '(1 2))</code> evaluates to 1&rdquo;.
-
-   <p>When a form is a macro call, it expands into a new form for Lisp to
+<p>You can read this as &ldquo;<code>(car '(1 2))</code> evaluates to 1&rdquo;.
+</p>
+<p>When a form is a macro call, it expands into a new form for Lisp to
 evaluate.  We show the result of the expansion with
-&lsquo;<samp><span class="samp">==&gt;</span></samp>&rsquo;.  We may or may not show the result of the
+&lsquo;<samp>&rarr;</samp>&rsquo;.  We may or may not show the result of the
 evaluation of the expanded form.
+</p>
+<div class="example">
+<pre class="example">(third '(a b c))
+     &rarr; (car (cdr (cdr '(a b c))))
+     &rArr; c
+</pre></div>
 
-<pre class="example">     (third '(a b c))
-          ==&gt; (car (cdr (cdr '(a b c))))
-          &rArr; c
-</pre>
-   <p>To help describe one form, we sometimes show another form that
+<p>To help describe one form, we sometimes show another form that
 produces identical results.  The exact equivalence of two forms is
-indicated with &lsquo;<samp><span class="samp">==</span></samp>&rsquo;.
+indicated with &lsquo;<samp>&equiv;</samp>&rsquo;.
+</p>
+<div class="example">
+<pre class="example">(make-sparse-keymap) &equiv; (list 'keymap)
+</pre></div>
 
-<pre class="example">     (make-sparse-keymap) == (list 'keymap)
-</pre>
-   </body></html>
 
+
+
+</body>
+</html>

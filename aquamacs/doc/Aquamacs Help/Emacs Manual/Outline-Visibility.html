@@ -1,105 +1,181 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Outline Visibility - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Outline Visibility</title>
+
+<meta name="description" content="GNU Emacs Manual: Outline Visibility">
+<meta name="keywords" content="GNU Emacs Manual: Outline Visibility">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Outline-Mode.html#Outline-Mode" title="Outline Mode">
-<link rel="prev" href="Outline-Motion.html#Outline-Motion" title="Outline Motion">
-<link rel="next" href="Outline-Views.html#Outline-Views" title="Outline Views">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Outline-Mode.html#Outline-Mode" rel="up" title="Outline Mode">
+<link href="Outline-Views.html#Outline-Views" rel="next" title="Outline Views">
+<link href="Outline-Motion.html#Outline-Motion" rel="prev" title="Outline Motion">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Outline-Visibility"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Outline-Views.html#Outline-Views">Outline Views</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Outline-Motion.html#Outline-Motion">Outline Motion</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Outline-Mode.html#Outline-Mode">Outline Mode</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Outline-Visibility"></a>
+<div class="header">
+<p>
+Next: <a href="Outline-Views.html#Outline-Views" accesskey="n" rel="next">Outline Views</a>, Previous: <a href="Outline-Motion.html#Outline-Motion" accesskey="p" rel="prev">Outline Motion</a>, Up: <a href="Outline-Mode.html#Outline-Mode" accesskey="u" rel="up">Outline Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Outline-Visibility-Commands"></a>
 <h4 class="subsection">25.9.3 Outline Visibility Commands</h4>
 
 <p>Outline mode provides several commands for temporarily hiding or
 revealing parts of the buffer, based on the outline structure.  These
 commands are not undoable; their effects are simply not recorded by
 the undo mechanism, so you can undo right past them (see <a href="Undo.html#Undo">Undo</a>).
-
-   <p>Many of these commands act on the current heading line.  If
+</p>
+<p>Many of these commands act on the current heading line.  If
 point is on a heading line, that is the current heading line; if point
 is on a body line, the current heading line is the nearest preceding
 header line.
-
-     <dl>
-<dt><kbd>C-c C-c</kbd><dd>Make the current heading line's body invisible (<code>hide-entry</code>). 
-<br><dt><kbd>C-c C-e</kbd><dd>Make the current heading line's body visible (<code>show-entry</code>). 
-<br><dt><kbd>C-c C-d</kbd><dd>Make everything under the current heading invisible, not including the
-heading itself (<code>hide-subtree</code>). 
-<br><dt><kbd>C-c C-s</kbd><dd>Make everything under the current heading visible, including body,
-subheadings, and their bodies (<code>show-subtree</code>). 
-<br><dt><kbd>C-c C-l</kbd><dd>Make the body of the current heading line, and of all its subheadings,
-invisible (<code>hide-leaves</code>). 
-<br><dt><kbd>C-c C-k</kbd><dd>Make all subheadings of the current heading line, at all levels,
-visible (<code>show-branches</code>). 
-<br><dt><kbd>C-c C-i</kbd><dd>Make immediate subheadings (one level down) of the current heading
-line visible (<code>show-children</code>). 
-<br><dt><kbd>C-c C-t</kbd><dd>Make all body lines in the buffer invisible (<code>hide-body</code>). 
-<br><dt><kbd>C-c C-a</kbd><dd>Make all lines in the buffer visible (<code>show-all</code>). 
-<br><dt><kbd>C-c C-q</kbd><dd>Hide everything except the top <var>n</var> levels of heading lines
-(<code>hide-sublevels</code>). 
-<br><dt><kbd>C-c C-o</kbd><dd>Hide everything except for the heading or body that point is in, plus
+</p>
+<dl compact="compact">
+<dt><kbd>C-c C-c</kbd></dt>
+<dd><p>Make the current heading line&rsquo;s body invisible (<code>hide-entry</code>).
+</p></dd>
+<dt><kbd>C-c C-e</kbd></dt>
+<dd><p>Make the current heading line&rsquo;s body visible (<code>show-entry</code>).
+</p></dd>
+<dt><kbd>C-c C-d</kbd></dt>
+<dd><p>Make everything under the current heading invisible, not including the
+heading itself (<code>hide-subtree</code>).
+</p></dd>
+<dt><kbd>C-c C-s</kbd></dt>
+<dd><p>Make everything under the current heading visible, including body,
+subheadings, and their bodies (<code>show-subtree</code>).
+</p></dd>
+<dt><kbd>C-c C-l</kbd></dt>
+<dd><p>Make the body of the current heading line, and of all its subheadings,
+invisible (<code>hide-leaves</code>).
+</p></dd>
+<dt><kbd>C-c C-k</kbd></dt>
+<dd><p>Make all subheadings of the current heading line, at all levels,
+visible (<code>show-branches</code>).
+</p></dd>
+<dt><kbd>C-c C-i</kbd></dt>
+<dd><p>Make immediate subheadings (one level down) of the current heading
+line visible (<code>show-children</code>).
+</p></dd>
+<dt><kbd>C-c C-t</kbd></dt>
+<dd><p>Make all body lines in the buffer invisible (<code>hide-body</code>).
+</p></dd>
+<dt><kbd>C-c C-a</kbd></dt>
+<dd><p>Make all lines in the buffer visible (<code>show-all</code>).
+</p></dd>
+<dt><kbd>C-c C-q</kbd></dt>
+<dd><p>Hide everything except the top <var>n</var> levels of heading lines
+(<code>hide-sublevels</code>).
+</p></dd>
+<dt><kbd>C-c C-o</kbd></dt>
+<dd><p>Hide everything except for the heading or body that point is in, plus
 the headings leading up from there to the top level of the outline
-(<code>hide-other</code>). 
+(<code>hide-other</code>).
+</p></dd>
 </dl>
 
-   <p><a name="index-hide_002dentry-2039"></a><a name="index-show_002dentry-2040"></a><a name="index-C_002dc-C_002dc-_0040r_007b_0028Outline-mode_0029_007d-2041"></a><a name="index-C_002dc-C_002de-_0040r_007b_0028Outline-mode_0029_007d-2042"></a>  The simplest of these commands are <kbd>C-c C-c</kbd>
+<a name="index-hide_002dentry"></a>
+<a name="index-show_002dentry"></a>
+<a name="index-C_002dc-C_002dc-_0028Outline-mode_0029"></a>
+<a name="index-C_002dc-C_002de-_0028Outline-mode_0029"></a>
+<p>The simplest of these commands are <kbd>C-c C-c</kbd>
 (<code>hide-entry</code>), which hides the body lines directly following the
 current heading line, and <kbd>C-c C-e</kbd> (<code>show-entry</code>), which
 reveals them.  Subheadings and their bodies are not affected.
-
-   <p><a name="index-hide_002dsubtree-2043"></a><a name="index-show_002dsubtree-2044"></a><a name="index-C_002dc-C_002ds-_0040r_007b_0028Outline-mode_0029_007d-2045"></a><a name="index-C_002dc-C_002dd-_0040r_007b_0028Outline-mode_0029_007d-2046"></a><a name="index-subtree-_0028Outline-mode_0029-2047"></a>  The commands <kbd>C-c C-d</kbd> (<code>hide-subtree</code>) and <kbd>C-c C-s</kbd>
+</p>
+<a name="index-hide_002dsubtree"></a>
+<a name="index-show_002dsubtree"></a>
+<a name="index-C_002dc-C_002ds-_0028Outline-mode_0029"></a>
+<a name="index-C_002dc-C_002dd-_0028Outline-mode_0029"></a>
+<a name="index-subtree-_0028Outline-mode_0029"></a>
+<p>The commands <kbd>C-c C-d</kbd> (<code>hide-subtree</code>) and <kbd>C-c C-s</kbd>
 (<code>show-subtree</code>) are more powerful.  They apply to the current
-heading line's <dfn>subtree</dfn>: its body, all of its subheadings, both
+heading line&rsquo;s <em>subtree</em>: its body, all of its subheadings, both
 direct and indirect, and all of their bodies.
-
-   <p><a name="index-hide_002dleaves-2048"></a><a name="index-show_002dbranches-2049"></a><a name="index-show_002dchildren-2050"></a><a name="index-C_002dc-C_002dl-_0040r_007b_0028Outline-mode_0029_007d-2051"></a><a name="index-C_002dc-C_002dk-_0040r_007b_0028Outline-mode_0029_007d-2052"></a><a name="index-C_002dc-C_002di-_0040r_007b_0028Outline-mode_0029_007d-2053"></a>  The command <kbd>C-c C-l</kbd> (<code>hide-leaves</code>) hides the body of the
+</p>
+<a name="index-hide_002dleaves"></a>
+<a name="index-show_002dbranches"></a>
+<a name="index-show_002dchildren"></a>
+<a name="index-C_002dc-C_002dl-_0028Outline-mode_0029"></a>
+<a name="index-C_002dc-C_002dk-_0028Outline-mode_0029"></a>
+<a name="index-C_002dc-C_002di-_0028Outline-mode_0029"></a>
+<p>The command <kbd>C-c C-l</kbd> (<code>hide-leaves</code>) hides the body of the
 current heading line as well as all the bodies in its subtree; the
 subheadings themselves are left visible.  The command <kbd>C-c C-k</kbd>
 (<code>show-branches</code>) reveals the subheadings, if they had previously
 been hidden (e.g., by <kbd>C-c C-d</kbd>).  The command <kbd>C-c C-i</kbd>
 (<code>show-children</code>) is a weaker version of this; it reveals just
 the direct subheadings, i.e., those one level down.
-
-   <p><a name="index-hide_002dother-2054"></a><a name="index-C_002dc-C_002do-_0040r_007b_0028Outline-mode_0029_007d-2055"></a>  The command <kbd>C-c C-o</kbd> (<code>hide-other</code>) hides everything
+</p>
+<a name="index-hide_002dother"></a>
+<a name="index-C_002dc-C_002do-_0028Outline-mode_0029"></a>
+<p>The command <kbd>C-c C-o</kbd> (<code>hide-other</code>) hides everything
 except the entry that point is in, plus its parents (the headers
 leading up from there to top level in the outline) and the top level
 headings.
-
-   <p><a name="index-hide_002dbody-2056"></a><a name="index-show_002dall-2057"></a><a name="index-C_002dc-C_002dt-_0040r_007b_0028Outline-mode_0029_007d-2058"></a><a name="index-C_002dc-C_002da-_0040r_007b_0028Outline-mode_0029_007d-2059"></a><a name="index-hide_002dsublevels-2060"></a><a name="index-C_002dc-C_002dq-_0040r_007b_0028Outline-mode_0029_007d-2061"></a>  The remaining commands affect the whole buffer.  <kbd>C-c C-t</kbd>
+</p>
+<a name="index-hide_002dbody"></a>
+<a name="index-show_002dall"></a>
+<a name="index-C_002dc-C_002dt-_0028Outline-mode_0029"></a>
+<a name="index-C_002dc-C_002da-_0028Outline-mode_0029"></a>
+<a name="index-hide_002dsublevels"></a>
+<a name="index-C_002dc-C_002dq-_0028Outline-mode_0029"></a>
+<p>The remaining commands affect the whole buffer.  <kbd>C-c C-t</kbd>
 (<code>hide-body</code>) makes all body lines invisible, so that you see
 just the outline structure (as a special exception, it will not hide
 lines at the top of the file, preceding the first header line, even
@@ -108,16 +184,26 @@ though these are technically body lines).  <kbd>C-c C-a</kbd>
 (<code>hide-sublevels</code>) hides all but the top level headings; with a
 numeric argument <var>n</var>, it hides everything except the top <var>n</var>
 levels of heading lines.
-
-   <p><a name="Outline-Search"></a><a name="index-reveal_002dmode-2062"></a><a name="index-search_002dinvisible-2063"></a>  When incremental search finds text that is hidden by Outline mode,
+</p>
+<a name="Outline-Search"></a><a name="index-reveal_002dmode"></a>
+<a name="index-search_002dinvisible"></a>
+<p>When incremental search finds text that is hidden by Outline mode,
 it makes that part of the buffer visible.  If you exit the search at
 that position, the text remains visible.  To toggle whether or not
-an active incremental search can match hidden text, type <kbd>M-s i</kbd>. 
+an active incremental search can match hidden text, type <kbd>M-s i</kbd>.
 To change the default for future searches, customize the option
 <code>search-invisible</code>.  (This option also affects how <code>query-replace</code>
-and related functions treat hidden text, see <a href="Query-Replace.html#Query-Replace">Query Replace</a>.) 
+and related functions treat hidden text, see <a href="Query-Replace.html#Query-Replace">Query Replace</a>.)
 You can also automatically make text visible as you navigate in it by
 using Reveal mode (<kbd>M-x reveal-mode</kbd>), a buffer-local minor mode.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Outline-Views.html#Outline-Views" accesskey="n" rel="next">Outline Views</a>, Previous: <a href="Outline-Motion.html#Outline-Motion" accesskey="p" rel="prev">Outline Motion</a>, Up: <a href="Outline-Mode.html#Outline-Mode" accesskey="u" rel="up">Outline Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

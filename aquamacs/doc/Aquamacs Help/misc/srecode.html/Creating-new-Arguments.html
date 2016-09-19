@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Copyright (C) 2007-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with the Front-Cover Texts being "A GNU Manual,"
+and with the Back-Cover Texts as in (a) below.  A copy of the license
+is included in the section entitled "GNU Free Documentation License".
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>SRecoder Manual: Creating new Arguments</title>
+
+<meta name="description" content="SRecoder Manual: Creating new Arguments">
+<meta name="keywords" content="SRecoder Manual: Creating new Arguments">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="Dictionaries.html#Dictionaries" rel="up" title="Dictionaries">
+<link href="Querying-a-Dictionary.html#Querying-a-Dictionary" rel="next" title="Querying a Dictionary">
+<link href="Argument-Resolution.html#Argument-Resolution" rel="prev" title="Argument Resolution">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Creating-new-Arguments"></a>
+<div class="header">
+<p>
+Next: <a href="Querying-a-Dictionary.html#Querying-a-Dictionary" accesskey="n" rel="next">Querying a Dictionary</a>, Previous: <a href="Argument-Resolution.html#Argument-Resolution" accesskey="p" rel="prev">Argument Resolution</a>, Up: <a href="Dictionaries.html#Dictionaries" accesskey="u" rel="up">Dictionaries</a> &nbsp; [<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Creating-new-Arguments-1"></a>
+<h3 class="section">6.5 Creating new Arguments</h3>
+
+<p>You can create new arguments for use in template files by writing new
+Emacs Lisp functions.  Doing so is easy.  Here is an example for the
+<code>:user</code> argument:
+</p>
+<div class="example">
+<pre class="example">(defun srecode-semantic-handle-:user (dict)
+  &quot;Add macros into the dictionary DICT based on the current :user.&quot;
+  (srecode-dictionary-set-value dict &quot;AUTHOR&quot; (user-full-name))
+  (srecode-dictionary-set-value dict &quot;LOGIN&quot; (user-login-name))
+   ;; ...
+  )
+</pre></div>
+
+<p>In this case, a function with the name prefix
+<code>srecode-semantic-handle-</code> that ends in <code>:user</code> creates a
+new argument <code>:user</code> that can be used in a template.
+</p>
+<p>Your argument handler must take one argument <var>dict</var>, which is the
+dictionary to fill in.  Inside your function, you can do whatever you
+want, but adding dictionary values is the right thing.
+</p>
+
+
+
+</body>
+</html>

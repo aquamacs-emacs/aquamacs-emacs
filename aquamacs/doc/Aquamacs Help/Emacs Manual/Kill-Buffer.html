@@ -1,92 +1,138 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Kill Buffer - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Kill Buffer</title>
+
+<meta name="description" content="GNU Emacs Manual: Kill Buffer">
+<meta name="keywords" content="GNU Emacs Manual: Kill Buffer">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Buffers.html#Buffers" title="Buffers">
-<link rel="prev" href="Misc-Buffer.html#Misc-Buffer" title="Misc Buffer">
-<link rel="next" href="Several-Buffers.html#Several-Buffers" title="Several Buffers">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Buffers.html#Buffers" rel="up" title="Buffers">
+<link href="Several-Buffers.html#Several-Buffers" rel="next" title="Several Buffers">
+<link href="Misc-Buffer.html#Misc-Buffer" rel="prev" title="Misc Buffer">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Kill-Buffer"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Several-Buffers.html#Several-Buffers">Several Buffers</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Misc-Buffer.html#Misc-Buffer">Misc Buffer</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Kill-Buffer"></a>
+<div class="header">
+<p>
+Next: <a href="Several-Buffers.html#Several-Buffers" accesskey="n" rel="next">Several Buffers</a>, Previous: <a href="Misc-Buffer.html#Misc-Buffer" accesskey="p" rel="prev">Misc Buffer</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Killing-Buffers"></a>
 <h3 class="section">19.4 Killing Buffers</h3>
 
-<p><a name="index-killing-buffers-1344"></a><a name="index-close-buffer-1345"></a><a name="index-close-file-1346"></a>  If you continue an Emacs session for a while, you may accumulate a
-large number of buffers.  You may then find it convenient to <dfn>kill</dfn>
+<a name="index-killing-buffers"></a>
+<a name="index-close-buffer"></a>
+<a name="index-close-file"></a>
+<p>If you continue an Emacs session for a while, you may accumulate a
+large number of buffers.  You may then find it convenient to <em>kill</em>
 the buffers you no longer need.  (Some other editors call this
-operation <dfn>close</dfn>, and talk about &ldquo;closing the buffer&rdquo; or
+operation <em>close</em>, and talk about &ldquo;closing the buffer&rdquo; or
 &ldquo;closing the file&rdquo; visited in the buffer.)  On most operating
 systems, killing a buffer releases its space back to the operating
 system so that other programs can use it.  Here are some commands for
 killing buffers:
-
-     <dl>
-<dt><kbd>C-x k </kbd><var>bufname</var><kbd> &lt;RET&gt;</kbd><dd>Kill buffer <var>bufname</var> (<code>kill-buffer</code>). 
-<br><dt><kbd>M-x kill-some-buffers</kbd><dd>Offer to kill each buffer, one by one. 
-<br><dt><kbd>M-x kill-matching-buffers</kbd><dd>Offer to kill all buffers matching a regular expression. 
+</p>
+<dl compact="compact">
+<dt><kbd>C-x k <var>bufname</var> <span class="key">RET</span></kbd></dt>
+<dd><p>Kill buffer <var>bufname</var> (<code>kill-buffer</code>).
+</p></dd>
+<dt><kbd>M-x kill-some-buffers</kbd></dt>
+<dd><p>Offer to kill each buffer, one by one.
+</p></dd>
+<dt><kbd>M-x kill-matching-buffers</kbd></dt>
+<dd><p>Offer to kill all buffers matching a regular expression.
+</p></dd>
 </dl>
 
-   <p><a name="index-kill_002dbuffer-1347"></a><a name="index-C_002dx-k-1348"></a>  <kbd>C-x k</kbd> (<code>kill-buffer</code>) kills one buffer, whose name you
+<a name="index-kill_002dbuffer"></a>
+<a name="index-C_002dx-k"></a>
+<p><kbd>C-x k</kbd> (<code>kill-buffer</code>) kills one buffer, whose name you
 specify in the minibuffer.  The default, used if you type just
-&lt;RET&gt; in the minibuffer, is to kill the current buffer.  If you
+<tt class="key">RET</tt> in the minibuffer, is to kill the current buffer.  If you
 kill the current buffer, another buffer becomes current: one that was
 current in the recent past but is not displayed in any window now.  If
 you ask to kill a file-visiting buffer that is modified, then you must
 confirm with <kbd>yes</kbd> before the buffer is killed.
-
-   <p><a name="index-kill_002dsome_002dbuffers-1349"></a>  The command <kbd>M-x kill-some-buffers</kbd> asks about each buffer, one
+</p>
+<a name="index-kill_002dsome_002dbuffers"></a>
+<p>The command <kbd>M-x kill-some-buffers</kbd> asks about each buffer, one
 by one.  An answer of <kbd>y</kbd> means to kill the buffer, just like
 <code>kill-buffer</code>.  This command ignores buffers whose names begin
 with a space, which are used internally by Emacs.
-
-   <p><a name="index-kill_002dmatching_002dbuffers-1350"></a>  The command <kbd>M-x kill-matching-buffers</kbd> prompts for a regular
-expression and kills all buffers whose names match that expression. 
+</p>
+<a name="index-kill_002dmatching_002dbuffers"></a>
+<p>The command <kbd>M-x kill-matching-buffers</kbd> prompts for a regular
+expression and kills all buffers whose names match that expression.
 See <a href="Regexps.html#Regexps">Regexps</a>.  Like <code>kill-some-buffers</code>, it asks for
 confirmation before each kill.  This command normally ignores buffers
-whose names begin with a space, which are used internally by Emacs. 
+whose names begin with a space, which are used internally by Emacs.
 To kill internal buffers as well, call <code>kill-matching-buffers</code>
 with a prefix argument.
-
-   <p>The Buffer Menu feature is also convenient for killing various
+</p>
+<p>The Buffer Menu feature is also convenient for killing various
 buffers.  See <a href="Several-Buffers.html#Several-Buffers">Several Buffers</a>.
-
-   <p><a name="index-kill_002dbuffer_002dhook-1351"></a>  If you want to do something special every time a buffer is killed, you
+</p>
+<a name="index-kill_002dbuffer_002dhook"></a>
+<p>If you want to do something special every time a buffer is killed, you
 can add hook functions to the hook <code>kill-buffer-hook</code> (see <a href="Hooks.html#Hooks">Hooks</a>).
-
-   <p><a name="index-clean_002dbuffer_002dlist-1352"></a>  If you run one Emacs session for a period of days, as many people do,
+</p>
+<a name="index-clean_002dbuffer_002dlist"></a>
+<p>If you run one Emacs session for a period of days, as many people do,
 it can fill up with buffers that you used several days ago.  The command
 <kbd>M-x clean-buffer-list</kbd> is a convenient way to purge them; it kills
 all the unmodified buffers that you have not used for a long time.  An
@@ -94,14 +140,25 @@ ordinary buffer is killed if it has not been displayed for three days;
 however, you can specify certain buffers that should never be killed
 automatically, and others that should be killed if they have been unused
 for a mere hour.
-
-   <p><a name="index-Midnight-mode-1353"></a><a name="index-midnight_002dmode-1354"></a><a name="index-midnight_002dhook-1355"></a>  You can also have this buffer purging done for you, once a day,
+</p>
+<a name="index-Midnight-mode"></a>
+<a name="index-midnight_002dmode"></a>
+<a name="index-midnight_002dhook"></a>
+<p>You can also have this buffer purging done for you, once a day,
 by enabling Midnight mode.  Midnight mode operates each day
 at midnight; at that time, it runs <code>clean-buffer-list</code>, or
 whichever functions you have placed in the normal hook
 <code>midnight-hook</code> (see <a href="Hooks.html#Hooks">Hooks</a>).  To enable Midnight mode, use
 the Customization buffer to set the variable <code>midnight-mode</code> to
 <code>t</code>.  See <a href="Easy-Customization.html#Easy-Customization">Easy Customization</a>.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Several-Buffers.html#Several-Buffers" accesskey="n" rel="next">Several Buffers</a>, Previous: <a href="Misc-Buffer.html#Misc-Buffer" accesskey="p" rel="prev">Misc Buffer</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

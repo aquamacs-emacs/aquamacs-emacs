@@ -1,100 +1,150 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Breakpoints - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Breakpoints</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Breakpoints">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Breakpoints">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Breaks.html#Breaks" title="Breaks">
-<link rel="next" href="Global-Break-Condition.html#Global-Break-Condition" title="Global Break Condition">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Breaks.html#Breaks" rel="up" title="Breaks">
+<link href="Global-Break-Condition.html#Global-Break-Condition" rel="next" title="Global Break Condition">
+<link href="Breaks.html#Breaks" rel="prev" title="Breaks">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Breakpoints"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Global-Break-Condition.html#Global-Break-Condition">Global Break Condition</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Breaks.html#Breaks">Breaks</a>
-<hr>
+Next: <a href="Global-Break-Condition.html#Global-Break-Condition" accesskey="n" rel="next">Global Break Condition</a>, Up: <a href="Breaks.html#Breaks" accesskey="u" rel="up">Breaks</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
+<hr>
+<a name="Edebug-Breakpoints"></a>
+<h4 class="subsubsection">17.2.6.1 Edebug Breakpoints</h4>
 
-<h5 class="subsubsection">17.2.6.1 Edebug Breakpoints</h5>
-
-<p><a name="index-breakpoints-_0028Edebug_0029-1130"></a>While using Edebug, you can specify <dfn>breakpoints</dfn> in the program you
+<a name="index-breakpoints-_0028Edebug_0029"></a>
+<p>While using Edebug, you can specify <em>breakpoints</em> in the program you
 are testing: these are places where execution should stop.  You can set a
 breakpoint at any stop point, as defined in <a href="Using-Edebug.html#Using-Edebug">Using Edebug</a>.  For
 setting and unsetting breakpoints, the stop point that is affected is
 the first one at or after point in the source code buffer.  Here are the
 Edebug commands for breakpoints:
-
-     <dl>
-<dt><kbd>b</kbd><dd>Set a breakpoint at the stop point at or after point
+</p>
+<dl compact="compact">
+<dt><kbd>b</kbd></dt>
+<dd><p>Set a breakpoint at the stop point at or after point
 (<code>edebug-set-breakpoint</code>).  If you use a prefix argument, the
 breakpoint is temporary&mdash;it turns off the first time it stops the
 program.
-
-     <br><dt><kbd>u</kbd><dd>Unset the breakpoint (if any) at the stop point at or after
+</p>
+</dd>
+<dt><kbd>u</kbd></dt>
+<dd><p>Unset the breakpoint (if any) at the stop point at or after
 point (<code>edebug-unset-breakpoint</code>).
-
-     <br><dt><kbd>x </kbd><var>condition</var><kbd> &lt;RET&gt;</kbd><dd>Set a conditional breakpoint which stops the program only if
+</p>
+</dd>
+<dt><kbd>x <var>condition</var> <span class="key">RET</span></kbd></dt>
+<dd><p>Set a conditional breakpoint which stops the program only if
 evaluating <var>condition</var> produces a non-<code>nil</code> value
 (<code>edebug-set-conditional-breakpoint</code>).  With a prefix argument,
 the breakpoint is temporary.
-
-     <br><dt><kbd>B</kbd><dd>Move point to the next breakpoint in the current definition
-(<code>edebug-next-breakpoint</code>). 
+</p>
+</dd>
+<dt><kbd>B</kbd></dt>
+<dd><p>Move point to the next breakpoint in the current definition
+(<code>edebug-next-breakpoint</code>).
+</p></dd>
 </dl>
 
-   <p>While in Edebug, you can set a breakpoint with <kbd>b</kbd> and unset one
+<p>While in Edebug, you can set a breakpoint with <kbd>b</kbd> and unset one
 with <kbd>u</kbd>.  First move point to the Edebug stop point of your choice,
-then type <kbd>b</kbd> or <kbd>u</kbd> to set or unset a breakpoint there. 
+then type <kbd>b</kbd> or <kbd>u</kbd> to set or unset a breakpoint there.
 Unsetting a breakpoint where none has been set has no effect.
-
-   <p>Re-evaluating or reinstrumenting a definition removes all of its
+</p>
+<p>Re-evaluating or reinstrumenting a definition removes all of its
 previous breakpoints.
-
-   <p>A <dfn>conditional breakpoint</dfn> tests a condition each time the program
+</p>
+<p>A <em>conditional breakpoint</em> tests a condition each time the program
 gets there.  Any errors that occur as a result of evaluating the
 condition are ignored, as if the result were <code>nil</code>.  To set a
 conditional breakpoint, use <kbd>x</kbd>, and specify the condition
 expression in the minibuffer.  Setting a conditional breakpoint at a
 stop point that has a previously established conditional breakpoint puts
 the previous condition expression in the minibuffer so you can edit it.
-
-   <p>You can make a conditional or unconditional breakpoint
-<dfn>temporary</dfn> by using a prefix argument with the command to set the
+</p>
+<p>You can make a conditional or unconditional breakpoint
+<em>temporary</em> by using a prefix argument with the command to set the
 breakpoint.  When a temporary breakpoint stops the program, it is
 automatically unset.
-
-   <p>Edebug always stops or pauses at a breakpoint, except when the Edebug
+</p>
+<p>Edebug always stops or pauses at a breakpoint, except when the Edebug
 mode is Go-nonstop.  In that mode, it ignores breakpoints entirely.
-
-   <p>To find out where your breakpoints are, use the <kbd>B</kbd> command, which
+</p>
+<p>To find out where your breakpoints are, use the <kbd>B</kbd> command, which
 moves point to the next breakpoint following point, within the same
 function, or to the first breakpoint if there are no following
 breakpoints.  This command does not continue execution&mdash;it just moves
 point in the buffer.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Global-Break-Condition.html#Global-Break-Condition" accesskey="n" rel="next">Global Break Condition</a>, Up: <a href="Breaks.html#Breaks" accesskey="u" rel="up">Breaks</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

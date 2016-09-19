@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>GNU Emacs Lisp Reference Manual: Dynamic Modules</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Dynamic Modules">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Dynamic Modules">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Loading.html#Loading" rel="up" title="Loading">
+<link href="Byte-Compilation.html#Byte-Compilation" rel="next" title="Byte Compilation">
+<link href="Hooks-for-Loading.html#Hooks-for-Loading" rel="prev" title="Hooks for Loading">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+<link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Dynamic-Modules"></a>
+<div class="header">
+<p>
+Previous: <a href="Hooks-for-Loading.html#Hooks-for-Loading" accesskey="p" rel="prev">Hooks for Loading</a>, Up: <a href="Loading.html#Loading" accesskey="u" rel="up">Loading</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Emacs-Dynamic-Modules"></a>
+<h3 class="section">15.11 Emacs Dynamic Modules</h3>
+<a name="index-dynamic-modules"></a>
+
+<p>A <em>dynamic Emacs module</em> is a shared library that provides
+additional functionality for use in Emacs Lisp programs, just like a
+package written in Emacs Lisp would.
+</p>
+<p>Functions that load Emacs Lisp packages can also load dynamic
+modules.  They recognize dynamic modules by looking at their file-name
+extension, a.k.a. &ldquo;suffix&rdquo;.  This suffix is platform-dependent.
+</p>
+<dl>
+<dt><a name="index-module_002dfile_002dsuffix"></a>Variable: <strong>module-file-suffix</strong></dt>
+<dd><p>This variable holds the system-dependent value of the file-name
+extension of the module files.  Its value is <samp>.so</samp> on Posix hosts
+and <samp>.dll</samp> on MS-Windows.
+</p></dd></dl>
+
+<a name="index-emacs_005fmodule_005finit"></a>
+<a name="index-plugin_005fis_005fGPL_005fcompatible"></a>
+<p>Every dynamic module should export a C-callable function named
+<code>emacs_module_init</code>, which Emacs will call as part of the call to
+<code>load</code> or <code>require</code> which loads the module.  It should also
+export a symbol named <code>plugin_is_GPL_compatible</code> to indicate that
+its code is released under the GPL or compatible license; Emacs will
+refuse to load modules that don&rsquo;t export such a symbol.
+</p>
+<p>If a module needs to call Emacs functions, it should do so through the
+API defined and documented in the header file <samp>emacs-module.h</samp>
+that is part of the Emacs distribution.
+</p>
+<a name="index-user_002dptr-object"></a>
+<p>Modules can create <code>user-ptr</code> Lisp objects that embed pointers to
+C struct&rsquo;s defined by the module.  This is useful for keeping around
+complex data structures created by a module, to be passed back to the
+module&rsquo;s functions.  User-ptr objects can also have associated
+<em>finalizers</em> &ndash; functions to be run when the object is GC&rsquo;ed; this
+is useful for freeing any resources allocated for the underlying data
+structure, such as memory, open file descriptors, etc.
+</p>
+<dl>
+<dt><a name="index-user_002dptrp"></a>Function: <strong>user-ptrp</strong> <em>object</em></dt>
+<dd><p>This function returns <code>t</code> if its argument is a <code>user-ptr</code>
+object.
+</p></dd></dl>
+
+<p>Loadable modules in Emacs are enabled by using the
+<kbd>--with-modules</kbd> option at configure time.
+</p><hr>
+<div class="header">
+<p>
+Previous: <a href="Hooks-for-Loading.html#Hooks-for-Loading" accesskey="p" rel="prev">Hooks for Loading</a>, Up: <a href="Loading.html#Loading" accesskey="u" rel="up">Loading</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

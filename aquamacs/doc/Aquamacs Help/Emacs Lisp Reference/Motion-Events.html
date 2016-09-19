@@ -1,65 +1,102 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Motion Events - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Motion Events</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Motion Events">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Motion Events">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Input-Events.html#Input-Events" title="Input Events">
-<link rel="prev" href="Repeat-Events.html#Repeat-Events" title="Repeat Events">
-<link rel="next" href="Focus-Events.html#Focus-Events" title="Focus Events">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Input-Events.html#Input-Events" rel="up" title="Input Events">
+<link href="Focus-Events.html#Focus-Events" rel="next" title="Focus Events">
+<link href="Repeat-Events.html#Repeat-Events" rel="prev" title="Repeat Events">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Motion-Events"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Focus-Events.html#Focus-Events">Focus Events</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Repeat-Events.html#Repeat-Events">Repeat Events</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Input-Events.html#Input-Events">Input Events</a>
-<hr>
+Next: <a href="Focus-Events.html#Focus-Events" accesskey="n" rel="next">Focus Events</a>, Previous: <a href="Repeat-Events.html#Repeat-Events" accesskey="p" rel="prev">Repeat Events</a>, Up: <a href="Input-Events.html#Input-Events" accesskey="u" rel="up">Input Events</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Motion-Events-1"></a>
 <h4 class="subsection">20.7.8 Motion Events</h4>
+<a name="index-motion-event"></a>
+<a name="index-mouse-motion-events"></a>
 
-<p><a name="index-motion-event-1498"></a><a name="index-mouse-motion-events-1499"></a>
-Emacs sometimes generates <dfn>mouse motion</dfn> events to describe motion
+<p>Emacs sometimes generates <em>mouse motion</em> events to describe motion
 of the mouse without any button activity.  Mouse motion events are
 represented by lists that look like this:
+</p>
+<div class="example">
+<pre class="example">(mouse-movement POSITION)
+</pre></div>
 
-<pre class="example">     (mouse-movement POSITION)
-</pre>
-   <p class="noindent"><var>position</var> is a mouse position list (see <a href="Click-Events.html#Click-Events">Click Events</a>),
+<p><var>position</var> is a mouse position list (see <a href="Click-Events.html#Click-Events">Click Events</a>),
 specifying the current position of the mouse cursor.  As with the
 end-position of a drag event, this position list may represent a
 location outside the boundaries of the initially selected frame, in
 which case the list contains that frame in place of a window.
-
-   <p>The special form <code>track-mouse</code> enables generation of motion
+</p>
+<p>The special form <code>track-mouse</code> enables generation of motion
 events within its body.  Outside of <code>track-mouse</code> forms, Emacs
 does not generate events for mere motion of the mouse, and these
 events do not appear.  See <a href="Mouse-Tracking.html#Mouse-Tracking">Mouse Tracking</a>.
+</p>
 
-   </body></html>
 
+
+</body>
+</html>

@@ -1,78 +1,114 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Truncation - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Truncation</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Truncation">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Truncation">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Display.html#Display" title="Display">
-<link rel="prev" href="Forcing-Redisplay.html#Forcing-Redisplay" title="Forcing Redisplay">
-<link rel="next" href="The-Echo-Area.html#The-Echo-Area" title="The Echo Area">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Display.html#Display" rel="up" title="Display">
+<link href="The-Echo-Area.html#The-Echo-Area" rel="next" title="The Echo Area">
+<link href="Forcing-Redisplay.html#Forcing-Redisplay" rel="prev" title="Forcing Redisplay">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Truncation"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="The-Echo-Area.html#The-Echo-Area">The Echo Area</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Forcing-Redisplay.html#Forcing-Redisplay">Forcing Redisplay</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Display.html#Display">Display</a>
-<hr>
+Next: <a href="The-Echo-Area.html#The-Echo-Area" accesskey="n" rel="next">The Echo Area</a>, Previous: <a href="Forcing-Redisplay.html#Forcing-Redisplay" accesskey="p" rel="prev">Forcing Redisplay</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Truncation-1"></a>
 <h3 class="section">37.3 Truncation</h3>
+<a name="index-line-wrapping"></a>
+<a name="index-line-truncation"></a>
+<a name="index-continuation-lines"></a>
+<a name="index-_0024-in-display"></a>
+<a name="index-_005c-in-display"></a>
 
-<p><a name="index-line-wrapping-4028"></a><a name="index-line-truncation-4029"></a><a name="index-continuation-lines-4030"></a><a name="index-g_t_0040samp_007b_0024_007d-in-display-4031"></a><a name="index-g_t_0040samp_007b_005c_007d-in-display-4032"></a>
-  When a line of text extends beyond the right edge of a window, Emacs
-can <dfn>continue</dfn> the line (make it wrap to the next screen
-line), or <dfn>truncate</dfn> the line (limit it to one screen line).  The
+<p>When a line of text extends beyond the right edge of a window, Emacs
+can <em>continue</em> the line (make it wrap to the next screen
+line), or <em>truncate</em> the line (limit it to one screen line).  The
 additional screen lines used to display a long text line are called
-<dfn>continuation</dfn> lines.  Continuation is not the same as filling;
+<em>continuation</em> lines.  Continuation is not the same as filling;
 continuation happens on the screen only, not in the buffer contents,
 and it breaks a line precisely at the right margin, not at a word
 boundary.  See <a href="Filling.html#Filling">Filling</a>.
-
-   <p>On a graphical display, tiny arrow images in the window fringes
+</p>
+<p>On a graphical display, tiny arrow images in the window fringes
 indicate truncated and continued lines (see <a href="Fringes.html#Fringes">Fringes</a>).  On a text
-terminal, a &lsquo;<samp><span class="samp">$</span></samp>&rsquo; in the rightmost column of the window indicates
-truncation; a &lsquo;<samp><span class="samp">\</span></samp>&rsquo; on the rightmost column indicates a line that
+terminal, a &lsquo;<samp>$</samp>&rsquo; in the rightmost column of the window indicates
+truncation; a &lsquo;<samp>\</samp>&rsquo; on the rightmost column indicates a line that
 wraps.  (The display table can specify alternate characters to use
 for this; see <a href="Display-Tables.html#Display-Tables">Display Tables</a>).
-
-<div class="defun">
-&mdash; User Option: <b>truncate-lines</b><var><a name="index-truncate_002dlines-4033"></a></var><br>
-<blockquote><p>If this buffer-local variable is non-<code>nil</code>, lines that extend
+</p>
+<dl>
+<dt><a name="index-truncate_002dlines"></a>User Option: <strong>truncate-lines</strong></dt>
+<dd><p>If this buffer-local variable is non-<code>nil</code>, lines that extend
 beyond the right edge of the window are truncated; otherwise, they are
 continued.  As a special exception, the variable
 <code>truncate-partial-width-windows</code> takes precedence in
-<dfn>partial-width</dfn> windows (i.e., windows that do not occupy the
-entire frame width). 
-</p></blockquote></div>
+<em>partial-width</em> windows (i.e., windows that do not occupy the
+entire frame width).
+</p></dd></dl>
 
-<div class="defun">
-&mdash; User Option: <b>truncate-partial-width-windows</b><var><a name="index-truncate_002dpartial_002dwidth_002dwindows-4034"></a></var><br>
-<blockquote><p><a name="index-partial_002dwidth-windows-4035"></a>This variable controls line truncation in <dfn>partial-width</dfn> windows. 
+<dl>
+<dt><a name="index-truncate_002dpartial_002dwidth_002dwindows"></a>User Option: <strong>truncate-partial-width-windows</strong></dt>
+<dd><a name="index-partial_002dwidth-windows"></a>
+<p>This variable controls line truncation in <em>partial-width</em> windows.
 A partial-width window is one that does not occupy the entire frame
 width (see <a href="Splitting-Windows.html#Splitting-Windows">Splitting Windows</a>).  If the value is <code>nil</code>, line
 truncation is determined by the variable <code>truncate-lines</code> (see
@@ -82,40 +118,49 @@ the value of <code>truncate-lines</code>; if the partial-width window has
 <var>n</var> or more columns, line truncation is determined by
 <code>truncate-lines</code>.  For any other non-<code>nil</code> value, lines are
 truncated in every partial-width window, regardless of the value of
-<code>truncate-lines</code>. 
-</p></blockquote></div>
+<code>truncate-lines</code>.
+</p></dd></dl>
 
-   <p>When horizontal scrolling (see <a href="Horizontal-Scrolling.html#Horizontal-Scrolling">Horizontal Scrolling</a>) is in use in
+<p>When horizontal scrolling (see <a href="Horizontal-Scrolling.html#Horizontal-Scrolling">Horizontal Scrolling</a>) is in use in
 a window, that forces truncation.
-
-<div class="defun">
-&mdash; Variable: <b>wrap-prefix</b><var><a name="index-wrap_002dprefix-4036"></a></var><br>
-<blockquote><p>If this buffer-local variable is non-<code>nil</code>, it defines a
-<dfn>wrap prefix</dfn> which Emacs displays at the start of every
+</p>
+<dl>
+<dt><a name="index-wrap_002dprefix"></a>Variable: <strong>wrap-prefix</strong></dt>
+<dd><p>If this buffer-local variable is non-<code>nil</code>, it defines a
+<em>wrap prefix</em> which Emacs displays at the start of every
 continuation line.  (If lines are truncated, <code>wrap-prefix</code> is
 never used.)  Its value may be a string or an image (see <a href="Other-Display-Specs.html#Other-Display-Specs">Other Display Specs</a>), or a stretch of whitespace such as specified by the
 <code>:width</code> or <code>:align-to</code> display properties (see <a href="Specified-Space.html#Specified-Space">Specified Space</a>).  The value is interpreted in the same way as a <code>display</code>
 text property.  See <a href="Display-Property.html#Display-Property">Display Property</a>.
-
-        <p>A wrap prefix may also be specified for regions of text, using the
+</p>
+<p>A wrap prefix may also be specified for regions of text, using the
 <code>wrap-prefix</code> text or overlay property.  This takes precedence
-over the <code>wrap-prefix</code> variable.  See <a href="Special-Properties.html#Special-Properties">Special Properties</a>. 
-</p></blockquote></div>
+over the <code>wrap-prefix</code> variable.  See <a href="Special-Properties.html#Special-Properties">Special Properties</a>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Variable: <b>line-prefix</b><var><a name="index-line_002dprefix-4037"></a></var><br>
-<blockquote><p>If this buffer-local variable is non-<code>nil</code>, it defines a
-<dfn>line prefix</dfn> which Emacs displays at the start of every
+<dl>
+<dt><a name="index-line_002dprefix"></a>Variable: <strong>line-prefix</strong></dt>
+<dd><p>If this buffer-local variable is non-<code>nil</code>, it defines a
+<em>line prefix</em> which Emacs displays at the start of every
 non-continuation line.  Its value may be a string or an image
 (see <a href="Other-Display-Specs.html#Other-Display-Specs">Other Display Specs</a>), or a stretch of whitespace such as
 specified by the <code>:width</code> or <code>:align-to</code> display properties
 (see <a href="Specified-Space.html#Specified-Space">Specified Space</a>).  The value is interpreted in the same way
 as a <code>display</code> text property.  See <a href="Display-Property.html#Display-Property">Display Property</a>.
-
-        <p>A line prefix may also be specified for regions of text using the
+</p>
+<p>A line prefix may also be specified for regions of text using the
 <code>line-prefix</code> text or overlay property.  This takes precedence
-over the <code>line-prefix</code> variable.  See <a href="Special-Properties.html#Special-Properties">Special Properties</a>. 
-</p></blockquote></div>
+over the <code>line-prefix</code> variable.  See <a href="Special-Properties.html#Special-Properties">Special Properties</a>.
+</p></dd></dl>
 
-   </body></html>
 
+<hr>
+<div class="header">
+<p>
+Next: <a href="The-Echo-Area.html#The-Echo-Area" accesskey="n" rel="next">The Echo Area</a>, Previous: <a href="Forcing-Redisplay.html#Forcing-Redisplay" accesskey="p" rel="prev">Forcing Redisplay</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,104 +1,138 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Memory Usage - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Memory Usage</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Memory Usage">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Memory Usage">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" title="GNU Emacs Internals">
-<link rel="prev" href="Stack_002dallocated-Objects.html#Stack_002dallocated-Objects" title="Stack-allocated Objects">
-<link rel="next" href="C-Dialect.html#C-Dialect" title="C Dialect">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" rel="up" title="GNU Emacs Internals">
+<link href="C-Dialect.html#C-Dialect" rel="next" title="C Dialect">
+<link href="Stack_002dallocated-Objects.html#Stack_002dallocated-Objects" rel="prev" title="Stack-allocated Objects">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Memory-Usage"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="C-Dialect.html#C-Dialect">C Dialect</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Stack_002dallocated-Objects.html#Stack_002dallocated-Objects">Stack-allocated Objects</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="GNU-Emacs-Internals.html#GNU-Emacs-Internals">GNU Emacs Internals</a>
-<hr>
+Next: <a href="C-Dialect.html#C-Dialect" accesskey="n" rel="next">C Dialect</a>, Previous: <a href="Stack_002dallocated-Objects.html#Stack_002dallocated-Objects" accesskey="p" rel="prev">Stack-allocated Objects</a>, Up: <a href="GNU-Emacs-Internals.html#GNU-Emacs-Internals" accesskey="u" rel="up">GNU Emacs Internals</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Memory-Usage-1"></a>
 <h3 class="section">E.5 Memory Usage</h3>
+<a name="index-memory-usage-1"></a>
 
-<p><a name="index-memory-usage-4799"></a>
-  These functions and variables give information about the total amount
-of memory allocation that Emacs has done, broken down by data type. 
+<p>These functions and variables give information about the total amount
+of memory allocation that Emacs has done, broken down by data type.
 Note the difference between these and the values returned by
 <code>garbage-collect</code>; those count objects that currently exist, but
 these count the number or size of all allocations, including those for
 objects that have since been freed.
+</p>
+<dl>
+<dt><a name="index-cons_002dcells_002dconsed"></a>Variable: <strong>cons-cells-consed</strong></dt>
+<dd><p>The total number of cons cells that have been allocated so far
+in this Emacs session.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Variable: <b>cons-cells-consed</b><var><a name="index-cons_002dcells_002dconsed-4800"></a></var><br>
-<blockquote><p>The total number of cons cells that have been allocated so far
-in this Emacs session. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-floats_002dconsed"></a>Variable: <strong>floats-consed</strong></dt>
+<dd><p>The total number of floats that have been allocated so far
+in this Emacs session.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Variable: <b>floats-consed</b><var><a name="index-floats_002dconsed-4801"></a></var><br>
-<blockquote><p>The total number of floats that have been allocated so far
-in this Emacs session. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-vector_002dcells_002dconsed"></a>Variable: <strong>vector-cells-consed</strong></dt>
+<dd><p>The total number of vector cells that have been allocated so far
+in this Emacs session.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Variable: <b>vector-cells-consed</b><var><a name="index-vector_002dcells_002dconsed-4802"></a></var><br>
-<blockquote><p>The total number of vector cells that have been allocated so far
-in this Emacs session. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-symbols_002dconsed"></a>Variable: <strong>symbols-consed</strong></dt>
+<dd><p>The total number of symbols that have been allocated so far
+in this Emacs session.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Variable: <b>symbols-consed</b><var><a name="index-symbols_002dconsed-4803"></a></var><br>
-<blockquote><p>The total number of symbols that have been allocated so far
-in this Emacs session. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-string_002dchars_002dconsed"></a>Variable: <strong>string-chars-consed</strong></dt>
+<dd><p>The total number of string characters that have been allocated so far
+in this session.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Variable: <b>string-chars-consed</b><var><a name="index-string_002dchars_002dconsed-4804"></a></var><br>
-<blockquote><p>The total number of string characters that have been allocated so far
-in this session. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Variable: <b>misc-objects-consed</b><var><a name="index-misc_002dobjects_002dconsed-4805"></a></var><br>
-<blockquote><p>The total number of miscellaneous objects that have been allocated so
+<dl>
+<dt><a name="index-misc_002dobjects_002dconsed"></a>Variable: <strong>misc-objects-consed</strong></dt>
+<dd><p>The total number of miscellaneous objects that have been allocated so
 far in this session.  These include markers and overlays, plus
-certain objects not visible to users. 
-</p></blockquote></div>
+certain objects not visible to users.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Variable: <b>intervals-consed</b><var><a name="index-intervals_002dconsed-4806"></a></var><br>
-<blockquote><p>The total number of intervals that have been allocated so far
-in this Emacs session. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-intervals_002dconsed"></a>Variable: <strong>intervals-consed</strong></dt>
+<dd><p>The total number of intervals that have been allocated so far
+in this Emacs session.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Variable: <b>strings-consed</b><var><a name="index-strings_002dconsed-4807"></a></var><br>
-<blockquote><p>The total number of strings that have been allocated so far in this
-Emacs session. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-strings_002dconsed"></a>Variable: <strong>strings-consed</strong></dt>
+<dd><p>The total number of strings that have been allocated so far in this
+Emacs session.
+</p></dd></dl>
 
-   </body></html>
 
+
+
+</body>
+</html>

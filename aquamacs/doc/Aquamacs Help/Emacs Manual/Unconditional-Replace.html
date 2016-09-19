@@ -1,72 +1,110 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Unconditional Replace - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Unconditional Replace</title>
+
+<meta name="description" content="GNU Emacs Manual: Unconditional Replace">
+<meta name="keywords" content="GNU Emacs Manual: Unconditional Replace">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Replace.html#Replace" title="Replace">
-<link rel="next" href="Regexp-Replace.html#Regexp-Replace" title="Regexp Replace">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Replace.html#Replace" rel="up" title="Replace">
+<link href="Regexp-Replace.html#Regexp-Replace" rel="next" title="Regexp Replace">
+<link href="Replace.html#Replace" rel="prev" title="Replace">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Unconditional-Replace"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Regexp-Replace.html#Regexp-Replace">Regexp Replace</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Replace.html#Replace">Replace</a>
-<hr>
+Next: <a href="Regexp-Replace.html#Regexp-Replace" accesskey="n" rel="next">Regexp Replace</a>, Up: <a href="Replace.html#Replace" accesskey="u" rel="up">Replace</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Unconditional-Replacement"></a>
 <h4 class="subsection">15.10.1 Unconditional Replacement</h4>
+<a name="index-replace_002dstring"></a>
 
-<p><a name="index-replace_002dstring-922"></a>
-     <dl>
-<dt><kbd>M-x replace-string &lt;RET&gt; </kbd><var>string</var><kbd> &lt;RET&gt; </kbd><var>newstring</var><kbd> &lt;RET&gt;</kbd><dd>Replace every occurrence of <var>string</var> with <var>newstring</var>. 
+<dl compact="compact">
+<dt><kbd>M-x replace-string <span class="key">RET</span> <var>string</var> <span class="key">RET</span> <var>newstring</var> <span class="key">RET</span></kbd></dt>
+<dd><p>Replace every occurrence of <var>string</var> with <var>newstring</var>.
+</p></dd>
 </dl>
 
-   <p>To replace every instance of &lsquo;<samp><span class="samp">foo</span></samp>&rsquo; after point with &lsquo;<samp><span class="samp">bar</span></samp>&rsquo;,
+<p>To replace every instance of &lsquo;<samp>foo</samp>&rsquo; after point with &lsquo;<samp>bar</samp>&rsquo;,
 use the command <kbd>M-x replace-string</kbd> with the two arguments
-&lsquo;<samp><span class="samp">foo</span></samp>&rsquo; and &lsquo;<samp><span class="samp">bar</span></samp>&rsquo;.  Replacement happens only in the text after
+&lsquo;<samp>foo</samp>&rsquo; and &lsquo;<samp>bar</samp>&rsquo;.  Replacement happens only in the text after
 point, so if you want to cover the whole buffer you must go to the
 beginning first.  All occurrences up to the end of the buffer are
 replaced; to limit replacement to part of the buffer, activate the
 region around that part.  When the region is active, replacement is
 limited to the region (see <a href="Mark.html#Mark">Mark</a>).
-
-   <p>When <code>replace-string</code> exits, it leaves point at the last
+</p>
+<p>When <code>replace-string</code> exits, it leaves point at the last
 occurrence replaced.  It adds the prior position of point (where the
 <code>replace-string</code> command was issued) to the mark ring, without
-activating the mark; use <kbd>C-u C-&lt;SPC&gt;</kbd> to move back there. 
+activating the mark; use <kbd>C-u C-<span class="key">SPC</span></kbd> to move back there.
 See <a href="Mark-Ring.html#Mark-Ring">Mark Ring</a>.
-
-   <p>A prefix argument restricts replacement to matches that are
+</p>
+<p>A prefix argument restricts replacement to matches that are
 surrounded by word boundaries.
+</p>
+<p>See <a href="Replacement-and-Lax-Matches.html#Replacement-and-Lax-Matches">Replacement and Lax Matches</a>, for details about
+case-sensitivity in replace commands.
+</p>
 
-   <p>See <a href="Replacement-and-Case.html#Replacement-and-Case">Replacement and Case</a>, for details about case-sensitivity in
-replace commands.
 
-   </body></html>
 
+</body>
+</html>

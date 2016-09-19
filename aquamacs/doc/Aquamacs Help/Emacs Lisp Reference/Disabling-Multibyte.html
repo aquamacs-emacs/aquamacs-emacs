@@ -1,89 +1,130 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Disabling Multibyte - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Disabling Multibyte</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Disabling Multibyte">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Disabling Multibyte">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" title="Non-ASCII Characters">
-<link rel="prev" href="Text-Representations.html#Text-Representations" title="Text Representations">
-<link rel="next" href="Converting-Representations.html#Converting-Representations" title="Converting Representations">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" rel="up" title="Non-ASCII Characters">
+<link href="Converting-Representations.html#Converting-Representations" rel="next" title="Converting Representations">
+<link href="Text-Representations.html#Text-Representations" rel="prev" title="Text Representations">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Disabling-Multibyte"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Converting-Representations.html#Converting-Representations">Converting Representations</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Text-Representations.html#Text-Representations">Text Representations</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Non_002dASCII-Characters.html#Non_002dASCII-Characters">Non-ASCII Characters</a>
-<hr>
+Next: <a href="Converting-Representations.html#Converting-Representations" accesskey="n" rel="next">Converting Representations</a>, Previous: <a href="Text-Representations.html#Text-Representations" accesskey="p" rel="prev">Text Representations</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Disabling-Multibyte-Characters"></a>
 <h3 class="section">32.2 Disabling Multibyte Characters</h3>
+<a name="index-disabling-multibyte"></a>
 
-<p><a name="index-disabling-multibyte-3452"></a>
-  By default, Emacs starts in multibyte mode: it stores the contents
+<p>By default, Emacs starts in multibyte mode: it stores the contents
 of buffers and strings using an internal encoding that represents
 non-<acronym>ASCII</acronym> characters using multi-byte sequences.  Multibyte
 mode allows you to use all the supported languages and scripts without
 limitations.
-
-   <p><a name="index-turn-multibyte-support-on-or-off-3453"></a>  Under very special circumstances, you may want to disable multibyte
-character support, for a specific buffer. 
+</p>
+<a name="index-turn-multibyte-support-on-or-off"></a>
+<p>Under very special circumstances, you may want to disable multibyte
+character support, for a specific buffer.
 When multibyte characters are disabled in a buffer, we call
-that <dfn>unibyte mode</dfn>.  In unibyte mode, each character in the
+that <em>unibyte mode</em>.  In unibyte mode, each character in the
 buffer has a character code ranging from 0 through 255 (0377 octal); 0
 through 127 (0177 octal) represent <acronym>ASCII</acronym> characters, and 128
 (0200 octal) through 255 (0377 octal) represent non-<acronym>ASCII</acronym>
 characters.
-
-   <p>To edit a particular file in unibyte representation, visit it using
+</p>
+<p>To edit a particular file in unibyte representation, visit it using
 <code>find-file-literally</code>.  See <a href="Visiting-Functions.html#Visiting-Functions">Visiting Functions</a>.  You can
 convert a multibyte buffer to unibyte by saving it to a file, killing
 the buffer, and visiting the file again with
 <code>find-file-literally</code>.  Alternatively, you can use <kbd>C-x
-&lt;RET&gt; c</kbd> (<code>universal-coding-system-argument</code>) and specify
-&lsquo;<samp><span class="samp">raw-text</span></samp>&rsquo; as the coding system with which to visit or save a
-file.  See <a href="../emacs/Text-Coding.html#Text-Coding">Specifying a Coding System for File Text</a>.  Unlike <code>find-file-literally</code>, finding
-a file as &lsquo;<samp><span class="samp">raw-text</span></samp>&rsquo; doesn't disable format conversion,
+<span class="key">RET</span> c</kbd> (<code>universal-coding-system-argument</code>) and specify
+&lsquo;<samp>raw-text</samp>&rsquo; as the coding system with which to visit or save a
+file.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Text-Coding.html#Text-Coding">Specifying a Coding System for File Text</a> in <cite>GNU Emacs Manual</cite>.  Unlike <code>find-file-literally</code>, finding
+a file as &lsquo;<samp>raw-text</samp>&rsquo; doesn&rsquo;t disable format conversion,
 uncompression, or auto mode selection.
-
-<!-- See http://debbugs.gnu.org/11226 for lack of unibyte tooltip. -->
-   <p><a name="index-enable_002dmultibyte_002dcharacters-3454"></a>The buffer-local variable <code>enable-multibyte-characters</code> is
-non-<code>nil</code> in multibyte buffers, and <code>nil</code> in unibyte ones. 
-The mode line also indicates whether a buffer is multibyte or not. 
+</p>
+<a name="index-enable_002dmultibyte_002dcharacters-1"></a>
+<p>The buffer-local variable <code>enable-multibyte-characters</code> is
+non-<code>nil</code> in multibyte buffers, and <code>nil</code> in unibyte ones.
+The mode line also indicates whether a buffer is multibyte or not.
 With a graphical display, in a multibyte buffer, the portion of the
 mode line that indicates the character set has a tooltip that (amongst
 other things) says that the buffer is multibyte.  In a unibyte buffer,
 the character set indicator is absent.  Thus, in a unibyte buffer
 (when using a graphical display) there is normally nothing before the
-indication of the visited file's end-of-line convention (colon,
+indication of the visited file&rsquo;s end-of-line convention (colon,
 backslash, etc.), unless you are using an input method.
-
-   <p><a name="index-toggle_002denable_002dmultibyte_002dcharacters-3455"></a>You can turn off multibyte support in a specific buffer by invoking the
+</p>
+<a name="index-toggle_002denable_002dmultibyte_002dcharacters"></a>
+<p>You can turn off multibyte support in a specific buffer by invoking the
 command <code>toggle-enable-multibyte-characters</code> in that buffer.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Converting-Representations.html#Converting-Representations" accesskey="n" rel="next">Converting Representations</a>, Previous: <a href="Text-Representations.html#Text-Representations" accesskey="p" rel="prev">Text Representations</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

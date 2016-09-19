@@ -1,143 +1,212 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Network Security - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Network Security</title>
+
+<meta name="description" content="GNU Emacs Manual: Network Security">
+<meta name="keywords" content="GNU Emacs Manual: Network Security">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Gnus.html#Gnus" title="Gnus">
-<link rel="next" href="Document-View.html#Document-View" title="Document View">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Document-View.html#Document-View" rel="next" title="Document View">
+<link href="Host-Security.html#Host-Security" rel="prev" title="Host Security">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Network-Security"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Document-View.html#Document-View">Document View</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Gnus.html#Gnus">Gnus</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
+Next: <a href="Document-View.html#Document-View" accesskey="n" rel="next">Document View</a>, Previous: <a href="Host-Security.html#Host-Security" accesskey="p" rel="prev">Host Security</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
+<hr>
+<a name="Network-Security-1"></a>
+<h2 class="chapter">36 Network Security</h2>
+<a name="index-network-security-manager"></a>
+<a name="index-NSM"></a>
+<a name="index-encryption"></a>
+<a name="index-SSL"></a>
+<a name="index-TLS"></a>
+<a name="index-STARTTLS"></a>
 
-<h2 class="chapter">35 Network Security</h2>
-
-<p><a name="index-network-security-manager-4031"></a><a name="index-NSM-4032"></a><a name="index-encryption-4033"></a><a name="index-SSL-4034"></a><a name="index-TLS-4035"></a><a name="index-STARTTLS-4036"></a>
-Whenever Emacs establishes any network connection, it passes the
-established connection to the <dfn>Network Security Manager</dfn>
+<p>Whenever Emacs establishes any network connection, it passes the
+established connection to the <em>Network Security Manager</em>
 (<acronym>NSM</acronym>).  <acronym>NSM</acronym> is responsible for enforcing the
 network security under your control.
-
-   <p><a name="index-network_002dsecurity_002dlevel-4037"></a>The <code>network-security-level</code> variable determines the security
+</p>
+<a name="index-network_002dsecurity_002dlevel"></a>
+<p>The <code>network-security-level</code> variable determines the security
 level that <acronym>NSM</acronym> enforces.  If its value is <code>low</code>, no
 security checks are performed.
-
-   <p>If this variable is <code>medium</code> (which is the default), a number of
+</p>
+<p>If this variable is <code>medium</code> (which is the default), a number of
 checks will be performed.  If as result <acronym>NSM</acronym> determines that
 the network connection might not be trustworthy, it will make you
 aware of that, and will ask you what to do about the network
 connection.
-
-   <p>You can decide to register a permanent security exception for an
+</p>
+<p>You can decide to register a permanent security exception for an
 unverified connection, a temporary exception, or refuse the connection
 entirely.
-
-   <p>Below is a list of the checks done on the <code>medium</code> level.
-
-     <dl>
-<dt>unable to verify a <acronym>TLS</acronym> certificate<dd>If the connection is a <acronym>TLS</acronym>, <acronym>SSL</acronym> or
+</p>
+<p>Below is a list of the checks done on the <code>medium</code> level.
+</p>
+<dl compact="compact">
+<dt>unable to verify a <acronym>TLS</acronym> certificate</dt>
+<dd><p>If the connection is a <acronym>TLS</acronym>, <acronym>SSL</acronym> or
 <acronym>STARTTLS</acronym> connection, <acronym>NSM</acronym> will check whether
-the certificate used to establish the identity of the server we're
+the certificate used to establish the identity of the server we&rsquo;re
 connecting to can be verified.
-
-     <p>While an invalid certificate is often the cause for concern (there
+</p>
+<p>While an invalid certificate is often the cause for concern (there
 could be a Man-in-the-Middle hijacking your network connection and
 stealing your password), there may be valid reasons for going ahead
 with the connection anyway.  For instance, the server may be using a
-self-signed certificate, or the certificate may have expired.  It's up
-to you to determine whether it's acceptable to continue with the
+self-signed certificate, or the certificate may have expired.  It&rsquo;s up
+to you to determine whether it&rsquo;s acceptable to continue with the
 connection.
-
-     <br><dt>a self-signed certificate has changed<dd>If you've previously accepted a self-signed certificate, but it has
+</p>
+</dd>
+<dt>a self-signed certificate has changed</dt>
+<dd><p>If you&rsquo;ve previously accepted a self-signed certificate, but it has
 now changed, that could mean that the server has just changed the
 certificate, but it might also mean that the network connection has
 been hijacked.
-
-     <br><dt>previously encrypted connection now unencrypted<dd>If the connection is unencrypted, but it was encrypted in previous
+</p>
+</dd>
+<dt>previously encrypted connection now unencrypted</dt>
+<dd><p>If the connection is unencrypted, but it was encrypted in previous
 sessions, this might mean that there is a proxy between you and the
 server that strips away <acronym>STARTTLS</acronym> announcements, leaving the
 connection unencrypted.  This is usually very suspicious.
-
-     <br><dt>talking to an unencrypted service when sending a password<dd>When connecting to an <acronym>IMAP</acronym> or <acronym>POP3</acronym> server, these
-should usually be encrypted, because it's common to send passwords
-over these connections.  Similarly, if you're sending email via
+</p>
+</dd>
+<dt>talking to an unencrypted service when sending a password</dt>
+<dd><p>When connecting to an <acronym>IMAP</acronym> or <acronym>POP3</acronym> server, these
+should usually be encrypted, because it&rsquo;s common to send passwords
+over these connections.  Similarly, if you&rsquo;re sending email via
 <acronym>SMTP</acronym> that requires a password, you usually want that
-connection to be encrypted.  If the connection isn't encrypted,
+connection to be encrypted.  If the connection isn&rsquo;t encrypted,
 <acronym>NSM</acronym> will warn you.
+</p>
+</dd>
+</dl>
 
-   </dl>
-
-   <p>If <code>network-security-level</code> is <code>high</code>, the following checks
+<p>If <code>network-security-level</code> is <code>high</code>, the following checks
 will be made, in addition to the above:
-
-     <dl>
-<dt>a validated certificate changes the public key<dd>Servers change their keys occasionally, and that is normally nothing
+</p>
+<dl compact="compact">
+<dt>a validated certificate changes the public key</dt>
+<dd><p>Servers change their keys occasionally, and that is normally nothing
 to be concerned about.  However, if you are worried that your network
 connections are being hijacked by agencies who have access to pliable
 Certificate Authorities which issue new certificates for third-party
 services, you may want to keep track of these changes.
-
-     <br><dt>Diffie-Hellman low prime bits<dd>When doing the public key exchange, the number of prime bits
-should be high to ensure that the channel can't be eavesdropped on by
+</p>
+</dd>
+<dt>Diffie-Hellman low prime bits</dt>
+<dd><p>When doing the public key exchange, the number of prime bits
+should be high to ensure that the channel can&rsquo;t be eavesdropped on by
 third parties.  If this number is too low, you will be warned.
-
-     <br><dt><acronym>RC4</acronym> stream cipher<dd>The <acronym>RC4</acronym> stream cipher is believed to be of low quality and
+</p>
+</dd>
+<dt><acronym>RC4</acronym> stream cipher</dt>
+<dd><p>The <acronym>RC4</acronym> stream cipher is believed to be of low quality and
 may allow eavesdropping by third parties.
-
-     <br><dt><acronym>SSL1</acronym>, <acronym>SSL2</acronym> and <acronym>SSL3</acronym><dd>The protocols older than <acronym>TLS1.0</acronym> are believed to be
+</p>
+</dd>
+<dt><acronym>SSL1</acronym>, <acronym>SSL2</acronym> and <acronym>SSL3</acronym></dt>
+<dd><p>The protocols older than <acronym>TLS1.0</acronym> are believed to be
 vulnerable to a variety of attacks, and you may want to avoid using
-these if what you're doing requires higher security. 
+these if what you&rsquo;re doing requires higher security.
+</p></dd>
 </dl>
 
-   <p>Finally, if <code>network-security-level</code> is <code>paranoid</code>, you will
+<p>Finally, if <code>network-security-level</code> is <code>paranoid</code>, you will
 also be notified the first time <acronym>NSM</acronym> sees any new
 certificate.  This will allow you to inspect all the certificates from
 all the connections that Emacs makes.
-
-   <p>The following additional variables can be used to control details of
+</p>
+<p>The following additional variables can be used to control details of
 <acronym>NSM</acronym> operation:
-
-     <dl>
-<dt><code>nsm-settings-file</code><dd><a name="index-nsm_002dsettings_002dfile-4038"></a>This is the file where <acronym>NSM</acronym> stores details about connections. 
-It defaults to <samp><span class="file">~/.emacs.d/network-security.data</span></samp>.
-
-     <br><dt><code>nsm-save-host-names</code><dd><a name="index-nsm_002dsave_002dhost_002dnames-4039"></a>By default, host names will not be saved for non-<code>STARTTLS</code>
-connections.  Instead a host/port hash is used to identify connections. 
-This means that one can't casually read the settings file to see what
+</p>
+<dl compact="compact">
+<dt><code>nsm-settings-file</code></dt>
+<dd><a name="index-nsm_002dsettings_002dfile"></a>
+<p>This is the file where <acronym>NSM</acronym> stores details about connections.
+It defaults to <samp>~/.emacs.d/network-security.data</samp>.
+</p>
+</dd>
+<dt><code>nsm-save-host-names</code></dt>
+<dd><a name="index-nsm_002dsave_002dhost_002dnames"></a>
+<p>By default, host names will not be saved for non-<code>STARTTLS</code>
+connections.  Instead a host/port hash is used to identify connections.
+This means that one can&rsquo;t casually read the settings file to see what
 servers the user has connected to.  If this variable is <code>t</code>,
-<acronym>NSM</acronym> will also save host names in the nsm-settings-file. 
+<acronym>NSM</acronym> will also save host names in the nsm-settings-file.
+</p></dd>
 </dl>
 
-   </body></html>
 
+<hr>
+<div class="header">
+<p>
+Next: <a href="Document-View.html#Document-View" accesskey="n" rel="next">Document View</a>, Previous: <a href="Host-Security.html#Host-Security" accesskey="p" rel="prev">Host Security</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

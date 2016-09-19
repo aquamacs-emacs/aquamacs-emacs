@@ -1,63 +1,120 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Maintaining - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Maintaining</title>
+
+<meta name="description" content="GNU Emacs Manual: Maintaining">
+<meta name="keywords" content="GNU Emacs Manual: Maintaining">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Building.html#Building" title="Building">
-<link rel="next" href="Abbrevs.html#Abbrevs" title="Abbrevs">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Version-Control.html#Version-Control" rel="next" title="Version Control">
+<link href="External-Lisp.html#External-Lisp" rel="prev" title="External Lisp">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Maintaining"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Abbrevs.html#Abbrevs">Abbrevs</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Building.html#Building">Building</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Maintaining"></a>
+<div class="header">
+<p>
+Next: <a href="Abbrevs.html#Abbrevs" accesskey="n" rel="next">Abbrevs</a>, Previous: <a href="Building.html#Building" accesskey="p" rel="prev">Building</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Maintaining-Large-Programs"></a>
 <h2 class="chapter">28 Maintaining Large Programs</h2>
 
-<p>This chapter describes Emacs features for maintaining large
-programs.  If you are maintaining a large Lisp program, then in
-addition to the features described here, you may find
-the Emacs Lisp Regression Testing (ERT) library useful
-(see <a href="../ert/index.html#Top">ERT</a>).
+<p>This chapter describes Emacs features for maintaining medium- to
+large-size programs and packages.  These features include:
+</p>
+<ul class="no-bullet">
+<li>− Unified interface to Support for Version Control Systems
+(<acronym>VCS</acronym>) that record the history of changes to source files.
 
-<ul class="menu">
-<li><a accesskey="1" href="Version-Control.html#Version-Control">Version Control</a>:      Using version control systems. 
-<li><a accesskey="2" href="Change-Log.html#Change-Log">Change Log</a>:           Maintaining a change history for your program. 
-<li><a accesskey="3" href="Tags.html#Tags">Tags</a>:                 Go directly to any function in your program in one
-                          command.  Tags remembers which file it is in. 
-<li><a accesskey="4" href="EDE.html#EDE">EDE</a>:                  An integrated development environment for Emacs.
+</li><li>− A specialized mode for maintaining <samp>ChangeLog</samp> files that provide
+a chronological log of program changes.
 
-<li><a accesskey="5" href="Emerge.html#Emerge">Emerge</a>:               A convenient way of merging two versions of a program. 
-</ul>
+</li><li>− <acronym>Xref</acronym>, a set of commands for displaying definitions of
+symbols (a.k.a. &ldquo;identifiers&rdquo;) and their references.
 
-   </body></html>
+</li><li>− <acronym>EDE</acronym>, the Emacs&rsquo;s own IDE.
 
+</li><li>− A mode for merging changes to program sources made on separate
+branches of development.
+</li></ul>
+
+<p>If you are maintaining a large Lisp program, then in addition to the
+features described here, you may find the Emacs Lisp Regression
+Testing (<acronym>ERT</acronym>) library useful (see <a href="../ert/index.html#Top">ERT</a> in <cite>Emacs
+Lisp Regression Testing</cite>).
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Version-Control.html#Version-Control" accesskey="1">Version Control</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using version control systems.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Change-Log.html#Change-Log" accesskey="2">Change Log</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Maintaining a change history for your program.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Xref.html#Xref" accesskey="3">Xref</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Find definitions and references of any function,
+                          method, struct, macro, &hellip; in your program.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="EDE.html#EDE" accesskey="4">EDE</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">An integrated development environment for Emacs.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Emerge.html#Emerge" accesskey="5">Emerge</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A convenient way of merging two versions of a program.
+</td></tr>
+</table>
+
+
+
+
+</body>
+</html>

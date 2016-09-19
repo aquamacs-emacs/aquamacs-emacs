@@ -1,95 +1,146 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Lisp Data Types - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Lisp Data Types</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Lisp Data Types">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Lisp Data Types">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Introduction.html#Introduction" title="Introduction">
-<link rel="next" href="Numbers.html#Numbers" title="Numbers">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Printed-Representation.html#Printed-Representation" rel="next" title="Printed Representation">
+<link href="Acknowledgments.html#Acknowledgments" rel="prev" title="Acknowledgments">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Lisp-Data-Types"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Numbers.html#Numbers">Numbers</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Introduction.html#Introduction">Introduction</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
+Next: <a href="Numbers.html#Numbers" accesskey="n" rel="next">Numbers</a>, Previous: <a href="Introduction.html#Introduction" accesskey="p" rel="prev">Introduction</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Lisp-Data-Types-1"></a>
 <h2 class="chapter">2 Lisp Data Types</h2>
+<a name="index-object"></a>
+<a name="index-Lisp-object"></a>
+<a name="index-type"></a>
+<a name="index-data-type"></a>
 
-<p><a name="index-object-37"></a><a name="index-Lisp-object-38"></a><a name="index-type-39"></a><a name="index-data-type-40"></a>
-  A Lisp <dfn>object</dfn> is a piece of data used and manipulated by Lisp
-programs.  For our purposes, a <dfn>type</dfn> or <dfn>data type</dfn> is a set of
+<p>A Lisp <em>object</em> is a piece of data used and manipulated by Lisp
+programs.  For our purposes, a <em>type</em> or <em>data type</em> is a set of
 possible objects.
-
-   <p>Every object belongs to at least one type.  Objects of the same type
-have similar structures and may usually be used in the same contexts. 
-Types can overlap, and objects can belong to two or more types. 
+</p>
+<p>Every object belongs to at least one type.  Objects of the same type
+have similar structures and may usually be used in the same contexts.
+Types can overlap, and objects can belong to two or more types.
 Consequently, we can ask whether an object belongs to a particular type,
 but not for <em>the</em> type of an object.
-
-   <p><a name="index-primitive-type-41"></a>  A few fundamental object types are built into Emacs.  These, from
-which all other types are constructed, are called <dfn>primitive types</dfn>. 
+</p>
+<a name="index-primitive-type"></a>
+<p>A few fundamental object types are built into Emacs.  These, from
+which all other types are constructed, are called <em>primitive types</em>.
 Each object belongs to one and only one primitive type.  These types
-include <dfn>integer</dfn>, <dfn>float</dfn>, <dfn>cons</dfn>, <dfn>symbol</dfn>,
-<dfn>string</dfn>, <dfn>vector</dfn>, <dfn>hash-table</dfn>, <dfn>subr</dfn>, and
-<dfn>byte-code function</dfn>, plus several special types, such as
-<dfn>buffer</dfn>, that are related to editing.  (See <a href="Editing-Types.html#Editing-Types">Editing Types</a>.)
-
-   <p>Each primitive type has a corresponding Lisp function that checks
+include <em>integer</em>, <em>float</em>, <em>cons</em>, <em>symbol</em>,
+<em>string</em>, <em>vector</em>, <em>hash-table</em>, <em>subr</em>, and
+<em>byte-code function</em>, plus several special types, such as
+<em>buffer</em>, that are related to editing.  (See <a href="Editing-Types.html#Editing-Types">Editing Types</a>.)
+</p>
+<p>Each primitive type has a corresponding Lisp function that checks
 whether an object is a member of that type.
-
-   <p>Lisp is unlike many other languages in that its objects are
-<dfn>self-typing</dfn>: the primitive type of each object is implicit in
+</p>
+<p>Lisp is unlike many other languages in that its objects are
+<em>self-typing</em>: the primitive type of each object is implicit in
 the object itself.  For example, if an object is a vector, nothing can
 treat it as a number; Lisp knows it is a vector, not a number.
-
-   <p>In most languages, the programmer must declare the data type of each
+</p>
+<p>In most languages, the programmer must declare the data type of each
 variable, and the type is known by the compiler but not represented in
 the data.  Such type declarations do not exist in Emacs Lisp.  A Lisp
 variable can have any type of value, and it remembers whatever value
 you store in it, type and all.  (Actually, a small number of Emacs
-Lisp variables can only take on values of a certain type. 
+Lisp variables can only take on values of a certain type.
 See <a href="Variables-with-Restricted-Values.html#Variables-with-Restricted-Values">Variables with Restricted Values</a>.)
-
-   <p>This chapter describes the purpose, printed representation, and read
+</p>
+<p>This chapter describes the purpose, printed representation, and read
 syntax of each of the standard types in GNU Emacs Lisp.  Details on how
 to use these types can be found in later chapters.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Printed-Representation.html#Printed-Representation" accesskey="1">Printed Representation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How Lisp objects are represented as text.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Comments.html#Comments" accesskey="2">Comments</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Comments and their formatting conventions.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Programming-Types.html#Programming-Types" accesskey="3">Programming Types</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Types found in all Lisp systems.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Editing-Types.html#Editing-Types" accesskey="4">Editing Types</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Types specific to Emacs.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Circular-Objects.html#Circular-Objects" accesskey="5">Circular Objects</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Read syntax for circular structure.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Type-Predicates.html#Type-Predicates" accesskey="6">Type Predicates</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Tests related to types.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Equality-Predicates.html#Equality-Predicates" accesskey="7">Equality Predicates</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Tests of equality between any two objects.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Printed-Representation.html#Printed-Representation">Printed Representation</a>:       How Lisp objects are represented as text. 
-<li><a accesskey="2" href="Comments.html#Comments">Comments</a>:                     Comments and their formatting conventions. 
-<li><a accesskey="3" href="Programming-Types.html#Programming-Types">Programming Types</a>:            Types found in all Lisp systems. 
-<li><a accesskey="4" href="Editing-Types.html#Editing-Types">Editing Types</a>:                Types specific to Emacs. 
-<li><a accesskey="5" href="Circular-Objects.html#Circular-Objects">Circular Objects</a>:             Read syntax for circular structure. 
-<li><a accesskey="6" href="Type-Predicates.html#Type-Predicates">Type Predicates</a>:              Tests related to types. 
-<li><a accesskey="7" href="Equality-Predicates.html#Equality-Predicates">Equality Predicates</a>:          Tests of equality between any two objects. 
-</ul>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Numbers.html#Numbers" accesskey="n" rel="next">Numbers</a>, Previous: <a href="Introduction.html#Introduction" accesskey="p" rel="prev">Introduction</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

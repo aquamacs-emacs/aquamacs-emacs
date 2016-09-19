@@ -1,113 +1,153 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Indirect Buffers - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Indirect Buffers</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Indirect Buffers">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Indirect Buffers">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Buffers.html#Buffers" title="Buffers">
-<link rel="prev" href="Killing-Buffers.html#Killing-Buffers" title="Killing Buffers">
-<link rel="next" href="Swapping-Text.html#Swapping-Text" title="Swapping Text">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Buffers.html#Buffers" rel="up" title="Buffers">
+<link href="Swapping-Text.html#Swapping-Text" rel="next" title="Swapping Text">
+<link href="Killing-Buffers.html#Killing-Buffers" rel="prev" title="Killing Buffers">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Indirect-Buffers"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Swapping-Text.html#Swapping-Text">Swapping Text</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Killing-Buffers.html#Killing-Buffers">Killing Buffers</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Buffers.html#Buffers">Buffers</a>
-<hr>
+Next: <a href="Swapping-Text.html#Swapping-Text" accesskey="n" rel="next">Swapping Text</a>, Previous: <a href="Killing-Buffers.html#Killing-Buffers" accesskey="p" rel="prev">Killing Buffers</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Indirect-Buffers-1"></a>
 <h3 class="section">26.11 Indirect Buffers</h3>
+<a name="index-indirect-buffers"></a>
+<a name="index-base-buffer"></a>
 
-<p><a name="index-indirect-buffers-2367"></a><a name="index-base-buffer-2368"></a>
-  An <dfn>indirect buffer</dfn> shares the text of some other buffer, which
-is called the <dfn>base buffer</dfn> of the indirect buffer.  In some ways it
+<p>An <em>indirect buffer</em> shares the text of some other buffer, which
+is called the <em>base buffer</em> of the indirect buffer.  In some ways it
 is the analogue, for buffers, of a symbolic link among files.  The base
 buffer may not itself be an indirect buffer.
-
-   <p>The text of the indirect buffer is always identical to the text of its
+</p>
+<p>The text of the indirect buffer is always identical to the text of its
 base buffer; changes made by editing either one are visible immediately
 in the other.  This includes the text properties as well as the characters
 themselves.
-
-   <p>In all other respects, the indirect buffer and its base buffer are
+</p>
+<p>In all other respects, the indirect buffer and its base buffer are
 completely separate.  They have different names, independent values of
 point, independent narrowing, independent markers and overlays (though
 inserting or deleting text in either buffer relocates the markers and
 overlays for both), independent major modes, and independent
 buffer-local variable bindings.
-
-   <p>An indirect buffer cannot visit a file, but its base buffer can.  If
+</p>
+<p>An indirect buffer cannot visit a file, but its base buffer can.  If
 you try to save the indirect buffer, that actually saves the base
 buffer.
-
-   <p>Killing an indirect buffer has no effect on its base buffer.  Killing
+</p>
+<p>Killing an indirect buffer has no effect on its base buffer.  Killing
 the base buffer effectively kills the indirect buffer in that it cannot
 ever again be the current buffer.
-
-<div class="defun">
-&mdash; Command: <b>make-indirect-buffer</b><var> base-buffer name &amp;optional clone<a name="index-make_002dindirect_002dbuffer-2369"></a></var><br>
-<blockquote><p>This creates and returns an indirect buffer named <var>name</var> whose
+</p>
+<dl>
+<dt><a name="index-make_002dindirect_002dbuffer"></a>Command: <strong>make-indirect-buffer</strong> <em>base-buffer name &amp;optional clone</em></dt>
+<dd><p>This creates and returns an indirect buffer named <var>name</var> whose
 base buffer is <var>base-buffer</var>.  The argument <var>base-buffer</var> may
 be a live buffer or the name (a string) of an existing buffer.  If
 <var>name</var> is the name of an existing buffer, an error is signaled.
-
-        <p>If <var>clone</var> is non-<code>nil</code>, then the indirect buffer originally
+</p>
+<p>If <var>clone</var> is non-<code>nil</code>, then the indirect buffer originally
 shares the state of <var>base-buffer</var> such as major mode, minor
 modes, buffer local variables and so on.  If <var>clone</var> is omitted
-or <code>nil</code> the indirect buffer's state is set to the default state
+or <code>nil</code> the indirect buffer&rsquo;s state is set to the default state
 for new buffers.
-
-        <p>If <var>base-buffer</var> is an indirect buffer, its base buffer is used as
+</p>
+<p>If <var>base-buffer</var> is an indirect buffer, its base buffer is used as
 the base for the new buffer.  If, in addition, <var>clone</var> is
 non-<code>nil</code>, the initial state is copied from the actual base
-buffer, not from <var>base-buffer</var>. 
-</p></blockquote></div>
+buffer, not from <var>base-buffer</var>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Command: <b>clone-indirect-buffer</b><var> newname display-flag &amp;optional norecord<a name="index-clone_002dindirect_002dbuffer-2370"></a></var><br>
-<blockquote><p>This function creates and returns a new indirect buffer that shares
-the current buffer's base buffer and copies the rest of the current
-buffer's attributes.  (If the current buffer is not indirect, it is
+<dl>
+<dt><a name="index-clone_002dindirect_002dbuffer"></a>Command: <strong>clone-indirect-buffer</strong> <em>newname display-flag &amp;optional norecord</em></dt>
+<dd><p>This function creates and returns a new indirect buffer that shares
+the current buffer&rsquo;s base buffer and copies the rest of the current
+buffer&rsquo;s attributes.  (If the current buffer is not indirect, it is
 used as the base buffer.)
-
-        <p>If <var>display-flag</var> is non-<code>nil</code>, that means to display the new
+</p>
+<p>If <var>display-flag</var> is non-<code>nil</code>, that means to display the new
 buffer by calling <code>pop-to-buffer</code>.  If <var>norecord</var> is
 non-<code>nil</code>, that means not to put the new buffer to the front of
-the buffer list. 
-</p></blockquote></div>
+the buffer list.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>buffer-base-buffer</b><var> &amp;optional buffer<a name="index-buffer_002dbase_002dbuffer-2371"></a></var><br>
-<blockquote><p>This function returns the base buffer of <var>buffer</var>, which defaults
+<dl>
+<dt><a name="index-buffer_002dbase_002dbuffer"></a>Function: <strong>buffer-base-buffer</strong> <em>&amp;optional buffer</em></dt>
+<dd><p>This function returns the base buffer of <var>buffer</var>, which defaults
 to the current buffer.  If <var>buffer</var> is not indirect, the value is
 <code>nil</code>.  Otherwise, the value is another buffer, which is never an
-indirect buffer. 
-</p></blockquote></div>
+indirect buffer.
+</p></dd></dl>
 
-   </body></html>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Swapping-Text.html#Swapping-Text" accesskey="n" rel="next">Swapping Text</a>, Previous: <a href="Killing-Buffers.html#Killing-Buffers" accesskey="p" rel="prev">Killing Buffers</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
+
+
+</body>
+</html>

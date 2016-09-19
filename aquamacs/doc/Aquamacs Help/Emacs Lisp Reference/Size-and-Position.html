@@ -1,201 +1,243 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Size and Position - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Size and Position</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Size and Position">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Size and Position">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Frame-Geometry.html#Frame-Geometry" title="Frame Geometry">
-<link rel="prev" href="Frame-Font.html#Frame-Font" title="Frame Font">
-<link rel="next" href="Implied-Frame-Resizing.html#Implied-Frame-Resizing" title="Implied Frame Resizing">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Frame-Geometry.html#Frame-Geometry" rel="up" title="Frame Geometry">
+<link href="Implied-Frame-Resizing.html#Implied-Frame-Resizing" rel="next" title="Implied Frame Resizing">
+<link href="Frame-Font.html#Frame-Font" rel="prev" title="Frame Font">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Size-and-Position"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Implied-Frame-Resizing.html#Implied-Frame-Resizing">Implied Frame Resizing</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Frame-Font.html#Frame-Font">Frame Font</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Frame-Geometry.html#Frame-Geometry">Frame Geometry</a>
-<hr>
+Next: <a href="Implied-Frame-Resizing.html#Implied-Frame-Resizing" accesskey="n" rel="next">Implied Frame Resizing</a>, Previous: <a href="Frame-Font.html#Frame-Font" accesskey="p" rel="prev">Frame Font</a>, Up: <a href="Frame-Geometry.html#Frame-Geometry" accesskey="u" rel="up">Frame Geometry</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Size-and-Position-1"></a>
 <h4 class="subsection">28.3.3 Size and Position</h4>
+<a name="index-frame-size-1"></a>
+<a name="index-frame-position-1"></a>
+<a name="index-position-of-frame-1"></a>
 
-<p><a name="index-frame-size-2754"></a><a name="index-frame-position-2755"></a><a name="index-position-of-frame-2756"></a>
-You can read or change the position of a frame using the frame
+<p>You can read or change the position of a frame using the frame
 parameters <code>left</code> and <code>top</code> (see <a href="Position-Parameters.html#Position-Parameters">Position Parameters</a>) and
 its size using the <code>height</code> and <code>width</code> parameters
 (see <a href="Size-Parameters.html#Size-Parameters">Size Parameters</a>).  Here are some special features for working
 with sizes and positions.  For all of these functions the argument
 <var>frame</var> must denote a live frame and defaults to the selected frame.
-
-<div class="defun">
-&mdash; Function: <b>frame-position</b><var> &amp;optional Lisp_Object &amp;optional frame<a name="index-frame_002dposition-2757"></a></var><br>
-<blockquote><p>This function returns the outer position (see <a href="Frame-Layout.html#Frame-Layout">Frame Layout</a>) of
+</p>
+<dl>
+<dt><a name="index-frame_002dposition"></a>Function: <strong>frame-position</strong> <em>&amp;optional Lisp_Object &amp;optional frame</em></dt>
+<dd><p>This function returns the outer position (see <a href="Frame-Layout.html#Frame-Layout">Frame Layout</a>) of
 <var>frame</var> in pixels.  The value is a cons giving the coordinates of
 the top left corner of the outer frame of <var>frame</var> relative to an
-origin at the position (0, 0) of the frame's display.  On a text
-terminal frame both values are zero. 
-</p></blockquote></div>
+origin at the position (0, 0) of the frame&rsquo;s display.  On a text
+terminal frame both values are zero.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>set-frame-position</b><var> frame X Y<a name="index-set_002dframe_002dposition-2758"></a></var><br>
-<blockquote><p>This function sets the outer frame position of <var>frame</var> to <var>X</var>
+<dl>
+<dt><a name="index-set_002dframe_002dposition"></a>Function: <strong>set-frame-position</strong> <em>frame X Y</em></dt>
+<dd><p>This function sets the outer frame position of <var>frame</var> to <var>X</var>
 and <var>Y</var>.  The latter arguments specify pixels and normally count
-from an origin at the position (0, 0) of <var>frame</var>'s display.
-
-        <p>A negative parameter value positions the right edge of the outer frame
+from an origin at the position (0, 0) of <var>frame</var>&rsquo;s display.
+</p>
+<p>A negative parameter value positions the right edge of the outer frame
 by <var>-x</var> pixels left from the right edge of the screen or the bottom
 edge by <var>-y</var> pixels up from the bottom edge of the screen.
+</p>
+<p>This function has no effect on text terminal frames.
+</p></dd></dl>
 
-        <p>This function has no effect on text terminal frames. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>frame-pixel-height</b><var> &amp;optional frame<a name="index-frame_002dpixel_002dheight-2759"></a></var><br>
-&mdash; Function: <b>frame-pixel-width</b><var> &amp;optional frame<a name="index-frame_002dpixel_002dwidth-2760"></a></var><br>
-<blockquote><p>   These functions return the inner height and width (the height and
+<dl>
+<dt><a name="index-frame_002dpixel_002dheight"></a>Function: <strong>frame-pixel-height</strong> <em>&amp;optional frame</em></dt>
+<dt><a name="index-frame_002dpixel_002dwidth"></a>Function: <strong>frame-pixel-width</strong> <em>&amp;optional frame</em></dt>
+<dd><p>These functions return the inner height and width (the height and
 width of the display area, see <a href="Frame-Layout.html#Frame-Layout">Frame Layout</a>) of <var>frame</var> in
 pixels.  For a text terminal, the results are in characters rather than
-pixels. 
-</p></blockquote></div>
+pixels.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>frame-text-height</b><var> &amp;optional frame<a name="index-frame_002dtext_002dheight-2761"></a></var><br>
-&mdash; Function: <b>frame-text-width</b><var> &amp;optional frame<a name="index-frame_002dtext_002dwidth-2762"></a></var><br>
-<blockquote><p>These functions return the height and width of the text area of
+<dl>
+<dt><a name="index-frame_002dtext_002dheight"></a>Function: <strong>frame-text-height</strong> <em>&amp;optional frame</em></dt>
+<dt><a name="index-frame_002dtext_002dwidth"></a>Function: <strong>frame-text-width</strong> <em>&amp;optional frame</em></dt>
+<dd><p>These functions return the height and width of the text area of
 <var>frame</var> (see <a href="Frame-Layout.html#Frame-Layout">Frame Layout</a>), measured in pixels.  For a text
 terminal, the results are in characters rather than pixels.
-
-        <p>The value returned by <code>frame-text-height</code> differs from that
+</p>
+<p>The value returned by <code>frame-text-height</code> differs from that
 returned by <code>frame-pixel-height</code> by not including the heights of
 any internal tool bar or menu bar, the height of one horizontal scroll
 bar and the widths of the internal border.
-
-        <p>The value returned by <code>frame-text-width</code> differs from that returned
+</p>
+<p>The value returned by <code>frame-text-width</code> differs from that returned
 by <code>frame-pixel-width</code> by not including the width of one vertical
 scroll bar, the widths of one left and one right fringe and the widths
-of the internal border. 
-</p></blockquote></div>
+of the internal border.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>frame-height</b><var> &amp;optional frame<a name="index-frame_002dheight-2763"></a></var><br>
-&mdash; Function: <b>frame-width</b><var> &amp;optional frame<a name="index-frame_002dwidth-2764"></a></var><br>
-<blockquote><p>These functions return the height and width of the text area of
+<dl>
+<dt><a name="index-frame_002dheight"></a>Function: <strong>frame-height</strong> <em>&amp;optional frame</em></dt>
+<dt><a name="index-frame_002dwidth"></a>Function: <strong>frame-width</strong> <em>&amp;optional frame</em></dt>
+<dd><p>These functions return the height and width of the text area of
 <var>frame</var>, measured in units of the default font height and width of
 <var>frame</var> (see <a href="Frame-Font.html#Frame-Font">Frame Font</a>).  These functions are plain shorthands
 for writing <code>(frame-parameter frame 'height)</code> and
 <code>(frame-parameter frame 'width)</code>.
-
-        <p>If the text area of <var>frame</var> measured in pixels is not a multiple of
+</p>
+<p>If the text area of <var>frame</var> measured in pixels is not a multiple of
 its default font size, the values returned by these functions are
 rounded down to the number of characters of the default font that fully
-fit into the text area. 
-</p></blockquote></div>
+fit into the text area.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; User Option: <b>frame-resize-pixelwise</b><var><a name="index-frame_002dresize_002dpixelwise-2765"></a></var><br>
-<blockquote><p>If this option is <code>nil</code>, a frame's size is usually rounded to a
-multiple of the current values of that frame's <code>frame-char-height</code>
+<dl>
+<dt><a name="index-frame_002dresize_002dpixelwise"></a>User Option: <strong>frame-resize-pixelwise</strong></dt>
+<dd><p>If this option is <code>nil</code>, a frame&rsquo;s size is usually rounded to a
+multiple of the current values of that frame&rsquo;s <code>frame-char-height</code>
 and <code>frame-char-width</code> whenever the frame is resized.  If this is
 non-<code>nil</code>, no rounding occurs, hence frame sizes can
 increase/decrease by one pixel.
-
-        <p>Setting this variable usually causes the next resize operation to pass
+</p>
+<p>Setting this variable usually causes the next resize operation to pass
 the corresponding size hints to the window manager.  This means that
-this variable should be set only in a user's initial file; applications
+this variable should be set only in a user&rsquo;s initial file; applications
 should never bind it temporarily.
-
-        <p>The precise meaning of a value of <code>nil</code> for this option depends on
+</p>
+<p>The precise meaning of a value of <code>nil</code> for this option depends on
 the toolkit used.  Dragging the external border with the mouse is done
 character-wise provided the window manager is willing to process the
 corresponding size hints.  Calling <code>set-frame-size</code> (see below)
 with arguments that do not specify the frame size as an integer multiple
 of its character size, however, may: be ignored, cause a rounding
 (GTK+), or be accepted (Lucid, Motif, MS-Windows).
+</p>
+<p>With some window managers you may have to set this to non-<code>nil</code> in
+order to make a frame appear truly maximized or full-screen.
+</p></dd></dl>
 
-        <p>With some window managers you may have to set this to non-<code>nil</code> in
-order to make a frame appear truly maximized or full-screen. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>set-frame-size</b><var> frame width height pixelwise<a name="index-set_002dframe_002dsize-2766"></a></var><br>
-<blockquote><p>This function sets the size of the text area of <var>frame</var>, measured in
+<dl>
+<dt><a name="index-set_002dframe_002dsize"></a>Function: <strong>set-frame-size</strong> <em>frame width height &amp;optional pixelwise</em></dt>
+<dd><p>This function sets the size of the text area of <var>frame</var>, measured in
 terms of the canonical height and width of a character on <var>frame</var>
 (see <a href="Frame-Font.html#Frame-Font">Frame Font</a>).
-
-        <p>The optional argument <var>pixelwise</var> non-<code>nil</code> means to measure
+</p>
+<p>The optional argument <var>pixelwise</var> non-<code>nil</code> means to measure
 the new width and height in units of pixels instead.  Note that if
 <code>frame-resize-pixelwise</code> is <code>nil</code>, some toolkits may refuse to
 fully honor the request if it does not increase/decrease the frame size
-to a multiple of its character size. 
-</p></blockquote></div>
+to a multiple of its character size.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>set-frame-height</b><var> frame height &amp;optional pretend pixelwise<a name="index-set_002dframe_002dheight-2767"></a></var><br>
-<blockquote><p>This function resizes the text area of <var>frame</var> to a height of
+<dl>
+<dt><a name="index-set_002dframe_002dheight"></a>Function: <strong>set-frame-height</strong> <em>frame height &amp;optional pretend pixelwise</em></dt>
+<dd><p>This function resizes the text area of <var>frame</var> to a height of
 <var>height</var> lines.  The sizes of existing windows in <var>frame</var> are
 altered proportionally to fit.
-
-        <p>If <var>pretend</var> is non-<code>nil</code>, then Emacs displays <var>height</var>
+</p>
+<p>If <var>pretend</var> is non-<code>nil</code>, then Emacs displays <var>height</var>
 lines of output in <var>frame</var>, but does not change its value for the
-actual height of the frame.  This is only useful on text terminals. 
+actual height of the frame.  This is only useful on text terminals.
 Using a smaller height than the terminal actually implements may be
 useful to reproduce behavior observed on a smaller screen, or if the
 terminal malfunctions when using its whole screen.  Setting the frame
 height directly does not always work, because knowing the correct
 actual size may be necessary for correct cursor positioning on
 text terminals.
-
-        <p>The optional fourth argument <var>pixelwise</var> non-<code>nil</code> means that
+</p>
+<p>The optional fourth argument <var>pixelwise</var> non-<code>nil</code> means that
 <var>frame</var> should be <var>height</var> pixels high.  Note that if
 <code>frame-resize-pixelwise</code> is <code>nil</code>, some toolkits may refuse to
 fully honor the request if it does not increase/decrease the frame
-height to a multiple of its character height. 
-</p></blockquote></div>
+height to a multiple of its character height.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>set-frame-width</b><var> frame width &amp;optional pretend pixelwise<a name="index-set_002dframe_002dwidth-2768"></a></var><br>
-<blockquote><p>This function sets the width of the text area of <var>frame</var>, measured
+<dl>
+<dt><a name="index-set_002dframe_002dwidth"></a>Function: <strong>set-frame-width</strong> <em>frame width &amp;optional pretend pixelwise</em></dt>
+<dd><p>This function sets the width of the text area of <var>frame</var>, measured
 in characters.  The argument <var>pretend</var> has the same meaning as in
 <code>set-frame-height</code>.
-
-        <p>The optional fourth argument <var>pixelwise</var> non-<code>nil</code> means that
+</p>
+<p>The optional fourth argument <var>pixelwise</var> non-<code>nil</code> means that
 <var>frame</var> should be <var>width</var> pixels wide.  Note that if
 <code>frame-resize-pixelwise</code> is <code>nil</code>, some toolkits may refuse to
 fully honor the request if it does not increase/decrease the frame width
-to a multiple of its character width. 
-</p></blockquote></div>
+to a multiple of its character width.
+</p></dd></dl>
 
-   <p>None of these three functions will make a frame smaller than needed to
+<p>None of these three functions will make a frame smaller than needed to
 display all of its windows together with their scroll bars, fringes,
 margins, dividers, mode and header lines.  This contrasts with requests
 by the window manager triggered, for example, by dragging the external
 border of a frame with the mouse.  Such requests are always honored by
 clipping, if necessary, portions that cannot be displayed at the right,
 bottom corner of the frame.
+</p>
 
-   </body></html>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Implied-Frame-Resizing.html#Implied-Frame-Resizing" accesskey="n" rel="next">Implied Frame Resizing</a>, Previous: <a href="Frame-Font.html#Frame-Font" accesskey="p" rel="prev">Frame Font</a>, Up: <a href="Frame-Geometry.html#Frame-Geometry" accesskey="u" rel="up">Frame Geometry</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
+
+
+</body>
+</html>

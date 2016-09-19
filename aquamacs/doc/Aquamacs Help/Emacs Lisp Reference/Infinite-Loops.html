@@ -1,72 +1,109 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Infinite Loops - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Infinite Loops</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Infinite Loops">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Infinite Loops">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Debugger.html#Debugger" title="Debugger">
-<link rel="prev" href="Error-Debugging.html#Error-Debugging" title="Error Debugging">
-<link rel="next" href="Function-Debugging.html#Function-Debugging" title="Function Debugging">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Debugger.html#Debugger" rel="up" title="Debugger">
+<link href="Function-Debugging.html#Function-Debugging" rel="next" title="Function Debugging">
+<link href="Error-Debugging.html#Error-Debugging" rel="prev" title="Error Debugging">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Infinite-Loops"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Function-Debugging.html#Function-Debugging">Function Debugging</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Error-Debugging.html#Error-Debugging">Error Debugging</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Debugger.html#Debugger">Debugger</a>
-<hr>
+Next: <a href="Function-Debugging.html#Function-Debugging" accesskey="n" rel="next">Function Debugging</a>, Previous: <a href="Error-Debugging.html#Error-Debugging" accesskey="p" rel="prev">Error Debugging</a>, Up: <a href="Debugger.html#Debugger" accesskey="u" rel="up">Debugger</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Debugging-Infinite-Loops"></a>
 <h4 class="subsection">17.1.2 Debugging Infinite Loops</h4>
+<a name="index-infinite-loops"></a>
+<a name="index-loops_002c-infinite"></a>
+<a name="index-quitting-from-infinite-loop"></a>
+<a name="index-stopping-an-infinite-loop"></a>
 
-<p><a name="index-infinite-loops-1085"></a><a name="index-loops_002c-infinite-1086"></a><a name="index-quitting-from-infinite-loop-1087"></a><a name="index-stopping-an-infinite-loop-1088"></a>
-  When a program loops infinitely and fails to return, your first
+<p>When a program loops infinitely and fails to return, your first
 problem is to stop the loop.  On most operating systems, you can do
-this with <kbd>C-g</kbd>, which causes a <dfn>quit</dfn>.  See <a href="Quitting.html#Quitting">Quitting</a>.
-
-   <p>Ordinary quitting gives no information about why the program was
+this with <kbd>C-g</kbd>, which causes a <em>quit</em>.  See <a href="Quitting.html#Quitting">Quitting</a>.
+</p>
+<p>Ordinary quitting gives no information about why the program was
 looping.  To get more information, you can set the variable
 <code>debug-on-quit</code> to non-<code>nil</code>.  Once you have the debugger
 running in the middle of the infinite loop, you can proceed from the
 debugger using the stepping commands.  If you step through the entire
 loop, you may get enough information to solve the problem.
-
-   <p>Quitting with <kbd>C-g</kbd> is not considered an error, and
-<code>debug-on-error</code> has no effect on the handling of <kbd>C-g</kbd>. 
+</p>
+<p>Quitting with <kbd>C-g</kbd> is not considered an error, and
+<code>debug-on-error</code> has no effect on the handling of <kbd>C-g</kbd>.
 Likewise, <code>debug-on-quit</code> has no effect on errors.
-
-<div class="defun">
-&mdash; User Option: <b>debug-on-quit</b><var><a name="index-debug_002don_002dquit-1089"></a></var><br>
-<blockquote><p>This variable determines whether the debugger is called when
+</p>
+<dl>
+<dt><a name="index-debug_002don_002dquit"></a>User Option: <strong>debug-on-quit</strong></dt>
+<dd><p>This variable determines whether the debugger is called when
 <code>quit</code> is signaled and not handled.  If <code>debug-on-quit</code> is
 non-<code>nil</code>, then the debugger is called whenever you quit (that
 is, type <kbd>C-g</kbd>).  If <code>debug-on-quit</code> is <code>nil</code> (the
-default), then the debugger is not called when you quit. 
-</p></blockquote></div>
+default), then the debugger is not called when you quit.
+</p></dd></dl>
 
-   </body></html>
 
+
+
+</body>
+</html>

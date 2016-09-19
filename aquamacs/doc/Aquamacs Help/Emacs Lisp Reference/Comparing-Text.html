@@ -1,79 +1,114 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Comparing Text - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Comparing Text</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Comparing Text">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Comparing Text">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Text.html#Text" title="Text">
-<link rel="prev" href="Buffer-Contents.html#Buffer-Contents" title="Buffer Contents">
-<link rel="next" href="Insertion.html#Insertion" title="Insertion">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Text.html#Text" rel="up" title="Text">
+<link href="Insertion.html#Insertion" rel="next" title="Insertion">
+<link href="Buffer-Contents.html#Buffer-Contents" rel="prev" title="Buffer Contents">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Comparing-Text"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Insertion.html#Insertion">Insertion</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Buffer-Contents.html#Buffer-Contents">Buffer Contents</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Text.html#Text">Text</a>
-<hr>
+Next: <a href="Insertion.html#Insertion" accesskey="n" rel="next">Insertion</a>, Previous: <a href="Buffer-Contents.html#Buffer-Contents" accesskey="p" rel="prev">Buffer Contents</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Comparing-Text-1"></a>
 <h3 class="section">31.3 Comparing Text</h3>
+<a name="index-comparing-buffer-text"></a>
 
-<p><a name="index-comparing-buffer-text-3142"></a>
-  This function lets you compare portions of the text in a buffer, without
+<p>This function lets you compare portions of the text in a buffer, without
 copying them into strings first.
-
-<div class="defun">
-&mdash; Function: <b>compare-buffer-substrings</b><var> buffer1 start1 end1 buffer2 start2 end2<a name="index-compare_002dbuffer_002dsubstrings-3143"></a></var><br>
-<blockquote><p>This function lets you compare two substrings of the same buffer or two
+</p>
+<dl>
+<dt><a name="index-compare_002dbuffer_002dsubstrings"></a>Function: <strong>compare-buffer-substrings</strong> <em>buffer1 start1 end1 buffer2 start2 end2</em></dt>
+<dd><p>This function lets you compare two substrings of the same buffer or two
 different buffers.  The first three arguments specify one substring,
 giving a buffer (or a buffer name) and two positions within the
 buffer.  The last three arguments specify the other substring in the
 same way.  You can use <code>nil</code> for <var>buffer1</var>, <var>buffer2</var>, or
 both to stand for the current buffer.
-
-        <p>The value is negative if the first substring is less, positive if the
+</p>
+<p>The value is negative if the first substring is less, positive if the
 first is greater, and zero if they are equal.  The absolute value of
 the result is one plus the index of the first differing characters
 within the substrings.
-
-        <p>This function ignores case when comparing characters
+</p>
+<p>This function ignores case when comparing characters
 if <code>case-fold-search</code> is non-<code>nil</code>.  It always ignores
 text properties.
-
-        <p>Suppose you have the text &lsquo;<samp><span class="samp">foobarbar&nbsp;haha!rara!</span></samp>&rsquo;<!-- /@w --> in the
-current buffer; then in this example the two substrings are &lsquo;<samp><span class="samp">rbar
-</span></samp>&rsquo; and &lsquo;<samp><span class="samp">rara!</span></samp>&rsquo;.  The value is 2 because the first substring is
+</p>
+<p>Suppose you have the text &lsquo;<samp>foobarbar&nbsp;haha!rara!</samp>&rsquo;<!-- /@w --> in the
+current buffer; then in this example the two substrings are &lsquo;<samp>rbar
+</samp>&rsquo; and &lsquo;<samp>rara!</samp>&rsquo;.  The value is 2 because the first substring is
 greater at the second character.
+</p>
+<div class="example">
+<pre class="example">(compare-buffer-substrings nil 6 11 nil 16 21)
+     &rArr; 2
+</pre></div>
+</dd></dl>
 
-     <pre class="example">          (compare-buffer-substrings nil 6 11 nil 16 21)
-               &rArr; 2
-</pre>
-        </blockquote></div>
 
-   </body></html>
 
+
+</body>
+</html>

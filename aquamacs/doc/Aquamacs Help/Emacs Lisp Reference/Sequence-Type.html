@@ -1,77 +1,111 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Sequence Type - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Sequence Type</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Sequence Type">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Sequence Type">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Programming-Types.html#Programming-Types" title="Programming Types">
-<link rel="prev" href="Symbol-Type.html#Symbol-Type" title="Symbol Type">
-<link rel="next" href="Cons-Cell-Type.html#Cons-Cell-Type" title="Cons Cell Type">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Programming-Types.html#Programming-Types" rel="up" title="Programming Types">
+<link href="Cons-Cell-Type.html#Cons-Cell-Type" rel="next" title="Cons Cell Type">
+<link href="Symbol-Type.html#Symbol-Type" rel="prev" title="Symbol Type">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Sequence-Type"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Cons-Cell-Type.html#Cons-Cell-Type">Cons Cell Type</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Symbol-Type.html#Symbol-Type">Symbol Type</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Programming-Types.html#Programming-Types">Programming Types</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Sequence-Type"></a>
+<div class="header">
+<p>
+Next: <a href="Cons-Cell-Type.html#Cons-Cell-Type" accesskey="n" rel="next">Cons Cell Type</a>, Previous: <a href="Symbol-Type.html#Symbol-Type" accesskey="p" rel="prev">Symbol Type</a>, Up: <a href="Programming-Types.html#Programming-Types" accesskey="u" rel="up">Programming Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Sequence-Types"></a>
 <h4 class="subsection">2.3.5 Sequence Types</h4>
 
-<p>A <dfn>sequence</dfn> is a Lisp object that represents an ordered set of
-elements.  There are two kinds of sequence in Emacs Lisp: <dfn>lists</dfn>
-and <dfn>arrays</dfn>.
-
-   <p>Lists are the most commonly-used sequences.  A list can hold
+<p>A <em>sequence</em> is a Lisp object that represents an ordered set of
+elements.  There are two kinds of sequence in Emacs Lisp: <em>lists</em>
+and <em>arrays</em>.
+</p>
+<p>Lists are the most commonly-used sequences.  A list can hold
 elements of any type, and its length can be easily changed by adding
 or removing elements.  See the next subsection for more about lists.
-
-   <p>Arrays are fixed-length sequences.  They are further subdivided into
+</p>
+<p>Arrays are fixed-length sequences.  They are further subdivided into
 strings, vectors, char-tables and bool-vectors.  Vectors can hold
 elements of any type, whereas string elements must be characters, and
 bool-vector elements must be <code>t</code> or <code>nil</code>.  Char-tables are
-like vectors except that they are indexed by any valid character code. 
+like vectors except that they are indexed by any valid character code.
 The characters in a string can have text properties like characters in
 a buffer (see <a href="Text-Properties.html#Text-Properties">Text Properties</a>), but vectors do not support text
 properties, even when their elements happen to be characters.
-
-   <p>Lists, strings and the other array types also share important
+</p>
+<p>Lists, strings and the other array types also share important
 similarities.  For example, all have a length <var>l</var>, and all have
 elements which can be indexed from zero to <var>l</var> minus one.  Several
-functions, called sequence functions, accept any kind of sequence. 
+functions, called sequence functions, accept any kind of sequence.
 For example, the function <code>length</code> reports the length of any kind
 of sequence.  See <a href="Sequences-Arrays-Vectors.html#Sequences-Arrays-Vectors">Sequences Arrays Vectors</a>.
-
-   <p>It is generally impossible to read the same sequence twice, since
+</p>
+<p>It is generally impossible to read the same sequence twice, since
 sequences are always created anew upon reading.  If you read the read
-syntax for a sequence twice, you get two sequences with equal contents. 
+syntax for a sequence twice, you get two sequences with equal contents.
 There is one exception: the empty list <code>()</code> always stands for the
 same object, <code>nil</code>.
+</p>
 
-   </body></html>
 
+
+</body>
+</html>

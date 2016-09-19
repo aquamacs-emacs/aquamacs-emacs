@@ -1,133 +1,179 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Kinds of Files - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Kinds of Files</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Kinds of Files">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Kinds of Files">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Information-about-Files.html#Information-about-Files" title="Information about Files">
-<link rel="prev" href="Testing-Accessibility.html#Testing-Accessibility" title="Testing Accessibility">
-<link rel="next" href="Truenames.html#Truenames" title="Truenames">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Information-about-Files.html#Information-about-Files" rel="up" title="Information about Files">
+<link href="Truenames.html#Truenames" rel="next" title="Truenames">
+<link href="Testing-Accessibility.html#Testing-Accessibility" rel="prev" title="Testing Accessibility">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Kinds-of-Files"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Truenames.html#Truenames">Truenames</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Testing-Accessibility.html#Testing-Accessibility">Testing Accessibility</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Information-about-Files.html#Information-about-Files">Information about Files</a>
-<hr>
+Next: <a href="Truenames.html#Truenames" accesskey="n" rel="next">Truenames</a>, Previous: <a href="Testing-Accessibility.html#Testing-Accessibility" accesskey="p" rel="prev">Testing Accessibility</a>, Up: <a href="Information-about-Files.html#Information-about-Files" accesskey="u" rel="up">Information about Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Distinguishing-Kinds-of-Files"></a>
 <h4 class="subsection">24.6.2 Distinguishing Kinds of Files</h4>
+<a name="index-file-classification"></a>
+<a name="index-classification-of-file-types"></a>
 
-<p><a name="index-file-classification-2094"></a><a name="index-classification-of-file-types-2095"></a>
-  This section describes how to distinguish various kinds of files, such
+<p>This section describes how to distinguish various kinds of files, such
 as directories, symbolic links, and ordinary files.
-
-<div class="defun">
-&mdash; Function: <b>file-symlink-p</b><var> filename<a name="index-file_002dsymlink_002dp-2096"></a></var><br>
-<blockquote><p><a name="index-file-symbolic-links-2097"></a>If the file <var>filename</var> is a symbolic link, the
+</p>
+<dl>
+<dt><a name="index-file_002dsymlink_002dp"></a>Function: <strong>file-symlink-p</strong> <em>filename</em></dt>
+<dd><a name="index-file-symbolic-links"></a>
+<p>If the file <var>filename</var> is a symbolic link, the
 <code>file-symlink-p</code> function returns its (non-recursive) link target
 as a string.  (The link target string is not necessarily the full
 absolute file name of the target; determining the full file name that
 the link points to is nontrivial, see below.)  If the leading
 directories of <var>filename</var> include symbolic links, this function
 recursively follows them.
-
-        <p>If the file <var>filename</var> is not a symbolic link, or does not exist,
+</p>
+<p>If the file <var>filename</var> is not a symbolic link, or does not exist,
 <code>file-symlink-p</code> returns <code>nil</code>.
+</p>
+<p>Here are a few examples of using this function:
+</p>
+<div class="example">
+<pre class="example">(file-symlink-p &quot;not-a-symlink&quot;)
+     &rArr; nil
+</pre><pre class="example">(file-symlink-p &quot;sym-link&quot;)
+     &rArr; &quot;not-a-symlink&quot;
+</pre><pre class="example">(file-symlink-p &quot;sym-link2&quot;)
+     &rArr; &quot;sym-link&quot;
+</pre><pre class="example">(file-symlink-p &quot;/bin&quot;)
+     &rArr; &quot;/pub/bin&quot;
+</pre></div>
 
-        <p>Here are a few examples of using this function:
-
-     <pre class="example">          (file-symlink-p "not-a-symlink")
-               &rArr; nil
-          (file-symlink-p "sym-link")
-               &rArr; "not-a-symlink"
-          (file-symlink-p "sym-link2")
-               &rArr; "sym-link"
-          (file-symlink-p "/bin")
-               &rArr; "/pub/bin"
-</pre>
-        <p>Note that in the third example, the function returned <samp><span class="file">sym-link</span></samp>,
+<p>Note that in the third example, the function returned <samp>sym-link</samp>,
 but did not proceed to resolve it, although that file is itself a
 symbolic link.  This is what we meant by &ldquo;non-recursive&rdquo; above&mdash;the
 process of following the symbolic links does not recurse if the link
 target is itself a link.
-
-        <p>The string that this function returns is what is recorded in the
-symbolic link; it may or may not include any leading directories. 
+</p>
+<p>The string that this function returns is what is recorded in the
+symbolic link; it may or may not include any leading directories.
 This function does <em>not</em> expand the link target to produce a
 fully-qualified file name, and in particular does not use the leading
 directories, if any, of the <var>filename</var> argument if the link target
-is not an absolute file name.  Here's an example:
+is not an absolute file name.  Here&rsquo;s an example:
+</p>
+<div class="example">
+<pre class="example">(file-symlink-p &quot;/foo/bar/baz&quot;)
+     &rArr; &quot;some-file&quot;
+</pre></div>
 
-     <pre class="example">          (file-symlink-p "/foo/bar/baz")
-               &rArr; "some-file"
-</pre>
-        <p class="noindent">Here, although <samp><span class="file">/foo/bar/baz</span></samp> was given as a fully-qualified file
+<p>Here, although <samp>/foo/bar/baz</samp> was given as a fully-qualified file
 name, the result is not, and in fact does not have any leading
-directories at all.  And since <samp><span class="file">some-file</span></samp> might itself be a
+directories at all.  And since <samp>some-file</samp> might itself be a
 symbolic link, you cannot simply prepend leading directories to it,
 nor even naively use <code>expand-file-name</code> (see <a href="File-Name-Expansion.html#File-Name-Expansion">File Name Expansion</a>) to produce its absolute file name.
-
-        <p>For this reason, this function is seldom useful if you need to
-determine more than just the fact that a file is or isn't a symbolic
+</p>
+<p>For this reason, this function is seldom useful if you need to
+determine more than just the fact that a file is or isn&rsquo;t a symbolic
 link.  If you actually need the file name of the link target, use
 <code>file-chase-links</code> or <code>file-truename</code>, described in
-<a href="Truenames.html#Truenames">Truenames</a>. 
-</p></blockquote></div>
+<a href="Truenames.html#Truenames">Truenames</a>.
+</p></dd></dl>
 
-   <p>The next two functions recursively follow symbolic links at
+<p>The next two functions recursively follow symbolic links at
 all levels for <var>filename</var>.
-
-<div class="defun">
-&mdash; Function: <b>file-directory-p</b><var> filename<a name="index-file_002ddirectory_002dp-2098"></a></var><br>
-<blockquote><p>This function returns <code>t</code> if <var>filename</var> is the name of an
+</p>
+<dl>
+<dt><a name="index-file_002ddirectory_002dp"></a>Function: <strong>file-directory-p</strong> <em>filename</em></dt>
+<dd><p>This function returns <code>t</code> if <var>filename</var> is the name of an
 existing directory, <code>nil</code> otherwise.
+</p>
+<div class="example">
+<pre class="example">(file-directory-p &quot;~rms&quot;)
+     &rArr; t
+</pre><pre class="example">(file-directory-p &quot;~rms/lewis/files.texi&quot;)
+     &rArr; nil
+</pre><pre class="example">(file-directory-p &quot;~rms/lewis/no-such-file&quot;)
+     &rArr; nil
+</pre><pre class="example">(file-directory-p &quot;$HOME&quot;)
+     &rArr; nil
+</pre><pre class="example">(file-directory-p
+ (substitute-in-file-name &quot;$HOME&quot;))
+     &rArr; t
+</pre></div>
+</dd></dl>
 
-     <pre class="example">          (file-directory-p "~rms")
-               &rArr; t
-          (file-directory-p "~rms/lewis/files.texi")
-               &rArr; nil
-          (file-directory-p "~rms/lewis/no-such-file")
-               &rArr; nil
-          (file-directory-p "$HOME")
-               &rArr; nil
-          (file-directory-p
-           (substitute-in-file-name "$HOME"))
-               &rArr; t
-</pre>
-        </blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>file-regular-p</b><var> filename<a name="index-file_002dregular_002dp-2099"></a></var><br>
-<blockquote><p>This function returns <code>t</code> if the file <var>filename</var> exists and is
+<dl>
+<dt><a name="index-file_002dregular_002dp"></a>Function: <strong>file-regular-p</strong> <em>filename</em></dt>
+<dd><p>This function returns <code>t</code> if the file <var>filename</var> exists and is
 a regular file (not a directory, named pipe, terminal, or
-other I/O device). 
-</p></blockquote></div>
+other I/O device).
+</p></dd></dl>
 
-   </body></html>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Truenames.html#Truenames" accesskey="n" rel="next">Truenames</a>, Previous: <a href="Testing-Accessibility.html#Testing-Accessibility" accesskey="p" rel="prev">Testing Accessibility</a>, Up: <a href="Information-about-Files.html#Information-about-Files" accesskey="u" rel="up">Information about Files</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
+
+
+</body>
+</html>

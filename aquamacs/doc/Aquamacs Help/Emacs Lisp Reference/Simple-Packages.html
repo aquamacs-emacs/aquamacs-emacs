@@ -1,107 +1,149 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Simple Packages - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Simple Packages</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Simple Packages">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Simple Packages">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Packaging.html#Packaging" title="Packaging">
-<link rel="prev" href="Packaging-Basics.html#Packaging-Basics" title="Packaging Basics">
-<link rel="next" href="Multi_002dfile-Packages.html#Multi_002dfile-Packages" title="Multi-file Packages">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Packaging.html#Packaging" rel="up" title="Packaging">
+<link href="Multi_002dfile-Packages.html#Multi_002dfile-Packages" rel="next" title="Multi-file Packages">
+<link href="Packaging-Basics.html#Packaging-Basics" rel="prev" title="Packaging Basics">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Simple-Packages"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Multi_002dfile-Packages.html#Multi_002dfile-Packages">Multi-file Packages</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Packaging-Basics.html#Packaging-Basics">Packaging Basics</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Packaging.html#Packaging">Packaging</a>
-<hr>
+Next: <a href="Multi_002dfile-Packages.html#Multi_002dfile-Packages" accesskey="n" rel="next">Multi-file Packages</a>, Previous: <a href="Packaging-Basics.html#Packaging-Basics" accesskey="p" rel="prev">Packaging Basics</a>, Up: <a href="Packaging.html#Packaging" accesskey="u" rel="up">Packaging</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="Simple-Packages-1"></a>
 <h3 class="section">39.2 Simple Packages</h3>
+<a name="index-single-file-package"></a>
+<a name="index-simple-package"></a>
 
-<p><a name="index-single-file-package-4726"></a><a name="index-simple-package-4727"></a>
-  A simple package consists of a single Emacs Lisp source file.  The
+<p>A simple package consists of a single Emacs Lisp source file.  The
 file must conform to the Emacs Lisp library header conventions
-(see <a href="Library-Headers.html#Library-Headers">Library Headers</a>).  The package's attributes are taken from
+(see <a href="Library-Headers.html#Library-Headers">Library Headers</a>).  The package&rsquo;s attributes are taken from
 the various headers, as illustrated by the following example:
+</p>
+<div class="example">
+<pre class="example">;;; superfrobnicator.el --- Frobnicate and bifurcate flanges
 
-<pre class="example">     ;;; superfrobnicator.el --- Frobnicate and bifurcate flanges
-     
-     ;; Copyright (C) 2011 Free Software Foundation, Inc.
-     
-     ;; Author: J. R. Hacker &lt;jrh@example.com&gt;
-     ;; Version: 1.3
-     ;; Package-Requires: ((flange "1.0"))
-     ;; Keywords: multimedia, frobnicate
-     ;; URL: http://example.com/jrhacker/superfrobnicate
-     
-     ...
-     
-     ;;; Commentary:
-     
-     ;; This package provides a minor mode to frobnicate and/or
-     ;; bifurcate any flanges you desire.  To activate it, just type
-     ...
-     
-     ;;;###autoload
-     (define-minor-mode superfrobnicator-mode
-     ...
-</pre>
-   <p>The name of the package is the same as the base name of the file, as
-written on the first line.  Here, it is &lsquo;<samp><span class="samp">superfrobnicator</span></samp>&rsquo;.
+;; Copyright (C) 2011 Free Software Foundation, Inc.
+</pre><pre class="example">
+;; Author: J. R. Hacker &lt;jrh@example.com&gt;
+;; Version: 1.3
+;; Package-Requires: ((flange &quot;1.0&quot;))
+;; Keywords: multimedia, frobnicate
+;; URL: http://example.com/jrhacker/superfrobnicate
 
-   <p>The brief description is also taken from the first line.  Here, it
-is &lsquo;<samp><span class="samp">Frobnicate and bifurcate flanges</span></samp>&rsquo;.
+&hellip;
 
-   <p>The version number comes from the &lsquo;<samp><span class="samp">Package-Version</span></samp>&rsquo; header, if
-it exists, or from the &lsquo;<samp><span class="samp">Version</span></samp>&rsquo; header otherwise.  One or the
+;;; Commentary:
+
+;; This package provides a minor mode to frobnicate and/or
+;; bifurcate any flanges you desire.  To activate it, just type
+&hellip;
+
+;;;###autoload
+(define-minor-mode superfrobnicator-mode
+&hellip;
+</pre></div>
+
+<p>The name of the package is the same as the base name of the file, as
+written on the first line.  Here, it is &lsquo;<samp>superfrobnicator</samp>&rsquo;.
+</p>
+<p>The brief description is also taken from the first line.  Here, it
+is &lsquo;<samp>Frobnicate and bifurcate flanges</samp>&rsquo;.
+</p>
+<p>The version number comes from the &lsquo;<samp>Package-Version</samp>&rsquo; header, if
+it exists, or from the &lsquo;<samp>Version</samp>&rsquo; header otherwise.  One or the
 other <em>must</em> be present.  Here, the version number is 1.3.
-
-   <p>If the file has a &lsquo;<samp><span class="samp">;;; Commentary:</span></samp>&rsquo; section, this section is
+</p>
+<p>If the file has a &lsquo;<samp>;;; Commentary:</samp>&rsquo; section, this section is
 used as the long description.  (When displaying the description, Emacs
-omits the &lsquo;<samp><span class="samp">;;; Commentary:</span></samp>&rsquo; line, as well as the leading comment
+omits the &lsquo;<samp>;;; Commentary:</samp>&rsquo; line, as well as the leading comment
 characters in the commentary itself.)
-
-   <p>If the file has a &lsquo;<samp><span class="samp">Package-Requires</span></samp>&rsquo; header, that is used as
+</p>
+<p>If the file has a &lsquo;<samp>Package-Requires</samp>&rsquo; header, that is used as
 the package dependencies.  In the above example, the package depends
-on the &lsquo;<samp><span class="samp">flange</span></samp>&rsquo; package, version 1.0 or higher.  See <a href="Library-Headers.html#Library-Headers">Library Headers</a>, for a description of the &lsquo;<samp><span class="samp">Package-Requires</span></samp>&rsquo; header.  If
+on the &lsquo;<samp>flange</samp>&rsquo; package, version 1.0 or higher.  See <a href="Library-Headers.html#Library-Headers">Library Headers</a>, for a description of the &lsquo;<samp>Package-Requires</samp>&rsquo; header.  If
 the header is omitted, the package has no dependencies.
-
-   <p>The &lsquo;<samp><span class="samp">Keywords</span></samp>&rsquo; and &lsquo;<samp><span class="samp">URL</span></samp>&rsquo; headers are optional, but recommended. 
+</p>
+<p>The &lsquo;<samp>Keywords</samp>&rsquo; and &lsquo;<samp>URL</samp>&rsquo; headers are optional, but recommended.
 The command <code>describe-package</code> uses these to add links to its
-output.  The &lsquo;<samp><span class="samp">Keywords</span></samp>&rsquo; header should contain at least one
+output.  The &lsquo;<samp>Keywords</samp>&rsquo; header should contain at least one
 standard keyword from the <code>finder-known-keywords</code> list.
-
-   <p>The file ought to also contain one or more autoload magic comments,
+</p>
+<p>The file ought to also contain one or more autoload magic comments,
 as explained in <a href="Packaging-Basics.html#Packaging-Basics">Packaging Basics</a>.  In the above example, a magic
 comment autoloads <code>superfrobnicator-mode</code>.
-
-   <p>See <a href="Package-Archives.html#Package-Archives">Package Archives</a>, for a explanation of how to add a
+</p>
+<p>See <a href="Package-Archives.html#Package-Archives">Package Archives</a>, for a explanation of how to add a
 single-file package to a package archive.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Multi_002dfile-Packages.html#Multi_002dfile-Packages" accesskey="n" rel="next">Multi-file Packages</a>, Previous: <a href="Packaging-Basics.html#Packaging-Basics" accesskey="p" rel="prev">Packaging Basics</a>, Up: <a href="Packaging.html#Packaging" accesskey="u" rel="up">Packaging</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

@@ -83,6 +83,10 @@ echo "MACOSX_DEPLOYMENT_TARGET=" $MACOSX_DEPLOYMENT_TARGET
 test $OMIT_AUTOGEN || ./autogen.sh ; \
 ./configure --with-ns --without-x CFLAGS="$FLAGS -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET" LDFLAGS="$FLAGS -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET" || exit
 make clean || exit
+
+## temporary:
+(cd etc/refcards; make; cd -)
+
 make -j4 all || exit
 make -j2 install || exit
 rm -f etc/DOC-*

@@ -1,45 +1,77 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Files - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Files</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Files">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Files">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Documentation.html#Documentation" title="Documentation">
-<link rel="next" href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving" title="Backups and Auto-Saving">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Visiting-Files.html#Visiting-Files" rel="next" title="Visiting Files">
+<link href="Help-Functions.html#Help-Functions" rel="prev" title="Help Functions">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Files"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving">Backups and Auto-Saving</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Documentation.html#Documentation">Documentation</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Files"></a>
+<div class="header">
+<p>
+Next: <a href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving" accesskey="n" rel="next">Backups and Auto-Saving</a>, Previous: <a href="Documentation.html#Documentation" accesskey="p" rel="prev">Documentation</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Files-1"></a>
 <h2 class="chapter">24 Files</h2>
 
 <p>This chapter describes the Emacs Lisp functions and variables to
@@ -47,41 +79,61 @@ find, create, view, save, and otherwise work with files and
 directories.  A few other file-related functions are described in
 <a href="Buffers.html#Buffers">Buffers</a>, and those related to backups and auto-saving are
 described in <a href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving">Backups and Auto-Saving</a>.
-
-   <p>Many of the file functions take one or more arguments that are file
+</p>
+<p>Many of the file functions take one or more arguments that are file
 names.  A file name is a string.  Most of these functions expand file
 name arguments using the function <code>expand-file-name</code>, so that
-<samp><span class="file">~</span></samp> is handled correctly, as are relative file names (including
-<samp><span class="file">../</span></samp>).  See <a href="File-Name-Expansion.html#File-Name-Expansion">File Name Expansion</a>.
-
-   <p>In addition, certain <dfn>magic</dfn> file names are handled specially. 
+<samp>~</samp> is handled correctly, as are relative file names (including
+<samp>../</samp>).  See <a href="File-Name-Expansion.html#File-Name-Expansion">File Name Expansion</a>.
+</p>
+<p>In addition, certain <em>magic</em> file names are handled specially.
 For example, when a remote file name is specified, Emacs accesses the
-file over the network via an appropriate protocol.  See <a href="../emacs/Remote-Files.html#Remote-Files">Remote Files</a>.  This handling is
+file over the network via an appropriate protocol.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Remote-Files.html#Remote-Files">Remote Files</a> in <cite>The GNU Emacs Manual</cite>.  This handling is
 done at a very low level, so you may assume that all the functions
 described in this chapter accept magic file names as file name
 arguments, except where noted.  See <a href="Magic-File-Names.html#Magic-File-Names">Magic File Names</a>, for details.
-
-   <p>When file I/O functions signal Lisp errors, they usually use the
+</p>
+<p>When file I/O functions signal Lisp errors, they usually use the
 condition <code>file-error</code> (see <a href="Handling-Errors.html#Handling-Errors">Handling Errors</a>).  The error
 message is in most cases obtained from the operating system, according
 to locale <code>system-messages-locale</code>, and decoded using coding system
 <code>locale-coding-system</code> (see <a href="Locales.html#Locales">Locales</a>).
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Visiting-Files.html#Visiting-Files" accesskey="1">Visiting Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reading files into Emacs buffers for editing.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Saving-Buffers.html#Saving-Buffers" accesskey="2">Saving Buffers</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Writing changed buffers back into files.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Reading-from-Files.html#Reading-from-Files" accesskey="3">Reading from Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reading files into buffers without visiting.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Writing-to-Files.html#Writing-to-Files" accesskey="4">Writing to Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Writing new files from parts of buffers.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="File-Locks.html#File-Locks" accesskey="5">File Locks</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Locking and unlocking files, to prevent
+                               simultaneous editing by two people.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Information-about-Files.html#Information-about-Files" accesskey="6">Information about Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Testing existence, accessibility, size of files.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Changing-Files.html#Changing-Files" accesskey="7">Changing Files</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Renaming files, changing permissions, etc.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="File-Names.html#File-Names" accesskey="8">File Names</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Decomposing and expanding file names.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Contents-of-Directories.html#Contents-of-Directories" accesskey="9">Contents of Directories</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Getting a list of the files in a directory.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Create_002fDelete-Dirs.html#Create_002fDelete-Dirs">Create/Delete Dirs</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Creating and Deleting Directories.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Magic-File-Names.html#Magic-File-Names">Magic File Names</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Special handling for certain file names.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Format-Conversion.html#Format-Conversion">Format Conversion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Conversion to and from various file formats.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Visiting-Files.html#Visiting-Files">Visiting Files</a>:            Reading files into Emacs buffers for editing. 
-<li><a accesskey="2" href="Saving-Buffers.html#Saving-Buffers">Saving Buffers</a>:            Writing changed buffers back into files. 
-<li><a accesskey="3" href="Reading-from-Files.html#Reading-from-Files">Reading from Files</a>:        Reading files into buffers without visiting. 
-<li><a accesskey="4" href="Writing-to-Files.html#Writing-to-Files">Writing to Files</a>:          Writing new files from parts of buffers. 
-<li><a accesskey="5" href="File-Locks.html#File-Locks">File Locks</a>:                Locking and unlocking files, to prevent
-                               simultaneous editing by two people. 
-<li><a accesskey="6" href="Information-about-Files.html#Information-about-Files">Information about Files</a>:   Testing existence, accessibility, size of files. 
-<li><a accesskey="7" href="Changing-Files.html#Changing-Files">Changing Files</a>:            Renaming files, changing permissions, etc. 
-<li><a accesskey="8" href="File-Names.html#File-Names">File Names</a>:                Decomposing and expanding file names. 
-<li><a accesskey="9" href="Contents-of-Directories.html#Contents-of-Directories">Contents of Directories</a>:   Getting a list of the files in a directory. 
-<li><a href="Create_002fDelete-Dirs.html#Create_002fDelete-Dirs">Create/Delete Dirs</a>:        Creating and Deleting Directories. 
-<li><a href="Magic-File-Names.html#Magic-File-Names">Magic File Names</a>:          Special handling for certain file names. 
-<li><a href="Format-Conversion.html#Format-Conversion">Format Conversion</a>:         Conversion to and from various file formats. 
-</ul>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Backups-and-Auto_002dSaving.html#Backups-and-Auto_002dSaving" accesskey="n" rel="next">Backups and Auto-Saving</a>, Previous: <a href="Documentation.html#Documentation" accesskey="p" rel="prev">Documentation</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

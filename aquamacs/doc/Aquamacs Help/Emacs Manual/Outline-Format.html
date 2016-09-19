@@ -1,104 +1,151 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Outline Format - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Outline Format</title>
+
+<meta name="description" content="GNU Emacs Manual: Outline Format">
+<meta name="keywords" content="GNU Emacs Manual: Outline Format">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Outline-Mode.html#Outline-Mode" title="Outline Mode">
-<link rel="next" href="Outline-Motion.html#Outline-Motion" title="Outline Motion">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Outline-Mode.html#Outline-Mode" rel="up" title="Outline Mode">
+<link href="Outline-Motion.html#Outline-Motion" rel="next" title="Outline Motion">
+<link href="Outline-Mode.html#Outline-Mode" rel="prev" title="Outline Mode">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Outline-Format"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Outline-Motion.html#Outline-Motion">Outline Motion</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Outline-Mode.html#Outline-Mode">Outline Mode</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Outline-Format"></a>
+<div class="header">
+<p>
+Next: <a href="Outline-Motion.html#Outline-Motion" accesskey="n" rel="next">Outline Motion</a>, Up: <a href="Outline-Mode.html#Outline-Mode" accesskey="u" rel="up">Outline Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Format-of-Outlines"></a>
 <h4 class="subsection">25.9.1 Format of Outlines</h4>
 
-<p><a name="index-heading-lines-_0028Outline-mode_0029-2025"></a><a name="index-body-lines-_0028Outline-mode_0029-2026"></a>  Outline mode assumes that the lines in the buffer are of two types:
-<dfn>heading lines</dfn> and <dfn>body lines</dfn>.  A heading line represents a
+<a name="index-heading-lines-_0028Outline-mode_0029"></a>
+<a name="index-body-lines-_0028Outline-mode_0029"></a>
+<p>Outline mode assumes that the lines in the buffer are of two types:
+<em>heading lines</em> and <em>body lines</em>.  A heading line represents a
 topic in the outline.  Heading lines start with one or more asterisk
-(&lsquo;<samp><span class="samp">*</span></samp>&rsquo;) characters; the number of asterisks determines the depth of
+(&lsquo;<samp>*</samp>&rsquo;) characters; the number of asterisks determines the depth of
 the heading in the outline structure.  Thus, a heading line with one
-&lsquo;<samp><span class="samp">*</span></samp>&rsquo; is a major topic; all the heading lines with two &lsquo;<samp><span class="samp">*</span></samp>&rsquo;s
-between it and the next one-&lsquo;<samp><span class="samp">*</span></samp>&rsquo; heading are its subtopics; and so
+&lsquo;<samp>*</samp>&rsquo; is a major topic; all the heading lines with two &lsquo;<samp>*</samp>&rsquo;s
+between it and the next one-&lsquo;<samp>*</samp>&rsquo; heading are its subtopics; and so
 on.  Any line that is not a heading line is a body line.  Body lines
 belong with the preceding heading line.  Here is an example:
+</p>
+<div class="example">
+<pre class="example">* Food
+This is the body,
+which says something about the topic of food.
 
-<pre class="example">     * Food
-     This is the body,
-     which says something about the topic of food.
-     
-     ** Delicious Food
-     This is the body of the second-level header.
-     
-     ** Distasteful Food
-     This could have
-     a body too, with
-     several lines.
-     
-     *** Dormitory Food
-     
-     * Shelter
-     Another first-level topic with its header line.
-</pre>
-   <p>A heading line together with all following body lines is called
-collectively an <dfn>entry</dfn>.  A heading line together with all following
-deeper heading lines and their body lines is called a <dfn>subtree</dfn>.
+** Delicious Food
+This is the body of the second-level header.
 
-   <p><a name="index-outline_002dregexp-2027"></a>  You can customize the criterion for distinguishing heading lines by
+** Distasteful Food
+This could have
+a body too, with
+several lines.
+
+*** Dormitory Food
+
+* Shelter
+Another first-level topic with its header line.
+</pre></div>
+
+<p>A heading line together with all following body lines is called
+collectively an <em>entry</em>.  A heading line together with all following
+deeper heading lines and their body lines is called a <em>subtree</em>.
+</p>
+<a name="index-outline_002dregexp"></a>
+<p>You can customize the criterion for distinguishing heading lines by
 setting the variable <code>outline-regexp</code>.  (The recommended ways to
-do this are in a major mode function or with a file local variable.) 
+do this are in a major mode function or with a file local variable.)
 Any line whose beginning has a match for this regexp is considered a
 heading line.  Matches that start within a line (not at the left
 margin) do not count.
-
-   <p>The length of the matching text determines the level of the heading;
+</p>
+<p>The length of the matching text determines the level of the heading;
 longer matches make a more deeply nested level.  Thus, for example, if
-a text formatter has commands &lsquo;<samp><span class="samp">@chapter</span></samp>&rsquo;, &lsquo;<samp><span class="samp">@section</span></samp>&rsquo; and
-&lsquo;<samp><span class="samp">@subsection</span></samp>&rsquo; to divide the document into chapters and sections,
+a text formatter has commands &lsquo;<samp>@chapter</samp>&rsquo;, &lsquo;<samp>@section</samp>&rsquo; and
+&lsquo;<samp>@subsection</samp>&rsquo; to divide the document into chapters and sections,
 you could make those lines count as heading lines by setting
-<code>outline-regexp</code> to &lsquo;<samp><span class="samp">"@chap\\|@\\(sub\\)*section"</span></samp>&rsquo;.  Note
-the trick: the two words &lsquo;<samp><span class="samp">chapter</span></samp>&rsquo; and &lsquo;<samp><span class="samp">section</span></samp>&rsquo; are equally
-long, but by defining the regexp to match only &lsquo;<samp><span class="samp">chap</span></samp>&rsquo; we ensure
+<code>outline-regexp</code> to &lsquo;<samp>&quot;@chap\\|@\\(sub\\)*section&quot;</samp>&rsquo;.  Note
+the trick: the two words &lsquo;<samp>chapter</samp>&rsquo; and &lsquo;<samp>section</samp>&rsquo; are equally
+long, but by defining the regexp to match only &lsquo;<samp>chap</samp>&rsquo; we ensure
 that the length of the text matched on a chapter heading is shorter,
 so that Outline mode will know that sections are contained in
 chapters.  This works as long as no other command starts with
-&lsquo;<samp><span class="samp">@chap</span></samp>&rsquo;.
-
-   <p><a name="index-outline_002dlevel-2028"></a>  You can explicitly specify a rule for calculating the level of a
+&lsquo;<samp>@chap</samp>&rsquo;.
+</p>
+<a name="index-outline_002dlevel"></a>
+<p>You can explicitly specify a rule for calculating the level of a
 heading line by setting the variable <code>outline-level</code>.  The value
 of <code>outline-level</code> should be a function that takes no arguments
 and returns the level of the current heading.  The recommended ways to
 set this variable are in a major mode command or with a file local
 variable.
+</p>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Outline-Motion.html#Outline-Motion" accesskey="n" rel="next">Outline Motion</a>, Up: <a href="Outline-Mode.html#Outline-Mode" accesskey="u" rel="up">Outline Mode</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

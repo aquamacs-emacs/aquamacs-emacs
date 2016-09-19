@@ -1,95 +1,136 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Running Hooks - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Running Hooks</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Running Hooks">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Running Hooks">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Hooks.html#Hooks" title="Hooks">
-<link rel="next" href="Setting-Hooks.html#Setting-Hooks" title="Setting Hooks">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Hooks.html#Hooks" rel="up" title="Hooks">
+<link href="Setting-Hooks.html#Setting-Hooks" rel="next" title="Setting Hooks">
+<link href="Hooks.html#Hooks" rel="prev" title="Hooks">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Running-Hooks"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Setting-Hooks.html#Setting-Hooks">Setting Hooks</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Hooks.html#Hooks">Hooks</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Running-Hooks"></a>
+<div class="header">
+<p>
+Next: <a href="Setting-Hooks.html#Setting-Hooks" accesskey="n" rel="next">Setting Hooks</a>, Up: <a href="Hooks.html#Hooks" accesskey="u" rel="up">Hooks</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Running-Hooks-1"></a>
 <h4 class="subsection">22.1.1 Running Hooks</h4>
 
 <p>In this section, we document the <code>run-hooks</code> function, which is
 used to run a normal hook.  We also document the functions for running
 various kinds of abnormal hooks.
-
-<div class="defun">
-&mdash; Function: <b>run-hooks</b><var> &amp;rest hookvars<a name="index-run_002dhooks-1812"></a></var><br>
-<blockquote><p>This function takes one or more normal hook variable names as
+</p>
+<dl>
+<dt><a name="index-run_002dhooks"></a>Function: <strong>run-hooks</strong> <em>&amp;rest hookvars</em></dt>
+<dd><p>This function takes one or more normal hook variable names as
 arguments, and runs each hook in turn.  Each argument should be a
 symbol that is a normal hook variable.  These arguments are processed
 in the order specified.
-
-        <p>If a hook variable has a non-<code>nil</code> value, that value should be a
+</p>
+<p>If a hook variable has a non-<code>nil</code> value, that value should be a
 list of functions.  <code>run-hooks</code> calls all the functions, one by
 one, with no arguments.
-
-        <p>The hook variable's value can also be a single function&mdash;either a
+</p>
+<p>The hook variable&rsquo;s value can also be a single function&mdash;either a
 lambda expression or a symbol with a function definition&mdash;which
 <code>run-hooks</code> calls.  But this usage is obsolete.
-
-        <p>If the hook variable is buffer-local, the buffer-local variable will
+</p>
+<p>If the hook variable is buffer-local, the buffer-local variable will
 be used instead of the global variable.  However, if the buffer-local
 variable contains the element <code>t</code>, the global hook variable will
-be run as well. 
-</p></blockquote></div>
+be run as well.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>run-hook-with-args</b><var> hook &amp;rest args<a name="index-run_002dhook_002dwith_002dargs-1813"></a></var><br>
-<blockquote><p>This function runs an abnormal hook by calling all the hook functions in
-<var>hook</var>, passing each one the arguments <var>args</var>. 
-</p></blockquote></div>
+<dl>
+<dt><a name="index-run_002dhook_002dwith_002dargs"></a>Function: <strong>run-hook-with-args</strong> <em>hook &amp;rest args</em></dt>
+<dd><p>This function runs an abnormal hook by calling all the hook functions in
+<var>hook</var>, passing each one the arguments <var>args</var>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>run-hook-with-args-until-failure</b><var> hook &amp;rest args<a name="index-run_002dhook_002dwith_002dargs_002duntil_002dfailure-1814"></a></var><br>
-<blockquote><p>This function runs an abnormal hook by calling each hook function in
+<dl>
+<dt><a name="index-run_002dhook_002dwith_002dargs_002duntil_002dfailure"></a>Function: <strong>run-hook-with-args-until-failure</strong> <em>hook &amp;rest args</em></dt>
+<dd><p>This function runs an abnormal hook by calling each hook function in
 turn, stopping if one of them fails by returning <code>nil</code>.  Each
 hook function is passed the arguments <var>args</var>.  If this function
 stops because one of the hook functions fails, it returns <code>nil</code>;
-otherwise it returns a non-<code>nil</code> value. 
-</p></blockquote></div>
+otherwise it returns a non-<code>nil</code> value.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>run-hook-with-args-until-success</b><var> hook &amp;rest args<a name="index-run_002dhook_002dwith_002dargs_002duntil_002dsuccess-1815"></a></var><br>
-<blockquote><p>This function runs an abnormal hook by calling each hook function,
+<dl>
+<dt><a name="index-run_002dhook_002dwith_002dargs_002duntil_002dsuccess"></a>Function: <strong>run-hook-with-args-until-success</strong> <em>hook &amp;rest args</em></dt>
+<dd><p>This function runs an abnormal hook by calling each hook function,
 stopping if one of them succeeds by returning a non-<code>nil</code>
 value.  Each hook function is passed the arguments <var>args</var>.  If this
 function stops because one of the hook functions returns a
 non-<code>nil</code> value, it returns that value; otherwise it returns
-<code>nil</code>. 
-</p></blockquote></div>
+<code>nil</code>.
+</p></dd></dl>
 
-   </body></html>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Setting-Hooks.html#Setting-Hooks" accesskey="n" rel="next">Setting Hooks</a>, Up: <a href="Hooks.html#Hooks" accesskey="u" rel="up">Hooks</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
+
+
+</body>
+</html>

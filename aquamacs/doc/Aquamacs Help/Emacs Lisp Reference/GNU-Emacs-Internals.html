@@ -1,62 +1,106 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>GNU Emacs Internals - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: GNU Emacs Internals</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: GNU Emacs Internals">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: GNU Emacs Internals">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Tips.html#Tips" title="Tips">
-<link rel="next" href="Standard-Errors.html#Standard-Errors" title="Standard Errors">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Building-Emacs.html#Building-Emacs" rel="next" title="Building Emacs">
+<link href="Library-Headers.html#Library-Headers" rel="prev" title="Library Headers">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="GNU-Emacs-Internals"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Standard-Errors.html#Standard-Errors">Standard Errors</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Tips.html#Tips">Tips</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="GNU-Emacs-Internals"></a>
+<div class="header">
+<p>
+Next: <a href="Standard-Errors.html#Standard-Errors" accesskey="n" rel="next">Standard Errors</a>, Previous: <a href="Tips.html#Tips" accesskey="p" rel="prev">Tips</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="GNU-Emacs-Internals-1"></a>
 <h2 class="appendix">Appendix E GNU Emacs Internals</h2>
 
 <p>This chapter describes how the runnable Emacs executable is dumped with
 the preloaded Lisp libraries in it, how storage is allocated, and some
 internal aspects of GNU Emacs that may be of interest to C programmers.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Building-Emacs.html#Building-Emacs" accesskey="1">Building Emacs</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How the dumped Emacs is made.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Pure-Storage.html#Pure-Storage" accesskey="2">Pure Storage</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Kludge to make preloaded Lisp functions shareable.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Garbage-Collection.html#Garbage-Collection" accesskey="3">Garbage Collection</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reclaiming space for Lisp objects no longer used.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Stack_002dallocated-Objects.html#Stack_002dallocated-Objects" accesskey="4">Stack-allocated Objects</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Temporary conses and strings on C stack.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Memory-Usage.html#Memory-Usage" accesskey="5">Memory Usage</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Info about total size of Lisp objects made so far.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="C-Dialect.html#C-Dialect" accesskey="6">C Dialect</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What C variant Emacs is written in.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Writing-Emacs-Primitives.html#Writing-Emacs-Primitives" accesskey="7">Writing Emacs Primitives</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Writing C code for Emacs.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Object-Internals.html#Object-Internals" accesskey="8">Object Internals</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Data formats of buffers, windows, processes.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="C-Integer-Types.html#C-Integer-Types" accesskey="9">C Integer Types</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How C integer types are used inside Emacs.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Building-Emacs.html#Building-Emacs">Building Emacs</a>:       How the dumped Emacs is made. 
-<li><a accesskey="2" href="Pure-Storage.html#Pure-Storage">Pure Storage</a>:         Kludge to make preloaded Lisp functions shareable. 
-<li><a accesskey="3" href="Garbage-Collection.html#Garbage-Collection">Garbage Collection</a>:   Reclaiming space for Lisp objects no longer used. 
-<li><a accesskey="4" href="Stack_002dallocated-Objects.html#Stack_002dallocated-Objects">Stack-allocated Objects</a>:     Temporary conses and strings on C stack. 
-<li><a accesskey="5" href="Memory-Usage.html#Memory-Usage">Memory Usage</a>:         Info about total size of Lisp objects made so far. 
-<li><a accesskey="6" href="C-Dialect.html#C-Dialect">C Dialect</a>:            What C variant Emacs is written in. 
-<li><a accesskey="7" href="Writing-Emacs-Primitives.html#Writing-Emacs-Primitives">Writing Emacs Primitives</a>:    Writing C code for Emacs. 
-<li><a accesskey="8" href="Object-Internals.html#Object-Internals">Object Internals</a>:     Data formats of buffers, windows, processes. 
-<li><a accesskey="9" href="C-Integer-Types.html#C-Integer-Types">C Integer Types</a>:      How C integer types are used inside Emacs. 
-</ul>
 
-   </body></html>
 
+
+</body>
+</html>

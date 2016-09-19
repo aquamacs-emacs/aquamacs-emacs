@@ -1,124 +1,169 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Setting Variables - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Setting Variables</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Setting Variables">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Setting Variables">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Variables.html#Variables" title="Variables">
-<link rel="prev" href="Accessing-Variables.html#Accessing-Variables" title="Accessing Variables">
-<link rel="next" href="Variable-Scoping.html#Variable-Scoping" title="Variable Scoping">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Variables.html#Variables" rel="up" title="Variables">
+<link href="Variable-Scoping.html#Variable-Scoping" rel="next" title="Variable Scoping">
+<link href="Accessing-Variables.html#Accessing-Variables" rel="prev" title="Accessing Variables">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Setting-Variables"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Accessing-Variables.html#Accessing-Variables">Accessing Variables</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Variables.html#Variables">Variables</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Setting-Variables"></a>
+<div class="header">
+<p>
+Next: <a href="Variable-Scoping.html#Variable-Scoping" accesskey="n" rel="next">Variable Scoping</a>, Previous: <a href="Accessing-Variables.html#Accessing-Variables" accesskey="p" rel="prev">Accessing Variables</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Setting-Variable-Values"></a>
 <h3 class="section">11.8 Setting Variable Values</h3>
 
 <p>The usual way to change the value of a variable is with the special
 form <code>setq</code>.  When you need to compute the choice of variable at
 run time, use the function <code>set</code>.
-
-<div class="defun">
-&mdash; Special Form: <b>setq</b> [<var>symbol form</var>]<var><small class="dots">...</small><a name="index-setq-736"></a></var><br>
-<blockquote><p>This special form is the most common method of changing a variable's
+</p>
+<dl>
+<dt><a name="index-setq"></a>Special Form: <strong>setq</strong> <em>[symbol form]&hellip;</em></dt>
+<dd><p>This special form is the most common method of changing a variable&rsquo;s
 value.  Each <var>symbol</var> is given a new value, which is the result of
 evaluating the corresponding <var>form</var>.  The current binding of the
 symbol is changed.
+</p>
+<p><code>setq</code> does not evaluate <var>symbol</var>; it sets the symbol that you
+write.  We say that this argument is <em>automatically quoted</em>.  The
+&lsquo;<samp>q</samp>&rsquo; in <code>setq</code> stands for &ldquo;quoted&rdquo;.
+</p>
+<p>The value of the <code>setq</code> form is the value of the last <var>form</var>.
+</p>
+<div class="example">
+<pre class="example">(setq x (1+ 2))
+     &rArr; 3
+</pre><pre class="example">x                   ; <span class="roman"><code>x</code> now has a global value.</span>
+     &rArr; 3
+</pre><pre class="example">(let ((x 5))
+  (setq x 6)        ; <span class="roman">The local binding of <code>x</code> is set.</span>
+  x)
+     &rArr; 6
+</pre><pre class="example">x                   ; <span class="roman">The global value is unchanged.</span>
+     &rArr; 3
+</pre></div>
 
-        <p><code>setq</code> does not evaluate <var>symbol</var>; it sets the symbol that you
-write.  We say that this argument is <dfn>automatically quoted</dfn>.  The
-&lsquo;<samp><span class="samp">q</span></samp>&rsquo; in <code>setq</code> stands for &ldquo;quoted&rdquo;.
-
-        <p>The value of the <code>setq</code> form is the value of the last <var>form</var>.
-
-     <pre class="example">          (setq x (1+ 2))
-               &rArr; 3
-          x                   ; <code>x</code><span class="roman"> now has a global value.</span>
-               &rArr; 3
-          (let ((x 5))
-            (setq x 6)        ; <span class="roman">The local binding of </span><code>x</code><span class="roman"> is set.</span>
-            x)
-               &rArr; 6
-          x                   ; <span class="roman">The global value is unchanged.</span>
-               &rArr; 3
-</pre>
-        <p>Note that the first <var>form</var> is evaluated, then the first
+<p>Note that the first <var>form</var> is evaluated, then the first
 <var>symbol</var> is set, then the second <var>form</var> is evaluated, then the
 second <var>symbol</var> is set, and so on:
+</p>
+<div class="example">
+<pre class="example">(setq x 10          ; <span class="roman">Notice that <code>x</code> is set before</span>
+      y (1+ x))     ;   <span class="roman">the value of <code>y</code> is computed.</span>
+     &rArr; 11
+</pre></div>
+</dd></dl>
 
-     <pre class="example">          (setq x 10          ; <span class="roman">Notice that </span><code>x</code><span class="roman"> is set before</span>
-                y (1+ x))     ;   <span class="roman">the value of </span><code>y</code><span class="roman"> is computed.</span>
-               &rArr; 11
-</pre>
-        </blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>set</b><var> symbol value<a name="index-set-737"></a></var><br>
-<blockquote><p>This function puts <var>value</var> in the value cell of <var>symbol</var>. 
+<dl>
+<dt><a name="index-set"></a>Function: <strong>set</strong> <em>symbol value</em></dt>
+<dd><p>This function puts <var>value</var> in the value cell of <var>symbol</var>.
 Since it is a function rather than a special form, the expression
-written for <var>symbol</var> is evaluated to obtain the symbol to set. 
+written for <var>symbol</var> is evaluated to obtain the symbol to set.
 The return value is <var>value</var>.
-
-        <p>When dynamic variable binding is in effect (the default), <code>set</code>
+</p>
+<p>When dynamic variable binding is in effect (the default), <code>set</code>
 has the same effect as <code>setq</code>, apart from the fact that
 <code>set</code> evaluates its <var>symbol</var> argument whereas <code>setq</code>
 does not.  But when a variable is lexically bound, <code>set</code> affects
 its <em>dynamic</em> value, whereas <code>setq</code> affects its current
 (lexical) value.  See <a href="Variable-Scoping.html#Variable-Scoping">Variable Scoping</a>.
+</p>
+<div class="example">
+<pre class="example">(set one 1)
+error&rarr; Symbol's value as variable is void: one
+</pre><pre class="example">(set 'one 1)
+     &rArr; 1
+</pre><pre class="example">(set 'two 'one)
+     &rArr; one
+</pre><pre class="example">(set two 2)         ; <span class="roman"><code>two</code> evaluates to symbol <code>one</code>.</span>
+     &rArr; 2
+</pre><pre class="example">one                 ; <span class="roman">So it is <code>one</code> that was set.</span>
+     &rArr; 2
+(let ((one 1))      ; <span class="roman">This binding of <code>one</code> is set,</span>
+  (set 'one 3)      ;   <span class="roman">not the global value.</span>
+  one)
+     &rArr; 3
+</pre><pre class="example">one
+     &rArr; 2
+</pre></div>
 
-     <pre class="example">          (set one 1)
-          error--&gt; Symbol's value as variable is void: one
-          (set 'one 1)
-               &rArr; 1
-          (set 'two 'one)
-               &rArr; one
-          (set two 2)         ; <code>two</code><span class="roman"> evaluates to symbol </span><code>one</code><span class="roman">.</span>
-               &rArr; 2
-          one                 ; <span class="roman">So it is </span><code>one</code><span class="roman"> that was set.</span>
-               &rArr; 2
-          (let ((one 1))      ; <span class="roman">This binding of </span><code>one</code><span class="roman"> is set,</span>
-            (set 'one 3)      ;   <span class="roman">not the global value.</span>
-            one)
-               &rArr; 3
-          one
-               &rArr; 2
-</pre>
-        <p>If <var>symbol</var> is not actually a symbol, a <code>wrong-type-argument</code>
+<p>If <var>symbol</var> is not actually a symbol, a <code>wrong-type-argument</code>
 error is signaled.
+</p>
+<div class="example">
+<pre class="example">(set '(x y) 'z)
+error&rarr; Wrong type argument: symbolp, (x y)
+</pre></div>
+</dd></dl>
 
-     <pre class="example">          (set '(x y) 'z)
-          error--&gt; Wrong type argument: symbolp, (x y)
-</pre>
-        </blockquote></div>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Variable-Scoping.html#Variable-Scoping" accesskey="n" rel="next">Variable Scoping</a>, Previous: <a href="Accessing-Variables.html#Accessing-Variables" accesskey="p" rel="prev">Accessing Variables</a>, Up: <a href="Variables.html#Variables" accesskey="u" rel="up">Variables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

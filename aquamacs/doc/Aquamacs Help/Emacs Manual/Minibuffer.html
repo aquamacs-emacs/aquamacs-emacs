@@ -1,66 +1,109 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Minibuffer - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Minibuffer</title>
+
+<meta name="description" content="GNU Emacs Manual: Minibuffer">
+<meta name="keywords" content="GNU Emacs Manual: Minibuffer">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Basic.html#Basic" title="Basic">
-<link rel="next" href="M_002dx.html#M_002dx" title="M-x">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Basic-Minibuffer.html#Basic-Minibuffer" rel="next" title="Basic Minibuffer">
+<link href="Repeating.html#Repeating" rel="prev" title="Repeating">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Minibuffer"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="M_002dx.html#M_002dx">M-x</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Basic.html#Basic">Basic</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
+Next: <a href="M_002dx.html#M_002dx" accesskey="n" rel="next">M-x</a>, Previous: <a href="Basic.html#Basic" accesskey="p" rel="prev">Basic</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="The-Minibuffer"></a>
 <h2 class="chapter">8 The Minibuffer</h2>
+<a name="index-minibuffer-1"></a>
 
-<p><a name="index-minibuffer-176"></a>
-  The <dfn>minibuffer</dfn> is where Emacs commands read complicated
+<p>The <em>minibuffer</em> is where Emacs commands read complicated
 arguments, such as file names, buffer names, Emacs command names, or
-Lisp expressions.  We call it the &ldquo;minibuffer&rdquo; because it's a
+Lisp expressions.  We call it the &ldquo;minibuffer&rdquo; because it&rsquo;s a
 special-purpose buffer with a small amount of screen space.  You can
 use the usual Emacs editing commands in the minibuffer to edit the
 argument text.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Basic-Minibuffer.html#Basic-Minibuffer" accesskey="1">Basic Minibuffer</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Basic usage of the minibuffer.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Minibuffer-File.html#Minibuffer-File" accesskey="2">Minibuffer File</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Entering file names with the minibuffer.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Minibuffer-Edit.html#Minibuffer-Edit" accesskey="3">Minibuffer Edit</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to edit in the minibuffer.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Completion.html#Completion" accesskey="4">Completion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">An abbreviation facility for minibuffer input.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Minibuffer-History.html#Minibuffer-History" accesskey="5">Minibuffer History</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reusing recent minibuffer arguments.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Repetition.html#Repetition" accesskey="6">Repetition</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Re-executing commands that used the minibuffer.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Passwords.html#Passwords" accesskey="7">Passwords</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Entering passwords in the echo area.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Yes-or-No-Prompts.html#Yes-or-No-Prompts" accesskey="8">Yes or No Prompts</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Replying yes or no in the echo area.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Basic-Minibuffer.html#Basic-Minibuffer">Basic Minibuffer</a>:       Basic usage of the minibuffer. 
-<li><a accesskey="2" href="Minibuffer-File.html#Minibuffer-File">Minibuffer File</a>:        Entering file names with the minibuffer. 
-<li><a accesskey="3" href="Minibuffer-Edit.html#Minibuffer-Edit">Minibuffer Edit</a>:        How to edit in the minibuffer. 
-<li><a accesskey="4" href="Completion.html#Completion">Completion</a>:             An abbreviation facility for minibuffer input. 
-<li><a accesskey="5" href="Minibuffer-History.html#Minibuffer-History">Minibuffer History</a>:     Reusing recent minibuffer arguments. 
-<li><a accesskey="6" href="Repetition.html#Repetition">Repetition</a>:             Re-executing commands that used the minibuffer. 
-<li><a accesskey="7" href="Passwords.html#Passwords">Passwords</a>:              Entering passwords in the echo area. 
-<li><a accesskey="8" href="Yes-or-No-Prompts.html#Yes-or-No-Prompts">Yes or No Prompts</a>:      Replying yes or no in the echo area. 
-</ul>
 
-   </body></html>
 
+
+</body>
+</html>

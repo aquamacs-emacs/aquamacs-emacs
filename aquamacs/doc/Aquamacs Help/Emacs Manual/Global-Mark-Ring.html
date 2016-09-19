@@ -1,63 +1,100 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Global Mark Ring - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Global Mark Ring</title>
+
+<meta name="description" content="GNU Emacs Manual: Global Mark Ring">
+<meta name="keywords" content="GNU Emacs Manual: Global Mark Ring">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Mark.html#Mark" title="Mark">
-<link rel="prev" href="Mark-Ring.html#Mark-Ring" title="Mark Ring">
-<link rel="next" href="Shift-Selection.html#Shift-Selection" title="Shift Selection">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Mark.html#Mark" rel="up" title="Mark">
+<link href="Shift-Selection.html#Shift-Selection" rel="next" title="Shift Selection">
+<link href="Mark-Ring.html#Mark-Ring" rel="prev" title="Mark Ring">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="Global-Mark-Ring"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Shift-Selection.html#Shift-Selection">Shift Selection</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Mark-Ring.html#Mark-Ring">Mark Ring</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Mark.html#Mark">Mark</a>
-<hr>
+Next: <a href="Shift-Selection.html#Shift-Selection" accesskey="n" rel="next">Shift Selection</a>, Previous: <a href="Mark-Ring.html#Mark-Ring" accesskey="p" rel="prev">Mark Ring</a>, Up: <a href="Mark.html#Mark" accesskey="u" rel="up">Mark</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
-
+<hr>
+<a name="The-Global-Mark-Ring"></a>
 <h3 class="section">11.5 The Global Mark Ring</h3>
+<a name="index-global-mark-ring"></a>
 
-<p><a name="index-global-mark-ring-390"></a>
-<a name="index-global_002dmark_002dring_002dmax-391"></a>  In addition to the ordinary mark ring that belongs to each buffer,
-Emacs has a single <dfn>global mark ring</dfn>.  Each time you set a mark,
+<a name="index-global_002dmark_002dring_002dmax"></a>
+<p>In addition to the ordinary mark ring that belongs to each buffer,
+Emacs has a single <em>global mark ring</em>.  Each time you set a mark,
 this is recorded in the global mark ring in addition to the current
-buffer's own mark ring, if you have switched buffers since the
+buffer&rsquo;s own mark ring, if you have switched buffers since the
 previous mark setting.  Hence, the global mark ring records a sequence
 of buffers that you have been in, and, for each buffer, a place where
 you set the mark.  The length of the global mark ring is controlled by
 <code>global-mark-ring-max</code>, and is 16 by default.
-
-   <p><a name="index-C_002dx-C_002d_0040key_007bSPC_007d-392"></a><a name="index-pop_002dglobal_002dmark-393"></a>  The command <kbd>C-x C-&lt;SPC&gt;</kbd> (<code>pop-global-mark</code>) jumps to
+</p>
+<a name="index-C_002dx-C_002dSPC"></a>
+<a name="index-pop_002dglobal_002dmark"></a>
+<p>The command <kbd>C-x C-<span class="key">SPC</span></kbd> (<code>pop-global-mark</code>) jumps to
 the buffer and position of the latest entry in the global ring.  It also
-rotates the ring, so that successive uses of <kbd>C-x C-&lt;SPC&gt;</kbd> take
+rotates the ring, so that successive uses of <kbd>C-x C-<span class="key">SPC</span></kbd> take
 you to earlier buffers and mark positions.
+</p>
 
-   </body></html>
 
+
+</body>
+</html>

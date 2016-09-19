@@ -1,101 +1,143 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Standard File Names - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Standard File Names</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Standard File Names">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Standard File Names">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="File-Names.html#File-Names" title="File Names">
-<link rel="prev" href="File-Name-Completion.html#File-Name-Completion" title="File Name Completion">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="File-Names.html#File-Names" rel="up" title="File Names">
+<link href="Contents-of-Directories.html#Contents-of-Directories" rel="next" title="Contents of Directories">
+<link href="File-Name-Completion.html#File-Name-Completion" rel="prev" title="File Name Completion">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Standard-File-Names"></a>
-<p>
-Previous:&nbsp;<a rel="previous" accesskey="p" href="File-Name-Completion.html#File-Name-Completion">File Name Completion</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="File-Names.html#File-Names">File Names</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Standard-File-Names"></a>
+<div class="header">
+<p>
+Previous: <a href="File-Name-Completion.html#File-Name-Completion" accesskey="p" rel="prev">File Name Completion</a>, Up: <a href="File-Names.html#File-Names" accesskey="u" rel="up">File Names</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Standard-File-Names-1"></a>
 <h4 class="subsection">24.8.7 Standard File Names</h4>
 
 <p>Sometimes, an Emacs Lisp program needs to specify a standard file
 name for a particular use&mdash;typically, to hold configuration data
 specified by the current user.  Usually, such files should be located
 in the directory specified by <code>user-emacs-directory</code>, which is
-<samp><span class="file">~/.emacs.d</span></samp> by default (see <a href="Init-File.html#Init-File">Init File</a>).  For example, abbrev
-definitions are stored by default in <samp><span class="file">~/.emacs.d/abbrev_defs</span></samp>. 
+<samp>~/.emacs.d</samp> by default (see <a href="Init-File.html#Init-File">Init File</a>).  For example, abbrev
+definitions are stored by default in <samp>~/.emacs.d/abbrev_defs</samp>.
 The easiest way to specify such a file name is to use the function
 <code>locate-user-emacs-file</code>.
-
-<div class="defun">
-&mdash; Function: <b>locate-user-emacs-file</b><var> base-name &amp;optional old-name<a name="index-locate_002duser_002demacs_002dfile-2198"></a></var><br>
-<blockquote><p>This function returns an absolute file name for an Emacs-specific
-configuration or data file.  The argument <samp><span class="file">base-name</span></samp> should be a
+</p>
+<dl>
+<dt><a name="index-locate_002duser_002demacs_002dfile"></a>Function: <strong>locate-user-emacs-file</strong> <em>base-name &amp;optional old-name</em></dt>
+<dd><p>This function returns an absolute file name for an Emacs-specific
+configuration or data file.  The argument <samp>base-name</samp> should be a
 relative file name.  The return value is the absolute name of a file
 in the directory specified by <code>user-emacs-directory</code>; if that
 directory does not exist, this function creates it.
-
-        <p>If the optional argument <var>old-name</var> is non-<code>nil</code>, it
-specifies a file in the user's home directory,
-<samp><span class="file">~/</span><var>old-name</var></samp>.  If such a file exists, the return value is
+</p>
+<p>If the optional argument <var>old-name</var> is non-<code>nil</code>, it
+specifies a file in the user&rsquo;s home directory,
+<samp>~/<var>old-name</var></samp>.  If such a file exists, the return value is
 the absolute name of that file, instead of the file specified by
 <var>base-name</var>.  This argument is intended to be used by Emacs
 packages to provide backward compatibility.  For instance, prior to
 the introduction of <code>user-emacs-directory</code>, the abbrev file was
-located in <samp><span class="file">~/.abbrev_defs</span></samp>.  Here is the definition of
+located in <samp>~/.abbrev_defs</samp>.  Here is the definition of
 <code>abbrev-file-name</code>:
+</p>
+<div class="example">
+<pre class="example">(defcustom abbrev-file-name
+  (locate-user-emacs-file &quot;abbrev_defs&quot; &quot;.abbrev_defs&quot;)
+  &quot;Default name of file from which to read abbrevs.&quot;
+  &hellip;
+  :type 'file)
+</pre></div>
+</dd></dl>
 
-     <pre class="example">          (defcustom abbrev-file-name
-            (locate-user-emacs-file "abbrev_defs" ".abbrev_defs")
-            "Default name of file from which to read abbrevs."
-            ...
-            :type 'file)
-</pre>
-        </blockquote></div>
-
-   <p>A lower-level function for standardizing file names, which
+<p>A lower-level function for standardizing file names, which
 <code>locate-user-emacs-file</code> uses as a subroutine, is
 <code>convert-standard-filename</code>.
-
-<div class="defun">
-&mdash; Function: <b>convert-standard-filename</b><var> filename<a name="index-convert_002dstandard_002dfilename-2199"></a></var><br>
-<blockquote><p>This function returns a file name based on <var>filename</var>, which fits
+</p>
+<dl>
+<dt><a name="index-convert_002dstandard_002dfilename"></a>Function: <strong>convert-standard-filename</strong> <em>filename</em></dt>
+<dd><p>This function returns a file name based on <var>filename</var>, which fits
 the conventions of the current operating system.
-
-        <p>On GNU and Unix systems, this simply returns <var>filename</var>.  On other
+</p>
+<p>On GNU and Unix systems, this simply returns <var>filename</var>.  On other
 operating systems, it may enforce system-specific file name
 conventions; for example, on MS-DOS this function performs a variety
 of changes to enforce MS-DOS file name limitations, including
-converting any leading &lsquo;<samp><span class="samp">.</span></samp>&rsquo; to &lsquo;<samp><span class="samp">_</span></samp>&rsquo; and truncating to three
-characters after the &lsquo;<samp><span class="samp">.</span></samp>&rsquo;.
-
-        <p>The recommended way to use this function is to specify a name which
+converting any leading &lsquo;<samp>.</samp>&rsquo; to &lsquo;<samp>_</samp>&rsquo; and truncating to three
+characters after the &lsquo;<samp>.</samp>&rsquo;.
+</p>
+<p>The recommended way to use this function is to specify a name which
 fits the conventions of GNU and Unix systems, and pass it to
-<code>convert-standard-filename</code>. 
-</p></blockquote></div>
+<code>convert-standard-filename</code>.
+</p></dd></dl>
 
-   </body></html>
+<hr>
+<div class="header">
+<p>
+Previous: <a href="File-Name-Completion.html#File-Name-Completion" accesskey="p" rel="prev">File Name Completion</a>, Up: <a href="File-Names.html#File-Names" accesskey="u" rel="up">File Names</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
+
+
+</body>
+</html>

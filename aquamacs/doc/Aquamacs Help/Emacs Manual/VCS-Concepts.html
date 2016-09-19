@@ -1,75 +1,116 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>VCS Concepts - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: VCS Concepts</title>
+
+<meta name="description" content="GNU Emacs Manual: VCS Concepts">
+<meta name="keywords" content="GNU Emacs Manual: VCS Concepts">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Introduction-to-VC.html#Introduction-to-VC" title="Introduction to VC">
-<link rel="prev" href="Version-Control-Systems.html#Version-Control-Systems" title="Version Control Systems">
-<link rel="next" href="VCS-Merging.html#VCS-Merging" title="VCS Merging">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Introduction-to-VC.html#Introduction-to-VC" rel="up" title="Introduction to VC">
+<link href="VCS-Merging.html#VCS-Merging" rel="next" title="VCS Merging">
+<link href="Version-Control-Systems.html#Version-Control-Systems" rel="prev" title="Version Control Systems">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
 <a name="VCS-Concepts"></a>
+<div class="header">
 <p>
-Next:&nbsp;<a rel="next" accesskey="n" href="VCS-Merging.html#VCS-Merging">VCS Merging</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Version-Control-Systems.html#Version-Control-Systems">Version Control Systems</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Introduction-to-VC.html#Introduction-to-VC">Introduction to VC</a>
-<hr>
+Next: <a href="VCS-Merging.html#VCS-Merging" accesskey="n" rel="next">VCS Merging</a>, Previous: <a href="Version-Control-Systems.html#Version-Control-Systems" accesskey="p" rel="prev">Version Control Systems</a>, Up: <a href="Introduction-to-VC.html#Introduction-to-VC" accesskey="u" rel="up">Introduction to VC</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
 </div>
+<hr>
+<a name="Concepts-of-Version-Control"></a>
+<h4 class="subsubsection">28.1.1.3 Concepts of Version Control</h4>
 
-<h5 class="subsubsection">28.1.1.3 Concepts of Version Control</h5>
-
-<p><a name="index-repository-2887"></a><a name="index-registered-file-2888"></a>   When a file is under version control, we say that it is
-<dfn>registered</dfn> in the version control system.  The system has a
-<dfn>repository</dfn> which stores both the file's present state and its
+<a name="index-repository"></a>
+<a name="index-registered-file"></a>
+<p>When a file is under version control, we say that it is
+<em>registered</em> in the version control system.  The system has a
+<em>repository</em> which stores both the file&rsquo;s present state and its
 change history&mdash;enough to reconstruct the current version or any
 earlier version.  The repository also contains other information, such
-as <dfn>log entries</dfn> that describe the changes made to each file.
-
-   <p><a name="index-work-file-2889"></a><a name="index-checking-out-files-2890"></a>  The copy of a version-controlled file that you actually edit is
-called the <dfn>work file</dfn>.  You can change each work file as you
+as <em>log entries</em> that describe the changes made to each file.
+</p>
+<a name="index-work-file"></a>
+<a name="index-checking-out-files"></a>
+<p>The copy of a version-controlled file that you actually edit is
+called the <em>work file</em>.  You can change each work file as you
 would an ordinary file.  After you are done with a set of changes, you
-may <dfn>commit</dfn> (or <dfn>check in</dfn>) the changes; this records the
+may <em>commit</em> (or <em>check in</em>) the changes; this records the
 changes in the repository, along with a descriptive log entry.
-
-   <p><a name="index-working-tree-2891"></a>  A directory tree of work files is called a <dfn>working tree</dfn>.
-
-   <p><a name="index-revision-2892"></a><a name="index-revision-ID-2893"></a>  Each commit creates a new <dfn>revision</dfn> in the repository.  The
+</p>
+<a name="index-working-tree"></a>
+<p>A directory tree of work files is called a <em>working tree</em>.
+</p>
+<a name="index-revision"></a>
+<a name="index-revision-ID"></a>
+<p>Each commit creates a new <em>revision</em> in the repository.  The
 version control system keeps track of all past revisions and the
 changes that were made in each revision.  Each revision is named by a
-<dfn>revision ID</dfn>, whose format depends on the version control system;
+<em>revision ID</em>, whose format depends on the version control system;
 in the simplest case, it is just an integer.
-
-   <p>To go beyond these basic concepts, you will need to understand three
+</p>
+<p>To go beyond these basic concepts, you will need to understand three
 aspects in which version control systems differ.  As explained in the
 next three sections, they can be lock-based or merge-based; file-based
 or changeset-based; and centralized or decentralized.  VC handles all
 these modes of operation, but it cannot hide the differences.
+</p>
 
-   </body></html>
 
+
+</body>
+</html>

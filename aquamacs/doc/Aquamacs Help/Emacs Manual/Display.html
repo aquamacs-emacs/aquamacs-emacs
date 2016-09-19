@@ -1,80 +1,143 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Manual,
+updated for Emacs version 25.1.
+
+Copyright © 1985-1987, 1993-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "The GNU Manifesto," "Distribution" and
+"GNU GENERAL PUBLIC LICENSE," with the Front-Cover Texts being "A GNU
+Manual," and with the Back-Cover Texts as in (a) below.  A copy of the
+license is included in the section entitled "GNU Free Documentation
+License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Display - GNU Emacs Manual</title>
+<title>GNU Emacs Manual: Display</title>
+
+<meta name="description" content="GNU Emacs Manual: Display">
+<meta name="keywords" content="GNU Emacs Manual: Display">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="prev" href="Registers.html#Registers" title="Registers">
-<link rel="next" href="Search.html#Search" title="Search">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Key-Index.html#Key-Index" rel="index" title="Key Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Scrolling.html#Scrolling" rel="next" title="Scrolling">
+<link href="Bookmarks.html#Bookmarks" rel="prev" title="Bookmarks">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Manual',
-updated for Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1985--1987, 1993--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``The GNU
-     Manifesto,'' ``Distribution'' and ``GNU GENERAL PUBLIC LICENSE,''
-     with the Front-Cover Texts being ``A GNU Manual,'' and with the
-     Back-Cover Texts as in (a) below.  A copy of the license is
-     included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Display"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="Search.html#Search">Search</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Registers.html#Registers">Registers</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="index.html#Top">Top</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Display"></a>
+<div class="header">
+<p>
+Next: <a href="Search.html#Search" accesskey="n" rel="next">Search</a>, Previous: <a href="Registers.html#Registers" accesskey="p" rel="prev">Registers</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Controlling-the-Display"></a>
 <h2 class="chapter">14 Controlling the Display</h2>
 
 <p>Since only part of a large buffer fits in the window, Emacs has to
 show only a part of it.  This chapter describes commands and variables
 that let you specify which part of the text you want to see, and how
 the text is displayed.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Scrolling.html#Scrolling" accesskey="1">Scrolling</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Commands to move text up and down in a window.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Recentering.html#Recentering" accesskey="2">Recentering</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A scroll command that centers the current line.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Auto-Scrolling.html#Auto-Scrolling" accesskey="3">Auto Scrolling</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Redisplay scrolls text automatically when needed.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Horizontal-Scrolling.html#Horizontal-Scrolling" accesskey="4">Horizontal Scrolling</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Moving text left and right in a window.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Narrowing.html#Narrowing" accesskey="5">Narrowing</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Restricting display and editing to a portion
+                             of the buffer.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="View-Mode.html#View-Mode" accesskey="6">View Mode</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Viewing read-only buffers.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Follow-Mode.html#Follow-Mode" accesskey="7">Follow Mode</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Follow mode lets two windows scroll as one.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Faces.html#Faces" accesskey="8">Faces</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to change the display style using faces.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Colors.html#Colors" accesskey="9">Colors</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Specifying colors for faces.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Standard-Faces.html#Standard-Faces">Standard Faces</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The main predefined faces.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Text-Scale.html#Text-Scale">Text Scale</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Increasing or decreasing text size in a buffer.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Font-Lock.html#Font-Lock">Font Lock</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Minor mode for syntactic highlighting using faces.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Highlight-Interactively.html#Highlight-Interactively">Highlight Interactively</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Tell Emacs what text to highlight.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Fringes.html#Fringes">Fringes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Enabling or disabling window fringes.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Displaying-Boundaries.html#Displaying-Boundaries">Displaying Boundaries</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Displaying top and bottom of the buffer.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Useless-Whitespace.html#Useless-Whitespace">Useless Whitespace</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Showing possibly spurious trailing whitespace.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Selective-Display.html#Selective-Display">Selective Display</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Hiding lines with lots of indentation.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Optional-Mode-Line.html#Optional-Mode-Line">Optional Mode Line</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Optional mode line display features.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Text-Display.html#Text-Display">Text Display</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How text characters are normally displayed.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Cursor-Display.html#Cursor-Display">Cursor Display</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Features for displaying the cursor.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Line-Truncation.html#Line-Truncation">Line Truncation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Truncating lines to fit the screen width instead
+                             of continuing them to multiple screen lines.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Visual-Line-Mode.html#Visual-Line-Mode">Visual Line Mode</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Word wrap and screen line-based editing.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Display-Custom.html#Display-Custom">Display Custom</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Information on variables for customizing display.
+</td></tr>
+</table>
 
-<ul class="menu">
-<li><a accesskey="1" href="Scrolling.html#Scrolling">Scrolling</a>:               Commands to move text up and down in a window. 
-<li><a accesskey="2" href="Recentering.html#Recentering">Recentering</a>:             A scroll command that centers the current line. 
-<li><a accesskey="3" href="Auto-Scrolling.html#Auto-Scrolling">Auto Scrolling</a>:          Redisplay scrolls text automatically when needed. 
-<li><a accesskey="4" href="Horizontal-Scrolling.html#Horizontal-Scrolling">Horizontal Scrolling</a>:    Moving text left and right in a window. 
-<li><a accesskey="5" href="Narrowing.html#Narrowing">Narrowing</a>:               Restricting display and editing to a portion
-                             of the buffer. 
-<li><a accesskey="6" href="View-Mode.html#View-Mode">View Mode</a>:               Viewing read-only buffers. 
-<li><a accesskey="7" href="Follow-Mode.html#Follow-Mode">Follow Mode</a>:             Follow mode lets two windows scroll as one. 
-<li><a accesskey="8" href="Faces.html#Faces">Faces</a>:                   How to change the display style using faces. 
-<li><a accesskey="9" href="Colors.html#Colors">Colors</a>:                  Specifying colors for faces. 
-<li><a href="Standard-Faces.html#Standard-Faces">Standard Faces</a>:          The main predefined faces. 
-<li><a href="Text-Scale.html#Text-Scale">Text Scale</a>:              Increasing or decreasing text size in a buffer. 
-<li><a href="Font-Lock.html#Font-Lock">Font Lock</a>:               Minor mode for syntactic highlighting using faces. 
-<li><a href="Highlight-Interactively.html#Highlight-Interactively">Highlight Interactively</a>:  Tell Emacs what text to highlight. 
-<li><a href="Fringes.html#Fringes">Fringes</a>:                 Enabling or disabling window fringes. 
-<li><a href="Displaying-Boundaries.html#Displaying-Boundaries">Displaying Boundaries</a>:   Displaying top and bottom of the buffer. 
-<li><a href="Useless-Whitespace.html#Useless-Whitespace">Useless Whitespace</a>:      Showing possibly spurious trailing whitespace. 
-<li><a href="Selective-Display.html#Selective-Display">Selective Display</a>:       Hiding lines with lots of indentation. 
-<li><a href="Optional-Mode-Line.html#Optional-Mode-Line">Optional Mode Line</a>:      Optional mode line display features. 
-<li><a href="Text-Display.html#Text-Display">Text Display</a>:            How text characters are normally displayed. 
-<li><a href="Cursor-Display.html#Cursor-Display">Cursor Display</a>:          Features for displaying the cursor. 
-<li><a href="Line-Truncation.html#Line-Truncation">Line Truncation</a>:         Truncating lines to fit the screen width instead
-                             of continuing them to multiple screen lines. 
-<li><a href="Visual-Line-Mode.html#Visual-Line-Mode">Visual Line Mode</a>:        Word wrap and screen line-based editing. 
-<li><a href="Display-Custom.html#Display-Custom">Display Custom</a>:          Information on variables for customizing display. 
-</ul>
+<hr>
+<div class="header">
+<p>
+Next: <a href="Search.html#Search" accesskey="n" rel="next">Search</a>, Previous: <a href="Registers.html#Registers" accesskey="p" rel="prev">Registers</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Key-Index.html#Key-Index" title="Index" rel="index">Index</a>]</p>
+</div>
 
-   </body></html>
 
+
+</body>
+</html>

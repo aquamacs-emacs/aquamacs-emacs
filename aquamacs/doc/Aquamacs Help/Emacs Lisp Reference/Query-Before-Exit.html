@@ -1,73 +1,109 @@
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright © 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
 <head>
-<title>Query Before Exit - GNU Emacs Lisp Reference Manual</title>
+<title>GNU Emacs Lisp Reference Manual: Query Before Exit</title>
+
+<meta name="description" content="GNU Emacs Lisp Reference Manual: Query Before Exit">
+<meta name="keywords" content="GNU Emacs Lisp Reference Manual: Query Before Exit">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="GNU Emacs Lisp Reference Manual">
-<meta name="generator" content="makeinfo 4.13">
-<link title="Top" rel="start" href="index.html#Top">
-<link rel="up" href="Processes.html#Processes" title="Processes">
-<link rel="prev" href="Sentinels.html#Sentinels" title="Sentinels">
-<link rel="next" href="System-Processes.html#System-Processes" title="System Processes">
-<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Index.html#Index" rel="index" title="Index">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="Processes.html#Processes" rel="up" title="Processes">
+<link href="System-Processes.html#System-Processes" rel="next" title="System Processes">
+<link href="Sentinels.html#Sentinels" rel="prev" title="Sentinels">
+<style type="text/css">
 <!--
-This is the `GNU Emacs Lisp Reference Manual'
-corresponding to Emacs version 25.0.50.
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
 
-Copyright (C) 1990--1996, 1998--2015 Free Software Foundation, Inc.
-
-     Permission is granted to copy, distribute and/or modify this
-     document under the terms of the GNU Free Documentation License,
-     Version 1.3 or any later version published by the Free Software
-     Foundation; with the Invariant Sections being ``GNU General Public
-     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
-     with the Back-Cover Texts as in (a) below.  A copy of the license
-     is included in the section entitled ``GNU Free Documentation
-     License.''
-
-     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
-     and modify this GNU manual.  Buying copies from the FSF supports
-     it in developing GNU and promoting software freedom.''
-   -->
-<meta http-equiv="Content-Style-Type" content="text/css">
 
 <link rel="stylesheet" href="aquamacs.css" type="text/css" /></head>
-<body>
-<div class="node">
-<a name="Query-Before-Exit"></a>
-<p>
-Next:&nbsp;<a rel="next" accesskey="n" href="System-Processes.html#System-Processes">System Processes</a>,
-Previous:&nbsp;<a rel="previous" accesskey="p" href="Sentinels.html#Sentinels">Sentinels</a>,
-Up:&nbsp;<a rel="up" accesskey="u" href="Processes.html#Processes">Processes</a>
-<hr>
-</div>
 
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Query-Before-Exit"></a>
+<div class="header">
+<p>
+Next: <a href="System-Processes.html#System-Processes" accesskey="n" rel="next">System Processes</a>, Previous: <a href="Sentinels.html#Sentinels" accesskey="p" rel="prev">Sentinels</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Querying-Before-Exit"></a>
 <h3 class="section">36.11 Querying Before Exit</h3>
 
-<p>When Emacs exits, it terminates all its subprocesses by sending them
-the <code>SIGHUP</code> signal.  Because subprocesses may be doing
-valuable work, Emacs normally asks the user to confirm that it is ok
-to terminate them.  Each process has a query flag, which, if
+<p>When Emacs exits, it terminates all its subprocesses.  For
+subprocesses that run a program, it sends them the <code>SIGHUP</code>
+signal; connections are simply closed.  Because subprocesses may be
+doing valuable work, Emacs normally asks the user to confirm that it
+is ok to terminate them.  Each process has a query flag, which, if
 non-<code>nil</code>, says that Emacs should ask for confirmation before
 exiting and thus killing that process.  The default for the query flag
 is <code>t</code>, meaning <em>do</em> query.
+</p>
+<dl>
+<dt><a name="index-process_002dquery_002don_002dexit_002dflag"></a>Function: <strong>process-query-on-exit-flag</strong> <em>process</em></dt>
+<dd><p>This returns the query flag of <var>process</var>.
+</p></dd></dl>
 
-<div class="defun">
-&mdash; Function: <b>process-query-on-exit-flag</b><var> process<a name="index-process_002dquery_002don_002dexit_002dflag-3966"></a></var><br>
-<blockquote><p>This returns the query flag of <var>process</var>. 
-</p></blockquote></div>
-
-<div class="defun">
-&mdash; Function: <b>set-process-query-on-exit-flag</b><var> process flag<a name="index-set_002dprocess_002dquery_002don_002dexit_002dflag-3967"></a></var><br>
-<blockquote><p>This function sets the query flag of <var>process</var> to <var>flag</var>.  It
+<dl>
+<dt><a name="index-set_002dprocess_002dquery_002don_002dexit_002dflag"></a>Function: <strong>set-process-query-on-exit-flag</strong> <em>process flag</em></dt>
+<dd><p>This function sets the query flag of <var>process</var> to <var>flag</var>.  It
 returns <var>flag</var>.
-
-        <p>Here is an example of using <code>set-process-query-on-exit-flag</code> on a
+</p>
+<p>Here is an example of using <code>set-process-query-on-exit-flag</code> on a
 shell process to avoid querying:
+</p>
+<div class="smallexample">
+<pre class="smallexample">(set-process-query-on-exit-flag (get-process &quot;shell&quot;) nil)
+     &rArr; nil
+</pre></div>
+</dd></dl>
 
-     <pre class="smallexample">          (set-process-query-on-exit-flag (get-process "shell") nil)
-               &rArr; nil
-</pre>
-        </blockquote></div>
 
-   </body></html>
 
+
+</body>
+</html>
