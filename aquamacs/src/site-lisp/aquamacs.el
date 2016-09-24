@@ -1255,8 +1255,7 @@ we put it on this frame."
    (initial-scratch-message nil)
    (focus-follows-mouse nil) ;; do not mess with user's mouse!
    (resize-mini-windows t)
-   (mouse-wheel-progressive-speed t)
-   ;;  (mouse-wheel-scroll-amount (1 (shift . 0.5) (control . 0.2) ))
+   (mouse-wheel-progressive-speed nil)
    (mouse-wheel-scroll-amount (1 ((shift) . 0.5) ((control) . 0.2) ))
    (show-paren-mode t)
    (blink-cursor-mode t)
