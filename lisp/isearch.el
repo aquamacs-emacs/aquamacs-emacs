@@ -1012,7 +1012,8 @@ The last thing is to trigger a new round of lazy highlighting."
 		    ;; pos-visible-in-window-group-p returns non-nil, but
 		    ;; the X coordinate it returns is 1 pixel beyond
 		    ;; the last visible one.
-		    (>= (car visible-p) (window-body-width nil t)))
+		    (>= (car visible-p)
+                        (* (window-max-chars-per-line) (frame-char-width))))
 		(set-window-hscroll (selected-window) current-scroll))))
 	(if isearch-other-end
             (if (< isearch-other-end (point)) ; isearch-forward?
@@ -1049,9 +1050,10 @@ NOPUSH is t and EDIT is t."
   (remove-hook 'mouse-leave-buffer-hook 'isearch-done)
   (remove-hook 'kbd-macro-termination-hook 'isearch-done)
   (setq isearch-lazy-highlight-start nil)
-  (with-current-buffer isearch--current-buffer
-    (setq isearch--current-buffer nil)
-    (setq cursor-sensor-inhibit (delq 'isearch cursor-sensor-inhibit)))
+  (when (buffer-live-p isearch--current-buffer)
+    (with-current-buffer isearch--current-buffer
+      (setq isearch--current-buffer nil)
+      (setq cursor-sensor-inhibit (delq 'isearch cursor-sensor-inhibit))))
 
   ;; Called by all commands that terminate isearch-mode.
   ;; If NOPUSH is non-nil, we don't push the string on the search ring.

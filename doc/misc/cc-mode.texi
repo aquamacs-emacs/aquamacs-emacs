@@ -2553,7 +2553,9 @@ for C code in GNU programs.
 
 @item k&r
 @cindex K&R style
-The classic Kernighan and Ritchie style for C code.
+The classic Kernighan and Ritchie style for C code. If you're looking
+for the style used in the 2nd edition of their book ``The C
+Programming Language'', then check out the @code{stroustrup} style.
 
 @item bsd
 @cindex BSD style
@@ -3541,10 +3543,11 @@ use, add this function to the front of the
 @example
 (defun c-semi&comma-no-newlines-before-nonblanks ()
   (save-excursion
-    (if (and (eq last-command-char ?\;)
-             (zerop (forward-line 1))
-             (not (looking-at "^[ \t]*$")))
-        'stop
+    (if (and (= (c-last-command-char) ?\;)
+	     (zerop (forward-line 1))
+	     (bolp)      ; forward-line has funny behavior at eob.
+	     (not (looking-at "^[ \t]*$")))
+	'stop
       nil)))
 @end example
 @end defun

@@ -5584,7 +5584,11 @@ compact_font_caches (void)
   for (t = terminal_list; t; t = t->next_terminal)
     {
       Lisp_Object cache = TERMINAL_FONT_CACHE (t);
-      if (CONSP (cache))
+      /* Inhibit compacting the caches if the user so wishes.  Some of
+	 the users don't mind a larger memory footprint, but do mind
+	 slower redisplay.  */
+      if (!inhibit_compacting_font_caches
+	  && CONSP (cache))
 	{
 	  Lisp_Object entry;
 
@@ -6010,7 +6014,7 @@ mark_glyph_matrix (struct glyph_matrix *matrix)
    all the references contained in it.  */
 
 #define LAST_MARKED_SIZE 500
-static Lisp_Object last_marked[LAST_MARKED_SIZE];
+Lisp_Object last_marked[LAST_MARKED_SIZE] EXTERNALLY_VISIBLE;
 static int last_marked_index;
 
 /* For debugging--call abort when we cdr down this many
@@ -6899,7 +6903,8 @@ sweep_misc (void)
 	      else if (mblk->markers[i].m.u_any.type == Lisp_Misc_User_Ptr)
 		{
 		  struct Lisp_User_Ptr *uptr = &mblk->markers[i].m.u_user_ptr;
-		  uptr->finalizer (uptr->p);
+		  if (uptr->finalizer)
+		    uptr->finalizer (uptr->p);
 		}
 #endif
               /* Set the type of the freed object to Lisp_Misc_Free.

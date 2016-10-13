@@ -4015,7 +4015,8 @@ These commands include \\[set-mark-command] and \\[start-kbd-macro]."
 
 
 (defvar filter-buffer-substring-functions nil
-  "This variable is a wrapper hook around `buffer-substring--filter'.")
+  "This variable is a wrapper hook around `buffer-substring--filter'.
+\(See `with-wrapper-hook' for details about wrapper hooks.)")
 (make-obsolete-variable 'filter-buffer-substring-functions
                         'filter-buffer-substring-function "24.4")
 
@@ -4056,7 +4057,8 @@ that are special to a buffer, and should not be copied into other buffers."
 (defun buffer-substring--filter (beg end &optional delete)
   "Default function to use for `filter-buffer-substring-function'.
 Its arguments and return value are as specified for `filter-buffer-substring'.
-This respects the wrapper hook `filter-buffer-substring-functions',
+Also respects the obsolete wrapper hook `filter-buffer-substring-functions'
+\(see `with-wrapper-hook' for details about wrapper hooks),
 and the abnormal hook `buffer-substring-filters'.
 No filtering is done unless a hook says to."
   (with-wrapper-hook filter-buffer-substring-functions (beg end delete)
@@ -4672,9 +4674,9 @@ If N is negative, this is a more recent kill.
 The sequence of kills wraps around, so that after the oldest one
 comes the newest one.
 
-When this command inserts killed text into the buffer, it honors
-`yank-excluded-properties' and `yank-handler' as described in the
-doc string for `insert-for-yank-1', which see."
+This command honors the `yank-handled-properties' and
+`yank-excluded-properties' variables, and the `yank-handler' text
+property, in the way that `yank' does."
   (interactive "*p")
   (if (not (eq last-command 'yank))
       (user-error "Previous command was not a yank"))
@@ -4707,10 +4709,34 @@ at the end, and set mark at the beginning without activating it.
 With just \\[universal-argument] as argument, put point at beginning, and mark at end.
 With argument N, reinsert the Nth most recent kill.
 
-When this command inserts text into the buffer, it honors the
-`yank-handled-properties' and `yank-excluded-properties'
-variables, and the `yank-handler' text property.  See
-`insert-for-yank-1' for details.
+This command honors the `yank-handled-properties' and
+`yank-excluded-properties' variables, and the `yank-handler' text
+property, as described below.
+
+Properties listed in `yank-handled-properties' are processed,
+then those listed in `yank-excluded-properties' are discarded.
+
+If STRING has a non-nil `yank-handler' property anywhere, the
+normal insert behavior is altered, and instead, for each contiguous
+segment of STRING that has a given value of the `yank-handler'
+property, that value is used as follows:
+
+The value of a `yank-handler' property must be a list of one to four
+elements, of the form (FUNCTION PARAM NOEXCLUDE UNDO).
+FUNCTION, if non-nil, should be a function of one argument (the
+ object to insert); FUNCTION is called instead of `insert'.
+PARAM, if present and non-nil, is passed to FUNCTION (to be handled
+ in whatever way is appropriate; e.g. if FUNCTION is `yank-rectangle',
+ PARAM may be a list of strings to insert as a rectangle).  If PARAM
+ is nil, then the current segment of STRING is used.
+If NOEXCLUDE is present and non-nil, the normal removal of
+ `yank-excluded-properties' is not performed; instead FUNCTION is
+ responsible for the removal.  This may be necessary if FUNCTION
+ adjusts point before or after inserting the object.
+UNDO, if present and non-nil, should be a function to be called
+ by `yank-pop' to undo the insertion of the current PARAM.  It is
+ given two arguments, the start and end of the region.  FUNCTION
+ may set `yank-undo-function' to override UNDO.
 
 See also the command `yank-pop' (\\[yank-pop])."
   (interactive "*P")
