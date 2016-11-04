@@ -4856,8 +4856,8 @@ To kill a whole line, when point is not at the beginning, type \
 \\[move-beginning-of-line] \\[kill-line] \\[kill-line].
 
 If `show-trailing-whitespace' is non-nil, this command will just
-kill the rest of the current line, even if there are only
-nonblanks there.
+kill the rest of the current line, even if there are no nonblanks
+there.
 
 If option `kill-whole-line' is non-nil, then this command kills the whole line
 including its terminating newline, when used at the beginning of a line
@@ -6683,9 +6683,13 @@ are interchanged."
   (transpose-subr 'forward-word arg))
 
 (defun transpose-sexps (arg)
-  "Like \\[transpose-words] but applies to sexps.
-Does not work on a sexp that point is in the middle of
-if it is a list or string."
+  "Like \\[transpose-chars] (`transpose-chars'), but applies to sexps.
+Unlike `transpose-words', point must be between the two sexps and not
+in the middle of a sexp to be transposed.
+With non-zero prefix arg ARG, effect is to take the sexp before point
+and drag it forward past ARG other sexps (backward if ARG is negative).
+If ARG is zero, the sexps ending at or after point and at or after mark
+are interchanged."
   (interactive "*p")
   (transpose-subr
    (lambda (arg)

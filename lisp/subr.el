@@ -1988,7 +1988,7 @@ this process is not associated with any buffer.
 
 PROGRAM is the program file name.  It is searched for in `exec-path'
 \(which see).  If nil, just associate a pty with the buffer.  Remaining
-arguments are strings to give program as arguments.
+arguments PROGRAM-ARGS are strings to give program as arguments.
 
 If you want to separate standard output from standard error, use
 `make-process' or invoke the command through a shell and redirect
@@ -4530,8 +4530,10 @@ to deactivate this transient map, regardless of KEEP-PRED."
                         ;; exit C-u.
                         t)
                        ((eq t keep-pred)
-                        (eq this-command
-                            (lookup-key map (this-command-keys-vector))))
+                        (let ((mc (lookup-key map (this-command-keys-vector))))
+                          ;; If the key is unbound `this-command` is
+                          ;; nil and so is `mc`.
+                          (and mc (eq this-command mc))))
                        (t (funcall keep-pred)))
                 (funcall exitfun)))))
     (add-hook 'pre-command-hook clearfun)
