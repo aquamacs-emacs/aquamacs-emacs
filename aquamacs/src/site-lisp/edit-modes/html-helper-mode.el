@@ -229,7 +229,6 @@ are created as local. When nil the creation is skipped.")
 (cond (html-helper-mode-uses-visual-basic (require 'visual-basic-mode)))
 (cond (html-helper-mode-uses-JDE (require 'jde)))
 (require 'cc-mode)
-'(require 'cl)
 
 ;; Set this to be whatever signature you want on the bottom of your pages.
 (defvar html-helper-address-string ""
@@ -597,7 +596,8 @@ with html-helper-add-type-to-alist."
     (and key
 	 (progn
 	   (set keymap nil)
-	   (define-prefix-command keymap)))
+	   (define-prefix-command keymap)
+	   (define-key html-helper-mode-map key keymap)))
     (and menu
 	 (progn
 	   (set menu nil)))))
