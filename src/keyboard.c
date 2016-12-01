@@ -70,9 +70,11 @@ along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.  */
 #include TERM_HEADER
 #endif /* HAVE_WINDOW_SYSTEM */
 
-/* Work around GCC bug 54561.  */
+/* Work around GCC bug 54561 (but not for Mac as -Wclobbered isn't defined there) */
+#ifndef DARWIN_OS
 #if GNUC_PREREQ (4, 3, 0)
 # pragma GCC diagnostic ignored "-Wclobbered"
+#endif
 #endif
 
 /* Variables for blockinput.h:  */
