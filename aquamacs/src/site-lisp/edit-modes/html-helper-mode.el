@@ -229,7 +229,7 @@ are created as local. When nil the creation is skipped.")
 (cond (html-helper-mode-uses-visual-basic (require 'visual-basic-mode)))
 (cond (html-helper-mode-uses-JDE (require 'jde)))
 (require 'cc-mode)
-(require 'cl)
+'(require 'cl)
 
 ;; Set this to be whatever signature you want on the bottom of your pages.
 (defvar html-helper-address-string ""
