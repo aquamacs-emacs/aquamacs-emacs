@@ -5782,7 +5782,7 @@ typedef struct _AppleEventSelectionRange {
     OSErr    err;
     BOOL    isSymLink;
     id manager=[NSFileManager defaultManager];
-    NSDictionary *sourceAttribute = [manager fileAttributesAtPath:sourceItem traverseLink:NO];
+    NSDictionary *sourceAttribute = [manager attributesOfItemAtPath:sourceItem error:nil];
     isSymLink = ([sourceAttribute objectForKey:@"NSFileType"] == NSFileTypeSymbolicLink);
     if (isSymLink)
       {
