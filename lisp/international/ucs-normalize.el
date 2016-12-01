@@ -227,7 +227,7 @@
     table))
 
 (defvar ucs-normalize-decomposition-pair-to-primary-composite nil
-  "Hashtable of decomposed pair to primary composite.
+  "Hash table of decomposed pair to primary composite.
 Note that Hangul are excluded.")
   (setq ucs-normalize-decomposition-pair-to-primary-composite
         (ucs-normalize-make-hash-table-from-alist
@@ -619,7 +619,7 @@ COMPOSITION-PREDICATE will be used to compose region."
 
 ;;; coding-system definition
 (define-coding-system 'utf-8-hfs
-  "UTF-8 based coding system for MacOS HFS file names.
+  "UTF-8 based coding system for macOS HFS file names.
 The singleton characters in HFS normalization exclusion will not
 be decomposed."
   :coding-type 'utf-8

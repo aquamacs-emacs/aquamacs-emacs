@@ -76,7 +76,7 @@ Used for querying duplicates and linking to existing bugs.")
 (defvar message-strip-special-text-properties)
 
 (defun report-emacs-bug-can-use-osx-open ()
-  "Return non-nil if the OS X \"open\" command is available for mailing."
+  "Return non-nil if the macOS \"open\" command is available for mailing."
   (and (featurep 'ns)
        (equal (executable-find "open") "/usr/bin/open")
        (memq system-type '(darwin))))
@@ -111,7 +111,7 @@ This requires you to be running either Gnome, KDE, or Xfce4."
 
 (defun report-emacs-bug-insert-to-mailer ()
   "Send the message to your preferred mail client.
-This requires either the OS X \"open\" command, or the freedesktop
+This requires either the macOS \"open\" command, or the freedesktop
 \"xdg-email\" command to be available."
   (interactive)
   (save-excursion

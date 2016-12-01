@@ -1,4 +1,4 @@
-/* NeXT/Open/GNUstep and MacOSX Cocoa menu and toolbar module.
+/* NeXT/Open/GNUstep and macOS Cocoa menu and toolbar module.
    Copyright (C) 2007-2016 Free Software Foundation, Inc.
 
 This file is part of GNU Emacs.
@@ -97,7 +97,7 @@ popup_activated (void)
 /* --------------------------------------------------------------------------
     Update menubar.  Three cases:
     1) ! deep_p, submenu = nil: Fresh switch onto a frame -- either set up
-       just top-level menu strings (OS X), or goto case (2) (GNUstep).
+       just top-level menu strings (macOS), or goto case (2) (GNUstep).
     2) deep_p, submenu = nil: Recompute all submenus.
     3) deep_p, submenu = non-nil: Update contents of a single submenu.
    -------------------------------------------------------------------------- */
@@ -614,7 +614,7 @@ name_is_separator (name)
     return;
 /*fprintf (stderr, "Updating menu '%s'\n", [[self title] UTF8String]); NSLog (@"%@\n", event); */
 #ifdef NS_IMPL_GNUSTEP
-  /* Don't know how to do this for anything other than OSX >= 10.5
+  /* Don't know how to do this for anything other than Mac OS X 10.5 and later.
      This is wrong, as it might run Lisp code in the event loop.  */
   ns_update_menubar (frame, true, self);
 #endif
@@ -697,8 +697,7 @@ name_is_separator (name)
 
       keyEq = [self parseKeyEquiv: wv->key];
 #ifdef NS_IMPL_COCOA
-      /* we display all key equivalents ourselves - Cocoa
-	 won't display more than one single key */
+      /* macOS just ignores modifier strings longer than one character */
       if (keyEquivModMask == 0)
 	title = [title stringByAppendingFormat: @"\t%@", keyEq];
       keyEq = @"";
@@ -1222,7 +1221,9 @@ update_frame_tool_bar (struct frame *f)
       if (// EQ (TOOLPROP (TOOL_BAR_ITEM_TYPE), Qt) ||
 	  (STRINGP (label) && strcmp("--", SSDATA (label)) == 0))
         {
-	  [toolbar addDisplayItemSpacerWithIdx: k++ tag:i key: keyText];
+          /* Skip separators.  Newer macOS don't show them, and on
+             GNUstep they are wide as a button, thus overflowing the
+             toolbar most of the time.  */
           continue;
         }
 

@@ -716,6 +716,9 @@ main (int argc, char **argv)
      to have non-stub implementations of APIs we need to convert file
      names between UTF-8 and the system's ANSI codepage.  */
   maybe_load_unicows_dll ();
+  /* Initialize the codepage for file names, needed to decode
+     non-ASCII file names during startup.  */
+  w32_init_file_name_codepage ();
 #endif
   /* This has to be done before module_init is called below, so that
      the latter could use the thread ID of the main thread.  */
@@ -1167,7 +1170,7 @@ Using an Emacs configured with --with-x-toolkit=lucid does not have this problem
 
       /* Called before syms_of_fileio, because it sets up Qerror_condition.  */
       syms_of_data ();
-      syms_of_fns ();	   /* Before syms_of_charset which uses hashtables.  */
+      syms_of_fns ();  /* Before syms_of_charset which uses hash tables.  */
       syms_of_fileio ();
       /* Before syms_of_coding to initialize Vgc_cons_threshold.  */
       syms_of_alloc ();
@@ -2412,7 +2415,7 @@ Special values:
   `gnu'          compiled for a GNU Hurd system.
   `gnu/linux'    compiled for a GNU/Linux system.
   `gnu/kfreebsd' compiled for a GNU system with a FreeBSD kernel.
-  `darwin'       compiled for Darwin (GNU-Darwin, Mac OS X, ...).
+  `darwin'       compiled for Darwin (GNU-Darwin, macOS, ...).
   `ms-dos'       compiled as an MS-DOS application.
   `windows-nt'   compiled as a native W32 application.
   `cygwin'       compiled using the Cygwin library.

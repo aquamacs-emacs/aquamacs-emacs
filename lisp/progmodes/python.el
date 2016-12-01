@@ -2414,7 +2414,7 @@ banner and the initial prompt are received separately."
 (defun python-shell-comint-end-of-output-p (output)
   "Return non-nil if OUTPUT is ends with input prompt."
   (string-match
-   ;; XXX: It seems on OSX an extra carriage return is attached
+   ;; XXX: It seems on macOS an extra carriage return is attached
    ;; at the end of output, this handles that too.
    (concat
     "\r?\n?"
@@ -4865,12 +4865,19 @@ point's current `syntax-ppss'."
              ;; Allow up to two consecutive docstrings only.
              (>=
               2
-              (progn
+              (let (last-backward-sexp-point)
                 (while (save-excursion
                          (python-nav-backward-sexp)
                          (setq backward-sexp-point (point))
                          (and (= indentation (current-indentation))
-                              (not (bobp)) ; Prevent infloop.
+                              ;; Make sure we're always moving point.
+                              ;; If we get stuck in the same position
+                              ;; on consecutive loop iterations,
+                              ;; bail out.
+                              (prog1 (not (eql last-backward-sexp-point
+                                               backward-sexp-point))
+                                (setq last-backward-sexp-point
+                                      backward-sexp-point))
                               (looking-at-p
                                (concat "[uU]?[rR]?"
                                        (python-rx string-delimiter)))))
@@ -5136,7 +5143,7 @@ returned as is."
   (add-to-list
    'hs-special-modes-alist
    `(python-mode
-     "\\s-*\\(?:def\\|class\\)\\>"
+     "\\s-*\\_<\\(?:def\\|class\\)\\_>"
      ;; Use the empty string as end regexp so it doesn't default to
      ;; "\\s)".  This way parens at end of defun are properly hidden.
      ""
