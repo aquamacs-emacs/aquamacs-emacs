@@ -190,15 +190,8 @@ ns_resize_truedpi_image (void *eImg, int respect_dpi, Lisp_Object scale_factor, 
   
   // we'll optimize for the main screen.
   // needed to pick the right representation e.g., when HiDPI image is provided.
-  if ([image respondsToSelector: @selector (bestRepresentationForRect:context:hints:)])
-    {
-      // Choose the smallest (full-resolution) image representation
-      imgRep = [image bestRepresentationForRect: NSMakeRect(100,100,2,2)  context:nil hints: nil];
-    }
-  else
-    {
-      imgRep = [image bestRepresentationForDevice: nil];
-    }
+  // Choose the smallest (full-resolution) image representation
+  imgRep = [image bestRepresentationForRect: NSMakeRect(100,100,2,2)  context:nil hints: nil];
   
   if (imgRep == nil)
       return;
