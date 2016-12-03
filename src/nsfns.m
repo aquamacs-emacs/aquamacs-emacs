@@ -1804,7 +1804,8 @@ capitalized in the same way. */)
   sc = [NSSpellChecker sharedSpellChecker];
 
   Lisp_Object retval = Qnil;
-  NSArray *guesses = [sc guessesForWord: [NSString stringWithUTF8String: SDATA (word)]];
+  NSString *the_word = [NSString stringWithUTF8String: SDATA (word)];
+  NSArray *guesses = [sc guessesForWordRange:NSMakeRange(0, [the_word length]) inString:the_word language:[sc language] inSpellDocumentWithTag:0];
   int arrayCount = [guesses count];
   int i = arrayCount;
   while (--i >= 0)
