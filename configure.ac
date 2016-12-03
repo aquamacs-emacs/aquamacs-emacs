@@ -1864,23 +1864,23 @@ Either fix this, or re-configure with the option '--without-ns'.])])
 
   macfont_file=""
   if test "${NS_IMPL_COCOA}" = "yes"; then
-    AC_MSG_CHECKING([for Mac OS X 10.6 or newer])
+    AC_MSG_CHECKING([for Mac OS X 10.9 or newer])
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <AppKit/AppKit.h>],
                                      [
 #ifdef MAC_OS_X_VERSION_MAX_ALLOWED
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1090
  ; /* OK */
 #else
- error "Mac OS X 10.6 or newer required";
+ error "Mac OS X 10.9 or newer required";
 #endif
 #endif
 		    ])],
-		    ns_osx_have_106=yes,
-		    ns_osx_have_106=no)
-    AC_MSG_RESULT([$ns_osx_have_106])
+		    ns_osx_have_109=yes,
+		    ns_osx_have_109=no)
+    AC_MSG_RESULT([$ns_osx_have_109])
 
-    if test $ns_osx_have_106 = no; then
-       AC_MSG_ERROR([Mac OS X 10.6 or newer is required]);
+    if test $ns_osx_have_109 = no; then
+       AC_MSG_ERROR([Mac OS X 10.9 or newer is required]);
     fi
   fi
 fi
