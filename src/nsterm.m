@@ -9127,17 +9127,8 @@ not_in_argv (NSString *arg)
 {
   /* TODO: if we want to allow variable widths, this is the place to do it,
            however neither GNUstep nor Cocoa support it very well */
-  CGFloat r;
-  if (! [NSScroller respondsToSelector:@selector(scrollerWidthForControlSize:scrollerStyle:)])
-    {
-  r = [NSScroller scrollerWidth];
-    }
-  else
-    {
-  r = [NSScroller scrollerWidthForControlSize: NSRegularControlSize
-                                scrollerStyle: NSScrollerStyleLegacy];
-    }
-  return r;
+  return [NSScroller scrollerWidthForControlSize: NSRegularControlSize
+                                   scrollerStyle: NSScrollerStyleLegacy];
 }
 
 
