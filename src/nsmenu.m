@@ -106,7 +106,8 @@ void
 ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
 {
   NSAutoreleasePool *pool;
-  id menu = [NSApp mainMenu];
+  NSMenu *app_menu = [NSApp mainMenu];
+  EmacsMenu *menu;
   static EmacsMenu *last_submenu = nil;
   BOOL needsSet = NO;
   bool owfi;
@@ -145,11 +146,15 @@ ns_update_menubar (struct frame *f, bool deep_p, EmacsMenu *submenu)
   pool = [[NSAutoreleasePool alloc] init];
 
   /* Menu may have been created automatically; if so, discard it. */
-  if ([menu isKindOfClass: [EmacsMenu class]] == NO) // && menu != panelMenu)
+  if ([app_menu isKindOfClass: [EmacsMenu class]] == NO) // && menu != panelMenu)
     {
-      if (menu != panelMenu)
-      [menu release];
+      if (app_menu != panelMenu)
+        [app_menu release];
       menu = nil;
+    }
+  else
+    {
+      menu = (EmacsMenu *) app_menu;
     }
 
   if (menu == nil)

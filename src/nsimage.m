@@ -124,7 +124,7 @@ ns_image_width (void *img)
 	return [imgRep pixelsWide];
     }
   */
-  return [(id)img size].width;
+  return [(NSImage *)img size].width;
 }
 
 int
@@ -141,7 +141,7 @@ ns_image_height (void *img)
 	return [imgRep pixelsHigh];
     }
   */
-  return [(id)img size].height;
+  return [(NSImage *)img size].height;
 }
 
 unsigned long

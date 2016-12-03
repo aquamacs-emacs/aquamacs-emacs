@@ -129,20 +129,20 @@ clean_local_selection_data (Lisp_Object obj)
 
 
 static void
-ns_declare_pasteboard (id pb)
+ns_declare_pasteboard (NSPasteboard *pb)
 {
   [pb declareTypes: ns_send_types owner: NSApp];
 }
 
 
 static void
-ns_undeclare_pasteboard (id pb)
+ns_undeclare_pasteboard (NSPasteboard *pb)
 {
   [pb declareTypes: [NSArray array] owner: nil];
 }
 
 static void
-ns_store_pb_change_count (id pb)
+ns_store_pb_change_count (NSPasteboard *pb)
 {
   [pasteboard_changecount
         setObject: [NSNumber numberWithLong: [pb changeCount]]
@@ -152,7 +152,7 @@ ns_store_pb_change_count (id pb)
 static NSInteger
 ns_get_pb_change_count (Lisp_Object selection)
 {
-  id pb = ns_symbol_to_pb (selection);
+  NSPasteboard *pb = ns_symbol_to_pb (selection);
   return pb != nil ? [pb changeCount] : -1;
 }
 
@@ -166,7 +166,7 @@ ns_get_our_change_count_for (Lisp_Object selection)
 
 
 static void
-ns_string_to_pasteboard_internal (id pb, Lisp_Object str, NSString *gtype)
+ns_string_to_pasteboard_internal (NSPasteboard *pb, Lisp_Object str, NSString *gtype)
 {
   if (EQ (str, Qnil))
     {
@@ -220,8 +220,7 @@ ns_get_local_selection (Lisp_Object selection_name,
 static Lisp_Object
 ns_get_foreign_selection (Lisp_Object symbol, Lisp_Object target)
 {
-  id pb;
-  pb = ns_symbol_to_pb (symbol);
+  NSPasteboard *pb = ns_symbol_to_pb (symbol);
   return pb != nil ? ns_string_from_pasteboard (pb) : Qnil;
 }
 
@@ -236,7 +235,7 @@ ns_get_foreign_selection (Lisp_Object symbol, Lisp_Object target)
 
 
 Lisp_Object
-ns_string_from_pasteboard (id pb)
+ns_string_from_pasteboard (NSPasteboard *pb)
 {
   NSString *type, *str;
   const char *utfStr;
@@ -303,13 +302,13 @@ ns_string_from_pasteboard (id pb)
 
 
 void
-ns_string_to_pasteboard (id pb, Lisp_Object str)
+ns_string_to_pasteboard (NSPasteboard *pb, Lisp_Object str)
 {
   ns_string_to_pasteboard_internal (pb, str, nil);
 }
 
 void
-ns_string_to_pasteboard_with_type (id pb, Lisp_Object str, Lisp_Object type)
+ns_string_to_pasteboard_with_type (NSPasteboard *pb, Lisp_Object str, Lisp_Object type)
 {
   NSString *ns_type = (NILP (type) ? nil :
 		       symbol_to_nsstring (type));
@@ -337,7 +336,7 @@ VALUE is typically a string, or a cons of two markers, but may be
 anything that the functions on `selection-converter-alist' know about.  */)
      (Lisp_Object selection, Lisp_Object value)
 {
-  id pb;
+  NSPasteboard *pb;
   NSString *type;
   Lisp_Object successful_p = Qnil, rest;
   Lisp_Object target_symbol;
@@ -386,7 +385,7 @@ DEFUN ("ns-disown-selection-internal", Fns_disown_selection_internal,
 Disowning it means there is no such selection.  */)
   (Lisp_Object selection)
 {
-  id pb;
+  NSPasteboard *pb;
   check_window_system (NULL);
   CHECK_SYMBOL (selection);
 
@@ -408,7 +407,7 @@ these literal upper-case names.)  The symbol nil is the same as
 `PRIMARY', and t is the same as `SECONDARY'.  */)
      (Lisp_Object selection)
 {
-  id pb;
+  NSPasteboard *pb;
   NSArray *types;
 
   if (!window_system_available (NULL))
@@ -481,7 +480,7 @@ DEFUN ("ns-get-selection-internal", Fns_get_selection_internal,
 SELECTION is a symbol, typically `PRIMARY', `SECONDARY', or `CLIPBOARD'. */)
      (Lisp_Object selection)
 {
-  id pb;
+  NSPasteboard *pb;
   check_window_system (NULL);
   pb = ns_symbol_to_pb (selection);
   return pb != nil ? ns_string_from_pasteboard (pb) : Qnil;
@@ -494,7 +493,7 @@ DEFUN ("ns-store-selection-internal", Fns_store_selection_internal,
 SELECTION is a symbol, typically `PRIMARY', `SECONDARY', or `CLIPBOARD'. */)
      (Lisp_Object selection, Lisp_Object string, Lisp_Object type)
 {
-  id pb;
+  NSPasteboard *pb;
   check_window_system (NULL);
   pb = ns_symbol_to_pb (selection);
   if (pb != nil) 

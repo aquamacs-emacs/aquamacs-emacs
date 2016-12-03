@@ -2585,7 +2585,7 @@ static void
 ns_redraw_scroll_bars (struct frame *f)
 {
   int i;
-  id view;
+  NSView *view;
   NSArray *subviews = [[FRAME_NS_VIEW (f) superview] subviews];
   NSTRACE ("ns_redraw_scroll_bars");
   for (i =[subviews count]-1; i >= 0; i--)
