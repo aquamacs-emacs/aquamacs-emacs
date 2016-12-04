@@ -5775,6 +5775,16 @@ typedef struct _AppleEventSelectionRange {
   return YES;
 }
 
+#ifdef EXPERIMENTAL_XCODE_ODB_SUPPORT
+/* Hayo Baan: Please note that below experimental code makes use of
+   deprecated functions.
+
+   Instead of FSRef* the code should be updated to make use of NSURL.
+
+   FSGetCatalogInfo seems to have been a no-op function for a very
+   long time now so I'm unsure if this code has ever been working.
+ */
+
 /* Make FSSpec from NSString
    based on http://www.opensource.apple.com/darwinsource/10.3/Kerberos-47/KerberosFramework/Common/Sources/FSpUtils.c */
 - (OSErr)getFSRefAtPath:(NSString*)sourceItem ref:(FSRef*)sourceRef
@@ -5821,7 +5831,6 @@ typedef struct
   short saved; // set this to zero when replying
 } ModificationInfo;
 
-#ifdef EXPERIMENTAL_XCODE_ODB_SUPPORT
 - (void)handleXcodeModEvent:(NSAppleEventDescriptor *)event withReplyEvent: (NSAppleEventDescriptor *)replyEvent
 {
   Lisp_Object tail, buf, file;
@@ -5882,7 +5891,7 @@ typedef struct
   [replyEvent setParamDescriptor:replyDesc forKeyword:keyDirectObject];
   // NSLog(@"reply: %@\n", replyEvent);
 }
-#endif
+#endif /* EXPERIMENTAL_XCODE_ODB_SUPPORT */
 
 /* **************************************************************************
 
@@ -9118,17 +9127,8 @@ not_in_argv (NSString *arg)
 {
   /* TODO: if we want to allow variable widths, this is the place to do it,
            however neither GNUstep nor Cocoa support it very well */
-  CGFloat r;
-  if (! [NSScroller respondsToSelector:@selector(scrollerWidthForControlSize:scrollerStyle:)])
-    {
-  r = [NSScroller scrollerWidth];
-    }
-  else
-    {
-  r = [NSScroller scrollerWidthForControlSize: NSRegularControlSize
-                                scrollerStyle: NSScrollerStyleLegacy];
-    }
-  return r;
+  return [NSScroller scrollerWidthForControlSize: NSRegularControlSize
+                                   scrollerStyle: NSScrollerStyleLegacy];
 }
 
 
