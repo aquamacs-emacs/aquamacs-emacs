@@ -1921,10 +1921,8 @@ DEFUN ("ns-popup-font-panel", Fns_popup_font_panel, Sns_popup_font_panel,
 	    {
 	      if (EQ (face->font->driver->type, Qns))
 		nsfont = ((struct nsfont_info *)face->font)->nsfont;
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
 	      else
 		nsfont = (NSFont *) macfont_get_nsctfont (face->font);
-#endif
 	    }
 	}
     } 
@@ -3582,9 +3580,6 @@ ns_screen_name (CGDirectDisplayID did)
 {
   char *name = NULL;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
-  if (floor(NSAppKitVersionNumber) >= 1265) // NSAppKitVersionNumber10_9
-{
   mach_port_t masterPort;
   io_iterator_t it;
   io_object_t obj;
@@ -3621,12 +3616,6 @@ ns_screen_name (CGDirectDisplayID did)
     }
 
   IOObjectRelease (it);
- }
-else
-#endif
-  {
-  name = ns_get_name_from_ioreg (CGDisplayIOServicePort (did));
-  }
   return name;
 }
 
@@ -3864,16 +3853,10 @@ compute_tip_xy (struct frame *f,
       pt.y = dpyinfo->last_mouse_motion_y;
       /* Convert to screen coordinates */
       pt = [view convertPoint: pt toView: nil];
-     if (! [NSWindow respondsToSelector: @selector(convertRectToScreen:)])
-      pt = [[view window] convertBaseToScreen: pt];
-     else
-      {
         NSRect r = NSMakeRect (pt.x, pt.y, 0, 0);
         r = [[view window] convertRectToScreen: r];
         pt.x = r.origin.x;
         pt.y = r.origin.y;
-      }
-#endif
     }
   else
     {
@@ -4429,3 +4412,5 @@ be used as the image of the icon representing the frame.  */);
   as_status = 0;
   as_result = 0;
 }
+
+#endif /* HAVE_NS */
