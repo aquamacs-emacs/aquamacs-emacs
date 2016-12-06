@@ -1226,9 +1226,7 @@ update_frame_tool_bar (struct frame *f)
       if (// EQ (TOOLPROP (TOOL_BAR_ITEM_TYPE), Qt) ||
 	  (STRINGP (label) && strcmp("--", SSDATA (label)) == 0))
         {
-          /* Skip separators.  Newer macOS don't show them, and on
-             GNUstep they are wide as a button, thus overflowing the
-             toolbar most of the time.  */
+          [toolbar addDisplayItemSpacerWithIdx: k++ tag:i key: keyText];
           continue;
         }
 
