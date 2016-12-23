@@ -4,16 +4,16 @@
 ;; Description: Miscellaneous non-interactive functions.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams (concat "drew.adams" "@" "oracle" ".com")
-;; Copyright (C) 1996-2014, Drew Adams, all rights reserved.
+;; Copyright (C) 1996-2016, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 17:21:28 1996
 ;; Version: 0
 ;; Package-Requires: ()
-;; Last-Updated: Thu Dec 26 09:41:30 2013 (-0800)
+;; Last-Updated: Sun Oct 16 15:19:51 2016 (-0700)
 ;;           By: dradams
-;;     Update #: 605
+;;     Update #: 666
 ;; URL: http://www.emacswiki.org/misc-fns.el
 ;; Keywords: internal, unix, lisp, extensions, local
-;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x
+;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x, 25.x
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -25,15 +25,11 @@
 ;;
 ;;    Miscellaneous non-interactive functions.
 ;;
-;;  Code here is organized into sections by area affected.
-;;
-;;    Sections are separated by `;;;$ ... ---------------'.
-;;
-;;  You may want to put this in your `~/.emacs' file, to erase the
+;;  You might want to put this in your `~/.emacs' file, to erase the
 ;;  minibuffer when it is inactive and `minibuffer-empty-p':
 ;;
 ;;   (require 'misc-fns)
-;;   (add-hook '<mode>-hook 'notify-user-of-mode), for each <mode>.
+;;   (add-hook '<MODE>-hook 'notify-user-of-mode), for each <MODE>.
 ;;
 ;;
 ;;  Face defined here: `notifying-user-of-mode'.
@@ -45,18 +41,33 @@
 ;;
 ;;  Functions defined here:
 ;;
-;;    `another-buffer', `color-named-at', `current-line',
-;;    `display-in-mode-line', `do-files', `flatten', `fontify-buffer',
-;;    `interesting-buffer-p', `live-buffer-name',
+;;    `all-apply-p', `another-buffer', `color-named-at',
+;;    `current-line', `display-in-mode-line', `do-files', `flatten',
+;;    `fontify-buffer', `interesting-buffer-p', `live-buffer-name',
 ;;    `make-transient-mark-mode-buffer-local', `mode-ancestors',
-;;    `mod-signed', `notify-user-of-mode', `region-or-buffer-limits',
-;;    `signum', `undefine-keys-bound-to', `undefine-killer-commands',
+;;    `mode-symbol-p', `mod-signed', `notify-user-of-mode',
+;;    `read-mode-name', `region-or-buffer-limits', `signum',
+;;    `some-apply-p' `string-after-p', `string-before-p',
+;;    `undefine-keys-bound-to', `undefine-killer-commands',
 ;;    `unique-name'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
 ;;
+;; 2016/10/16 dadams
+;;     Added: all-apply-p, some-apply-p.
+;; 2016/05/19 dadams
+;;     Added: mode-symbol-p, read-mode-name.
+;; 2015/12/31 dadams
+;;     Renamed: chars-(after|before) to string-(after|before)-p.
+;;     chars-(after|before): Use version from Martin Rudalics in Emacs bug #17284.
+;; 2015/10/02 dadams
+;;     chars-before: Use version from Tassilo Horn (help-gnu-emacs@gnu.org).
+;; 2015/04/03 dadams
+;;     Added: chars-after, chars-before.
+;; 2014/10/14 dadams
+;;     Added :group for defcustom and defface.
 ;; 2013/09/30 dadams
 ;;     Removed force-time-redisplay.
 ;; 2012/11/10 dadams
@@ -183,7 +194,7 @@
 ;;;###autoload
 (defcustom mode-line-reminder-duration 10
   "*Maximum number of seconds to display a reminder in the mode-line."
-  :type 'integer)
+  :group 'help :type 'integer)
 
 (defun display-in-mode-line (text)
   "Display TEXT in mode line for `mode-line-reminder-duration' seconds."
@@ -328,12 +339,13 @@ If the region is not active or is empty, then bob and eob are used."
 (defcustom notifying-user-of-mode-flag t
   "*Non-nil means to display messages notifying user of mode changes.
 See function `notify-user-of-mode'."
-  :type 'boolean)
+  :group 'help :type 'boolean)
 
 (defface notify-user-of-mode '((((background dark)) (:foreground "cyan"))
                                (t (:foreground "dark blue")))
   "*Face used for notifying user of current major mode.
-See function `notify-user-of-mode'.")
+See function `notify-user-of-mode'."
+  :group 'help)
 
 (defun notify-user-of-mode (&optional buffer anyway)
   "Display msg naming major mode of BUFFER (default: current buffer).
@@ -365,6 +377,40 @@ Uses symbol property `derived-mode-parent' to trace backwards."
       (setq parent  (get parent 'derived-mode-parent)))
     modes))
 
+(defun mode-symbol-p (symbol)
+  "Return non-nil if SYMBOL is a major-mode or minor-mode symbol.
+Note: This might falsely return nil in some exceptional cases."
+  (or (get symbol 'derived-mode-parent) ; Most modes.
+      (get symbol 'custom-mode-group) ; Some modes, such as `ada-mode'.
+      ;; Use `FOO-mode' as candidate if `FOO' has a custom group.
+      (and (string-match "-mode\\'" (symbol-name symbol))
+           (get (setq symbol  (intern (substring (symbol-name symbol) 0
+                                                 (match-beginning 0))))
+                'custom-group))
+      (eq 'fundamental-mode symbol)))
+
+(defun read-mode-name (&optional prompt predicate require-match initial-input
+                         history def inherit-input-method keymap)
+  "Read the name of a major or minor mode symbol, with completion.
+Optional args are as for `completing-read', but without COLLECTION.
+Optional arg PREDICATE is applied only to mode symbols."
+  (let ((emacs-23+  (fboundp 'completion-table-with-predicate)) ; Emacs 23+
+        (pred       (if (not predicate)
+                        'mode-symbol-p
+                      `(lambda (symb) (and (funcall 'mode-symbol-p symb)
+                                      (funcall ',predicate symb))))))
+    (completing-read (or prompt  "Mode: ")
+                     (if emacs-23+
+                         (apply-partially #'completion-table-with-predicate
+                                          obarray pred t)
+                       obarray)
+                     (and (not emacs-23+)  pred)
+                     require-match
+                     (or initial-input  (symbol-name major-mode))
+                     history
+                     def
+                     inherit-input-method
+                     keymap)))
 
 
 ;;;$ FILES --------------------------------------------------------------------
@@ -434,7 +480,7 @@ Optional arg KILL-BUF-AFTER non-nil means kill buffer after saving it."
      upcase-word vc-insert-headers whitespace-cleanup
      whitespace-cleanup-region yank yank-pop yank-rectangle zap-to-char))
   "*Buffer-modifying commands used in `undefine-killer-commands'."
-  :type '(repeat symbol))
+  :group 'editing :type '(repeat symbol))
 
 (defun undefine-keys-bound-to (command keymap)
   "Undefine all keys bound only by inheritance to COMMAND in KEYMAP.
@@ -538,6 +584,103 @@ Return nil if no color is named at point."
                    (modify-syntax-entry ?# "w") ; Make `#' a word constituent.
                    (word-at-point))))
       (and word  (color-defined-p word)  word))))
+
+;;; (defun chars-after (chars)
+;;;   "Return non-nil if the literal string CHARS is right after point."
+;;;   (let* ((len  (length chars))
+;;;          (idx  (1- len))
+;;;          (pt   (point)))
+;;;     (catch 'chars-after
+;;;       (dolist (char  (nreverse (append chars ())))
+;;;         (unless (condition-case nil
+;;;                     (eq char (char-after (+ pt idx)))
+;;;                   (error nil))          ; e.g. `eobp'
+;;;           (throw 'chars-after nil))
+;;;         (setq idx  (1- idx)))
+;;;       t)))
+
+;; Version similar to `chars-before' by Martin Rudalics in bug #17284.
+;; And renamed from `chars-after'.
+;;
+(defun string-after-p (chars)
+  "Return non-nil if the literal string CHARS is right after point."
+  (let ((end  (+ (point) (length chars))))
+    (and (<= end (point-max))
+         (string= chars (buffer-substring-no-properties (point) end)))))
+
+;;; (defun chars-before (chars)
+;;;   "Return non-nil if the literal string CHARS is right before point.
+;;; This is more efficient that `looking-back' for this use case."
+;;;   (let* ((len  (length chars))
+;;;          (idx  (1- len))
+;;;          (pt   (point)))
+;;;     (catch 'chars-before
+;;;       (dolist (char  (append chars ()))
+;;;         (unless (condition-case nil
+;;;                     (eq char (char-before (- pt idx)))
+;;;                   (error nil))          ; e.g. `bobp'
+;;;           (throw 'chars-before nil))
+;;;         (setq idx  (1- idx)))
+;;;       t)))
+
+;; Version from Tassilo Horn [tsdh@gnu.org], in help-gnu-emacs@gnu.org,
+;; 2015-10-02, Subject "`looking-back' strange warning".
+;;
+;;; (defun chars-before (chars)
+;;;   "Return non-nil if the literal string CHARS is right before point.
+;;; This is more efficient that `looking-back' for this use case."
+;;;   (let ((beg  (- (point) (length chars))))
+;;;     (unless (< beg 0)
+;;;       (save-excursion
+;;; 	(goto-char beg)
+;;; 	(looking-at (regexp-quote chars))))))
+
+;; Version from Martin Rudalics in thread of Emacs bug #17284.
+;; And renamed from `chars-before'.
+;;
+(defun string-before-p (chars)
+  "Return non-nil if the literal string CHARS is right before point.
+This is more efficient that `looking-back' for this use case."
+  (let ((start  (- (point) (length chars))))
+    (and (>= start (point-min))
+         (string= chars (buffer-substring-no-properties start (point))))))
+
+(defun all-apply-p (predicates &optional arguments)
+  "Invoke PREDICATES in order, passing ARGUMENTS, until one returns nil.
+If none returns nil then return the value returned by the last one.
+
+PREDICATES can also be a single predicate, in which case it acts the
+same as a singleton list of that predicate.
+
+This is like `run-hook-with-args-until-failure', except that that
+function accepts a hook variable whose value is PREDICATES as its
+first argument."
+  (when (functionp predicates) (setq predicates  (list predicates)))
+  (let ((ret  t))
+    (catch 'all-apply-p
+      (dolist (pred  predicates)
+        (setq ret  (apply pred arguments))
+        (unless ret (throw 'all-apply-p nil)))
+      ret)))
+
+(defun some-apply-p (predicates &optional arguments)
+  "Invoke PREDICATES in order, passing ARGUMENTS, until one returns non-nil.
+If none returns non-nil then return the value returned by last one.
+
+PREDICATES can also be a single predicate, in which case it acts the
+same as a singleton list of that predicate.
+
+This is like `run-hook-with-args-until-success', except that that
+function accepts a hook variable whose value is PREDICATES as its
+first argument."
+  (when (functionp predicates) (setq predicates  (list predicates)))
+  (let ((ret  nil))
+    (catch 'some-apply-p
+      (dolist (pred  predicates)
+        (setq ret  (apply pred arguments))
+        (when ret (throw 'some-apply-p ret)))
+      ret)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; misc-fns.el ends here

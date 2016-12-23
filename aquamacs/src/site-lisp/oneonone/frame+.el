@@ -1,21 +1,20 @@
-;;; Aquamacs-Update: http://www.emacswiki.org/cgi-bin/wiki/frame+.el/download/frame+.el
 ;;; frame+.el --- Extensions to `frame.el'.
 ;;
 ;; Filename: frame+.el
 ;; Description: Extensions to `frame.el'.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams (concat "drew.adams" "@" "oracle" ".com")
-;; Copyright (C) 1996-2014, Drew Adams, all rights reserved.
+;; Copyright (C) 1996-2016, Drew Adams, all rights reserved.
 ;; Created: Fri Apr 12 16:42:12 1996
 ;; Version: 0
 ;; Package-Requires: ()
-;; Last-Updated: Thu Dec 26 09:01:12 2013 (-0800)
+;; Last-Updated: Thu Dec 31 13:26:18 2015 (-0800)
 ;;           By: dradams
-;;     Update #: 261
+;;     Update #: 264
 ;; URL: http://www.emacswiki.org/frame+.el
 ;; Doc URL: http://emacswiki.org/OneOnOneEmacs
 ;; Keywords: frames
-;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x
+;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x, 25.x
 ;;
 ;; Features that might be required by this library:
 ;;

@@ -4,20 +4,19 @@
 ;; Description: Frame and window commands (interactive functions).
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams (concat "drew.adams" "@" "oracle" ".com")
-;; Copyright (C) 1996-2014, Drew Adams, all rights reserved.
+;; Copyright (C) 1996-2016, Drew Adams, all rights reserved.
 ;; Created: Tue Mar  5 16:30:45 1996
 ;; Version: 0
-;; Package-Requires: ()
 ;; Package-Requires: ((frame-fns "0"))
-;; Last-Updated: Thu Dec 26 09:01:26 2013 (-0800)
+;; Last-Updated: Sun Jan 24 08:32:11 2016 (-0800)
 ;;           By: dradams
-;;     Update #: 2894
+;;     Update #: 3052
 ;; URL: http://www.emacswiki.org/frame-cmds.el
 ;; Doc URL: http://emacswiki.org/FrameModes
 ;; Doc URL: http://www.emacswiki.org/OneOnOneEmacs
 ;; Doc URL: http://www.emacswiki.org/Frame_Tiling_Commands
 ;; Keywords: internal, extensions, mouse, frames, windows, convenience
-;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x
+;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x, 25.x
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -100,11 +99,13 @@
 ;;
 ;;  Commands defined here:
 ;;
-;;    `delete-1-window-frames-on', `delete/iconify-window',
-;;    `delete/iconify-windows-on', `delete-other-frames',
-;;    `delete-windows-for', `enlarge-font', `enlarge-frame',
-;;    `enlarge-frame-horizontally', `hide-everything', `hide-frame',
-;;    `iconify-everything', `iconify/map-frame', `iconify/show-frame',
+;;    `create-frame-tiled-horizontally',
+;;    `create-frame-tiled-vertically', `delete-1-window-frames-on',
+;;    `delete/iconify-window', `delete/iconify-windows-on',
+;;    `delete-other-frames', `delete-windows-for', `enlarge-font',
+;;    `enlarge-frame', `enlarge-frame-horizontally',
+;;    `hide-everything', `hide-frame', `iconify-everything',
+;;    `iconify/map-frame', `iconify/show-frame',
 ;;    `jump-to-frame-config-register', `maximize-frame',
 ;;    `maximize-frame-horizontally', `maximize-frame-vertically',
 ;;    `mouse-iconify/map-frame', `mouse-iconify/show-frame',
@@ -113,6 +114,7 @@
 ;;    `move-frame-to-screen-bottom', `move-frame-to-screen-left',
 ;;    `move-frame-to-screen-right', `move-frame-to-screen-top',
 ;;    `move-frame-to-screen-top-left', `move-frame-up',
+;;    `name-all-frames-numerically', `name-frame-numerically',
 ;;    `other-window-or-frame', `remove-window', `remove-windows-on',
 ;;    `rename-frame', `rename-non-minibuffer-frame', `restore-frame',
 ;;    `restore-frame-horizontally', `restore-frame-vertically',
@@ -121,31 +123,43 @@
 ;;    `set-frame-alist-parameter-from-frame', `show-*Help*-buffer',
 ;;    `show-a-frame-on', `show-buffer-menu', `show-frame',
 ;;    `show-hide', `shrink-frame', `shrink-frame-horizontally',
+;;    `split-frame-horizontally', `split-frame-vertically',
+;;    `tear-off-window', `tear-off-window-if-not-alone',
 ;;    `tell-customize-var-has-changed', `tile-frames',
-;;    `tile-frames-horizontally', `tile-frames-vertically',
+;;    `tile-frames-horizontally', `tile-frames-side-by-side',
+;;    `tile-frames-top-to-bottom', `tile-frames-vertically',
 ;;    `toggle-max-frame', `toggle-max-frame-horizontally',
 ;;    `toggle-max-frame-vertically'.
 ;;
 ;;  Non-interactive functions defined here:
 ;;
-;;    `assq-delete-all' (Emacs 20), `available-screen-pixel-bounds',
-;;    `available-screen-pixel-height', `available-screen-pixel-width',
-;;    `butlast' (Emacs 20), `effective-screen-pixel-bounds',
-;;    `enlarged-font-name', `frame-alist-var-names',
-;;    `frame-cmds-set-difference', `frame-iconified-p',
-;;    `frame-parameter-names', `nbutlast' (Emacs 20),
-;;    `new-frame-position', `read-args-for-tile-frames',
-;;    `read-buffer-for-delete-windows', `smart-tool-bar-pixel-height'.
+;;    `assq-delete-all' (Emacs 20), `butlast' (Emacs 20),
+;;    `frcmds-available-screen-pixel-bounds',
+;;    `frcmds-available-screen-pixel-height',
+;;    `frcmds-available-screen-pixel-width',
+;;    `frcmds-effective-screen-pixel-bounds',
+;;    `frcmds-enlarged-font-name', `frcmds-extra-pixels-width',
+;;    `frcmds-extra-pixels-height', `frcmds-frame-alist-var-names',
+;;    `frcmds-frame-parameter-names', `frcmds-frame-iconified-p',
+;;    `frcmds-frame-number', `frcmds-new-frame-position',
+;;    `frcmds-read-args-for-tiling',
+;;    `frcmds-read-buffer-for-delete-windows',
+;;    `frcmds-set-difference', `frcmds-smart-tool-bar-pixel-height',
+;;    `frcmds-split-frame-1', `frcmds-tile-frames', `nbutlast' (Emacs
+;;    20).
 ;;
 ;;  Error symbols defined here:
 ;;
 ;;    `font-too-small', `font-size'.
 ;;
 ;;
-;;
-;;  ***** NOTE: The following EMACS PRIMITIVES have been REDEFINED HERE:
+;;  ***** NOTE: The following EMACS PRIMITIVE has been ADVISED HERE:
 ;;
 ;;  `delete-window' - If only one window in frame, `delete-frame'.
+;;
+;;
+;;  ***** NOTE: The following EMACS PRIMITIVE has been REDEFINED HERE:
+;;
 ;;  `delete-windows-on' -
 ;;     1) Reads buffer differently.  Only buffers showing windows are candidates.
 ;;     2) Calls `delete-window', so this also deletes frames where
@@ -179,6 +193,7 @@
 ;;   (substitute-key-definition 'delete-window      'remove-window global-map)
 ;;   (define-key ctl-x-map "o"                      'other-window-or-frame)
 ;;   (define-key ctl-x-4-map "1"                    'delete-other-frames)
+;;   (define-key ctl-x-5-map "1"                    'tear-off-window)
 ;;   (define-key ctl-x-5-map "h"                    'show-*Help*-buffer)
 ;;   (substitute-key-definition 'delete-window      'delete-windows-for global-map)
 ;;   (define-key global-map "\C-xt."                'save-frame-config)
@@ -264,6 +279,53 @@
 ;;
 ;;; Change Log:
 ;;
+;; 2016/01/24 dadams
+;;     Added: tear-off-window, tear-off-window-if-not-alone.
+;; 2015/08/14 dadams
+;;     tell-customize-var-has-changed: Use symbol-value, not eval.
+;; 2014/12/09 dadams
+;;     Added: frcmds-frame-pixel-height.
+;;     frcmds-split-frame-1: Use frame-pixel-width and frcmds-frame-pixel-height, instead of working
+;;                           with width and height frame parameters (char-based).
+;;     frcmds-tile-frames:
+;;       If Emacs 24.4+, use PIXELWISE arg with set-frame-size.
+;;       Otherwise: * Always subtract frcmds-extra-pixels-width.
+;;                  * Do not subtract borders.
+;;                  * Increment origin by one border-width.
+;; 2014/12/07 dadams
+;;     Added: split-frame-horizontally, split-frame-vertically.
+;;     frcmds-tile-frames: Added optional args, so can tile within a rectangle.
+;;     create-frame-tiled-(horizontally|vertically): Keep same font size.
+;; 2014/12/06 dadams
+;;     Added: create-frame-tiled-horizontally, create-frame-tiled-vertically.
+;;     Added aliases: tile-frames-side-by-side, tile-frames-top-to-bottom.
+;;     window-mgr-title-bar-pixel-height: Changed default value for ns to 50.  Thx to Nate Eagleson.
+;; 2014/10/15 dadams
+;;     window-mgr-title-bar-pixel-height: Added default value for ns (Next).  Thx to Nate Eagleson.
+;; 2014/10/13 dadams
+;;     Removed extra, empty Package-Requires.
+;; 2014/07/21 dadams
+;;     Do not redefine delete-window - just advise it.
+;;     delete/iconify-window: Just use delete-window, not old-delete-window.
+;; 2014/04/19 dadams
+;;     Added: frcmds-frame-number, name-all-frames-numerically, name-frame-numerically.
+;;     Renamed: available-screen-pixel-*       to frcmds-available-screen-pixel-*,
+;;              enlarged-font-name             to frcmds-enlarged-font-name,
+;;              extra-pixels-*                 to frcmds-extra-pixels-*,
+;;              frame-alist-var-names          to frcmds-frame-alist-var-names,
+;;              frame-parameter-names          to frcmds-frame-parameter-names,
+;;              frame-iconified-p              to frcmds-frame-iconified-p,
+;;              new-frame-position             to frcmds-new-frame-position,
+;;              read-args-for-tile-frames      to frcmds-read-args-for-tiling,
+;;              read-buffer-for-delete-windows to frcmds-read-buffer-for-delete-windows,
+;;              frame-cmds-set-difference      to frcmds-set-difference,
+;;              smart-tool-bar-pixel-height    to frcmds-smart-tool-bar-pixel-height,
+;;              tile-frames                    to frcmds-tile-frames.
+;;     rename-non-minibuffer-frame: Pass OLD-NAME and NEW-NAME to rename-frame.
+;;     Group Frame-Commands: Added :prefix frcmds-.
+;;
+;; 2014/02/24 dadams
+;;     rename-frame, rename-non-minibuffer-frame: Fixed default buffer name for non-interactive.
 ;; 2013/09/21 dadams
 ;;     maximize-frame: Apply frame-geom-value-numeric to new-* also.  Bug report thx: Mike Fitzgerald.
 ;; 2013/07/21 dadams
@@ -493,8 +555,9 @@
 ;;
 ;;; Code:
 
-(eval-when-compile (require 'cl)) ;; case, incf (plus, for Emacs 20: dolist)
-(require 'frame-fns) ;; frame-geom-value-numeric, frames-on, get-frame-name, get-a-frame, read-frame
+(eval-when-compile (require 'cl)) ;; case, incf (plus, for Emacs 20: dolist, dotimes)
+(require 'frame-fns) ;; frame-geom-value-cons, frame-geom-value-numeric, frames-on, get-frame-name,
+                     ;; get-a-frame, read-frame
 (require 'strings nil t) ;; (no error if not found) read-buffer
 (require 'misc-fns nil t) ;; (no error if not found) another-buffer
 
@@ -507,6 +570,7 @@
 ;; in `thumb-frm.el'.
 
 ;; Quiet byte-compiler.
+(defvar 1on1-minibuffer-frame)          ; In `oneonone.el'
 (defvar mac-tool-bar-display-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -519,29 +583,29 @@
 (defgroup Frame-Commands nil
   "Miscellaneous frame and window commands."
   :group 'frames
+  :prefix "frcmds-"
   :link `(url-link :tag "Send Bug Report"
           ,(concat "mailto:" "drew.adams" "@" "oracle" ".com?subject=\
 frame-cmds.el bug: \
 &body=Describe bug here, starting with `emacs -q'.  \
 Don't forget to mention your Emacs and library versions."))
   :link '(url-link :tag "Other Libraries by Drew"
-          "http://www.emacswiki.org/cgi-bin/wiki/DrewsElispLibraries")
+          "http://www.emacswiki.org/DrewsElispLibraries")
   :link '(url-link :tag "Download"
-          "http://www.emacswiki.org/cgi-bin/wiki/frame-cmds.el")
+          "http://www.emacswiki.org/frame-cmds.el")
   :link '(url-link :tag "Description - `delete-window'"
-          "http://www.emacswiki.org/cgi-bin/wiki/FrameModes")
+          "http://www.emacswiki.org/FrameModes")
   :link '(url-link :tag "Description - Frame Renaming"
-          "http://www.emacswiki.org/cgi-bin/wiki/FrameTitle")
+          "http://www.emacswiki.org/FrameTitle")
   :link '(url-link :tag "Description - Frame Resizing"
-          "http://www.emacswiki.org/cgi-bin/wiki/Shrink-Wrapping_Frames")
+          "http://www.emacswiki.org/Shrink-Wrapping_Frames")
   :link '(url-link :tag "Description - Frame Customization"
-          "http://www.emacswiki.org/cgi-bin/wiki/CustomizingAndSaving")
+          "http://www.emacswiki.org/CustomizingAndSaving")
   :link '(url-link :tag "Description - Frame Tiling"
-          "http://www.emacswiki.org/cgi-bin/wiki/Frame_Tiling_Commands")
+          "http://www.emacswiki.org/Frame_Tiling_Commands")
   :link '(url-link :tag "Description - General"
-          "http://www.emacswiki.org/cgi-bin/wiki/FrameModes")
-  :link '(emacs-commentary-link :tag "Commentary" "frame-cmds")
-  )
+          "http://www.emacswiki.org/FrameModes")
+  :link '(emacs-commentary-link :tag "Commentary" "frame-cmds"))
 
 (defcustom rename-frame-when-iconify-flag t
   "*Non-nil means frames are renamed when iconified.
@@ -559,7 +623,11 @@ Candidates include `jump-to-frame-config-register' and `show-buffer-menu'."
                  (function :tag "Another function"))
   :group 'Frame-Commands)
 
-(defcustom window-mgr-title-bar-pixel-height (if (eq window-system 'mac) 22 27)
+;; Use `cond', not `case', for Emacs 20 byte-compiler.
+(defcustom window-mgr-title-bar-pixel-height (cond ((eq window-system 'mac) 22)
+                                                   ;; For older versions of OS X, 40 might be better.
+						   ((eq window-system 'ns)  50)
+						   (t  27))
   "*Height of frame title bar provided by the window manager, in pixels.
 You might alternatively call this constant the title-bar \"width\" or
 \"thickness\".  There is no way for Emacs to determine this, so you
@@ -726,21 +794,15 @@ A negative prefix arg deiconifies all iconified frames."
   (iconify-or-deiconify-frame))
 
 
-(or (fboundp 'old-delete-window)
-    (fset 'old-delete-window (symbol-function 'delete-window)))
 
-
-;; REPLACES ORIGINAL (built-in):
+;; ADVISE ORIGINAL (built-in):
+;;
 ;; If WINDOW is the only one in its frame, `delete-frame'.
-;;;###autoload
-(defun delete-window (&optional window)
-  "Remove WINDOW from the display.  Default is `selected-window'.
-If WINDOW is the only one in its frame, then `delete-frame' too."
-  (interactive)
+(defadvice delete-window (around delete-frame-if-one-win activate)
+  "If WINDOW is the only one in its frame, then `delete-frame' too."
   (save-current-buffer
-    (setq window  (or window  (selected-window)))
-    (select-window window)
-    (if (one-window-p t) (delete-frame) (old-delete-window (selected-window)))))
+    (select-window (or (ad-get-arg 0)  (selected-window)))
+    (if (one-window-p t) (delete-frame) ad-do-it)))
 
 ;;;###autoload
 (defun delete-windows-for (&optional buffer)
@@ -748,15 +810,18 @@ If WINDOW is the only one in its frame, then `delete-frame' too."
 With no prefix arg, delete the selected window.
 With a prefix arg, prompt for a buffer and delete all windows, on any
   frame, that show that buffer."
-  (interactive (list (and current-prefix-arg  (read-buffer-for-delete-windows))))
+  (interactive (list (and current-prefix-arg  (frcmds-read-buffer-for-delete-windows))))
   (if buffer (delete-windows-on buffer) (delete-window)))
 
 
+
 ;; REPLACES ORIGINAL (built-in):
+;;
 ;; 1) Use `read-buffer' in interactive spec.
 ;; 2) Do not raise an error if BUFFER is a string that does not name a buffer.
-;; 3) Call `delete-window', so if you use my `delete-window' then this also deletes
+;; 3) Call `delete-window', so if you use the advised `delete-window' here then this also deletes
 ;;    frames where window showing the BUFFER is the only window.
+;;
 ;;;###autoload
 (defun delete-windows-on (&optional buffer frame)
   "Delete windows showing BUFFER.
@@ -773,7 +838,7 @@ Interactively, FRAME depends on the prefix arg, as follows:
   With prefix arg >= 0, FRAME is t (this frame only).
   With prefix arg < 0,  FRAME is `visible' (all visible frames)."
   (interactive
-   (list (read-buffer-for-delete-windows)
+   (list (frcmds-read-buffer-for-delete-windows)
          (and current-prefix-arg
               (or (natnump (prefix-numeric-value current-prefix-arg))  'visible))))
   (unless buffer (setq buffer  (current-buffer))) ; Like Emacs 23+ - unlike Emacs 21-22.
@@ -787,7 +852,7 @@ Interactively, FRAME depends on the prefix arg, as follows:
          (while (setq win  (get-buffer-window buffer frame)) (delete-window win))
          nil)))                         ; Return nil always, like vanilla Emacs.
 
-(defun read-buffer-for-delete-windows ()
+(defun frcmds-read-buffer-for-delete-windows ()
   "Read buffer name for delete-windows commands.
 Only displayed buffers are completion candidates."
   (completing-read "Delete windows on buffer: "
@@ -799,7 +864,7 @@ Only displayed buffers are completion candidates."
                      cand-bufs)
                    nil t nil 'minibuffer-history (buffer-name (current-buffer)) t))
 
-(defsubst frame-iconified-p (frame)
+(defsubst frcmds-frame-iconified-p (frame)
   "Return non-nil if FRAME is `frame-live-p' and `frame-visible-p'."
   (and (frame-live-p frame)  (eq (frame-visible-p frame) 'icon)))
 
@@ -817,7 +882,7 @@ Only displayed buffers are completion candidates."
 ;;         ;; HACK because of Emacs bug: `raise-frame' won't raise a frame
 ;;         ;; that was first iconified and then made invisible.
 ;;         ;; So, here we don't make an iconified frame invisible.
-;;         (unless (frame-iconified-p fr)
+;;         (unless (frcmds-frame-iconified-p fr)
 ;;           (make-frame-invisible fr)))
 ;;     (delete-window)))
 
@@ -886,7 +951,7 @@ Interactively, FRAME-P depends on the prefix arg, as follows:
             (delete-frame))             ; Default.
         (setq one-win-p  nil)))
     ;; Do this outside `save-window-excursion'.
-    (unless one-win-p (old-delete-window window))))
+    (unless one-win-p (delete-window window))))
 
 ;;;###autoload
 (defun delete/iconify-windows-on (buffer &optional frame frame-p)
@@ -940,8 +1005,8 @@ NEW-NAME is a string or nil.  Default NEW-NAME is current `buffer-name'."
                      nil t)             ; Default = selected.  Must exist.
          (read-from-minibuffer "Rename to (new name): " (cons (buffer-name) 1))
          current-prefix-arg))
-  (setq old-name  (or old-name  (get-frame-name)) ; Batch default: current.
-        new-name  (or new-name  (buffer-name))) ; Batch default: buffer name.
+  (setq old-name  (or old-name  (get-frame-name)) ; Batch defaults from current.
+        new-name  (or new-name  (buffer-name (window-buffer (frame-selected-window)))))
   ;; Convert to frame if string.
   (let ((fr  (get-a-frame old-name)))
     (if all-named
@@ -965,15 +1030,57 @@ NEW-NAME is a string or nil.  Default NEW-NAME is current `buffer-name'."
                      nil t)             ; Default = selected.  Must exist.
          (read-from-minibuffer "Rename to (new name): " (cons (buffer-name) 1))
          current-prefix-arg))
-  (setq old-name  (or old-name  (get-frame-name)) ; Batch default: current.
-        new-name  (or new-name  (buffer-name))) ; Batch default: buffer name.
-  (let ((fr  (get-a-frame old-name)))    ; Convert to frame if string.
+  (setq old-name  (or old-name  (get-frame-name)) ; Batch defaults from current.
+        new-name  (or new-name  (buffer-name (window-buffer (frame-selected-window)))))
+  (let ((fr  (get-a-frame old-name)))   ; Convert to frame if string.
     (if (and (boundp '1on1-minibuffer-frame)
              (eq (cdr (assq 'name (frame-parameters 1on1-minibuffer-frame)))
                  (cdr (assq 'name (frame-parameters fr)))))
         (and (interactive-p)
-             (error "Use `rename-frame' if you really want to rename minibuffer"))
-      (rename-frame))))
+             (error "Use `rename-frame' if you really want to rename minibuffer frame"))
+      (rename-frame old-name new-name))))
+
+;;;###autoload
+(defun name-all-frames-numerically (&optional startover)
+  "Rename all frames to numerals in 1,2,3...
+With optional arg STARTOVER (prefix arg, interactively), rename all
+starting over from 1.  Otherwise, numbering continues from the highest
+existing frame number."
+  (interactive "P")
+  (when startover
+    (dolist (fr  (frame-list))
+      (rename-non-minibuffer-frame fr (format "a%s" (frame-parameter fr 'name)))))
+  (mapc #'name-frame-numerically (frame-list)))
+
+;;;###autoload
+(defun name-frame-numerically (&optional frame frames)
+  "Name FRAME (default, selected frame) to a numeral in 1,2,3...
+If FRAME's name is already such a numeral, do nothing.
+Else:
+ Rename it to a numeral one greater than the max numeric frame name.
+ Rename any other frames to numerals also.
+
+To automatically name new frames numerically, you can do this in your
+init file:
+
+  (add-hook 'after-make-frame-functions 'name-frame-numerically)"
+  (interactive)
+  (setq frame   (or frame   (selected-frame))
+        frames  (or frames  (list frame)))
+  (let ((onum  (frcmds-frame-number frame))
+        onums max)
+    (unless onum
+      (dolist (fr  (frcmds-set-difference (frame-list) frames))
+        (unless (eq fr frame)
+          (name-frame-numerically fr (cons fr frames))))
+      (setq onums  (delq nil (mapcar #'frcmds-frame-number (frame-list)))
+            max    (if onums (apply #'max onums) 0))
+      (rename-non-minibuffer-frame frame (number-to-string (1+ max))))))
+
+(defun frcmds-frame-number (frame)
+  "Return FRAME's number, or nil if its name is not a numeral 1,2,3..."
+  (let ((num  (string-to-number (frame-parameter frame 'name))))
+    (and (wholenump num)  (not (zerop num))  num)))
 
 ;;;###autoload
 (defun show-frame (frame)
@@ -1066,11 +1173,11 @@ In Lisp code:
   (unless direction (setq direction  'both))
   (let (;; Size of a frame that uses all of the available screen area,
         ;; but leaving room for a minibuffer frame at bottom of display.
-        (fr-pixel-width   (available-screen-pixel-width))
-        (fr-pixel-height  (available-screen-pixel-height))
+        (fr-pixel-width   (frcmds-available-screen-pixel-width))
+        (fr-pixel-height  (frcmds-available-screen-pixel-height))
         (fr-origin        (if (eq direction 'horizontal)
-                              (car (effective-screen-pixel-bounds))
-                            (cadr (effective-screen-pixel-bounds))))
+                              (car (frcmds-effective-screen-pixel-bounds))
+                            (cadr (frcmds-effective-screen-pixel-bounds))))
         (orig-left        (frame-parameter frame 'left))
         (orig-top         (frame-parameter frame 'top))
         (orig-width       (frame-parameter frame 'width))
@@ -1080,14 +1187,14 @@ In Lisp code:
            (new-top     (if (memq direction '(vertical   both)) 0 orig-top))
            ;; Subtract borders, scroll bars, & title bar, then convert pixel sizes to char sizes.
            (new-width   (if (memq direction '(horizontal both))
-                            (/ (- fr-pixel-width borders (frame-extra-pixels-width frame))
+                            (/ (- fr-pixel-width borders (frcmds-extra-pixels-width frame))
                                (frame-char-width frame))
                           orig-width))
            (new-height  (if (memq direction '(vertical both))
                             (- (/ (- fr-pixel-height borders
-                                     (frame-extra-pixels-height frame)
+                                     (frcmds-extra-pixels-height frame)
                                      window-mgr-title-bar-pixel-height
-                                     (smart-tool-bar-pixel-height))
+                                     (frcmds-smart-tool-bar-pixel-height))
                                   (frame-char-height frame))
                                ;; Subtract menu bar unless on Carbon Emacs (menu bar not in the frame).
                                (if (eq window-system 'mac)
@@ -1156,9 +1263,9 @@ With a negative prefix arg, toggle horizontally.
 
 When toggling both directions, each is toggled from its last maximize
 or restore state.  This means that using this after
-`maximize-horizontal', `maximize-vertical', `toggle-max-horizontal',
-or `toggle-max-vertical' does not necessarily just reverse the effect
-of that command.
+`maximize-frame-horizontally', `maximize-frame-vertically',
+`toggle-max-frame-horizontally', or `toggle-max-frame-vertically' does
+not necessarily just reverse the effect of that command.
 
 In Lisp code:
  DIRECTION is the direction: `horizontal', `vertical', or `both'.
@@ -1197,32 +1304,111 @@ In Lisp code:
   (show-frame frame))
 
 ;;;###autoload
+(defalias 'tile-frames-side-by-side 'tile-frames-horizontally)
+;;;###autoload
 (defun tile-frames-horizontally (&optional frames)
-  "Tile frames horizontally.
-Interatively:
+  "Tile frames horizontally (side by side).
+Interactively:
   With prefix arg, you are prompted for names of two frames to tile.
   With no prefix arg, all visible frames are tiled, except a
        standalone minibuffer frame, if any.
 If called from a program, all frames in list FRAMES are tiled."
-  (interactive (and current-prefix-arg  (read-args-for-tile-frames)))
-  (tile-frames 'horizontal frames))
+  (interactive (and current-prefix-arg  (frcmds-read-args-for-tiling)))
+  (frcmds-tile-frames 'horizontal frames))
 
 ;;;###autoload
+(defalias 'tile-frames-top-to-bottom 'tile-frames-vertically)
+;;;###autoload
 (defun tile-frames-vertically (&optional frames)
-  "Tile frames vertically.
-Interatively:
+  "Tile frames vertically (stacking from the top of the screen downward).
+Interactively:
   With prefix arg, you are prompted for names of two frames to tile.
   With no prefix arg, all visible frames are tiled, except a
        standalone minibuffer frame, if any.
 If called from a program, all frames in list FRAMES are tiled."
-  (interactive (and current-prefix-arg  (read-args-for-tile-frames)))
-  (tile-frames 'vertical frames))
+  (interactive (and current-prefix-arg  (frcmds-read-args-for-tiling)))
+  (frcmds-tile-frames 'vertical frames))
 
-(defun tile-frames (direction frames)
+;;;###autoload
+(defun create-frame-tiled-horizontally ()
+  "Horizontally tile screen with selected frame and a copy.
+The same character size is used for the new frame."
+  (interactive)
+  (let* ((fr1    (selected-frame))
+         (font1  (frame-parameter fr1 'font))
+         (fr2    (make-frame-command)))
+    (save-selected-window (select-frame fr2) (set-frame-font font1))
+    (frcmds-tile-frames 'horizontal (list fr1 fr2))))
+
+;;;###autoload
+(defun create-frame-tiled-vertically ()
+  "Vertically tile screen with selected frame and a copy.
+The same character size is used for the new frame."
+  (interactive)
+  (let* ((fr1    (selected-frame))
+         (font1  (frame-parameter fr1 'font))
+         (fr2    (make-frame-command)))
+    (frcmds-tile-frames 'vertical (list fr1 fr2))))
+
+;;;###autoload
+(defun split-frame-horizontally (num)
+  "Horizontally split the selected frame.
+With a prefix arg, create that many new frames.
+The same character size is used for the new frames."
+  (interactive "p")
+  (frcmds-split-frame-1 'horizontal num))
+
+;;;###autoload
+(defun split-frame-vertically (num)
+  "Vertically split the selected frame.
+With a prefix arg, create that many new frames.
+The same character size is used for the new frames."
+  (interactive "p")
+  (frcmds-split-frame-1 'vertical num))
+
+(defun frcmds-split-frame-1 (direction num)
+  "Helper for `split-frame-horizontally' and `split-frame-vertically'.
+DIRECTION is `horizontal' or `vertical'.
+NUM is the desired number of new frames to create."
+  (let* ((fr1     (selected-frame))
+         (font1   (frame-parameter fr1 'font))
+         (x-min   (frame-geom-value-numeric 'left (frame-parameter fr1 'left)))
+         (y-min   (frame-geom-value-numeric 'top  (frame-parameter fr1 'top)))
+         (wid     (frame-pixel-width fr1))
+         (hght    (frcmds-frame-pixel-height fr1))
+         (frames  (list fr1))
+         fr)
+    (dotimes (ii num)
+      (setq fr  (make-frame-command))
+      (save-selected-window (select-frame fr) (set-frame-font font1))
+      (push fr frames))
+    (frcmds-tile-frames direction frames x-min y-min wid hght)))
+
+(defun frcmds-frame-pixel-height (frame)
+  "Pixel height of FRAME, including the window-manager title bar and menu-bar.
+For the title bar, `window-mgr-title-bar-pixel-height' is used.
+For the menu-bar, the frame char size is multiplied by frame parameter
+`menu-bar-lines'.  But that parameter does not take into account
+menu-bar wrapping."
+  (+ window-mgr-title-bar-pixel-height
+     (frame-pixel-height frame)
+     (if (not (eq window-system 'x))
+         0
+       (+ (* (frame-char-height frame)
+             (cdr (assq 'menu-bar-lines (frame-parameters frame))))))))
+
+(defun frcmds-tile-frames (direction frames &optional x-min-pix y-min-pix pix-width pix-height)
   "Tile visible frames horizontally or vertically, depending on DIRECTION.
-Arg DIRECTION is `horizontal' or `vertical'.
+Arg DIRECTION is `horizontal' or `vertical' (meaning side by side or
+above and below, respectively).
+
 Arg FRAMES is the list of frames to tile.  If nil, then tile all visible
-frames (except a standalone minibuffer frame, if any)."
+frames (except a standalone minibuffer frame, if any).
+
+The optional args cause tiling to be limited to the bounding rectangle
+they specify.  X-MIN-PIX and Y-MIN-PIX are the `left' and `top' screen
+pixel positions of the rectangle.  X-PIX-WIDTH and Y-PIX-HEIGHT are
+the pixel width and height of the rectangle."
   (let ((visible-frames   (or frames
                               (filtered-frame-list ; Get visible frames, except minibuffer.
                                #'(lambda (fr)
@@ -1235,52 +1421,68 @@ frames (except a standalone minibuffer frame, if any)."
                                                      (cdr (assq 'name (frame-parameters fr)))))))))))
         ;; Size of a frame that uses all of the available screen area,
         ;; but leaving room for a minibuffer frame at bottom of display.
-        (fr-pixel-width   (available-screen-pixel-width))
-        (fr-pixel-height  (available-screen-pixel-height))
+        (fr-pixel-width   (or pix-width   (frcmds-available-screen-pixel-width)))
+        (fr-pixel-height  (or pix-height  (frcmds-available-screen-pixel-height)))
         (fr-origin        (if (eq direction 'horizontal)
-                              (car (effective-screen-pixel-bounds))
-                            (cadr (effective-screen-pixel-bounds)))))
+                              (or x-min-pix  (car (frcmds-effective-screen-pixel-bounds)))
+                            (or y-min-pix  (cadr (frcmds-effective-screen-pixel-bounds))))))
     (case direction                     ; Size of frame in pixels.
       (horizontal  (setq fr-pixel-width   (/ fr-pixel-width  (length visible-frames))))
       (vertical    (setq fr-pixel-height  (/ fr-pixel-height (length visible-frames))))
-      (otherwise   (error "Function tile-frames: DIRECTION must be `horizontal' or `vertical'")))
+      (otherwise   (error "`frcmds-tile-frames': DIRECTION must be `horizontal' or `vertical'")))
     (dolist (fr  visible-frames)
-      ;; $$$$$$ (let ((borders (* 2 (+ (cdr (assq 'border-width (frame-parameters fr)))
-      ;;                               (cdr (assq 'internal-border-width (frame-parameters fr)))))))
-      (let ((borders  (* 2 (cdr (assq 'border-width (frame-parameters fr))))))
+      (if (or (> emacs-major-version 24)
+              (and (= emacs-major-version 24)  (> emacs-minor-version 3)))
+          (let ((frame-resize-pixelwise  t))
+            (set-frame-size
+             fr
+             ;; Subtract scroll bars, & title bar.
+             (- fr-pixel-width (frcmds-extra-pixels-width fr))
+             (- fr-pixel-height
+                window-mgr-title-bar-pixel-height
+                (if pix-height 0 (frcmds-smart-tool-bar-pixel-height fr))
+                (if (not (eq window-system 'x)) ; Menu bar for X is not in the frame.
+                    0
+                  (* (frame-char-height fr) (cdr (assq 'menu-bar-lines (frame-parameters fr))))))
+             'PIXELWISE))
         (set-frame-size
          fr
-         ;; Subtract borders, scroll bars, & title bar, then convert pixel sizes to char sizes.
-         (/ (- fr-pixel-width borders (frame-extra-pixels-width fr))
+         ;; Subtract scroll bars, & title bar, then convert pixel sizes to char sizes.
+         (/ (- fr-pixel-width
+               (frcmds-extra-pixels-width fr))
             (frame-char-width fr))
-         (- (/ (- fr-pixel-height borders (frame-extra-pixels-height fr)
-                  window-mgr-title-bar-pixel-height (smart-tool-bar-pixel-height))
-               (frame-char-height fr))
-            (if (eq window-system 'mac)
-                0                       ; Menu bar for Carbon Emacs is not in the frame.
-              (cdr (assq 'menu-bar-lines (frame-parameters fr))))))) ; Subtract `menu-bar-lines'.
+         (/ (- fr-pixel-height
+               (frcmds-extra-pixels-height fr)
+               window-mgr-title-bar-pixel-height
+               (if pix-height 0 (frcmds-smart-tool-bar-pixel-height fr))
+               (if (not (eq window-system 'x)) ; Menu bar for X is not in the frame.
+                   0
+                 (* (frame-char-height fr) (cdr (assq 'menu-bar-lines (frame-parameters fr))))))
+            (frame-char-height fr))))
       (set-frame-position fr
-                          (if (eq direction 'horizontal) fr-origin 0)
-                          (if (eq direction 'horizontal) 0 fr-origin))
+                          (if (eq direction 'horizontal) fr-origin (or x-min-pix  0))
+                          (if (eq direction 'horizontal) (or y-min-pix  0) fr-origin))
       (show-frame fr)
-      (incf fr-origin (if (eq direction 'horizontal) fr-pixel-width fr-pixel-height)))))
+      ;; Move over the width or height of one frame, and add one border width.
+      (incf fr-origin (+ (or (cdr (assq 'border-width (frame-parameters fr)))  0)
+                         (if (eq direction 'horizontal) fr-pixel-width fr-pixel-height))))))
 
-(defun frame-extra-pixels-width (frame)
+(defun frcmds-extra-pixels-width (frame)
   "Pixel difference between FRAME total width and its text area width."
   (- (frame-pixel-width frame) (* (frame-char-width frame) (frame-width frame))))
 
-(defun frame-extra-pixels-height (frame)
+(defun frcmds-extra-pixels-height (frame)
   "Pixel difference between FRAME total height and its text area height."
   (- (frame-pixel-height frame) (* (frame-char-height frame) (frame-height frame))))
 
-(defun smart-tool-bar-pixel-height (&optional frame)
+(defun frcmds-smart-tool-bar-pixel-height (&optional frame)
   "Pixel height of Mac smart tool bar."
   (if (and (boundp 'mac-tool-bar-display-mode)  (> (frame-parameter frame 'tool-bar-lines) 0))
       (if (eq mac-tool-bar-display-mode 'icons) 40 56)
     0))
 
-(defun read-args-for-tile-frames ()
-  "Read arguments for `tile-frames'."
+(defun frcmds-read-args-for-tiling ()
+  "Read arguments for `frcmds-tile-frames'."
   (list
    (list
     ;; Note: `read-frame' puts selected-frame name at front of `frame-name-history'.
@@ -1312,7 +1514,7 @@ frames (except a standalone minibuffer frame, if any)."
         fr)
       t)))))
 
-(defun available-screen-pixel-bounds ()
+(defun frcmds-available-screen-pixel-bounds ()
   "Returns a value of the same form as option `available-screen-pixel-bounds'.
 This represents the currently available screen area."
   (or available-screen-pixel-bounds     ; Use the option value, if available.
@@ -1333,28 +1535,32 @@ This represents the currently available screen area."
     "Return a copy of LIST with the last N elements removed."
     (if (and n  (<= n 0)) list (nbutlast (copy-sequence list) n))))
 
-(defun effective-screen-pixel-bounds ()
+(defun frcmds-effective-screen-pixel-bounds ()
   "Upper left and lower right of available screen space for tiling frames.
-This is `available-screen-pixel-bounds', possibly adjusted to allow
-for the standalone minibuffer frame provided by `oneonone.el'."
+This is `frcmds-available-screen-pixel-bounds', possibly adjusted to
+allow for the standalone minibuffer frame provided by `oneonone.el'."
   (if (boundp '1on1-minibuffer-frame)
-      (append (butlast (available-screen-pixel-bounds))
+      (append (butlast (frcmds-available-screen-pixel-bounds))
               (list (frame-geom-value-numeric 'top (cdr (assq 'top (frame-parameters
                                                                     1on1-minibuffer-frame))))))
-    (available-screen-pixel-bounds)))
+    (frcmds-available-screen-pixel-bounds)))
 
-(defun available-screen-pixel-width (&optional include-mini-p)
+(defun frcmds-available-screen-pixel-width (&optional include-mini-p)
   "Width of the usable screen, in pixels.
 Non-nil optional argument `include-mini-p' means include the space
 occupied by a standalone minibuffer, if any."
-  (let ((bounds  (if include-mini-p (available-screen-pixel-bounds) (effective-screen-pixel-bounds))))
+  (let ((bounds  (if include-mini-p
+                     (frcmds-available-screen-pixel-bounds)
+                   (frcmds-effective-screen-pixel-bounds))))
     (- (caddr bounds) (car bounds)))) ; X1 - X0
 
-(defun available-screen-pixel-height (&optional include-mini-p)
+(defun frcmds-available-screen-pixel-height (&optional include-mini-p)
   "Height of the usable screen, in pixels.
 Non-nil optional argument `include-mini-p' means include the
 space occupied by a standalone minibuffer, if any."
-  (let ((bounds  (if include-mini-p (available-screen-pixel-bounds) (effective-screen-pixel-bounds))))
+  (let ((bounds  (if include-mini-p
+                     (frcmds-available-screen-pixel-bounds)
+                   (frcmds-effective-screen-pixel-bounds))))
     (- (cadddr bounds) (cadr bounds)))) ; Y1 - Y0
 
 ;; Inspired by `sk-grow-frame' from Sarir Khamsi [sarir.khamsi@raytheon.com]
@@ -1398,7 +1604,7 @@ In Lisp code, FRAME is the frame to move."
   (interactive "p")
   (unless n (setq n  1))
   (setq n  (* n (frame-char-height frame)))
-  (modify-frame-parameters frame (list (list 'top '+ (new-frame-position frame 'top n)))))
+  (modify-frame-parameters frame (list (list 'top '+ (frcmds-new-frame-position frame 'top n)))))
 
 ;;;###autoload
 (defun move-frame-up (&optional n frame) ; Suggested binding: `M-up'.
@@ -1416,7 +1622,7 @@ In Lisp code, FRAME is the frame to move."
   (interactive "p")
   (unless n (setq n  1))
   (setq n  (* n (frame-char-width frame)))
-  (modify-frame-parameters frame (list (list 'left '+ (new-frame-position frame 'left n)))))
+  (modify-frame-parameters frame (list (list 'left '+ (frcmds-new-frame-position frame 'left n)))))
 
 ;;;###autoload
 (defun move-frame-left (&optional n frame) ; Suggested binding: `M-left'.
@@ -1427,15 +1633,15 @@ Same as `move-frame-right', except movement is to the left."
   (move-frame-right (- n)))
 
 ;; Helper function.
-(defun new-frame-position (frame type incr)
+(defun frcmds-new-frame-position (frame type incr)
   "Return the new TYPE position of FRAME, incremented by INCR.
 TYPE is `left' or `top'.
 INCR is the increment to use when changing the position."
   (let ((new-pos            (+ incr (cadr (frame-geom-value-cons
                                            type (cdr (assq type (frame-parameters frame)))))))
         (display-dimension  (if (eq 'left type)
-                                (available-screen-pixel-width t)
-                              (available-screen-pixel-height t)))
+                                (frcmds-available-screen-pixel-width t)
+                              (frcmds-available-screen-pixel-height t)))
         (frame-dimension    (if (eq 'left type) (frame-pixel-width frame) (frame-pixel-height frame))))
     (if (not move-frame-wrap-within-display-flag)
         new-pos
@@ -1462,10 +1668,10 @@ With a prefix arg, offset it that many char heights from the bottom."
                        0)
                      (get-a-frame (read-frame "Frame: " nil 'EXISTING))))
   (let* ((borders       (* 2 (cdr (assq 'border-width (frame-parameters frame)))))
-         (avail-height  (- (/ (- (available-screen-pixel-height) borders
-                                 (frame-extra-pixels-height frame)
+         (avail-height  (- (/ (- (frcmds-available-screen-pixel-height) borders
+                                 (frcmds-extra-pixels-height frame)
                                  window-mgr-title-bar-pixel-height
-                                 (smart-tool-bar-pixel-height))
+                                 (frcmds-smart-tool-bar-pixel-height))
                               (frame-char-height frame))
                            ;; Subtract menu bar unless on Carbon Emacs (menu bar not in the frame).
                            (if (eq window-system 'mac)
@@ -1526,9 +1732,9 @@ Optional FRAME parameter defaults to current frame."
   (setq frame  (or frame  (selected-frame)))
   (let ((fontname  (cdr (assq 'font (frame-parameters frame))))
         (count     enlarge-font-tries))
-    (setq fontname  (enlarged-font-name fontname frame increment))
+    (setq fontname  (frcmds-enlarged-font-name fontname frame increment))
     (while (and (not (x-list-fonts fontname))  (wholenump (setq count  (1- count))))
-      (setq fontname  (enlarged-font-name fontname frame increment)))
+      (setq fontname  (frcmds-enlarged-font-name fontname frame increment)))
     (unless (x-list-fonts fontname) (error "Cannot change font size"))
     (modify-frame-parameters frame (list (cons 'font fontname)))
     ;; Update faces that want a bold or italic version of the default font.
@@ -1564,7 +1770,7 @@ Optional FRAME parameter defaults to current frame."
 (put 'font-size      'error-conditions '(error font-size))
 (put 'font-size      'error-message    "Bad font size")
 
-(defun enlarged-font-name (fontname frame increment)
+(defun frcmds-enlarged-font-name (fontname frame increment)
   "FONTNAME, after enlarging font size of FRAME by INCREMENT.
 FONTNAME is the font of FRAME."
   (when (query-fontset fontname)
@@ -1591,10 +1797,11 @@ whose value is an alist of frame parameters."
                                                  (symbol-nearest-point))
                                             (symbolp (variable-at-point))))
          (enable-recursive-minibuffers  t))
-     (list (intern (completing-read "Frame alist to change (variable): "
-                                    (frame-alist-var-names) nil t nil nil 'default-frame-alist t))
+     (list (intern (completing-read
+                    "Frame alist to change (variable): "
+                    (frcmds-frame-alist-var-names) nil t nil nil 'default-frame-alist t))
            (intern (completing-read "Parameter to set:" ; Lax completion - not just known parameters.
-                                    (frame-parameter-names) nil nil nil nil 'left t))
+                                    (frcmds-frame-parameter-names) nil nil nil nil 'left t))
            (get-a-frame (read-frame "Frame to copy parameter value from: " nil t)))))
   (unless (boundp alist)
     (error "Not a defined Emacs variable: `%s'" alist))
@@ -1618,7 +1825,7 @@ Elements of ALIST that are not conses are ignored."
     alist))
 
 ;; Define this to avoid requiring `cl.el' at runtime.  Same as `icicle-set-difference'.
-(defun frame-cmds-set-difference (list1 list2 &optional key)
+(defun frcmds-set-difference (list1 list2 &optional key)
   "Combine LIST1 and LIST2 using a set-difference operation.
 Optional arg KEY is a function used to extract the part of each list
 item to compare.
@@ -1651,18 +1858,19 @@ FRAME defaults to the selected frame."
                                                  (symbol-nearest-point))
                                             (symbolp (variable-at-point))))
          (enable-recursive-minibuffers  t))
-     (list (intern (completing-read "Frame alist to change (variable): "
-                                    (frame-alist-var-names) nil t nil nil 'default-frame-alist t))
+     (list (intern (completing-read
+                    "Frame alist to change (variable): "
+                    (frcmds-frame-alist-var-names) nil t nil nil 'default-frame-alist t))
            (get-a-frame (read-frame "Frame to copy parameter values from: " nil t))
            current-prefix-arg)))
   (unless (boundp alist)
     (error "Not a defined Emacs variable: `%s'" alist))
-  (set alist (frame-cmds-set-difference (frame-parameters frame)
-                                        (and (not really-all-p)  frame-parameters-to-exclude)
-                                        #'car))
+  (set alist (frcmds-set-difference (frame-parameters frame)
+                                    (and (not really-all-p)  frame-parameters-to-exclude)
+                                    #'car))
   (tell-customize-var-has-changed alist))
 
-(defun frame-alist-var-names ()
+(defun frcmds-frame-alist-var-names ()
   "Return an alist of all variable names that end in \"frame-alist\".
 The CAR of each list item is a string variable name.
 The CDR is nil."
@@ -1673,7 +1881,7 @@ The CDR is nil."
                                  (push (list sym) vars))))
     vars))
 
-(defun frame-parameter-names ()
+(defun frcmds-frame-parameter-names ()
   "Return an alist of all available frame-parameter names.
 These are the documented, out-of-the-box (predefined) parameters.
 The CAR of each list item is a string parameter name.
@@ -1743,13 +1951,37 @@ The CDR is nil."
   "Tell Customize to recognize that VARIABLE has been set (changed).
 VARIABLE is a symbol that names a user option."
   (interactive "vVariable: ")
-  (put variable 'customized-value (list (custom-quote (eval variable)))))
+  (put variable 'customized-value (list (custom-quote (symbol-value variable)))))
 
 ;;;###autoload
 (defun other-window-or-frame (arg)
   "`other-frame', if `one-window-p'; otherwise, `other-window'."
   (interactive "p")
   (if (one-window-p) (other-frame arg) (other-window arg)))
+
+;;;###autoload
+(defun tear-off-window ()
+  "Create a new frame displaying buffer of window clicked on.
+If window is not the only one in frame, then delete it.
+Otherwise, this command effectively clones the frame and window."
+  (interactive)
+  (let* ((window  (selected-window))
+         (buf     (window-buffer window))
+         (frame   (make-frame)))
+    (select-frame frame)
+    (switch-to-buffer buf)
+    (save-window-excursion (select-window window)
+                           (unless (one-window-p) (delete-window window)))))
+
+;;;###autoload
+(defun tear-off-window-if-not-alone ()
+  "Move selected window to a new frame, unless it is alone in its frame.
+If it is alone, do nothing.  Otherwise, delete it and create a new
+frame showing the same buffer."
+  (interactive)
+  (if (one-window-p 'NOMINI)
+      (message "Sole window in frame")
+    (tear-off-window)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 

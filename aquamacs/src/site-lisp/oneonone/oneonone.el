@@ -4,17 +4,17 @@
 ;; Description: Frame configuration that uses one frame per window.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams (concat "drew.adams" "@" "oracle" ".com")
-;; Copyright (C) 1999-2014, Drew Adams, all rights reserved.
+;; Copyright (C) 1999-2016, Drew Adams, all rights reserved.
 ;; Created: Fri Apr  2 12:34:20 1999
 ;; Version: 0
 ;; Package-Requires: ((hexrgb "0"))
-;; Last-Updated: Thu Dec 26 09:43:34 2013 (-0800)
+;; Last-Updated: Thu Dec 31 15:46:34 2015 (-0800)
 ;;           By: dradams
-;;     Update #: 2822
+;;     Update #: 3087
 ;; URL: http://www.emacswiki.org/oneonone.el
 ;; Doc URL: http://emacswiki.org/OneOnOneEmacs
 ;; Keywords: local, frames
-;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x
+;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x, 25.x
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -45,14 +45,14 @@
 ;;  In addition, these user options control the creation of three
 ;;  separate, specialized frames:
 ;;
-;;    - `1on1-*Help*-frame-flag' - *Help* buffer frame
-;;    - `1on1-*Completions*-frame-flag' - *Completions* buffer frame
+;;    - `1on1-*Help*-frame-flag' - `*Help*' buffer frame
+;;    - `1on1-*Completions*-frame-flag' - `*Completions*' buffer frame
 ;;    - `1on1-minibuffer-frame-flag' - minibuffer frame
 ;;
-;;  Buffers *Help* and *Completions* are always displayed in their own
-;;  frames.  In addition, if `1on1-*Help*-frame-flag' or
-;;  `1on1-*Completions*-frame-flag' is non-nil, then the *Help* or
-;;  *Completions* frame has a special (customizable) appearance.
+;;  Buffers `*Help*' and `*Completions*' are always displayed in their
+;;  own frames.  In addition, if `1on1-*Help*-frame-flag' or
+;;  `1on1-*Completions*-frame-flag' is non-nil, then the `*Help*' or
+;;  `*Completions*' frame has a special (customizable) appearance.
 ;;
 ;;  If `1on1-minibuffer-frame-flag' is non-nil (the default value),
 ;;  then the minibuffer is shown in its own frame,
@@ -64,6 +64,16 @@
 ;;  By default, if you use a standalone minibuffer frame, it is
 ;;  automatically sized to the full width of your display and placed
 ;;  at the bottom of the display.
+;;
+;;  If you use a standalone minibuffer frame then option
+;;  `minibuffer-auto-raise' can make a difference.  This library does
+;;  not change the option value.  A value of nil can make sense for
+;;  some window managers that force the refocusing of a frame whenever
+;;  it is raised.  If you use MS Windows then this is not a problem:
+;;  command `1on1-emacs' sets the Windows-specific option
+;;  `w32-grab-focus-on-raise' to nil, so that frame raising and
+;;  focusing are decoupled.  So on MS Windows, at least, a non-nil
+;;  value for `minibuffer-auto-raise' can make sense.
 ;;
 ;;  If `1on1-fit-minibuffer-frame-flag' is non-nil,
 ;;  `1on1-minibuffer-frame-flag' is non-nil, and you also use library
@@ -94,7 +104,7 @@
 ;;  of these built-in functions to play well with frames.
 ;;
 ;;  For more information on One-on-One Emacs see
-;;  http://www.emacswiki.org/cgi-bin/wiki/OneOnOneEmacs.
+;;  http://www.emacswiki.org/OneOnOneEmacs.
 ;;
 ;;  To use this library, put the following at the *END* of your init
 ;;  file, `.emacs' (or `_emacs').  In particular, if your init file
@@ -113,8 +123,8 @@
 ;;  requiring `oneonone.el' but before executing `1on1-emacs':
 ;;
 ;;    (require 'oneonone)
-;;    (setq default-frame-alist nil)
-;;    (setq initial-frame-alist '((background-color . "White"))); e.g.
+;;    (setq default-frame-alist  nil)
+;;    (setq initial-frame-alist  '((background-color . "White"))); e.g.
 ;;    (1on1-emacs)
 ;;
 ;;  If you want the text cursor to change to a box when Emacs is idle,
@@ -145,23 +155,29 @@
 ;;    (define-key minibuffer-local-completion-map "\C-o"
 ;;                '1on1-fit-minibuffer-frame)
 ;;
+;;  By default, `oneonone.el' sets the width of the bottom and right
+;;  dividers, which separate Emacs windows, to 2 instead of 0.  This
+;;  lets you more easily notice where to drag with your mouse, to
+;;  resize windows.  If you use Emacs 24.4 or later then I also
+;;  recommend that you consider customizing face `window-divider', to
+;;  further highlight the dividers.
+;;
 ;;
 ;;  Notes on user options defined here:
 ;;  ---------------------------------
 ;;
-;;  Some user options are used here only as conveniences to define
-;;  frame-parameter alists.  They are defined using `defvar', not
-;;  `defcustom', because you cannot use Customize to define them
+;;  Some non-option variables are used here only as conveniences to
+;;  define frame-parameter alists.  They are defined using `defvar',
+;;  not `defcustom', because you cannot use Customize to define them
 ;;  independently of the alist user options they help to define.  The
 ;;  alists themselves are the variables to customize.  If you want to
 ;;  change the `defvar' variables individually and then use them to
 ;;  set the alist variables, then use `setq', not Customize, to change
 ;;  them, and restart Emacs for their changes to take effect.
 ;;
-;;  Changes to any user options defined here with `defcustom' will
-;;  take effect as soon as `1on1-emacs' is executed, so you can do
-;;  `M-x 1on1-emacs' to see their changes (no need to restart
-;;  Emacs).
+;;  Changes to any user options defined here take effect as soon as
+;;  `1on1-emacs' is executed, so you can do `M-x 1on1-emacs' to see
+;;  their changes (no need to restart Emacs).
 ;;
 ;;  User options `1on1-color-minibuffer-frame-on-setup-increment' and
 ;;  `1on1-color-minibuffer-frame-on-exit-increment' determine how much
@@ -187,13 +203,14 @@
 ;;    `1on1-set-box-cursor-when-idle-interval',
 ;;    `1on1-set-cursor-type', `1on1-toggle-box-cursor-when-idle'.
 ;;
-;;  Customizable user options defined here:
+;;  User options defined here:
 ;;
 ;;    `1on1-*Completions*-frame-flag',
 ;;    `1on1-*Completions*-frame-at-right-flag',
 ;;    `1on1-*Help*-frame-flag',
 ;;    `1on1-active-minibuffer-frame-background',
 ;;    `1on1-active-mode-line-background',
+;;    `1on1-change-cursor-on-input-method-flag',
 ;;    `1on1-change-cursor-on-overwrite/read-only-flag',
 ;;    `1on1-color-minibuffer-frame-on-exit-increment',
 ;;    `1on1-color-minibuffer-frame-on-setup-increment',
@@ -217,29 +234,8 @@
 ;;    `1on1-minibuffer-frame-width',
 ;;    `1on1-minibuffer-frame-width-percent',
 ;;    `1on1-remap-other-frame-command-flag',
-;;    `1on1-special-display-frame-alist'.
-;;
-;;  Non-customizable user options defined here:
-;;
-;;    `1on1-default-frame-background', `1on1-default-frame-font',
-;;    `1on1-default-frame-foreground',
-;;    `1on1-default-frame-menu-bar-lines',
-;;    `1on1-default-frame-mouse-color', `1on1-default-frame-size',
-;;    `1on1-default-frame-upper-left-corner',
-;;    `1on1-default-special-frame-background',
-;;    `1on1-default-special-frame-cursor-color',
-;;    `1on1-default-special-frame-font',
-;;    `1on1-default-special-frame-foreground',
-;;    `1on1-default-special-frame-menu-bar-lines',
-;;    `1on1-default-special-frame-mouse-color',
-;;    `1on1-default-special-frame-size',
-;;    `1on1-default-special-frame-upper-left-corner',
-;;    `1on1-minibuffer-frame-background',
-;;    `1on1-minibuffer-frame-cursor-color',
-;;    `1on1-minibuffer-frame-font',
-;;    `1on1-minibuffer-frame-foreground',
-;;    `1on1-minibuffer-frame-height',
-;;    `1on1-minibuffer-frame-mouse-color'.
+;;    `1on1-special-display-frame-alist', `1on1-task-bar-height'
+;;    (Emacs < 24.4).
 ;;
 ;;  Non-interactive functions defined here:
 ;;
@@ -255,14 +251,32 @@
 ;;    `1on1-minibuffer-prompt-end', `1on1-reset-minibuffer-frame',
 ;;    `1on1-remove-if', `1on1-set-minibuffer-frame-top/bottom',
 ;;    `1on1-set-minibuffer-frame-width',
-;;    `1on1-setup-minibuffer-frame-coloring', `1on1-setup-mode-line',
+;;    `1on1-setup-minibuffer-frame-coloring', `1on1-setup-mode-line'.
 ;;
 ;;  Non-option variables defined here:
 ;;
 ;;    `1on1-box-cursor-when-idle-p',
 ;;    `1on1-box-cursor-when-idle-interval',
-;;    `1on1-box-cursor-when-idle-timer', `1on1-last-cursor-type',
-;;    `1on1-minibuffer-frame'.
+;;    `1on1-box-cursor-when-idle-timer',
+;;    `1on1-default-frame-background', `1on1-default-frame-font',
+;;    `1on1-default-frame-foreground',
+;;    `1on1-default-frame-menu-bar-lines',
+;;    `1on1-default-frame-mouse-color', `1on1-default-frame-size',
+;;    `1on1-default-frame-upper-left-corner', `1on1-divider-width',
+;;    `1on1-last-cursor-type', `1on1-minibuffer-frame',
+;;    `1on1-minibuffer-frame-background',
+;;    `1on1-minibuffer-frame-bottom-offset',
+;;    `1on1-minibuffer-frame-cursor-color',
+;;    `1on1-minibuffer-frame-font',
+;;    `1on1-minibuffer-frame-foreground',
+;;    `1on1-minibuffer-frame-height',
+;;    `1on1-minibuffer-frame-mouse-color',
+;;    `1on1-special-frame-background',
+;;    `1on1-special-frame-cursor-color', `1on1-special-frame-font',
+;;    `1on1-special-frame-foreground',
+;;    `1on1-special-frame-menu-bar-lines',
+;;    `1on1-special-frame-mouse-color', `1on1-special-frame-size',
+;;    `1on1-special-frame-upper-left-corner'.
 ;;
 ;;
 ;;  ***** NOTE: These EMACS PRIMITIVES have been REDEFINED HERE:
@@ -284,6 +298,49 @@
  
 ;;; Change Log:
 ;;
+;; 2015/08/21 dadams
+;;     1on1-display-*Completions*-frame: Use icicle-mru-window-for-buffer (Emacs 24+).
+;; 2015/08/20 dadams
+;;     1on1-display-*Completions*-frame: Use face-remap-add-relative instead of set-face-*.
+;; 2015/04/11 dadams
+;;     1on1-display-*Completions*-frame: If minibuf is active, redirect to minibuf frame.
+;;       And if not, do not redirect if completion-reference-buffer is *Completions*.
+;; 2015/01/26 dadams
+;;     1on1-display-*Completions*-frame: Use completion-reference-buffer, if displayed.
+;; 2014/12/01 dadams
+;;     1on1-emacs: Do not set minibuffer-auto-raise to nil.  Let user do it based on window mgr.
+;;     1on1-default-frame-cursor-type(-overwrite/read-only), 1on1-emacs,
+;;       1on1-change-cursor-on-overwrite/read-only:
+;;         Ensure that cursor type cannot be set to nil.
+;;     1on1-change-cursor-on-input-method:
+;;       Do not set it if there is no setting based on null entry in default-frame-alist.
+;; 2014/11/30 dadams
+;;     1on1-emacs, 1on1-change-cursor-on-overwrite/read-only:
+;;       Use cursor-type setting in default-frame-alist, not 1on1-default-frame-cursor-type.
+;;     1on1-change-cursor-on-input-method:
+;;       Use cursor-color setting in default-frame-alist, not 1on1-default-frame-cursor-color.
+;; 2014/11/27 dadams
+;;     Added: 1on1-task-bar-height, 1on1-minibuffer-frame-bottom-offset.
+;;     1on1-emacs: Set 1on1-minibuffer-frame-bottom-offset (Emacs 24.4+ only).
+;;     1on1-set-minibuffer-frame-top/bottom:
+;;       Use *-minibuffer-frame-bottom-offset (or *-task-bar-height) instead of 2 * char height.
+;;     1on1-set-minibuffer-frame-width: Use monitor width instead of x-display-pixel-width.
+;; 2014/09/03 dadams
+;;     1on1-minibuffer-frame-alist: No horizontal scroll bars.
+;; 2014/08/28 dadams
+;;     1on1-emacs: Removed vestigial defadvice of y-or-n-p.
+;;     y-or-n-p: Fix regexp: [\n], not \n. Do not resize for Emacs 20 (it shows newlines as \n).
+;; 2014/08/27 dadams
+;;     y-or-n-p: Resize frame to fit PROMPT.  See Emacs bug #18340.
+;;     1on1-default-frame-alist, 1on1-special-display-frame-alist: No horizontal scroll bars.
+;; 2014/02/11 dadams
+;;     1on1-color-minibuffer-frame-on-(exit|setup)-increment: Change type: number, not integer.
+;; 2014/01/30 dadams
+;;     Added: 1on1-divider-width.
+;;     Renamed: 1on1-default-special-frame* to 1on1-special-frame*.
+;;              This is an *incompatible change*: If you customized options with the old names
+;;              then you will need recustomize using the new names.
+;;     1on1-(default|special)-frame-alist: Use 1on1-divider-width.
 ;; 2013/12/21 dadams
 ;;     Removed autoload cookie: *-frame-alist.
 ;;     1on1-(in)active-mode-line-background: Use constant default, so can have autoload cookie.
@@ -614,7 +671,7 @@
 (require 'frame-cmds nil t) ;; (no error if not found): rename-frame
 (require 'zoom-frm nil t) ;; (no error if not found):
                           ;; frame-zoom-font-difference, zoom-frm-out
-(require 'hexrgb) ;; hexrgb-color-values-to-hex, hexrgb-hsv-to-rgb, hexrgb-rgb-to-hsv
+(require 'hexrgb) ;; hexrgb-increment-hue
 
 
 ;; Ensure that this is loaded before compiling it.
@@ -634,16 +691,22 @@
   "Options to define initial frame configuration."
   :prefix "1on1-" :group 'frames
   :link `(url-link :tag "Send Bug Report"
-          ,(concat "mailto:" "drew.adams" "@" "oracle" ".com?subject=\
-oneonone.el bug: \
+          ,(concat "mailto:" "drew.adams" "@" "oracle" ".com?subject=oneonone.el bug: \
 &body=Describe bug here, starting with `emacs -q'.  \
 Don't forget to mention your Emacs and library versions."))
   :link '(url-link :tag "Other Libraries by Drew"
-          "http://www.emacswiki.org/cgi-bin/wiki/DrewsElispLibraries")
-  :link '(url-link :tag "Download" "http://www.emacswiki.org/cgi-bin/wiki/oneonone.el")
+          "http://www.emacswiki.org/DrewsElispLibraries")
+  :link '(url-link :tag "Download" "http://www.emacswiki.org/oneonone.el")
   :link '(url-link :tag "Description"
-          "http://www.emacswiki.org/cgi-bin/wiki/OneOnOneEmacs")
+          "http://www.emacswiki.org/OneOnOneEmacs")
   :link '(emacs-commentary-link :tag "Commentary" "oneonone"))
+
+(defvar 1on1-divider-width 2
+  "Default `bottom-divider-width' and `right-divider-width'.
+This is used only to define the standard value of
+`1on1-default-frame-alist' and `1on1-special-display-frame-alist'.
+Customize those options, not this variable.  If you change this
+variable, you will need to restart Emacs for it to take effect.")
  
 ;;; Minibuffer frame: ********************************
 ;;;
@@ -661,6 +724,17 @@ to generally use a separate frame.
 If you change this variable, you will need to restart Emacs for it to
 take effect."
   :type 'boolean :group 'One-On-One)
+
+(unless (fboundp 'display-monitor-attributes-list) ; Emacs < 24.4.
+  (defcustom 1on1-task-bar-height 28
+    "Height of area at screen bottom that is not available for Emacs.
+Space reserved for the MS Windows task bar, for example.
+Not used for Emacs release 24.4 or later. "
+    :type 'integer :group 'One-On-One))
+
+(defvar 1on1-minibuffer-frame-bottom-offset nil
+  "Offset for bottom of minibuffer frame, from monitor bottom.
+The value is negative, and measured in pixels.")
 
 ;;;###autoload
 (defcustom 1on1-remap-other-frame-command-flag (> emacs-major-version 23)
@@ -726,14 +800,14 @@ take effect."
   "*Increment to change minibuffer-frame hue when minibuffer is exited.
 This should be opposite in sign to
 `1on1-color-minibuffer-frame-on-setup-increment.'"
-  :type 'integer :group 'One-On-One)
+  :type 'number :group 'One-On-One)
 
 ;;;###autoload
 (defcustom 1on1-color-minibuffer-frame-on-setup-increment -0.10
   "*Increment to change minibuffer-frame hue when minibuffer is entered.
 This should be opposite in sign to
 `1on1-color-minibuffer-frame-on-exit-increment.'"
-  :type 'integer :group 'One-On-One)
+  :type 'number :group 'One-On-One)
 
 ;;;###autoload
 (defcustom 1on1-active-mode-line-background "PaleGoldenrod"
@@ -876,6 +950,8 @@ for the new value to take effect."
        (cons 'minibuffer 'only))
    (or (assq 'user-position minibuffer-frame-alist)
        (cons 'user-position t))
+   (or (assq 'horizontal-scroll-bars minibuffer-frame-alist)
+       (cons 'horizontal-scroll-bars nil)) ; No horizontal scroll bars by default.
    (or (assq 'vertical-scroll-bars minibuffer-frame-alist) ;  No scroll bar.
        (cons 'vertical-scroll-bars nil))
    (or (assq 'name minibuffer-frame-alist)
@@ -1104,7 +1180,9 @@ for the new value to take effect.  Furthermore, if
 `1on1-emacs', you will need to toggle that variable to non-nil (and
 back to nil, if that's the value you want).  Otherwise, the new value
 will take effect only after you restart Emacs."
-  :type 'symbol :group 'One-On-One)
+  ;; Ensure that it cannot be set to `nil'.
+  :type '(restricted-sexp :match-alternatives ((lambda (x) (and x  (symbolp x)))) :value bar)
+  :group 'One-On-One)
 
 (defvar 1on1-last-cursor-type 1on1-default-frame-cursor-type "Saved last cursor type.")
 
@@ -1115,7 +1193,9 @@ This applies only to non-special frames.  This has no effect if
 `1on1-change-cursor-on-overwrite/read-only-flag' is nil.  If you
 customize this variable, you will need to rerun `1on1-emacs' for the
 new value to take effect."
-  :type 'symbol :group 'One-On-One)
+  ;; Ensure that it cannot be set to `nil'.
+  :type '(restricted-sexp :match-alternatives ((lambda (x) (and x  (symbolp x)))) :value box)
+  :group 'One-On-One)
 
 (defvar 1on1-box-cursor-when-idle-p t
   "Non-nil means to use a box cursor whenever Emacs is idle.
@@ -1182,6 +1262,10 @@ take effect.")
        (cons 'cursor-type 1on1-default-frame-cursor-type))
    (or (assq 'menu-bar-lines default-frame-alist)
        (cons 'menu-bar-lines 1on1-default-frame-menu-bar-lines))
+   (or (assq 'bottom-divider-width default-frame-alist)
+       (cons 'bottom-divider-width 1on1-divider-width))
+   (or (assq 'right-divider-width default-frame-alist)
+       (cons 'right-divider-width 1on1-divider-width))
    (or (assq 'top default-frame-alist)
        (cons 'top (car 1on1-default-frame-upper-left-corner)))
    (or (assq 'left default-frame-alist)
@@ -1194,6 +1278,8 @@ take effect.")
        (cons 'minibuffer (not 1on1-minibuffer-frame-flag)))
    (or (assq 'user-position default-frame-alist)
        (cons 'user-position t))
+   (or (assq 'horizontal-scroll-bars default-frame-alist)
+       (cons 'horizontal-scroll-bars nil)) ; No horizontal scroll bars by default.
    (or (assq 'vertical-scroll-bars default-frame-alist)
        (cons 'vertical-scroll-bars 'right))
    (or (assq 'icon-type default-frame-alist)
@@ -1218,7 +1304,7 @@ for the new value to take effect."
  
 ;;; Special-display frames: `1on1-special-display-frame-alist' ************************
 ;;;
-(defvar 1on1-default-special-frame-foreground "Black"
+(defvar 1on1-special-frame-foreground "Black"
   "Default foreground color for special display frames.
 
 This is used only to define the standard value of
@@ -1226,7 +1312,7 @@ This is used only to define the standard value of
 one.  If you change this variable, you will need to restart Emacs for
 it to take effect.")
 
-(defvar 1on1-default-special-frame-background "LightSteelBlue"
+(defvar 1on1-special-frame-background "LightSteelBlue"
   "Default background color for special display frames.
 
 This is used only to define the standard value of
@@ -1234,7 +1320,7 @@ This is used only to define the standard value of
 one.  If you change this variable, you will need to restart Emacs for
 it to take effect.")
 
-(defvar 1on1-default-special-frame-font
+(defvar 1on1-special-frame-font
   (if (eq system-type 'windows-nt)
       ;;; "-*-Lucida Console-normal-r-*-*-14-112-96-96-c-*-iso8859-1"
       "-*-Lucida Console-normal-r-*-*-14-*-*-*-c-*-iso8859-1"
@@ -1248,7 +1334,7 @@ This is used only to define the standard value of
 one.  If you change this variable, you will need to restart Emacs for
 it to take effect.")
 
-(defvar 1on1-default-special-frame-mouse-color "Yellow"
+(defvar 1on1-special-frame-mouse-color "Yellow"
   "Default mouse color for special display frames.
 
 This is used only to define the standard value of
@@ -1256,7 +1342,7 @@ This is used only to define the standard value of
 one.  If you change this variable, you will need to restart Emacs for
 it to take effect.")
 
-(defvar 1on1-default-special-frame-cursor-color "Yellow"
+(defvar 1on1-special-frame-cursor-color "Yellow"
   "Default text cursor color for special display frames.
 
 This is used only to define the standard value of
@@ -1264,7 +1350,7 @@ This is used only to define the standard value of
 one.  If you change this variable, you will need to restart Emacs for
 it to take effect.")
 
-(defvar 1on1-default-special-frame-menu-bar-lines 1
+(defvar 1on1-special-frame-menu-bar-lines 1
   "Number of lines used for the menu bar of special display frames.
 
 This is used only to define the standard value of
@@ -1272,7 +1358,7 @@ This is used only to define the standard value of
 one.  If you change this variable, you will need to restart Emacs for
 it to take effect.")
 
-(defvar 1on1-default-special-frame-upper-left-corner '(0 . 0)
+(defvar 1on1-special-frame-upper-left-corner '(0 . 0)
   "Position of upper left corner of special display frames.
 A cons whose car is the distance from the top in pixels
 and whose cdr is the distance from the left in pixels.
@@ -1282,7 +1368,7 @@ This is used only to define the standard value of
 one.  If you change this variable, you will need to restart Emacs for
 it to take effect.")
 
-(defvar 1on1-default-special-frame-size '(80 . 20)
+(defvar 1on1-special-frame-size '(80 . 20)
   "Default size of special display frames.
 A cons whose car is the frame width in characters and whose cdr is the
 frame height in characters.
@@ -1297,29 +1383,35 @@ it to take effect.")
 (defcustom 1on1-special-display-frame-alist
   (list
    (or (assq 'font special-display-frame-alist)
-       (cons 'font 1on1-default-special-frame-font))
+       (cons 'font 1on1-special-frame-font))
    (or (assq 'width special-display-frame-alist)
-       (cons 'width (car 1on1-default-special-frame-size)))
+       (cons 'width (car 1on1-special-frame-size)))
    (or (assq 'height special-display-frame-alist)
-       (cons 'height (cdr 1on1-default-special-frame-size)))
+       (cons 'height (cdr 1on1-special-frame-size)))
    (or (assq 'mouse-color special-display-frame-alist)
-       (cons 'mouse-color 1on1-default-special-frame-mouse-color))
+       (cons 'mouse-color 1on1-special-frame-mouse-color))
    (or (assq 'cursor-color special-display-frame-alist)
-       (cons 'cursor-color 1on1-default-special-frame-cursor-color))
+       (cons 'cursor-color 1on1-special-frame-cursor-color))
    (or (assq 'menu-bar-lines special-display-frame-alist)
-       (cons 'menu-bar-lines 1on1-default-special-frame-menu-bar-lines))
+       (cons 'menu-bar-lines 1on1-special-frame-menu-bar-lines))
+   (or (assq 'bottom-divider-width special-display-frame-alist)
+       (cons 'bottom-divider-width 1on1-divider-width))
+   (or (assq 'right-divider-width special-display-frame-alist)
+       (cons 'right-divider-width 1on1-divider-width))
    (or (assq 'foreground-color special-display-frame-alist)
-       (cons 'foreground-color 1on1-default-special-frame-foreground))
+       (cons 'foreground-color 1on1-special-frame-foreground))
    (or (assq 'background-color special-display-frame-alist)
-       (cons 'background-color 1on1-default-special-frame-background))
+       (cons 'background-color 1on1-special-frame-background))
    (or (assq 'top special-display-frame-alist)
-       (cons 'top (car 1on1-default-special-frame-upper-left-corner)))
+       (cons 'top (car 1on1-special-frame-upper-left-corner)))
    (or (assq 'left special-display-frame-alist)
-       (cons 'left (cdr 1on1-default-special-frame-upper-left-corner)))
+       (cons 'left (cdr 1on1-special-frame-upper-left-corner)))
    (or (assq 'unsplittable special-display-frame-alist)
        (cons 'unsplittable t))
    (or (assq 'user-position special-display-frame-alist)
        (cons 'user-position t))
+   (or (assq 'horizontal-scroll-bars special-display-frame-alist)
+       (cons 'horizontal-scroll-bars nil)) ; No horizontal scroll bars by default.
    (or (assq 'vertical-scroll-bars special-display-frame-alist)
        (cons 'vertical-scroll-bars 'right)))
   "Properties to be used for One-on-One `special-display-frame-alist'.
@@ -1349,9 +1441,9 @@ If `1on1-separate-minibuffer-*Completions*-flag' is non-nil, then
   (interactive)
   (unless (if (fboundp 'display-graphic-p) (display-graphic-p) window-system)
     (error "Use `1on1-emacs' only with a graphics display, not with a text terminal"))
-  (setq default-frame-alist (append 1on1-default-frame-alist default-frame-alist)
-        special-display-frame-alist (append 1on1-special-display-frame-alist
-                                            special-display-frame-alist))
+  (setq default-frame-alist          (append 1on1-default-frame-alist default-frame-alist)
+        special-display-frame-alist  (append 1on1-special-display-frame-alist
+                                             special-display-frame-alist))
 
   ;; *Help* frame
   (if 1on1-*Help*-frame-flag
@@ -1362,9 +1454,9 @@ If `1on1-separate-minibuffer-*Completions*-flag' is non-nil, then
                    (cons 'mouse-color 1on1-help-frame-mouse+cursor-color)
                    (cons 'cursor-color 1on1-help-frame-mouse+cursor-color)
                    '(height . 40))))
-    (setq special-display-buffer-names
-          (1on1-remove-if (lambda (elt) (equal "*Help*" (car elt)))
-                          special-display-buffer-names)))
+    (setq special-display-buffer-names  (1on1-remove-if (lambda (elt)
+                                                          (equal "*Help*" (car elt)))
+                                                        special-display-buffer-names)))
 
   ;; *Completions* frame
   ;; If `1on1-minibuffer-frame-flag' is non-nil, then *Completions* frame must be treated
@@ -1378,14 +1470,14 @@ If `1on1-separate-minibuffer-*Completions*-flag' is non-nil, then
               ((background-color ,@1on1-completions-frame-background)
                (mouse-color      ,@1on1-completions-frame-mouse+cursor-color)
                (cursor-color     ,@1on1-completions-frame-mouse+cursor-color)
-               (menu-bar-lines . 0) (tool-bar-lines . 0)    ; No menu bar or tool bar.
+               (menu-bar-lines . 0) (tool-bar-lines . 0) ; No menu bar or tool bar.
                ,@(and 1on1-completions-frame-width
                       `((width   ,@1on1-completions-frame-width))))))
          (add-to-list 'special-display-buffer-names
                       `("*Completions*" 1on1-display-*Completions*-frame)))
-    (setq special-display-buffer-names
-          (1on1-remove-if (lambda (elt) (equal "*Completions*" (car elt)))
-                          special-display-buffer-names)))
+    (setq special-display-buffer-names  (1on1-remove-if (lambda (elt)
+                                                          (equal "*Completions*" (car elt)))
+                                                        special-display-buffer-names)))
 
   ;; Minibuffer frame
   (when 1on1-minibuffer-frame-flag
@@ -1393,15 +1485,31 @@ If `1on1-separate-minibuffer-*Completions*-flag' is non-nil, then
     (setq pop-up-frames  t)
 
     ;; Set up `1on1-minibuffer-frame'.
-    (setq minibuffer-frame-alist (append 1on1-minibuffer-frame-alist
-                                         minibuffer-frame-alist))
+    (setq minibuffer-frame-alist  (append 1on1-minibuffer-frame-alist minibuffer-frame-alist))
     (if 1on1-minibuffer-frame
         (modify-frame-parameters 1on1-minibuffer-frame 1on1-minibuffer-frame-alist)
       (setq 1on1-minibuffer-frame
             (let ((after-make-frame-functions  ())) ; E.g. inhibit `fit-frame'.
               (make-frame 1on1-minibuffer-frame-alist))))
 
-    ;; Resize and reposition it.  If variable `1on1-minibuffer-frame-width'
+    ;; Set `1on1-minibuffer-frame-bottom-offset' (Emacs 24.4+ only).
+    (when (and (not 1on1-minibuffer-frame-bottom-offset)
+               (fboundp 'display-monitor-attributes-list))
+      (catch '1on1-emacs
+        (dolist (attr  (display-monitor-attributes-list))
+          (when (memq 1on1-minibuffer-frame (cdr (assoc 'frames attr)))
+            (setq 1on1-minibuffer-frame-bottom-offset
+                  (- (nth 4 (assoc 'workarea attr))
+                     (nth 4 (assoc 'geometry attr))
+                     (or (- (frame-parameter 1on1-minibuffer-frame 'border-width))  0)))
+            (throw '1on1-emacs nil)))
+        ;; Fallback - should not happen.  No monitor has minibuffer frame.
+        (setq 1on1-minibuffer-frame-bottom-offset
+              (- (nth 4 (assoc 'workarea (car (display-monitor-attributes-list))))
+                 (nth 4 (assoc 'geometry (car (display-monitor-attributes-list))))
+                 (or (- (frame-parameter 1on1-minibuffer-frame 'border-width))  0)))))
+
+    ;; Resize and reposition frame.  If variable `1on1-minibuffer-frame-width'
     ;; or `1on1-minibuffer-frame-top/bottom' is nil, calculate automatically.
     (1on1-set-minibuffer-frame-width)
     (1on1-set-minibuffer-frame-top/bottom)
@@ -1410,7 +1518,7 @@ If `1on1-separate-minibuffer-*Completions*-flag' is non-nil, then
     (when (fboundp 'rename-frame)
       (rename-frame 1on1-minibuffer-frame "Emacs minibuffer                         \
 show/hide: hold CTRL + click in window"))
-    (setq minibuffer-auto-raise t)
+    ;; (setq minibuffer-auto-raise  t) ; $$$$$$$ Let user decide, based on window mgr behavior.
     ;; Background colors of minibuffer frame: 3 states
     (add-hook 'isearch-mode-hook '1on1-color-isearch-minibuffer-frame)
     (add-hook 'isearch-mode-end-hook '1on1-color-minibuffer-frame-on-exit)
@@ -1427,11 +1535,12 @@ show/hide: hold CTRL + click in window"))
     (remove-hook 'post-command-hook '1on1-fit-minibuffer-frame))
   (if 1on1-change-cursor-on-overwrite/read-only-flag
       (add-hook 'post-command-hook '1on1-change-cursor-on-overwrite/read-only)
-    (1on1-set-cursor-type 1on1-default-frame-cursor-type)
+    (let ((deflt-ctype  (cdr (assq 'cursor-type default-frame-alist))))
+      (when deflt-ctype (1on1-set-cursor-type deflt-ctype)))
     (remove-hook 'post-command-hook '1on1-change-cursor-on-overwrite/read-only))
   (if 1on1-change-cursor-on-input-method-flag
       (add-hook 'post-command-hook '1on1-change-cursor-on-input-method)
-    (setq current-input-method nil)
+    (setq current-input-method  nil)
     (1on1-change-cursor-on-input-method)
     (remove-hook 'post-command-hook '1on1-change-cursor-on-input-method))
   (add-hook 'minibuffer-exit-hook '1on1-reset-minibuffer-frame)
@@ -1450,28 +1559,33 @@ show/hide: hold CTRL + click in window"))
 
 ;; This is inspired by code from Juri Linkov <juri@jurta.org>.
 (defun 1on1-change-cursor-on-input-method ()
-  "Set cursor type depending on whether an input method is used or not."
+  "Set cursor color, depending on whether an input method is used or not."
   (when 1on1-change-cursor-on-input-method-flag
-    (set-cursor-color
-     (if current-input-method
-         1on1-default-frame-cursor-color-input-method
-       (let ((bufname (buffer-name (current-buffer))))
-         (cond
-           ((string= "*Help*" bufname) 1on1-help-frame-mouse+cursor-color)
-           ((string= "*Completions*" bufname) 1on1-completions-frame-mouse+cursor-color)
-           ((eq 1on1-minibuffer-frame (selected-frame))
-            1on1-minibuffer-frame-cursor-color)
-           ((special-display-p bufname) 1on1-default-special-frame-cursor-color)
-           (t 1on1-default-frame-cursor-color)))))))
+    (if current-input-method
+        (set-cursor-color 1on1-default-frame-cursor-color-input-method)
+      (let ((bufname  (buffer-name (current-buffer))))
+        (cond ((string= "*Help*" bufname)
+               (set-cursor-color 1on1-help-frame-mouse+cursor-color))
+              ((string= "*Completions*" bufname)
+               (set-cursor-color 1on1-completions-frame-mouse+cursor-color))
+              ((eq 1on1-minibuffer-frame (selected-frame))
+               (set-cursor-color 1on1-minibuffer-frame-cursor-color))
+              ((special-display-p bufname)
+               (set-cursor-color 1on1-special-frame-cursor-color))
+              ;; Do not set it if there is no setting for it in `default-frame-alist'.
+              ((cdr (assq 'cursor-color default-frame-alist))
+               (set-cursor-color (cdr (assq 'cursor-color default-frame-alist)))))))))
 
 ;; This is from Juri Linkov <juri@jurta.org>, with read-only added.
 (defun 1on1-change-cursor-on-overwrite/read-only ()
   "Set cursor type differently for overwrite mode and read-only buffer.
 That is, use one cursor type for overwrite mode and read-only buffers,
 and another cursor type otherwise."
-  (1on1-set-cursor-type (if (or buffer-read-only overwrite-mode)
-                            1on1-default-frame-cursor-type-overwrite/read-only
-                          1on1-default-frame-cursor-type)))
+  (let ((deflt-ctype  (cdr (assq 'cursor-type default-frame-alist))))
+    (when (or buffer-read-only  overwrite-mode  deflt-ctype)
+      (1on1-set-cursor-type (if (or buffer-read-only  overwrite-mode)
+                                1on1-default-frame-cursor-type-overwrite/read-only
+                              deflt-ctype)))))
 
 (unless (fboundp 'set-cursor-type) (defalias 'set-cursor-type '1on1-set-cursor-type))
 ;; This is essentially from Juri Linkov <juri@jurta.org>.
@@ -1487,9 +1601,9 @@ To get the frame's current cursor type, use `frame-parameters'."
 
 (defun 1on1-box-cursor-when-idle ()
   "Change the cursor to a box cursor when Emacs is idle."
-  (let ((type (cdr (assoc 'cursor-type (frame-parameters)))))
+  (let ((type  (cdr (assoc 'cursor-type (frame-parameters)))))
     (unless (eq type 'box)
-      (setq 1on1-last-cursor-type type)
+      (setq 1on1-last-cursor-type  type)
       (1on1-set-cursor-type 'box))))
 
 (defun 1on1-box-cursor-when-idle-off ()
@@ -1504,8 +1618,9 @@ To get the frame's current cursor type, use `frame-parameters'."
 When on, the cursor is changed to a box whenever Emacs is idle.
 With prefix argument, turn on if ARG > 0; else turn off."
   (interactive "P")
-  (setq 1on1-box-cursor-when-idle-p
-        (if arg (> (prefix-numeric-value arg) 0) (not 1on1-box-cursor-when-idle-p)))
+  (setq 1on1-box-cursor-when-idle-p  (if arg
+                                         (> (prefix-numeric-value arg) 0)
+                                       (not 1on1-box-cursor-when-idle-p)))
   (cond (1on1-box-cursor-when-idle-p
          (timer-activate-when-idle 1on1-box-cursor-when-idle-timer)
          (add-hook 'pre-command-hook '1on1-box-cursor-when-idle-off)
@@ -1526,7 +1641,7 @@ use `\\[toggle-box-cursor-when-idle]."
   (interactive
    "nSeconds to idle, before changing to a box cursor: ")
   (timer-set-idle-time 1on1-box-cursor-when-idle-timer
-                       (setq 1on1-box-cursor-when-idle-interval secs)
+                       (setq 1on1-box-cursor-when-idle-interval  secs)
                        t))
 
 ;;;###autoload
@@ -1563,12 +1678,12 @@ Otherwise, that variable should be nil."
   "Display *Help* buffer in its own frame.
 `special-display-function' is used to do the actual displaying.
 BUF and ARGS are the arguments to `special-display-function'."
-  (let ((old-ptr-shape (and (boundp 'x-pointer-shape) x-pointer-shape))
+  (let ((old-ptr-shape  (and (boundp 'x-pointer-shape) x-pointer-shape))
         return-window)
-    (when (boundp 'x-pointer-xterm) (setq x-pointer-shape x-pointer-xterm))
-    (setq return-window (select-window (funcall special-display-function buf args)))
+    (when (boundp 'x-pointer-xterm) (setq x-pointer-shape  x-pointer-xterm))
+    (setq return-window  (select-window (funcall special-display-function buf args)))
     (raise-frame)
-    (setq x-pointer-shape old-ptr-shape)
+    (setq x-pointer-shape  old-ptr-shape)
     return-window))
 
 (defun 1on1-display-*Completions*-frame (buf &optional args)
@@ -1582,23 +1697,31 @@ the frame that set up the minibuffer.
 
 If `zoom-frm.el' is used, then shrink the text according to
 `1on1-completions-frame-zoom-font-difference'."
-  (let ((old-ptr-shape (and (boundp 'x-pointer-shape) x-pointer-shape))
+  (let ((old-ptr-shape  (and (boundp 'x-pointer-shape) x-pointer-shape))
         return-window)
     (when (and 1on1-*Completions*-frame-flag (boundp 'x-pointer-box-spiral))
-      (setq x-pointer-shape x-pointer-box-spiral))
-    (setq return-window (select-window (funcall special-display-function buf args)))
+      (setq x-pointer-shape  x-pointer-box-spiral))
+    (setq return-window  (select-window (funcall special-display-function buf args)))
 
     ;; In Icicles, use the font family of the original window.  This is particularly for
     ;; picking up the proper font for Unicode chars in `*Completions*'.  Emacs 23+ only.
     (when (and (boundp 'icicle-mode) icicle-mode
                icicle-pre-minibuffer-buffer
                (> emacs-major-version 22))
-      (let* ((orig-win       (get-buffer-window icicle-pre-minibuffer-buffer 'visible))
+      ;; Prior to Emacs 24, dunno how to get last-used window showing
+      ;; `icicle-pre-minibuffer-buffer'.  This only gets some window showing it - not TRT.
+      ;; (This code is similar to what is in `icicle-display-candidates-in-Completions'.)
+      (let* ((orig-win       (if (not (fboundp 'icicle-mru-window-for-buffer))
+                                 (get-buffer-window icicle-pre-minibuffer-buffer 'visible)
+                               (icicle-mru-window-for-buffer icicle-pre-minibuffer-buffer
+                                                             'NOMINI 0)))
              (orig-font-fam  (and (window-live-p orig-win)
                                   (save-window-excursion (select-window orig-win)
                                                          (face-attribute 'default :family)))))
-        (when orig-font-fam
-          (set-face-attribute 'default (selected-frame) :family orig-font-fam))))
+        ;; $$$$$$$$?? (when (and orig-font-fam  (not (eq orig-win return-window)))
+        ;;
+        ;; We do not save the cookie from this, as we do not have a function that removes it.
+        (when orig-font-fam (face-remap-add-relative 'default :family orig-font-fam))))
 
     ;; Zoom text by `1on1-completions-frame-zoom-font-difference'.
     (when (and (fboundp 'zoom-frm-out) 1on1-completions-frame-zoom-font-difference)
@@ -1614,9 +1737,18 @@ If `zoom-frm.el' is used, then shrink the text according to
        (selected-frame)                 ; Hard-code 7 here - what does it depend on?
        `((left . ,(- (x-display-pixel-width) (+ (frame-pixel-width) 7))))))
     (raise-frame)
-    (when 1on1-minibuffer-frame (redirect-frame-focus (selected-frame) 1on1-minibuffer-frame))
+    (let ((redirect  (if (active-minibuffer-window)
+                         1on1-minibuffer-frame
+                       (and completion-reference-buffer
+                            (get-buffer-window completion-reference-buffer 'visible)
+                            (not (eq (get-buffer "*Completions*") completion-reference-buffer))
+                            (window-frame (get-buffer-window completion-reference-buffer t))))))
+      (when redirect
+        (redirect-frame-focus (selected-frame) redirect)))
+    ;; $$$$$$$ (when 1on1-minibuffer-frame (redirect-frame-focus (selected-frame)
+    ;;                                                           1on1-minibuffer-frame))
     (when (and 1on1-*Completions*-frame-flag (boundp 'x-pointer-box-spiral))
-      (setq x-pointer-shape old-ptr-shape))
+      (setq x-pointer-shape  old-ptr-shape))
     return-window))
 
 (defun 1on1-color-minibuffer-frame-on-setup ()
@@ -1626,12 +1758,12 @@ Use this when increasing the minibuffer recursion depth."
     (save-window-excursion
       (select-frame 1on1-minibuffer-frame)
       (set-background-color 1on1-active-minibuffer-frame-background)
-      (let ((count (minibuffer-depth)))
+      (let ((count  (minibuffer-depth)))
         (while (> count 1)
           (set-background-color (hexrgb-increment-hue ; Change bg hue slightly.
                                  (frame-parameter nil 'background-color)
                                  1on1-color-minibuffer-frame-on-setup-increment))
-          (setq count (1- count)))))))
+          (setq count  (1- count)))))))
 
 (defun 1on1-color-minibuffer-frame-on-exit ()
   "Change background of minibuffer frame to reflect the minibuffer depth.
@@ -1669,6 +1801,7 @@ Terminates any keyboard macro executing, unless arg DO-NOT-TERMINATE non-nil."
   "Redefine some built-in functions so they color the minibuffer frame.
 Functions redefined: `y-or-n-p', `top-level'."
 
+
   (or (fboundp '1on1-ORIG-y-or-n-p)
       (fset '1on1-ORIG-y-or-n-p (symbol-function 'y-or-n-p)))
 
@@ -1682,8 +1815,18 @@ It should end in a space; `y-or-n-p' adds `(y or n) ' to it.
 No confirmation of answer is requested; a single character is enough.
 Also accepts SPC to mean yes, or DEL to mean no."
     (1on1-color-minibuffer-frame-on-setup)
-    (prog1 (1on1-ORIG-y-or-n-p prompt)
-      (1on1-color-minibuffer-frame-on-exit)))
+    ;; Resize echo area if necessary, to show `y-or-n-p' prompt.  Compensates for functions
+    ;; like `find-file-literally' that pass multi-line PROMPT args to it.  See Emacs bug #18340.
+    ;; (Do not do it for Emacs 20, because it shows newlines as two ordinary chars, `\n'.)
+    (when (and 1on1-fit-minibuffer-frame-flag  (> emacs-major-version 20))
+      (let ((nlines  (length (split-string prompt "[\n]"))))
+        (set-frame-height (window-frame (minibuffer-window)) (1+ nlines))
+        (1on1-set-minibuffer-frame-top/bottom)))
+    (let ((result  (1on1-ORIG-y-or-n-p prompt)))
+      (when (and 1on1-fit-minibuffer-frame-flag  (> emacs-major-version 20))
+        (1on1-reset-minibuffer-frame))  ; Restore frame.
+      (1on1-color-minibuffer-frame-on-exit)
+      result))
 
 
   (or (fboundp '1on1-ORIG-top-level)
@@ -1738,29 +1881,36 @@ Use `1on1-minibuffer-frame-top/bottom' if non-nil.
 Else, place minibuffer at bottom of display."
   (when 1on1-minibuffer-frame
     (condition-case nil
-        (if nil;; $$$$$$ (fboundp 'redisplay)
+        (if nil ;; $$$$$$ (fboundp 'redisplay)
             (redisplay t)
           (force-mode-line-update t))
-      (error nil))                      ; Ignore errors from, e.g., killed buffers.
+      (error nil))         ; Ignore errors from, e.g., killed buffers.
     (modify-frame-parameters
      1on1-minibuffer-frame
      `((top ,@ (or 1on1-minibuffer-frame-top/bottom
-                (- (* 2 (frame-char-height 1on1-minibuffer-frame)))))))))
+                   (if (not (fboundp 'display-monitor-attributes-list))
+                       (- 1on1-task-bar-height)
+                     1on1-minibuffer-frame-bottom-offset)))))))
 
 (defun 1on1-set-minibuffer-frame-width ()
   "Set width of minibuffer frame, in characters.
 Use `1on1-minibuffer-frame-width' if not nil.
 Else, set width relative to character size of `1on1-minibuffer-frame'
-and display size, and depending on
-`1on1-minibuffer-frame-width-percent':
-
-  (/ (* 1on1-minibuffer-frame-width-percent (x-display-pixel-width))
-     (* 100 (frame-char-width 1on1-minibuffer-frame)))"
+and display monitor size, and depending on
+`1on1-minibuffer-frame-width-percent'."
   (when 1on1-minibuffer-frame
     (set-frame-width
      1on1-minibuffer-frame
      (or 1on1-minibuffer-frame-width
-         (/ (* 1on1-minibuffer-frame-width-percent (x-display-pixel-width))
+         (/ (* 1on1-minibuffer-frame-width-percent
+               (if (not (fboundp 'display-monitor-attributes-list))
+                   (x-display-pixel-width)
+                 (catch '1on1-set-minibuffer-frame-width
+                   (dolist (attr  (display-monitor-attributes-list))
+                     (when (memq 1on1-minibuffer-frame (cdr (assoc 'frames attr)))
+                       (throw '1on1-set-minibuffer-frame-width (nth 3 (assoc 'geometry attr)))))
+                   ;; Fallback - should not happen.  No monitor has minibuffer frame.
+                   (nth 3 (assoc 'geometry (car (display-monitor-attributes-list)))))))
             (* 100 (frame-char-width 1on1-minibuffer-frame)))))))
 
 ;;;###autoload

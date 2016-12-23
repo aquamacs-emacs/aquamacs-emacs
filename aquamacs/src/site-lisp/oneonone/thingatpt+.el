@@ -4,16 +4,16 @@
 ;; Description: Extensions to `thingatpt.el'.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams (concat "drew.adams" "@" "oracle" ".com")
-;; Copyright (C) 1996-2014, Drew Adams, all rights reserved.
+;; Copyright (C) 1996-2016, Drew Adams, all rights reserved.
 ;; Created: Tue Feb 13 16:47:45 1996
 ;; Version: 0
-;; Last-Updated: Thu Dec 26 09:52:10 2013 (-0800)
+;; Last-Updated: Mon Nov 21 15:25:52 2016 (-0800)
 ;;           By: dradams
-;;     Update #: 2172
+;;     Update #: 2325
 ;; URL: http://www.emacswiki.org/thingatpt%2b.el
 ;; Doc URL: http://www.emacswiki.org/ThingAtPointPlus#ThingAtPoint%2b
 ;; Keywords: extensions, matching, mouse
-;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x
+;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x, 25.x
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -41,6 +41,7 @@
 ;;    `tap-bounds-of-color-at-point', `tap-bounds-of-form-at-point',
 ;;    `tap-bounds-of-form-nearest-point',
 ;;    `tap-bounds-of-list-at-point',
+;;    `tap-bounds-of-list-contents-at-point',
 ;;    `tap-bounds-of-list-nearest-point',
 ;;    `tap-bounds-of-number-at-point',
 ;;    `tap-bounds-of-number-at-point-decimal',
@@ -57,24 +58,27 @@
 ;;    `tap-define-aliases-wo-prefix', `tap-form-at-point-with-bounds',
 ;;    `tap-form-nearest-point', `tap-form-nearest-point-with-bounds',
 ;;    `tap-list-at/nearest-point-with-bounds',
-;;    `tap-list-at-point-with-bounds', `tap-list-nearest-point',
+;;    `tap-list-at-point-with-bounds', `tap-list-contents-at-point',
+;;    `tap-list-contents-nearest-point', `tap-list-nearest-point',
 ;;    `tap-list-nearest-point-with-bounds',
 ;;    `tap-list-nearest-point-as-string', `tap-looking-at-p',
 ;;    `tap-looking-back-p', `tap-non-nil-symbol-name-at-point',
 ;;    `tap-non-nil-symbol-name-nearest-point',
 ;;    `tap-non-nil-symbol-nearest-point',
 ;;    `tap-number-at-point-decimal', `tap-number-at-point-hex',
-;;    `tap-number-nearest-point', `tap-region-or-word-at-point',
+;;    `tap-number-nearest-point', `tap-read-from-whole-string',
+;;    `tap-region-or-word-at-point',
 ;;    `tap-region-or-word-nearest-point',
 ;;    `tap-region-or-non-nil-symbol-name-nearest-point',
 ;;    `tap-sentence-nearest-point', `tap-sexp-at-point-with-bounds',
 ;;    `tap-sexp-nearest-point', `tap-sexp-nearest-point-with-bounds',
 ;;    `tap-string-at-point', `tap-string-contents-at-point',
-;;    `tap-string-contents-nearest-point.', `tap-string-match-p',
+;;    `tap-string-contents-nearest-point', `tap-string-match-p',
 ;;    `tap-string-nearest-point', `tap-symbol-at-point-with-bounds',
 ;;    `tap-symbol-name-at-point', `tap-symbol-name-nearest-point',
 ;;    `tap-symbol-nearest-point',
-;;    `tap-symbol-nearest-point-with-bounds',
+;;    `tap-symbol-nearest-point-with-bounds', `tap-thing-at-point',
+;;    `tap-thing-at-point-as-string',
 ;;    `tap-thing-at-point-with-bounds',
 ;;    `tap-thing/form-nearest-point-with-bounds',
 ;;    `tap-thing-nearest-point',
@@ -108,15 +112,14 @@
 ;;  Load this library after loading the standard GNU file
 ;;  `thingatpt.el'.  You can put this in your init file (`~/.emacs'):
 ;;
-;;    (eval-after-load "thingatpt"
-;;      '(require 'thingatpt+))
+;;    (eval-after-load "thingatpt" '(require 'thingatpt+))
 ;;
 ;;  That defines new functions and improved versions of some of the
 ;;  standard thing-at-point functions.  All such functions have the
 ;;  prefix `tap-', so they are not used by default in any way.
 ;;
-;;  That does not at all, however, make Emacs use the improved
-;;  functions.  Merely loading this library does not change the
+;;  Requiring library `thingatpt+.el' does not, however, make Emacs
+;;  use the improved functions.  Merely loading it does not change the
 ;;  behavior of thing-at-point features.
 ;;
 ;;  If you want functions defined here to be used for calls to
@@ -128,6 +131,11 @@
 ;;      '(when (require 'thingatpt+)
 ;;         (tap-put-thing-at-point-props))
 ;;
+;;  Note that some of my other libraries, including Icicles,
+;;  Bookmark+, `grep+.el', `replace+.el', and `strings.el', do exactly
+;;  that.  Note too that `tap-put-thing-at-point-props' improves the
+;;  behavior of (thing-at-point 'list) - see below.
+;;
 ;;  A further step, which I recommend, is to use the `tap-' versions
 ;;  of standard functions, defined here, everywhere in place of those
 ;;  standard functions.  In other words, redefine the standard
@@ -136,11 +144,12 @@
 ;;  `tap-bounds-of-thing-at-point' does.
 ;;
 ;;  (If you do that then you need not invoke
-;;  `tap-put-thing-at-point-props', since the property values set by
-;;  vanilla library `thingatpt.el' will be OK because the functions
-;;  themselves will have been redefined in that case.)
+;;  `tap-put-thing-at-point-props' to pick up the versions defined
+;;  here of standard functions.  The property values set by vanilla
+;;  library `thingatpt.el' will be OK because the functions themselves
+;;  will have been redefined in that case.)
 ;;
-;;  So to get the most out of this library, I recommend that you put
+;;  To get the most out of this library, I recommend that you put
 ;;  (only) the following in your init file:
 ;;
 ;;    (eval-after-load "thingatpt"
@@ -236,6 +245,32 @@
 ;;
 ;;; Change Log:
 ;;
+;; 2016/11/21 dadams
+;;     Rename tap-thing-at-point to tap-thing-at-point-as-string and add new def of former.
+;;     The new def follows vanilla Emacs in letting property thing-at-point return non-string.
+;;     tap-form-at-point: Use tap-thing-at-point-as-string.
+;;     tap-region-or-word-at-point: Use args STRICT REALLY-WORD with current-word.
+;; 2016/11/04 dadams
+;;     tap-thing-at-point: Added optional arg NO-PROPERTIES, per Emacs 24.4+.
+;;     tap-form-at-point, tap-non-nil-symbol-name-at-point:
+;;       Use nil for optional arg NO-PROPERTIES in call to tap-thing-at-point.
+;; 2016/09/06 dadams
+;;     Added: tap-read-from-whole-string.
+;;     tap-form-at-point(-with-bounds): Use tap-read-from-whole-string.
+;; 2016/08/30 dadams
+;;     tap-string-match-p: Do NOT alias string-match-p, because that is a defsubst.
+;; 2016/06/20 dadams
+;;     tap-thing-at-point:
+;;       Typo: convert result of funcall, not original THING, to string.  Thx to Tino Calancha.
+;; 2015/08/23 dadams
+;;     tap-list-at/nearest-point-with-bounds:
+;;       Use (nth 3 (syntax-ppss)) for Emacs 25+ - see Emacs bug #20732.
+;; 2014/08/22 dadams
+;;     tap-looking-at-p: Do not defalias to Emacs looking-at-p because that is a defsubst.
+;; 2014/06/07 dadams
+;;     Added: tap-bounds-of-list-contents-at-point, tap-list-contents-at-point,
+;;            tap-list-contents-nearest-point.
+;;     Put tap-bounds-of-(string|list)-contents-at-point as bounds-of-thing-at-point property.
 ;; 2013/09/20 dadams
 ;;     Added: tap-bounds-of-string-contents-at-point, tap-string-contents-at-point,
 ;;            tap-string-contents-nearest-point.
@@ -439,7 +474,10 @@ Don't forget to mention your Emacs and library versions."))
 Used typically by functions that invoke
 `tap-thing/form-nearest-point-with-bounds', and which provide default
 text for minibuffer input.  Such functions can also ignore or override
-this setting temporarily."
+this setting temporarily.
+
+See `tap-thing-nearest-point' for an explanation of the determination
+of \"nearness\"."
   :type 'integer :group 'thing-at-point-plus :group 'minibuffer)
 
 ;;;###autoload
@@ -449,7 +487,10 @@ To constrain search to the same line as point, set this to zero.
 Used typically by functions that invoke
 `tap-thing/form-nearest-point-with-bounds', and which provide default
 text for minibuffer input.  Such functions can also ignore or override
-this setting temporarily."
+this setting temporarily.
+
+See `tap-thing-nearest-point' for an explanation of the determination
+of \"nearness\"."
   :type 'integer :group 'thing-at-point-plus :group 'minibuffer)
 
 
@@ -461,18 +502,32 @@ this setting temporarily."
 ;;; Utility Functions ------------------------------------------------
 
 
-;; Same as `icicle-string-match-p' in `icicles-fn.el'.
-(if (fboundp 'string-match-p)
-    (defalias 'tap-string-match-p 'string-match-p) ; Emacs 23+
-  (defun tap-string-match-p (regexp string &optional start)
-    "Like `string-match', but this saves and restores the match data."
-    (save-match-data (string-match regexp string start))))
+;; Same as `read-from-whole-string' (called `thingatpt--read-from-whole-string' starting
+;; with Emacs 25) in library `thingatpt.el'.
+;;
+(defun tap-read-from-whole-string (string)
+  "Read a Lisp expression from STRING.
+Raise an error if the entire string was not used."
+  (let* ((read-data  (read-from-string string))
+	 (more-left (condition-case nil
+                        ;; The call to `ignore' suppresses a compiler warning.
+                        (progn (ignore (read-from-string (substring string (cdr read-data))))
+                               t)
+                      (end-of-file nil))))
+    (if more-left (error "Can't read whole string") (car read-data))))
 
-(if (fboundp 'looking-at-p)
-    (defalias 'tap-looking-at-p 'looking-at-p) ; Emacs 23+
-  (defun tap-looking-at-p (regexp)
-    "Like `looking-at', but this saves and restores the match data."
-    (save-match-data (looking-at regexp))))
+;; Same as `icicle-string-match-p' in `icicles-fn.el'.
+;; Do NOT alias `string-match-p', because that is a `defsubst'.
+;;
+(defun tap-string-match-p (regexp string &optional start)
+  "Like `string-match', but this saves and restores the match data."
+  (save-match-data (string-match regexp string start)))
+
+;; Same as `bmkp-looking-at-p' (`bookmark+-bmu.el'), `icicle-looking-at-p' (`icicles-mcmd.el').
+;; Do not `defalias' to Emacs `looking-at-p' because that is a `defsubst'.
+(defun tap-looking-at-p (regexp)
+  "Like `looking-at', but this saves and restores the match data."
+  (save-match-data (looking-at regexp)))
 
 (defun tap-looking-back-p (regexp &optional limit greedy)
   "Like `looking-back', but this does not change the match data."
@@ -588,8 +643,8 @@ Do everything except handle the optional SYNTAX-TABLE arg."
 Return nil if no such thing is found.
 
 If found, return a cons (THE-THING START . END), where THE-THING is
-the `tap-thing-at-point', a string.  START and END are the buffer
-positions of THE-THING.
+the `tap-thing-at-point'.  START and END are the buffer positions of
+THE-THING.
 
 See `tap-bounds-of-thing-at-point'.
 
@@ -597,20 +652,53 @@ Optional arg SYNTAX-TABLE is a syntax table to use."
   (let ((bounds  (tap-bounds-of-thing-at-point thing syntax-table)))
     (and bounds  (cons (buffer-substring (car bounds) (cdr bounds)) bounds))))
 
-
 ;; If you invoke `tap-redefine-std-fns', this def replaces the original in `thingatpt.el'.
 ;;
 ;; 1. Add optional argument SYNTAX-TABLE.
 ;; 2. Check first the symbol property `tap-thing-at-point'.
 ;;
-(defun tap-thing-at-point (thing &optional syntax-table)
+(defun tap-thing-at-point (thing &optional no-properties syntax-table)
+  "Return the THING at point.
+If no THING is present at point then return nil.
+
+THING is an Emacs Lisp symbol that specifies a type of syntactic
+entity.  THING examples include `symbol', `list', `sexp', `defun',
+`filename', `url', `email', `word', `sentence', `whitespace', `line',
+`number', and `page'.  See the commentary of library `thingatpt.el'
+for how to define a symbol as a valid THING.
+
+If THING has property `thing-at-point' then the property value should
+be a function.  Call the function with no arguments, and return the
+result.
+
+Otherwise, try to get the bounds of THING.  If successful, return the
+bounded string.
+
+Optional arg NO-PROPERTIES means that if a string is to be returned
+then it is first stripped of any text properties.
+
+Optional arg SYNTAX-TABLE is a syntax table to use."
+  (let* ((thing-fn   (or (get thing 'tap-thing-at-point)  (get thing 'thing-at-point)))
+         (something  (if thing-fn
+                         (let* ((opoint  (point))
+                                (thg     (prog1 (funcall thing-fn)
+                                           (constrain-to-field nil opoint))))
+                           thg)
+                       (let ((bounds  (tap-bounds-of-thing-at-point thing syntax-table)))
+                         (and bounds  (buffer-substring (car bounds) (cdr bounds)))))))
+    (when (and (stringp something)  no-properties)
+      (set-text-properties 0 (length something) nil something))
+    something))
+
+(defun tap-thing-at-point-as-string (thing &optional no-properties syntax-table)
   "Return the THING at point as a string.
 If no THING is present at point then return nil.
 
 THING is an Emacs Lisp symbol that specifies a type of syntactic
-entity.  THING examples include `word', `sentence', `defun'.  See the
-commentary of library `thingatpt.el' for how to define a symbol as a
-valid THING.
+entity.  THING examples include `symbol', `list', `sexp', `defun',
+`filename', `url', `email', `word', `sentence', `whitespace', `line',
+`number', and `page'.  See the commentary of library `thingatpt.el'
+for how to define a symbol as a valid THING.
 
 If THING has property `thing-at-point' then the property value should
 be a function.  The function is called with no arguments.  If the
@@ -618,21 +706,28 @@ return value of that function is a string or nil then that value is
 returned by this function also.  Otherwise, that value is converted to
 a string and returned.
 
+Optional arg NO-PROPERTIES means that if a string is to be returned
+then it is first stripped of any text properties.
+
 Optional arg SYNTAX-TABLE is a syntax table to use."
-  (let ((thing-fn  (or (get thing 'tap-thing-at-point)  (get thing 'thing-at-point))))
-    (if thing-fn
-        (let* ((opoint  (point))
-               (thg     (prog1 (funcall thing-fn)
-                          (constrain-to-field nil opoint))))
-          (if (stringp thg)
-              thg
-            (and thg  (format "%s" thing))))
-      (let ((bounds  (tap-bounds-of-thing-at-point thing syntax-table)))
-        (and bounds  (buffer-substring (car bounds) (cdr bounds)))))))
+  (let* ((thing-fn  (or (get thing 'tap-thing-at-point)  (get thing 'thing-at-point)))
+         (text      (if thing-fn
+                        (let* ((opoint  (point))
+                               (thg     (prog1 (funcall thing-fn)
+                                          (constrain-to-field nil opoint))))
+                          (if (stringp thg)
+                              thg
+                            (and thg  (format "%s" thg))))
+                      (let ((bounds  (tap-bounds-of-thing-at-point thing syntax-table)))
+                        (and bounds  (buffer-substring (car bounds) (cdr bounds)))))))
+    (when (and text  no-properties) (set-text-properties 0 (length text) nil text))
+    text))
 
 (defun tap-thing-nearest-point-with-bounds (thing &optional syntax-table)
   "Return the THING nearest point, plus its bounds: (THING START . END).
 Return nil if no such THING is found.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'.
+
 THING is the `tap-thing-nearest-point', a string.
 START and END are the buffer positions of THING - see
 `tap-bounds-of-thing-nearest-point'.
@@ -645,6 +740,8 @@ Optional arg SYNTAX-TABLE is a syntax table to use."
   "Thing or form nearest point, plus bounds: (THING-OR-FORM START . END).
 Helper for `tap-thing-nearest-point-with-bounds'
 and `tap-form-nearest-point-with-bounds'.
+
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'.
 
 FN is a function returning a thing or a form at point, and its bounds.
 Other args are as for `tap-thing-nearest-point-with-bounds'."
@@ -721,9 +818,11 @@ Other args are as for `tap-thing-nearest-point-with-bounds'."
 
 (defun tap-bounds-of-thing-nearest-point (thing &optional syntax-table)
   "Return the start and end locations for the THING nearest point.
-See `tap-thing-nearest-point'.
 Return a consp (START . END), where START /= END.
 Return nil if no such THING is found.
+
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'.
+
 Optional arg SYNTAX-TABLE is a syntax table to use."
   (let ((thing+bds  (tap-thing-nearest-point-with-bounds thing syntax-table)))
     (and thing+bds
@@ -731,7 +830,9 @@ Optional arg SYNTAX-TABLE is a syntax table to use."
 
 (defun tap-thing-nearest-point (thing &optional syntax-table)
   "Return the THING nearest point, if any, else nil.
-See also `tap-thing-at-point'.
+The search for the THING is bounded by options
+`tap-near-point-x-distance' and `tap-near-point-y-distance'.
+
 \"Nearest\" to point is determined as follows:
 
   The nearest THING on the same line is returned, if there is any.
@@ -747,6 +848,8 @@ However, for some THINGs whitespace between THINGs might be considered
 insignificant, as well as the amount of it.  This means that if point
 is between two THINGs and surrounded by whitespace then the \"nearest\"
 THING returned might not be the one that is absolutely closest.
+
+See also `tap-thing-at-point'.
 
 Optional arg SYNTAX-TABLE is a syntax table to use."
   (let ((thing+bds  (tap-thing-nearest-point-with-bounds thing syntax-table)))
@@ -768,7 +871,7 @@ Optional args:
   (condition-case nil                   ; E.g. error if tries to read a dot (`.').
       (let* ((thing+bds  (tap-thing-at-point-with-bounds (or thing  'sexp) syntax-table))
              (bounds     (cdr thing+bds))
-             (sexp       (and bounds  (read-from-whole-string (car thing+bds)))))
+             (sexp       (and bounds  (tap-read-from-whole-string (car thing+bds)))))
         (and bounds  (or (not predicate)  (funcall predicate sexp))
              (cons sexp bounds)))
     (error nil)))
@@ -818,15 +921,16 @@ This is an Emacs Lisp entity, not necessarily a string.  THING must be
 readable as a Lisp entity, or else nil is returned.
 
 Reading THING and returning the resulting Lisp entity is the main
-difference between this function and `tap-thing-at-point'.  The other
-difference is the use of PREDICATE.
+difference between this function and `tap-thing-at-point-as-string'.
+The other difference is the use of PREDICATE.
 
 Optional args:
   THING is the kind of form desired (default: `sexp').
   PREDICATE is a predicate that the form must satisfy to qualify.
   SYNTAX-TABLE is a syntax table to use."
   (let ((form  (condition-case nil
-                   (read-from-whole-string (tap-thing-at-point (or thing  'sexp) syntax-table))
+                   (tap-read-from-whole-string
+                    (tap-thing-at-point-as-string (or thing  'sexp) nil syntax-table))
                  (error nil))))
     (and (or (not predicate)  (funcall predicate form))
          form)))
@@ -834,6 +938,8 @@ Optional args:
 (defun tap-form-nearest-point-with-bounds (&optional thing predicate syntax-table)
   "Return the form nearest point, plus its bounds: (FORM START . END).
 Return nil if no form is found.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'.
+
 FORM is from `tap-form-nearest-point'.
 START and END are the buffer positions of FORM.
 Optional args:
@@ -847,6 +953,8 @@ Optional args:
 (defun tap-sexp-nearest-point-with-bounds (&optional predicate syntax-table)
   "Return the sexp nearest point, plus its bounds: (SEXP START . END).
 Return nil if no sexp is found.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'.
+
 SEXP is an Emacs Lisp entity, the result of reading a textual sexp
  near point.  See `tap-sexp-nearest-point'.
 START and END are the buffer positions of SEXP.
@@ -855,12 +963,13 @@ Optional args are the same as for
   (tap-form-nearest-point-with-bounds 'sexp predicate syntax-table))
 
 (defun tap-bounds-of-form-nearest-point (&optional thing predicate syntax-table)
-  "Return the start and end locations for the THING nearest point.
+  "Return the start and end locations for the form nearest point.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'.
 See `tap-form-nearest-point'.
+
 Return a consp (START . END), where START /= END.
 Return nil if no form is found.
-Optional args are the same as for
-`tap-form-nearest-point-with-bounds'."
+Arguments are the same as for `tap-form-nearest-point-with-bounds'."
   (let ((form+bds  (tap-form-nearest-point-with-bounds thing predicate syntax-table)))
     (and form+bds
          (cdr form+bds))))
@@ -869,6 +978,8 @@ Optional args are the same as for
 (defun tap-bounds-of-sexp-nearest-point (&optional predicate syntax-table)
   "Return the start and end locations for the sexp nearest point.
 See `tap-sexp-nearest-point'.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'.
+
 Return a consp (START . END), where START /= END.
 Return nil if no form is found.
 Optional args are the same as for `tap-bounds-of-sexp-nearest-point'."
@@ -878,6 +989,8 @@ Optional args are the same as for `tap-bounds-of-sexp-nearest-point'."
   "Return the form nearest point, if any, else nil.
 This is an Emacs Lisp entity, not necessarily a string.  THING must be
 readable as a Lisp entity, or else nil is returned.
+
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'.
 
 Reading THING and returning the resulting Lisp entity is the main
 difference between this function and `tap-thing-nearest-point'.  The
@@ -897,6 +1010,8 @@ Optional args:
   "Return the Emacs Lisp symbol nearest point, plus its bounds.
 Return (SYMBOL START . END), or nil if no symbol is found.
 Note that nil is also returned if the symbol at point is `nil'.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'.
+
 SYMBOL is the symbol from `tap-symbol-at-point'.
 START and END are the buffer positions of SYMBOL."
   (tap-form-at-point-with-bounds 'symbol 'symbolp emacs-lisp-mode-syntax-table))
@@ -942,7 +1057,8 @@ All but the first return strings, not (non-nil) symbols."
 SYMBOL is the `tap-symbol-nearest-point'.
 If optional arg NON-NIL is non-nil, then the nearest symbol other
   than `nil' is sought.
-Return nil if no such Emacs Lisp symbol is found."
+Return nil if no such Emacs Lisp symbol is found.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'."
   (tap-form-nearest-point-with-bounds 'symbol
                                       (if non-nil
                                           (lambda (sym) (and sym  (symbolp sym)))
@@ -955,7 +1071,8 @@ See `tap-symbol-nearest-point'.
 Return a consp (START . END), where START /= END.
 Return nil if no such Emacs Lisp symbol is found.
 If optional arg NON-NIL is non-nil, then seek the nearest symbol other
-than `nil'."
+than `nil'.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'."
   (let ((symb+bds  (tap-symbol-nearest-point-with-bounds non-nil)))
     (and symb+bds
          (cdr symb+bds))))
@@ -963,6 +1080,7 @@ than `nil'."
 (defun tap-symbol-nearest-point (&optional non-nil)
   "Return the Emacs Lisp symbol nearest point, or nil if none.
 \"Nearest\" to point is determined as for `tap-thing-nearest-point'.
+
 If optional arg NON-NIL is non-nil, then seek the nearest symbol other
   than `nil'.
 
@@ -1017,7 +1135,8 @@ Non-nil UNQUOTEDP means remove the car if it is `quote' or
  `backquote-backquote-symbol'.
 
 Return (LIST START . END) with START and END of the non-empty LIST.
-Return nil if no non-empty list is found."
+Return nil if no non-empty list is found.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'."
   (save-excursion
     (unless (eq at/near 'tap-sexp-at-point-with-bounds)
       ;; Skip over whitespace, including newlines.
@@ -1025,7 +1144,9 @@ Return nil if no non-empty list is found."
       (cond ((tap-looking-at-p   "\\(\\s-*\\|[\n]*\\)\\s(") (skip-syntax-forward "->"))
             ((tap-looking-back-p "\\s)\\(\\s-*\\|[\n]*\\)") (skip-syntax-backward "->"))))
     (let (strg-end)
-      (while (setq strg-end  (in-string-p))
+      (while (setq strg-end  (if (> emacs-major-version 24)
+                                 (nth 3 (syntax-ppss)) ; Emacs bug #20732
+                               (in-string-p)))
         (skip-syntax-forward "^\"")     ; Skip past string element of list.
         (skip-syntax-forward "\"")))    ; Skip past new string opening, `"', into next string.
     (let ((sexp+bnds  (funcall at/near)))
@@ -1056,6 +1177,8 @@ Return nil if no non-empty list is found."
 (defun tap-list-at-point-with-bounds (&optional up unquotedp)
   "Return (LIST START . END), boundaries of the `tap-list-at-point'.
 Return nil if no non-empty list is found.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'.
+
 UP (default: 0) is the number of list levels to go up to start with.
 Non-nil UNQUOTEDP means remove the car if it is `quote' or
  `backquote-backquote-symbol'."
@@ -1064,6 +1187,8 @@ Non-nil UNQUOTEDP means remove the car if it is `quote' or
 (defun tap-list-nearest-point-with-bounds (&optional up unquotedp)
   "Return (LIST START . END), boundaries of the `tap-list-nearest-point'.
 Return nil if no non-empty list is found.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'.
+
 UP (default: 0) is the number of list levels to go up to start with.
 Non-nil UNQUOTEDP means remove the car if it is `quote' or
  `backquote-backquote-symbol'."
@@ -1087,6 +1212,8 @@ Optional args:
 See `tap-list-nearest-point'.
 Return a consp (START . END), where START /= END.
 Return nil if no non-empty list is found.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'.
+
 Optional args:
   UP (default: 0) is the number of list levels to go up to start with.
   Non-nil UNQUOTEDP means remove the car if it is `quote' or
@@ -1119,8 +1246,7 @@ Note: If point is inside a string that is inside a list:
  nearby strings contain parens.
  (These are limitations of function `up-list'.)"
   (let ((list+bds  (tap-list-at-point-with-bounds up)))
-    (and list+bds
-         (car list+bds))))
+    (and list+bds  (car list+bds))))
 
 
 (put 'unquoted-list 'thing-at-point     'tap-unquoted-list-at-point)
@@ -1132,8 +1258,7 @@ Same as `tap-list-at-point', but removes the car if it is `quote' or
  `backquote-backquote-symbol' (\`).
 UP (default: 0) is the number of list levels to go up to start with."
   (let ((list+bds  (tap-list-at-point-with-bounds up 'UNQUOTED)))
-    (and list+bds
-         (car list+bds))))
+    (and list+bds  (car list+bds))))
 
 ;;; This simple definition is nowhere near as good as the one below.
 ;;;
@@ -1148,10 +1273,11 @@ UP (default: 0) is the number of list levels to go up to start with."
 (defun tap-list-nearest-point (&optional up)
   "Return the non-nil list nearest point, or nil if none.
 Same as `tap-list-at-point', but returns the nearest list.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'.
+
 UP (default: 0) is the number of list levels to go up to start with."
   (let ((list+bds  (tap-list-nearest-point-with-bounds up)))
-    (and list+bds
-         (car list+bds))))
+    (and list+bds  (car list+bds))))
 
 (defun tap-unquoted-list-nearest-point (&optional up)
   "Return the non-nil list nearest point, or nil if none.
@@ -1181,6 +1307,31 @@ If not \"\", the list in the string is what is returned by
 UP (default: 0) is the number of list levels to go up to start with."
   (let ((list+bds  (tap-list-nearest-point-with-bounds up 'UNQUOTED)))
     (if list+bds (format "%s" (car list+bds)) "")))
+
+(defun tap-bounds-of-list-contents-at-point ()
+  "Return the start and end locations for the list contents at point.
+Same as `tap-bounds-of-list-at-point', except that this does not
+include the enclosing `(' and `)' characters."
+  (let ((full  (tap-bounds-of-list-at-point)))
+    (and full  (cons (1+ (car full)) (1- (cdr full))))))
+
+;; Add this so that, for example, `thgcmd-defined-thing-p' in
+;; `thing-cmds.el' recognizes `list-contents' as a THING.
+(put 'list-contents 'bounds-of-thing-at-point 'tap-bounds-of-list-contents-at-point)
+
+(defun tap-list-contents-at-point ()
+  "Return the contents of the list at point as a string, or nil if none.
+Same as `tap-list-at-point-as-string', except that this does not
+include the enclosing `(' and `)' characters."
+  (let ((bounds  (tap-bounds-of-list-contents-at-point)))
+    (and bounds  (buffer-substring (car bounds) (cdr bounds)))))
+
+(defun tap-list-contents-nearest-point ()
+  "Return the contents of the list nearest point as a string, or nil.
+See `tap-list-contents-at-point'.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'."
+  (let ((full  (tap-bounds-of-thing-nearest-point 'list)))
+    (and full  (buffer-substring (1+ (car full)) (1- (cdr full))))))
  
 ;;; SYMBOL NAMES, WORDS, SENTENCES, etc. -----------------------
 
@@ -1190,7 +1341,7 @@ UP (default: 0) is the number of list levels to go up to start with."
 
 (defun tap-non-nil-symbol-name-at-point ()
   "String naming a non-nil Emacs Lisp symbol at point, or nil if none."
-  (let ((name  (tap-thing-at-point 'symbol emacs-lisp-mode-syntax-table)))
+  (let ((name  (tap-thing-at-point 'symbol nil emacs-lisp-mode-syntax-table)))
     (and (not (equal "nil" name))  name)))
 
 
@@ -1233,6 +1384,7 @@ See `tap-non-nil-symbol-name-nearest-point'."
 (defun tap-word-nearest-point (&optional syntax-table)
   "Return the word (a string) nearest to point, if any, else nil.
 \"Nearest\" to point is determined as for `tap-thing-nearest-point'.
+
 Optional arg SYNTAX-TABLE is a syntax table to use."
   (tap-thing-nearest-point 'word syntax-table))
 
@@ -1249,11 +1401,13 @@ See `tap-word-nearest-point'."
 (put 'region-or-word 'tap-thing-at-point 'tap-region-or-word-at-point)
 
 (defun tap-region-or-word-at-point ()
-  "Return non-empty active region or word at point."
+  "Return non-empty active region or word at or adjacent to point."
   (if (and transient-mark-mode mark-active
            (not (eq (region-beginning) (region-end))))
       (buffer-substring-no-properties (region-beginning) (region-end))
-    (current-word)))
+    (if (> emacs-major-version 21)
+        (current-word 'STRICT 'REALLY-WORD)
+      (current-word 'STRICT))))
 
 
 (when (fboundp 'color-defined-p)        ; Emacs 21+
@@ -1281,27 +1435,31 @@ Return nil if no color name is found."
   (defun tap-color-nearest-point-with-bounds ()
     "Return the color name nearest point, plus its bounds: (COLOR START . END).
 Return nil if no color name is found.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'.
+
 COLOR is a color name or RGB code (with prefix `#').
  See `tap-color-nearest-point'.
 START and END are the buffer positions of COLOR."
     (tap-thing-nearest-point-with-bounds 'color))
 
   (defun tap-color-nearest-point ()
-    "Return the color name or RGB code (with prefix `#') nearest point."
+    "Return the color name or RGB code (with prefix `#') nearest point.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'."
     (let ((color+bds  (tap-color-nearest-point-with-bounds)))
       (and color+bds  (car color+bds)))))
 
 (defun tap-sentence-nearest-point (&optional syntax-table)
   "Return the sentence (a string) nearest to point, if any, else \"\".
 \"Nearest\" to point is determined as for `tap-thing-nearest-point'.
+
 Optional arg SYNTAX-TABLE is a syntax table to use."
   (tap-thing-nearest-point 'sentence syntax-table))
 
 (defun tap-sexp-nearest-point (&optional syntax-table)
   "Return the sexp nearest point, if any, else \"\".
 This is an Emacs Lisp entity, the result of reading a textual sexp
-near point.  \"Nearest\" to point is determined as for
-`tap-thing-nearest-point'.
+near point.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'.
 
 Optional arg SYNTAX-TABLE is a syntax table to use."
   (tap-form-nearest-point 'sexp nil syntax-table))
@@ -1309,6 +1467,7 @@ Optional arg SYNTAX-TABLE is a syntax table to use."
 (defun tap-number-nearest-point (&optional syntax-table)
   "Return the number nearest to point, if any, else nil.
 \"Nearest\" to point is determined as for `tap-thing-nearest-point'.
+
 Optional arg SYNTAX-TABLE is a syntax table to use."
   (tap-form-nearest-point 'sexp 'numberp syntax-table))
 
@@ -1419,6 +1578,7 @@ those string contents directly using `tap-string-contents-at-point'."
 
   (defun tap-string-nearest-point ()
     "Return the string nearest point, or nil if there is none.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'.
 See `tap-string-at-point'."
     (tap-thing-nearest-point 'string))
 
@@ -1429,6 +1589,10 @@ include the enclosing `\"' characters."
     (let ((full  (tap-bounds-of-string-at-point)))
       (and full  (cons (1+ (car full)) (1- (cdr full))))))
 
+  ;; Add this so that, for example, `thgcmd-defined-thing-p' in
+  ;; `thing-cmds.el' recognizes `string-contents' as a THING.
+  (put 'string-contents 'bounds-of-thing-at-point 'tap-bounds-of-string-contents-at-point)
+
   (defun tap-string-contents-at-point ()
     "Return the contents of the string at point, or nil if none.
 Same as `tap-string-at-point', except that this does not include the
@@ -1438,6 +1602,7 @@ enclosing `\"' characters."
 
   (defun tap-string-contents-nearest-point ()
     "Return the contents of the string nearest point, or nil if none.
+\"Nearest\" to point is determined as for `tap-thing-nearest-point'.
 See `tap-string-contents-at-point'."
     (let ((full  (tap-bounds-of-thing-nearest-point 'string)))
       (and full  (buffer-substring (1+ (car full)) (1- (cdr full)))))))
@@ -1462,7 +1627,7 @@ another way, not by setting these properties."
 
   ;; These are not set in `thingatpt.el', but a function for the THING is defined there.
   (put 'list   'thing-at-point           'tap-list-at-point)
-  (put 'number 'thing-at-point           'number-at-point)
+  (put 'number 'thing-at-point           'number-at-point) ; In vanilla after 2012-10-12.
   (put 'number 'bounds-of-thing-at-point 'tap-bounds-of-number-at-point)
   t)                                    ; Return non-nil so can use with `and' etc.
 
@@ -1631,12 +1796,16 @@ Return the signed number of chars moved if /= ARG, else return nil."
       (and (< (abs max) (abs arg))
            max))))
 
-;; Inspired by `find-thing-at-point' at `http://www.emacswiki.org/cgi-bin/wiki/SeanO'.
+;; Inspired by `find-thing-at-point' at `http://www.emacswiki.org/SeanO'.
 ;;;###autoload
 (defun find-fn-or-var-nearest-point (&optional confirmp)
   "Go to the definition of the function or variable nearest the cursor.
 With a prefix arg, or if no function or variable is near the cursor,
-prompt for the function or variable to find, instead."
+prompt for the function or variable to find, instead.
+
+\"Nearest\" is determined as for `tap-thing-nearest-point'.
+The search is bounded by options `tap-near-point-x-distance' and
+`tap-near-point-y-distance'."
   (interactive "P")
   (let* ((symb  (tap-symbol-nearest-point))
          (var   (and (boundp symb)  symb))

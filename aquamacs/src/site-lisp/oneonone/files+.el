@@ -4,16 +4,16 @@
 ;; Description: Enhancements of standard library `files.el'.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams (concat "drew.adams" "@" "oracle" ".com")
-;; Copyright (C) 1996-2014, Drew Adams, all rights reserved.
+;; Copyright (C) 1996-2016, Drew Adams, all rights reserved.
 ;; Created: Fri Aug 11 14:24:13 1995
 ;; Version: 0
 ;; Package-Requires: ()
-;; Last-Updated: Thu Dec 26 08:56:31 2013 (-0800)
+;; Last-Updated: Thu Dec 31 13:13:14 2015 (-0800)
 ;;           By: dradams
-;;     Update #: 723
+;;     Update #: 741
 ;; URL: http://www.emacswiki.org/files+.el
 ;; Keywords: internal, extensions, local
-;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x
+;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x, 24.x, 25.x
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -69,6 +69,13 @@
 ;;
 ;;; Change Log:
 ;;
+;; 2015/12/15 dadams
+;;     insert-directory: Use match beginning for "total" text.  Thx to Tino Calancha.
+;; 2015/12/10 dadams
+;;     count-dired-files: Back up 1 char first, if eobp.  Thx to Tino Calancha.
+;; 2014/09/07 dadams
+;;     update-dired-files-count: Corrected wrt dired-hide-details:
+;;       Test inside loop, and use beginning of match, not (line-beginning-position 2).
 ;; 2013/11/11 dadams
 ;;     switch-to-buffer-other-(frame|window), display-buffer-other-frame:
 ;;       Do not redefine for Emacs 24+.  Removed autoload cookies.
@@ -622,7 +629,7 @@ normally equivalent short `-D' option is just passed on to
             (save-excursion
               (goto-char beg)
               (while (re-search-forward "^ *\\(total\\)" nil t)
-                (beginning-of-line)
+                (goto-char (match-beginning 1))
                 (insert "files " (number-to-string (save-match-data
                                                      (count-dired-files)))
                         "/" (number-to-string
@@ -630,7 +637,7 @@ normally equivalent short `-D' option is just passed on to
                                                          nil nil t)) 2))
                         " ")
                 (goto-char beg)
-                (re-search-forward "^files [0-9]+/[0-9]+ \\(total\\)" nil t)
+                (re-search-forward "^ *files [0-9]+/[0-9]+ \\(total\\)" nil t)
                 (replace-match "space used" nil nil nil 1)
                 (let ((available  (and (fboundp 'get-free-disk-space)
                                        (get-free-disk-space ".")))
@@ -654,6 +661,7 @@ This includes directory entries, as well as files, but it excludes `.'
 and `..'."
   ;; $$$$ Should we skip `#' files also, as in `dired-trivial-filenames'?
   (save-excursion
+    (when (save-restriction (widen) (eobp)) (goto-char (1- (point))))
     (re-search-backward "^$" nil 'to-bob)
     (if (not (re-search-forward dired-move-to-filename-regexp nil t))
         0
@@ -677,10 +685,10 @@ and `..'."
            (str-num-files  (number-to-string num-files)))
       (save-excursion
         (goto-char (point-min))
-        ;; No-op if the line should be hidden.
-        (unless (eq (get-text-property (line-beginning-position 2) 'invisible)
-                    'dired-hide-details-information)
-          (while (re-search-forward "^  files \\([0-9]+\\)/\\([0-9]+\\)" nil t)
+        (while (re-search-forward "^  files \\([0-9]+\\)/\\([0-9]+\\)" nil t)
+          ;; No-op if the line should be hidden.
+          (unless (eq (get-text-property (match-beginning 0) 'invisible)
+                      'dired-hide-details-information)
             (let ((buffer-read-only  nil)
                   (map               (make-sparse-keymap)))
               (define-key map [mouse-2] 'dired-mouse-describe-listed-directory)
@@ -698,10 +706,11 @@ and `..'."
                   (add-text-properties
                    (save-excursion (beginning-of-line) (+ 2 (point))) (match-end 2)
                    `(mouse-face highlight keymap ,map
-                     help-echo "Files shown / total files in directory \
+                                help-echo "Files shown / total files in directory \
 \[RET, mouse-2: more info]"))
-                (error nil))))
-          (set-buffer-modified-p nil))))))
+                (error nil)))))
+        (set-buffer-modified-p nil)))))
+
 
 ;;;###autoload
 (defun dired-describe-listed-directory ()
