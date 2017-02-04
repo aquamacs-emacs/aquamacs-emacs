@@ -1,6 +1,6 @@
 ;;; rst.el --- Mode for viewing and editing reStructuredText-documents.
 
-;; Copyright (C) 2003-2016 Free Software Foundation, Inc.
+;; Copyright (C) 2003-2017 Free Software Foundation, Inc.
 
 ;; Maintainer: Stefan Merten <smerten@oekonux.de>
 ;; Author: Stefan Merten <smerten@oekonux.de>,
@@ -267,7 +267,7 @@ in parentheses follows the development revision and the time stamp.")
     ("1.3.0" . "24.3")
     ("1.3.1" . "24.3")
     ("1.4.0" . "24.3")
-    ("1.4.1" . "24.5")
+    ("1.4.1" . "25.1")
     ))
 
 (unless (assoc rst-official-version rst-package-emacs-version-alist)

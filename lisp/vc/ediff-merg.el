@@ -1,6 +1,6 @@
 ;;; ediff-merg.el --- merging utilities
 
-;; Copyright (C) 1994-2016 Free Software Foundation, Inc.
+;; Copyright (C) 1994-2017 Free Software Foundation, Inc.
 
 ;; Author: Michael Kifer <kifer@cs.stonybrook.edu>
 ;; Package: ediff
@@ -84,7 +84,7 @@ A region is considered to have been changed if it is different from the current
 default (`default-A', `default-B', `combined') and it hasn't been marked as
 `prefer-A' or `prefer-B'.
 A region is considered to have been changed also when it is marked as
-as `prefer-A', but is different from the corresponding difference region in
+`prefer-A', but is different from the corresponding difference region in
 Buffer A or if it is marked as `prefer-B' and is different from the region in
 Buffer B."
   :type 'boolean

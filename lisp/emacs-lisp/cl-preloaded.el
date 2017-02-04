@@ -1,6 +1,6 @@
 ;;; cl-preloaded.el --- Preloaded part of the CL library  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015-2016 Free Software Foundation, Inc
+;; Copyright (C) 2015-2017 Free Software Foundation, Inc
 
 ;; Author: Stefan Monnier <monnier@iro.umontreal.ca>
 ;; Package: emacs
@@ -45,7 +45,7 @@
 
 (defun cl--assertion-failed (form &optional string sargs args)
   (if debug-on-error
-      (funcall debugger `(cl-assertion-failed ,form ,string ,@sargs))
+      (funcall debugger 'error `(cl-assertion-failed (,form ,string ,@sargs)))
     (if string
         (apply #'error string (append sargs args))
       (signal 'cl-assertion-failed `(,form ,@sargs)))))

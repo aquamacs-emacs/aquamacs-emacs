@@ -1,6 +1,6 @@
 ;;; tramp.el --- Transparent Remote Access, Multiple Protocol
 
-;; Copyright (C) 1998-2016 Free Software Foundation, Inc.
+;; Copyright (C) 1998-2017 Free Software Foundation, Inc.
 
 ;; Author: Kai Großjohann <kai.grossjohann@gmx.net>
 ;;         Michael Albinus <michael.albinus@gmx.de>
@@ -4102,7 +4102,11 @@ this file, if that variable is non-nil."
 	      (file-exists-p tramp-auto-save-directory))
     (make-directory tramp-auto-save-directory t))
 
-  (let ((system-type 'not-windows)
+  (let ((system-type
+	 (if (and (stringp tramp-auto-save-directory)
+		  (file-remote-p tramp-auto-save-directory))
+	     'not-windows
+	   system-type))
 	(auto-save-file-name-transforms
 	 (if (and (null tramp-auto-save-directory)
 		  (boundp 'auto-save-file-name-transforms))

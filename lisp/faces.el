@@ -1,6 +1,6 @@
 ;;; faces.el --- Lisp faces
 
-;; Copyright (C) 1992-1996, 1998-2016 Free Software Foundation, Inc.
+;; Copyright (C) 1992-1996, 1998-2017 Free Software Foundation, Inc.
 
 ;; Maintainer: emacs-devel@gnu.org
 ;; Keywords: internal
@@ -2316,10 +2316,13 @@ If you set `term-file-prefix' to nil, this function does nothing."
 
 (defface variable-pitch
   '((((type w32))
-     ;; This is a kludgy workaround for an issue discussed in
+     ;; This is a workaround for an issue discussed in
      ;; http://lists.gnu.org/archive/html/emacs-devel/2016-04/msg00746.html.
-     :font "-outline-Arial-normal-normal-normal-sans-*-*-*-*-p-*-iso8859-1")
-    (t :family "Sans Serif"))
+     ;; We need (a) the splash screen not to pick up bold-italics variant of
+     ;; the font, and (b) still be able to request bold/italic/larger size
+     ;; variants in the likes of EWW.
+     :family "Arial" :foundry "outline")
+  (t :family "Sans Serif"))
   "The basic variable-pitch face."
   :group 'basic-faces)
 

@@ -1,6 +1,6 @@
 ;;; mailcap.el --- MIME media types configuration
 
-;; Copyright (C) 1998-2016 Free Software Foundation, Inc.
+;; Copyright (C) 1998-2017 Free Software Foundation, Inc.
 
 ;; Author: William M. Perry <wmperry@aventail.com>
 ;;	Lars Magne Ingebrigtsen <larsi@gnus.org>
@@ -818,7 +818,7 @@ If NO-DECODE is non-nil, don't decode STRING."
     (".css"   . "text/css")
     (".dvi"   . "application/x-dvi")
     (".diff"  . "text/x-patch")
-    (".dpatch". "test/x-patch")
+    (".dpatch". "text/x-patch")
     (".el"    . "application/emacs-lisp")
     (".eps"   . "application/postscript")
     (".etx"   . "text/x-setext")

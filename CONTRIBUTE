@@ -162,7 +162,7 @@ them right the first time, so here are guidelines for formatting them:
 - If you use Emacs VC, one way to format ChangeLog entries is to create
   a top-level ChangeLog file manually, and update it with 'C-x 4 a' as
   usual.  Do not register the ChangeLog file under git; instead, use
-  'C-c C-a' to insert its contents into into your *vc-log* buffer.
+  'C-c C-a' to insert its contents into your *vc-log* buffer.
   Or if 'log-edit-hook' includes 'log-edit-insert-changelog' (which it
   does by default), they will be filled in for you automatically.
 
@@ -249,6 +249,13 @@ Think about whether your change requires updating the manuals.  If you
 know it does not, mark the NEWS entry with "---".  If you know
 that *all* the necessary documentation updates have been made, mark
 the entry with "+++".  Otherwise do not mark it.
+
+If your change requires updating the manuals to document new
+functions/commands/variables/faces, then use the proper Texinfo
+command to index them; for instance, use @vindex for variables and
+@findex for functions/commands.  For the full list of predefine indices, see
+http://www.gnu.org/software/texinfo/manual/texinfo/html_node/Predefined-Indices.html
+or run the shell command 'info "(texinfo)Predefined Indices"'.
 
 For more specific tips on Emacs's doc style, see
 http://www.gnu.org/software/emacs/manual/html_node/elisp/Documentation-Tips.html

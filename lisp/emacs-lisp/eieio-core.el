@@ -1,6 +1,6 @@
 ;;; eieio-core.el --- Core implementation for eieio  -*- lexical-binding:t -*-
 
-;; Copyright (C) 1995-1996, 1998-2016 Free Software Foundation, Inc.
+;; Copyright (C) 1995-1996, 1998-2017 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 ;; Version: 1.4
@@ -1101,7 +1101,7 @@ method invocation orders of the involved classes."
   (list eieio--generic-subclass-generalizer))
 
 
-;;;### (autoloads nil "eieio-compat" "eieio-compat.el" "dba4205b1a0d7133f1311d975b4d0ebe")
+;;;### (autoloads nil "eieio-compat" "eieio-compat.el" "e91175056972ff549f07b83740ad04eb")
 ;;; Generated autoloads from eieio-compat.el
 
 (autoload 'eieio--defalias "eieio-compat" "\
