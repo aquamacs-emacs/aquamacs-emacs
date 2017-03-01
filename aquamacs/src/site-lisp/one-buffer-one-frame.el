@@ -693,7 +693,7 @@ may be set to `nil' if such empty frames become visible inadvertently."
 	  parms)))
 	(if (and aquamacs-last-frame-empty-frame
 		 (frame-live-p aquamacs-last-frame-empty-frame)
-		 (not (frame-iconified-p aquamacs-last-frame-empty-frame)))
+		 (not (frcmds-frame-iconified-p aquamacs-last-frame-empty-frame)))
 	    (modify-frame-parameters aquamacs-last-frame-empty-frame
 				     (cons '(fullscreen . nil) parms))
 	  (setq aquamacs-last-frame-empty-frame (make-frame all-parms))))

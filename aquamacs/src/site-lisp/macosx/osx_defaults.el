@@ -148,7 +148,7 @@ from earlier versions of the distribution."
     (unless (eq 'found
 		(catch 'exit 
 		  (mapc (lambda (f)
-			  (when (frame-iconified-p f)
+			  (when (frcmds-frame-iconified-p f)
 			    (select-frame f)
 			    (make-frame-visible)
 			    (throw 'exit 'found)))
