@@ -121,8 +121,12 @@ maintainer-clean: distclean
 ## Do not remove these files, even in a bootstrap, because they rarely
 ## change and it slows down bootstrap (a tiny bit).
 ## Cf leim/ja-dic (which is much slower).
+##
+## We can not remove ${top_srcdir}/src/macuvs.h since it has a
+## circular dependency: it is built using the emacs we build, but that
+## build itself is dependent on ${top_srcdir}/src/macuvs.h.
 extraclean:
-	rm -f ${top_srcdir}/src/macuvs.h ${unidir}/charscript.el*
+	rm -f ${unidir}/charscript.el*
   ifneq (,$(wildcard $(unidir)/charprop.el))
 	cd $(unidir) && \
 	  rm -f `sed -n 's/^;; FILE: //p' < charprop.el` charprop.el
