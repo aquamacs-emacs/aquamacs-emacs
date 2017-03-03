@@ -645,8 +645,7 @@ even if it's the only visible frame."
   (select-window window)
   (if (one-window-p t)
       (aquamacs-delete-frame)
-    (old-delete-window (selected-window))))
-;; old-delete-window is the original emacs delete-window.
+    (delete-window (selected-window))))
 
 (defun delete-window-if-one-buffer-one-frame ()
   ;; only delete window when tabbar-mode is not on!

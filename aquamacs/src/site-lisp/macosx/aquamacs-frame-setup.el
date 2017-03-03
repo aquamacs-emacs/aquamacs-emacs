@@ -131,3 +131,6 @@ Usable in `temp-buffer-show-hook'."
 ;; do not import - always fits frame for special frames
 ;; (require 'frame+ nil t)                 ; Corrections, extensions.
 (require 'frame-cmds nil t)             ; Frame and window commands.
+(when (ad-is-advised 'delete-window)
+  ;; dangerous overreach?
+  (ad-deactivate 'delete-window)) ;; do not advise delete-window for compatibility
