@@ -311,7 +311,16 @@ to their equivalents used on Mac OS X."
 
 
 (defvar mac-option-modifier-enabled-value 'meta)
-(defun  toggle-mac-option-modifier (&optional interactively) 
+(defun  toggle-mac-option-modifier (&optional interactively)
+  "Switch the meaning of the Option key.
+The Option (Alt) key may be used as `Meta' modifier (similar to
+the Esc key) for key combinations such as M-x, or it may be used
+as the regular modifier key to enter characters not directly present
+on the keyboard, such as é on an English QWERTY keyboard, or { or @ on
+a German keyboard.
+
+This function customizes the variable `mac-option-modifier', which see.
+See also `ns-right-alternate-modifier'."
   (interactive "p")
   (unless mac-option-modifier-enabled-value
     (setq mac-option-modifier-enabled-value 'meta))
