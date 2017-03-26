@@ -281,7 +281,7 @@ default setting; don't change it unless you know what you're doing."
   :type 'sexp
   :group 'htmlize)
 
-(defcustom htmlize-ignore-face-size 'absolute
+(defcustom htmlize-ignore-face-size nil  ;;'absolute ;; Aquamacs - nil
   "Whether face size should be ignored when generating HTML.
 If this is nil, face sizes are used.  If set to t, sizes are ignored
 If set to `absolute', only absolute size specifications are ignored.
@@ -1214,7 +1214,7 @@ Adds default fonts such as `monospace' where appropriate."
 	    collect (if (eq h 'unspecified) nil h))))
       (let ((size
 	     (reduce 'htmlize-merge-size (cons nil size-list))))
-	(if size (round (* htmlize-font-size-scaling-factor size)))))))
+	(if size (* htmlize-font-size-scaling-factor size)))))) ;; Aquamacs
 
 (defun htmlize-face-css-name (face)
   ;; Generate the css-name property for the given face.  Emacs places
