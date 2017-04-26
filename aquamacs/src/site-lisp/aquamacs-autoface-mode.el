@@ -75,34 +75,6 @@ for which the menu is being updated."
   "Default face for buffers when `aquamacs-autoface-mode' is active."
   :group 'Aquamacs)
 
-(defun aquamacs-import-frame-parameters-to-auto-faces ()
-  "Read `aquamacs-default-styles', convert to faces.
-The faces are then to be used with `aquamacs-autoface-mode'."
-  (when (boundp 'aquamacs-default-styles)
-    (message "Frame styles have been converted to faces: %s."
-	     (mapcar
-     (lambda (elt)
-       (let* ((mode (car elt))
-	      (style (cdr elt))
-	      (face (aquamacs-autoface-make-face mode t))
-	      (color-theme (cdr (assq 'color-theme style)))
-	      (col-theme-parms (if color-theme
-				   (condition-case nil
-				       (color-theme-frame-params
-					(color-theme-canonic color-theme))
-				     (error nil)))))
-	 (when (assq 'background-color style)
-	   (set-face-background face (cdr (assq 'background-color style))))
-	 (when (assq 'foreground-color style)
-	   (set-face-foreground face (cdr (assq 'foreground-color style))))
-	 (when (assq 'font style)
-	   (set-face-font face (cdr (assq 'font style)) nil))
-       mode))
-     aquamacs-default-styles))
-    (if (and (fboundp 'aquamacs-styles) (boundp 'aquamacs-styles) aquamacs-styles)
-	;; this should ensure that styles is not kept `on' in custom-file.
-	(aquamacs-styles 0))))
-
 (defun aquamacs-autoface-mark-face-to-save (face &optional dont-save)
   "Ensure FACE will be saved to `custom-file'."
   (when (facep face)
@@ -221,14 +193,16 @@ Sets the `autoface-default' face."
   "Regular expression to be saved in frame parameters.
 This is used by the function
 `aquamacs-set-frame-parameters-as-default' to determine which
-frame parameters to save as default. handled by
-aquamacs-styles.")
+frame parameters to save as default.")
 
 (defun aquamacs-set-frame-parameters-as-special-display ()
   "Use current frame settings for special display frames.
 See also `aquamacs-set-frame-parameters-as-default'."
   (interactive)
   (aquamacs-set-frame-parameters-as-default 'special-display-frame-alist))
+
+;; To Do:
+;; This should probably be stored in a custom theme that is then activated
 
 (defun aquamacs-set-frame-parameters-as-default (&optional target)
   "Use current frame settings as default for new frames.
@@ -319,18 +293,12 @@ include-default includes autoface-default.  face-names implies include-default."
   (interactive)
   (aquamacs-clear-autofaces)
   (aquamacs-init-faces)
-  (when aquamacs-styles-mode
-    (aquamacs-styles-mode 0))
   (message "All auto faces reset to defaults. Add new ones or use customize to
 modify them."))
 
 (defun aquamacs-clear-autofaces ()
   "Clear all autofaces."
   (interactive)
-  (when (boundp 'aquamacs-default-styles)
-      (setq aquamacs-default-styles nil))
-  (when aquamacs-styles-mode
-    (aquamacs-styles-mode 0))
   ;; reset the face
   (mapc (lambda (face) (face-spec-set face '((t (:inherit autoface-default)))
 				      (if (> emacs-major-version 22) t)))

@@ -164,27 +164,6 @@ Separate paths from file names with --."
 
       )
 
-    (if (and (boundp 'aquamacs-default-styles)
-	     (< aquamacs-customization-version-id 092.8))
-	;; bring the lucida font back because
-	;; we have switched over to monaco as the default
-	(mapc
-	 (lambda (th)
-	   (unless (assq (car th) aquamacs-default-styles)
-	     (assq-set (car th)
-		       (cdr th)
-		       'aquamacs-default-styles)))
-	 ;; list
-	 (filter-fonts '(
-			 (text-mode
-			  (font . "fontset-lucida14"))
-			 (change-log-mode
-			  (font . "fontset-lucida14"))
-			 (tex-mode
-			  (font . "fontset-lucida14"))
-			 (paragraph-indent-text-mode
-			  (font . "fontset-lucida14"))
-			 ))))
     (if (< aquamacs-customization-version-id 094.1)
 	(progn
 	  ;; change the customizations.el file to not contain the setq statement any more
@@ -201,24 +180,8 @@ Separate paths from file names with --."
 	  (setq special-display-frame-alist
 		(assq-delete-all 'scroll-bar-width special-display-frame-alist))
 
-	  (if (boundp 'aquamacs-default-styles)
-	  (mapc
-	   (lambda (th)
-	     (unless (assq (car th) aquamacs-default-styles)
-	       (assq-set (car th)
-			 (cdr th)
-			 'aquamacs-default-styles)))
-	   ;; list
-	   (filter-fonts '(
-			   (help-mode (tool-bar-lines . 0) (fit-frame . t))
-			   (custom-mode (tool-bar-lines . 0) (fit-frame . t))))))))
-    (if (and (boundp 'aquamacs-default-styles)
-	     (< aquamacs-customization-version-id 99.1))
-	(mapc (lambda (formode)
-		(assq-delete-all 'tool-bar
-				 (cdr-safe (cdr-safe (car-safe
-						      (cdr-safe formode))))))
-	      aquamacs-default-styles))
+	  ))
+    
     (when (< aquamacs-customization-version-id 131)
       ;; turn on tool bar only once to show the nice new tool bar
       (add-hook 'after-init-functions
@@ -250,16 +213,7 @@ Separate paths from file names with --."
       (when (eq one-buffer-one-frame-mode 'default)
 	(custom-set-variables '(one-buffer-one-frame-mode t))))
 
-    (when (and (boundp 'aquamacs-default-styles)
-	       (< aquamacs-customization-version-id 161))
-      ;; some tidying up from previous versions
-      (let ((default-frame-parms (assq 'default aquamacs-default-styles)))
-	(when default-frame-parms
-	  (setq aquamacs-default-styles
-		(cons (cons 'style-default (cdr-safe default-frame-parms))
-		      (assq-delete-all
-		       'default
-		       aquamacs-default-styles))))))
+    
     (when (< aquamacs-customization-version-id 162)
       (aquamacs-import-frame-parameters-to-auto-faces))
     (when (< aquamacs-customization-version-id 208)
@@ -502,7 +456,6 @@ have changed."
     :group 'Aquamacs
     :type '(choice (const nil)  (const ask) (const t)))
 
-;; (aquamacs-variable-customized-p 'aquamacs-styles-mode)
 ;; (aquamacs-variable-customized-p 'case-fold-search)
 ;; (aquamacs-variable-customized-p 'ns-alternate-modifier)
 ;; (aquamacs-variable-customized-p 'mac-option-modifier)
@@ -905,7 +858,6 @@ yes-or-no prompts - y or n will do."
   (require 'aquamacs-menu) ; before osx_defaults
 
   (require 'aquamacs-autoface-mode)
-  (autoload 'aquamacs-styles-mode "aquamacs-styles.el" "Automatically set frame style according to major mode" 'interactive nil)
 
   (menu-bar-update-buffers) ;; update Buffers menu now
   (aquamacs-update-menu t) ;; initial setup of the menu
@@ -1080,8 +1032,6 @@ Use this argument instead of explicitly setting `view-exit-action'."
 ;; so everything is copied over to the 'default style as appropriate
 ;; mode-specific font settings
 ;;  if turned on, default-frame-alist should be empty now
-(aquamacs-set-defaults '((aquamacs-styles-mode nil)))
-;; (require 'aquamacs-styles)   ; deprecated
 
 ;; local toolbars
 (defun tool-bar-enabled-p (&optional frame)
@@ -1351,7 +1301,6 @@ listed here."
 	    display-battery-mode
 	    one-buffer-one-frame-mode
 	    visual-line-mode ; set by line wrapping menu functions
-	    aquamacs-styles-mode
 	    aquamacs-autoface-mode
 	    aquamacs-tool-bar-user-customization
 	    ns-tool-bar-display-mode ;; can be set through GUI by user
