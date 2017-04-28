@@ -53,6 +53,7 @@
 (require 'fontset)
 (require 'dnd)
 (require 'ucs-normalize)
+(require 'subr-x)
 
 (defgroup ns nil
   "GNUstep/macOS specific features."
@@ -264,21 +265,14 @@ The properties returned may include `top', `left', `height', and `width'."
 
 (declare-function dnd-open-file "dnd" (uri action))
 
-;; from http://ergoemacs.org/emacs/modernization_elisp_lib_problem.html
-(defun trim-string (string)
-  "Remove white spaces in beginning and ending of STRING.
-White space here is any of: space, tab, emacs newline (line feed, ASCII 10)."
-(replace-regexp-in-string "\\`[ \t\n]*" "" (replace-regexp-in-string "[ \t\n]*\\'" "" string))
-)
-
-;; function to handle multi line strings that are passed to the "open-file" service
-(defun open-file-service (filepaths)
-  "Opens multiple files at once when multiline string is selected."
-  (setq path_list (split-string filepaths "[\f\t\n\r\v]+"))
-  (while path_list
-    (if (not (equal "" (car path_list)))
-      (dnd-open-file (trim-string (car path_list)) nil))
-    (setq path_list (cdr path_list))))
+;; Handles multi line strings that are passed to the "open-file" service.
+(defun ns-open-file-service (filepaths)
+  "Opens multiple files at once when a multiline string is selected and passed
+to the Open Selected File system service."
+  (let ((path_list (split-string filepaths "[\n\r]+")))
+    (dolist (path_string path_list)
+      (if (not (equal "" path_string))
+	  (dnd-open-file (string-trim path_string) nil)))))
 
 (defun ns-spi-service-call ()
   "Respond to a service request."
@@ -287,7 +281,7 @@ White space here is any of: space, tab, emacs newline (line feed, ASCII 10)."
 	 (switch-to-buffer (generate-new-buffer "*untitled*"))
 	 (insert ns-input-spi-arg))
 	((string-equal ns-input-spi-name "open-file")
-	 (open-file-service ns-input-spi-arg))
+	 (ns-open-file-service ns-input-spi-arg))
 	((string-equal ns-input-spi-name "mail-selection")
 	 (compose-mail)
 	 (rfc822-goto-eoh)
