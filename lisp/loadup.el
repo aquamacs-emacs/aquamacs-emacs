@@ -294,6 +294,8 @@
       ;; not be built early enough during bootstrap.
       (when (load-history-filename-element "charprop\\.el")
         (load "international/ucs-normalize")
+	(load "emacs-lisp/pcase.el")
+	(load "emacs-lisp/subr-x.el")
         (load "term/ns-win"))))
 (if (fboundp 'x-create-frame)
     ;; Do it after loading term/foo-win.el since the value of the
