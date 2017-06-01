@@ -53,6 +53,7 @@
 (require 'fontset)
 (require 'dnd)
 (require 'ucs-normalize)
+(require 'subr-x)
 
 (defgroup ns nil
   "GNUstep/macOS specific features."
@@ -264,6 +265,15 @@ The properties returned may include `top', `left', `height', and `width'."
 
 (declare-function dnd-open-file "dnd" (uri action))
 
+;; Handles multi line strings that are passed to the "open-file" service.
+(defun ns-open-file-service (filepaths)
+  "Opens multiple files at once when a multiline string is selected and passed
+to the Open Selected File system service."
+  (let ((path_list (split-string filepaths "[\n\r]+")))
+    (dolist (path_string path_list)
+      (if (not (equal "" path_string))
+	  (dnd-open-file (string-trim path_string) nil)))))
+
 (defun ns-spi-service-call ()
   "Respond to a service request."
   (interactive)
@@ -271,7 +281,7 @@ The properties returned may include `top', `left', `height', and `width'."
 	 (switch-to-buffer (generate-new-buffer "*untitled*"))
 	 (insert ns-input-spi-arg))
 	((string-equal ns-input-spi-name "open-file")
-	 (dnd-open-file ns-input-spi-arg nil))
+	 (ns-open-file-service ns-input-spi-arg))
 	((string-equal ns-input-spi-name "mail-selection")
 	 (compose-mail)
 	 (rfc822-goto-eoh)
