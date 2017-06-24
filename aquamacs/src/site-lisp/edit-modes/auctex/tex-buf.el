@@ -1488,7 +1488,7 @@ Rerun to get mark in right position\\." nil t)
 	 (setq TeX-command-next TeX-command-default))
 	((re-search-forward
 	  "^\\(\\*\\* \\)?J?I?p?\\(La\\|Sli\\)TeX\\(2e\\)? \
-\\(Version\\|ver\\.\\|<[0-9/]*>\\)" nil t)
+\\(Version\\|ver\\.\\|<[0-9/-]*>\\)" nil t)
 	 (let* ((warnings (and TeX-debug-warnings
 			       (TeX-LaTeX-sentinel-has-warnings)))
 		(bad-boxes (and TeX-debug-bad-boxes
