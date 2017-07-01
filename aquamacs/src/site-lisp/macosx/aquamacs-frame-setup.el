@@ -78,13 +78,15 @@ even when minimal fringes are used. (Aquamacs)"
  ;; new help page is displayed, text gets wrapped.
  '((create-frame-min-width 68)
 ;; do not set any fonts here. aquamacs.el takes care of this,
-;; checking that the fonts actually exist.
-   (default-frame-alist 
-     ((foreground-color . "Black") (background-color . "White") 
-      (cursor-type . box) (cursor-color . "Red")   (vertical-scroll-bars . right)  
-      (tool-bar-lines . 1 ) 
-      (internal-border-width . 0)
-      (left-fringe . 1) (right-fringe . nil) (fringe . nil)))
+   ;; checking that the fonts actually exist.
+   
+   ;; This has been moved to aquamacs-frame-theme.el
+   ;; (default-frame-alist 
+   ;;   ((foreground-color . "Black") (background-color . "White") 
+   ;;    (cursor-type . box) (cursor-color . "Red")   (vertical-scroll-bars . right)  
+   ;;    (tool-bar-lines . 1 ) 
+   ;;    (internal-border-width . 0)
+   ;;    (left-fringe . 1) (right-fringe . nil) (fringe . nil)))
    
    (special-display-frame-alist
     ((unsplittable . nil)

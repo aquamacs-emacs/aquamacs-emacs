@@ -268,7 +268,17 @@ Use `mac-command-modifier' instead."))
 	   (setq mac-option-modifier nil))
       (if (> aquamacs-customization-version-id 096.0)
 	(message "Warning: `mac-pass-option-to-system' is deprecated from
-Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you.")))))
+Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you.")))
+
+    (if (< aquamacs-customization-version-id 310.0)
+        ;; make sure that the new aquamacs themes are part of custom-enabled-themes
+        (when (not (memq 'aquamacs-frame-look custom-enabled-themes))
+          (let ((cet custom-enabled-themes))
+            (enable-theme 'aquamacs-frame-look)
+            (mapc (lambda (x) (enable-theme x))
+                  (reverse cet))
+          ))))
+    )
 
 (defun aquamacs-cua-warning ()
     (and (not cua-mode)
@@ -530,6 +540,75 @@ Returns t."
 	(aquamacs-menu-bar-options-save)))
     (error nil)) ;; in case of quit
   t)
+
+
+;; (aquamacs-add-warning-to-dotemacs)
+(defun aquamacs-add-warning-to-dotemacs ()
+  ;; modled after custom-save-all
+  (let* ((filename "~/.emacs")
+	 (old-buffer (find-buffer-visiting filename))
+	 old-buffer-name)
+    (when (file-readable-p filename)
+      (with-current-buffer (let ((find-file-visit-truename t))
+                             (or old-buffer
+                                 (let ((delay-mode-hooks t))
+                                   (find-file-noselect filename))))
+        ;; We'll save using file-precious-flag, so avoid destroying
+        ;; symlinks.  (If we're not already visiting the buffer, this is
+        ;; handled by find-file-visit-truename, above.)
+        (when old-buffer
+          (setq old-buffer-name (buffer-file-name))
+          (set-visited-file-name (file-chase-links filename)))
+
+        (unless (eq major-mode 'emacs-lisp-mode)
+          (delay-mode-hooks (emacs-lisp-mode)))
+        (let ((inhibit-read-only t)
+              (print-length nil)
+              (print-level nil))
+          (let ((marker "Aquamacs custom-file warning:"))
+            (beginning-of-buffer)
+            (unless (search-forward marker nil t)
+              ;; not found
+              (beginning-of-buffer)
+              (end-of-line)
+              (while (nth 4 (syntax-ppss))
+                (forward-line)
+                (end-of-line))
+              (beginning-of-line)
+              (insert (aquamacs-get-custom-file-dotemacs-warning marker))
+              )))
+        (let ((file-precious-flag t))
+          (save-buffer))
+        (if old-buffer
+            (progn
+              (set-visited-file-name old-buffer-name)
+              (set-buffer-modified-p nil))
+          (kill-buffer (current-buffer)))))))
+
+
+(defun aquamacs-get-custom-file-dotemacs-warning (marker)
+  (let ((warning (format
+";; ________________________________________________________________________
+;; %s
+;; Warning: customizations set in Aquamacs and saved to `custom-file'
+;; (customizations.el) with the \"Save Options\" function will be loaded
+;; after loading .emacs.  Settings made here may be unreliable.
+;; To avoid, write your startup settings in the file
+;; %s
+;; A standard customization is the `aquamacs-frame-look' theme, which
+;; will set these variables:
+;; %s
+;; ________________________________________________________________________
+" marker (car (last aquamacs-preference-files))
+   (aquamacs-vars-changed-by-theme 'aquamacs-frame-look))))
+   warning))
+
+(defun aquamacs-vars-changed-by-theme (theme)
+  (mapcar
+   (lambda (c) 
+     (when (eq 'theme-value (car c))
+       (car (cdr c))))
+   (get theme 'theme-settings)))
 
 (defun aquamacs-save-buffers-kill-emacs (&optional arg)
     "Offer to save each buffer, then kill this Emacs process.
@@ -991,6 +1070,14 @@ Use this argument instead of explicitly setting `view-exit-action'."
 
 (require 'color-theme-autoloads)
 
+  
+;; add aquamacs themes to load path
+(add-to-list 'custom-theme-load-path
+             (concat (mac-resources-path)
+                     "lisp/aquamacs/themes"))
+(load-theme 'aquamacs-frame-look 'no-confirm)
+(enable-theme 'aquamacs-frame-look)
+
 ;; follow mouse autoload
 (autoload 'turn-on-follow-mouse "follow-mouse.el"   "Moving the mouse will automatically select the window under it" 'interactive nil)
 (autoload 'turn-off-follow-mouse "follow-mouse.el"   "Moving the mouse will not automatically select the window under it" 'interactive nil)
@@ -1020,11 +1107,13 @@ Use this argument instead of explicitly setting `view-exit-action'."
 
 ;; set some defaults which will be set by other functions anyways
 ;; just so we save them to standard-value
-(assq-set 'menu-bar-lines 1 'default-frame-alist)
-(assq-set 'tool-bar-lines 1 'default-frame-alist)
 
-(aquamacs-set-defaults `((default-frame-alist ,default-frame-alist)
-			   (special-display-frame-alist ,special-display-frame-alist)))
+;; This is now handled by aquamacs-frame-theme.el
+;; (assq-set 'menu-bar-lines 1 'default-frame-alist)
+;; (assq-set 'tool-bar-lines 1 'default-frame-alist)
+
+;; (aquamacs-set-defaults `((default-frame-alist ,default-frame-alist)
+;; 			   (special-display-frame-alist ,special-display-frame-alist)))
 
 (ats "fontsets done")
 
@@ -1305,7 +1394,8 @@ listed here."
 	    aquamacs-tool-bar-user-customization
 	    ns-tool-bar-display-mode ;; can be set through GUI by user
 	    ns-tool-bar-size-mode ;; can be set through GUI by user
-	    default-frame-alist ;; does this not prevent users from setting these?
+            ;; default-frame-alist should not be saved in customizations
+            ;;   it interferes with themes.
 ;;;	     do not save initial-frame-alist - it is stored by smart-frame-positions
 ;;;  to do: frame-notice-user-settings should use default-frame-alist in addition to
 ;;; initial-frame-alist, so "adopt frame parameters as default" should work.

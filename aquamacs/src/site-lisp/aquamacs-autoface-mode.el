@@ -201,9 +201,6 @@ See also `aquamacs-set-frame-parameters-as-default'."
   (interactive)
   (aquamacs-set-frame-parameters-as-default 'special-display-frame-alist))
 
-;; To Do:
-;; This should probably be stored in a custom theme that is then activated
-
 (defun aquamacs-set-frame-parameters-as-default (&optional target)
   "Use current frame settings as default for new frames.
 Sets all frame parameters in `default-frame-alist' and
@@ -235,18 +232,30 @@ given, set the variable named TARGET instead, e.g.,
 				      (symbol-name (car pm)))
 				     (list pm)))
 			       (frame-parameters))))))
+    ;; (setq target nil new-values (frame-parameters))
+    ;; (custom-theme-set-variables
+    ;;  'user
+    ;;  (list (or target 'default-frame-alist)
+    ;;  (append
+    ;;   (apply #'append
+    ;;          (mapcar
+    ;;           (lambda (pm)
+    ;;     	(unless (assq (car pm) new-values)
+    ;;     	  (list pm)))
+    ;;           (symbol-value (or target 'default-frame-alist))))
+    ;;   new-values)))
+    ;; (enable-theme 'user)
 
     (customize-set-variable
      (or target 'default-frame-alist)
      (append
       (apply #'append
-	     (mapcar
-	      (lambda (pm)
-		(unless (assq (car pm) new-values)
-		  (list pm)))
-	      (symbol-value (or target 'default-frame-alist))))
-      new-values)
-     )
+             (mapcar
+              (lambda (pm)
+        	(unless (assq (car pm) new-values)
+        	  (list pm)))
+              (symbol-value (or target 'default-frame-alist))))
+      new-values))
     (unless target
       ;; set initial-frame-alist
       (customize-set-variable
@@ -599,20 +608,20 @@ modified, or in FRAME if given."
 
 
 
-(define-key appearance-menu [aquamacs-set-frame-defaults]
-  (list 'menu-item "Adopt Face and Frame Parameters as Frame Default"
-	'aquamacs-set-frame-parameters-as-default
-	:visible '(not (special-display-p (buffer-name)))
-	:help "Set most default frame parameters to ones of selected frame."))
+;; (define-key appearance-menu [aquamacs-set-frame-defaults]
+;;   (list 'menu-item "Adopt Face and Frame Parameters as Frame Default"
+;; 	'aquamacs-set-frame-parameters-as-default
+;; 	:visible '(not (special-display-p (buffer-name)))
+;; 	:help "Set most default frame parameters to ones of selected frame."))
 
-(define-key appearance-menu [aquamacs-set-frame-display-display]
-  (list 'menu-item "Adopt Face and Frame Parameters for Special Frames"
-	'aquamacs-set-frame-parameters-as-special-display
-	:visible '(special-display-p (buffer-name ))
-	:help "Set most special display frame parameters to ones of selected frame."))
+;; (define-key appearance-menu [aquamacs-set-frame-display-display]
+;;   (list 'menu-item "Adopt Face and Frame Parameters for Special Frames"
+;; 	'aquamacs-set-frame-parameters-as-special-display
+;; 	:visible '(special-display-p (buffer-name ))
+;; 	:help "Set most special display frame parameters to ones of selected frame."))
 
 
-(define-key appearance-menu [aquamacs-frame-sep] '(menu-item "--" nil))
+;; (define-key appearance-menu [aquamacs-frame-sep] '(menu-item "--" nil))
 
 (define-key appearance-menu [aquamacs-frame-autofaces]
   (list 'menu-item "Auto Faces" aquamacs-autoface-menu
@@ -716,6 +725,12 @@ modified, or in FRAME if given."
 	      :key-sequence [(,osxkeys-command-key shift t)]
 	      :enable (menu-bar-menu-frame-live-and-visible-p)
 	      :help "Select a font from list of known fonts/fontsets"))
+
+    (define-key appearance-menu [ct-sep] '(menu-item "--"))
+
+    (define-key appearance-menu [customize-themes]
+      '(menu-item "Custom Themes" customize-themes
+                  :help "Choose a pre-defined customization theme"))
 
 
 (define-key-after menu-bar-options-menu [aquamacs-frame-autofaces]

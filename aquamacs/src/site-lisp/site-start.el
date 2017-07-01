@@ -23,7 +23,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2006, 2007, 2008, 2009, 2010, 2013: David Reitter
+;; Copyright (C) 2006, 2007, 2008, 2009, 2010, 2013, 2017: David Reitter
  
 
 
@@ -42,7 +42,7 @@
 The format of the string is undefined. 
 For a reliable numerical representation, use `aquamacs-version-id'.")
 
-(defvar aquamacs-version-id 309
+(defvar aquamacs-version-id 310
 "A float indicating Aquamacs' version number.
 Full integers correspond to the third position of the public
 version number, e.g. version 0.9.7 is represented as `97.x'.
