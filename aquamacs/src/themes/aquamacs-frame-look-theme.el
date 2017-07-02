@@ -4,11 +4,11 @@
 
 (custom-theme-set-variables 'aquamacs-frame-look
                             
- '(cursor-type '(bar . 2))
- '(cursor-color "Red")
+ '(cursor-type '(bar . 2)) ; Cursor type is per-buffer
  '(default-frame-alist
     '((tool-bar-lines . 1)
       (menu-bar-lines . 1)
+      (cursor-color . "Red") ; Cursor color is per-frame
       (foreground-color . "Black")
       (background-color . "White")
       (vertical-scroll-bars . right)
