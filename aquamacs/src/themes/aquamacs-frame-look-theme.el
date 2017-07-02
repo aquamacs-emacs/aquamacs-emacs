@@ -4,7 +4,7 @@
 
 (custom-theme-set-variables 'aquamacs-frame-look
                             
- '(cursor-type t)
+ '(cursor-type '(bar . 2))
  '(cursor-color "Red")
  '(default-frame-alist
     '((tool-bar-lines . 1)
