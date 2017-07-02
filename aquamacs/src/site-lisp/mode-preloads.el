@@ -267,6 +267,8 @@ or `CVS', and any subdirectory that contains a file named `.nosearch'."
 
 (add-to-list (quote auto-mode-alist) (quote ("\\.py\\'" . python-mode)))
 
+(autoload 'prolog-mode "prolog.el" "Major mode for editing Prolog code." 'interactive nil)
+
 
 (autoload (quote py-shell) "python-mode" 
   "Start an interactive Python interpreter in another window.")
