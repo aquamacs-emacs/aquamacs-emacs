@@ -542,10 +542,10 @@ Returns t."
   t)
 
 
-;; (aquamacs-add-warning-to-dotemacs)
 (defun aquamacs-add-warning-to-dotemacs ()
-  ;; modled after custom-save-all
-  (let* ((filename "~/.emacs")
+  "Insert a warning into .emacs to use Preferences.el if custom-file overrides settings"
+  ;; modeled after custom-save-all
+  (let* ((filename "~/.emacs")  ;; support ~/emacs.d/init.el ??
 	 (old-buffer (find-buffer-visiting filename))
 	 old-buffer-name)
     (when (file-readable-p filename)
@@ -588,20 +588,21 @@ Returns t."
 
 (defun aquamacs-get-custom-file-dotemacs-warning (marker)
   (let ((warning (format
-";; ________________________________________________________________________
+";; ____________________________________________________________________________
 ;; %s
-;; Warning: customizations set in Aquamacs and saved to `custom-file'
-;; (customizations.el) with the \"Save Options\" function will be loaded
-;; after loading .emacs.  Settings made here may be unreliable.
-;; To avoid, write your startup settings in the file
+;; Warning: The .emacs file is loaded before `custom-file' (customizations.el),
+;; where customizations set in Aquamacs are saved.
+;; For this reason, settings made here may be unreliable.
+;; A standard customization saved in `custom-file' is the
+;; `aquamacs-frame-look' theme, which will set the following variables:
 ;; %s
-;; A standard customization is the `aquamacs-frame-look' theme, which
-;; will set these variables:
+;; Consider moving your startup settings to the Preferences.el file, which
+;; is loaded after `custom-file':
 ;; %s
-;; ________________________________________________________________________
-" marker (car (last aquamacs-preference-files))
-   (aquamacs-vars-changed-by-theme 'aquamacs-frame-look))))
-   warning))
+;; _____________________________________________________________________________
+" marker (aquamacs-vars-changed-by-theme 'aquamacs-frame-look)
+                    (car (last aquamacs-preference-files)))))
+      warning))
 
 (defun aquamacs-vars-changed-by-theme (theme)
   (mapcar
@@ -1077,6 +1078,10 @@ Use this argument instead of explicitly setting `view-exit-action'."
                      "lisp/aquamacs/themes"))
 (load-theme 'aquamacs-frame-look 'no-confirm)
 (enable-theme 'aquamacs-frame-look)
+
+(unless (equal init-file-user nil)
+  (aquamacs-add-warning-to-dotemacs))
+
 
 ;; follow mouse autoload
 (autoload 'turn-on-follow-mouse "follow-mouse.el"   "Moving the mouse will automatically select the window under it" 'interactive nil)
