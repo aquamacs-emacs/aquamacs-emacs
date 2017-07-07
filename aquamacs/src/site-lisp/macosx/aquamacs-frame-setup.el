@@ -32,23 +32,23 @@
 
 
 (provide 'aquamacs-frame-setup) ;; added by dr. 12/2004
- 
+
 (require 'fit-frame)
 
 ;; allow autofitting using smart-frame-positioning
 (defvar smart-frame-positioning-hook nil)
 (add-hook 'smart-frame-positioning-hook
-	  (lambda (f)
-	    (if (frame-parameter f 'fit-frame )
-		(when (fboundp 'fit-frame-single-window-forced) 
-		  (progn (fit-frame-single-window-forced f))))))
+          (lambda (f)
+            (if (frame-parameter f 'fit-frame )
+                (when (fboundp 'fit-frame-single-window-forced)
+                  (progn (fit-frame-single-window-forced f))))))
 
 (require 'aquamacs-mac-fontsets)
 
 (defun aquamacs-define-the-fringe-bitmap ()
   "Redefines a fringe bitmap (continuation) so that it looks good
 even when minimal fringes are used. (Aquamacs)"
-  
+
   ;; Code by Kim F. Storm
   (define-fringe-bitmap 'right-truncation
     "\xa9\x02\x04" nil nil 'bottom)
@@ -60,7 +60,7 @@ even when minimal fringes are used. (Aquamacs)"
     "\x2a\0\0" nil nil 'bottom)
 
   (let ((tr (assoc 'truncation default-fringe-indicator-alist))
-	(co (assoc 'continuation default-fringe-indicator-alist)))
+        (co (assoc 'continuation default-fringe-indicator-alist)))
     (if tr (setcdr tr '(left-truncation right-truncation)))
     (if co (setcdr co '(left-continuation right-continuation)))))
 
@@ -70,41 +70,45 @@ even when minimal fringes are used. (Aquamacs)"
 (aquamacs-define-the-fringe-bitmap)
 (setq fringe-mode '(1 . 1)) ;; to reflect the default.
 ;; This is a hack because fringe-mode likes to round up stuff.
- 
+
 ;; set default colors
-(aquamacs-set-defaults 
+(aquamacs-set-defaults
 ;; because we fit *Help* frames (fit-frame), we want to specify a
  ;; minimum of 68 characters. Otherwise we'll fit, and as soon as a
  ;; new help page is displayed, text gets wrapped.
  '((create-frame-min-width 68)
 ;; do not set any fonts here. aquamacs.el takes care of this,
    ;; checking that the fonts actually exist.
-   
-   ;; This has been moved to aquamacs-frame-theme.el
-   ;; (default-frame-alist 
-   ;;   ((foreground-color . "Black") (background-color . "White") 
-   ;;    (cursor-type . box) (cursor-color . "Red")   (vertical-scroll-bars . right)  
-   ;;    (tool-bar-lines . 1 ) 
-   ;;    (internal-border-width . 0)
-   ;;    (left-fringe . 1) (right-fringe . nil) (fringe . nil)))
-   
+
+   ;; Minimal defaults in default-frame-alist, because they
+   ;; interfere with custom theme based customization
+   (default-frame-alist
+     (;;  These are default anyways.  Do not set them in
+      ;; d-f-a to allow better customization with themes etc.
+      ;; (foreground-color . "Black") (background-color . "White")
+      (cursor-color . "Red")
+      ;; default anyway (vertical-scroll-bars . right)
+      ;; default anyway (tool-bar-lines . 1 )
+      (internal-border-width . 0)
+      (left-fringe . 1) (right-fringe . nil) (fringe . nil)))
+
    (special-display-frame-alist
     ((unsplittable . nil)
      (width . 75)
      (height . 35)
      (left . 0)
-     (top . 30))))) 
+     (top . 30)))))
 
 
 ;;; COMMENT THIS OUT IF YOU DO *NOT* WANT MAXIMUM BUFFER HIGHLIGHTING.
 (defconst font-lock-maximum-decoration t)
 
-   
-(defconst special-display-regexps '( "[ ]?\\*info.*\\*[ ]?" 
-				     "[ ]?\\*[hH]elp.*" 
-				     "[ ]?\\*Messages\\*[ ]?"  
-				     "[ ]?\\*Open Recent\\*[ ]?"
-				     ".*SPEEDBAR.*"))
+
+(defconst special-display-regexps '( "[ ]?\\*info.*\\*[ ]?"
+                                     "[ ]?\\*[hH]elp.*"
+                                     "[ ]?\\*Messages\\*[ ]?"
+                                     "[ ]?\\*Open Recent\\*[ ]?"
+                                     ".*SPEEDBAR.*"))
 
 
 ;; AUTO-FITTING
@@ -115,7 +119,7 @@ even when minimal fringes are used. (Aquamacs)"
 ;;; (defvar inhibit-fit-frame t) ; Inhibit *ALL* frame fitting, (even `C-x C-_').
 
 ;; we allow frame fitting by default
-(aquamacs-set-defaults 
+(aquamacs-set-defaults
  '((inhibit-fit-frame-flag nil)))
 
 ; but never fit frames automatically, but force frame-fitting
@@ -128,7 +132,7 @@ Usable in `temp-buffer-show-hook'."
 
  ;;;;;;;;;;;;;;;;
 ;; the following is copied from Drew Adams's start.el package:
- 
+
 (require 'simple+ nil t)                ; Corrections, extensions.
 ;; do not import - always fits frame for special frames
 ;; (require 'frame+ nil t)                 ; Corrections, extensions.

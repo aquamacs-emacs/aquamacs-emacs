@@ -64,54 +64,54 @@ To visit a file without any kind of conversion and without
 automatically choosing a major mode, use \\[find-file-literally]."
   (interactive)
   (if (or (not one-buffer-one-frame)
-	  filename
-	  (< (buffer-size (window-buffer (frame-first-window))) 2))
+          filename
+          (< (buffer-size (window-buffer (frame-first-window))) 2))
       (if filename
-	  (aquamacs-find-file-2 filename)
-	(call-interactively 'aquamacs-find-file-2))
+          (aquamacs-find-file-2 filename)
+        (call-interactively 'aquamacs-find-file-2))
     ;; open new frame with empty buffer
     (new-empty-buffer nil 'fundamental-mode) ;;  'fundamental-mode
     (let ((buf (current-buffer)))
       (unwind-protect
-	  (progn
-	    ;; the following will open the file in the given
-	    ;; frame, because the buffer shown is empty.
-	    (call-interactively 'aquamacs-find-file-2)
-	    (unless (eq (current-buffer) buf) ; get rid of old buffer
-	      (with-current-buffer (current-buffer)
-		(with-selected-window (selected-window)
-		  (kill-buffer buf)))))
-	    ;;(setq one-buffer-one-frame t))
-	(progn
-	   (when (eq major-mode 'dired-mode)
-	     ;; do not obof variable itself buffer-local
-	     ;; other packaes will bind it temporarily with let
-	     ;; and then change the current buffer (e.g., by
-	     ;; creating a tab).
-	     ;; the behavior in that case is undefined.
-	     (set (make-local-variable 'one-buffer-one-frame-inhibit) t))
-	(when (and (buffer-live-p buf)
-		 (< (buffer-size) 2))		; for safety
-	    (with-current-buffer (current-buffer)
-		(with-selected-window (selected-window)
-		  (kill-buffer buf)))))))))
+          (progn
+            ;; the following will open the file in the given
+            ;; frame, because the buffer shown is empty.
+            (call-interactively 'aquamacs-find-file-2)
+            (unless (eq (current-buffer) buf) ; get rid of old buffer
+              (with-current-buffer (current-buffer)
+                (with-selected-window (selected-window)
+                  (kill-buffer buf)))))
+            ;;(setq one-buffer-one-frame t))
+        (progn
+           (when (eq major-mode 'dired-mode)
+             ;; do not obof variable itself buffer-local
+             ;; other packaes will bind it temporarily with let
+             ;; and then change the current buffer (e.g., by
+             ;; creating a tab).
+             ;; the behavior in that case is undefined.
+             (set (make-local-variable 'one-buffer-one-frame-inhibit) t))
+        (when (and (buffer-live-p buf)
+                 (< (buffer-size) 2))		; for safety
+            (with-current-buffer (current-buffer)
+                (with-selected-window (selected-window)
+                  (kill-buffer buf)))))))))
 
 (defun aquamacs-find-file-2 (filename &optional wildcards)
   "Edit file FILENAME."
 
   (interactive
    (find-file-read-args "Find file: "
-			(confirm-nonexistent-file-or-buffer)))
+                        (confirm-nonexistent-file-or-buffer)))
 
   (let ((value (find-file-noselect filename nil nil wildcards)))
 
     (if tabbar-mode
-	(if (listp value)
-	    (mapcar 'switch-to-buffer-in-tab (nreverse value))
-	  (switch-to-buffer-in-tab value))
+        (if (listp value)
+            (mapcar 'switch-to-buffer-in-tab (nreverse value))
+          (switch-to-buffer-in-tab value))
       (if (listp value)
-	  (mapcar 'switch-to-buffer (nreverse value))
-	(switch-to-buffer value)))))
+          (mapcar 'switch-to-buffer (nreverse value))
+        (switch-to-buffer value)))))
 
 
 (defun aquamacs-recentf-show-basenames (l &optional no-dir)
@@ -121,18 +121,18 @@ optional argument NO-DIR is non-nil, or its directory otherwise.
 Separate paths from file names with --."
     (let (filtered-names filtered-list full name counters sufx)
       (dolist (elt l (nreverse filtered-list))
-	(setq full (recentf-menu-element-value elt)
-	      name (file-name-nondirectory full))
-	(if (not (member name filtered-names))
-	    (push name filtered-names)
-	  (if no-dir
-	      (if (setq sufx (assoc name counters))
-		  (setcdr sufx (1+ (cdr sufx)))
-		(setq sufx 1)
-		(push (cons name sufx) counters))
-	    (setq sufx (file-name-directory full)))
-	  (setq name (format "%s -- %s" name sufx)))
-	(push (recentf-make-menu-element name full) filtered-list))))
+        (setq full (recentf-menu-element-value elt)
+              name (file-name-nondirectory full))
+        (if (not (member name filtered-names))
+            (push name filtered-names)
+          (if no-dir
+              (if (setq sufx (assoc name counters))
+                  (setcdr sufx (1+ (cdr sufx)))
+                (setq sufx 1)
+                (push (cons name sufx) counters))
+            (setq sufx (file-name-directory full)))
+          (setq name (format "%s -- %s" name sufx)))
+        (push (recentf-make-menu-element name full) filtered-list))))
 
   ;; define a single command to be included in the recentf menu
   (defun recentf-clearlist ()
@@ -154,80 +154,80 @@ Separate paths from file names with --."
 
     (when (and (not (equal init-file-user nil)) ;; no .emacs was read (-q option)
                (boundp 'aquamacs-customization-version-id)
-	       aquamacs-customization-version-id
-	       (> aquamacs-customization-version-id 0))
+               aquamacs-customization-version-id
+               (> aquamacs-customization-version-id 0))
 
     (if (< aquamacs-customization-version-id 092.5)
 
-	;; make sure we fit frames
-	(assq-set 'user-position nil 'default-frame-alist)
+        ;; make sure we fit frames
+        (assq-set 'user-position nil 'default-frame-alist)
 
       )
 
     (if (< aquamacs-customization-version-id 094.1)
-	(progn
-	  ;; change the customizations.el file to not contain the setq statement any more
-	  ;; old versions of Aquamacs (unclear which ones) wrote it to custom-file this way.
-	  (if (file-exists-p custom-file)
-	      (with-temp-file custom-file
-		(insert-file-contents custom-file)
-		(replace-regexp "(setq aquamacs-customization-version-id [0-9\\.]+)"
-				"" nil (point-min) (point-max))))
-	  ;; in the mode-spec styles, this is taken care of
-	  ;; anyways
-	  (setq default-frame-alist
-		(assq-delete-all 'scroll-bar-width default-frame-alist))
-	  (setq special-display-frame-alist
-		(assq-delete-all 'scroll-bar-width special-display-frame-alist))
+        (progn
+          ;; change the customizations.el file to not contain the setq statement any more
+          ;; old versions of Aquamacs (unclear which ones) wrote it to custom-file this way.
+          (if (file-exists-p custom-file)
+              (with-temp-file custom-file
+                (insert-file-contents custom-file)
+                (replace-regexp "(setq aquamacs-customization-version-id [0-9\\.]+)"
+                                "" nil (point-min) (point-max))))
+          ;; in the mode-spec styles, this is taken care of
+          ;; anyways
+          (setq default-frame-alist
+                (assq-delete-all 'scroll-bar-width default-frame-alist))
+          (setq special-display-frame-alist
+                (assq-delete-all 'scroll-bar-width special-display-frame-alist))
 
-	  ))
-    
+          ))
+
     (when (< aquamacs-customization-version-id 131)
       ;; turn on tool bar only once to show the nice new tool bar
       (add-hook 'after-init-functions
-		(lambda ()
-		  (mapc (lambda (frame)
-			  (modify-frame-parameters frame (list (cons 'tool-bar-lines 1))))
-			(frame-list)))))
+                (lambda ()
+                  (mapc (lambda (frame)
+                          (modify-frame-parameters frame (list (cons 'tool-bar-lines 1))))
+                        (frame-list)))))
     (when (< aquamacs-customization-version-id 140)
       (condition-case nil
-	  (unless (boundp 'aquamacs-140-custom-file-upgraded)
-	    (with-temp-buffer
-	      (princ "
+          (unless (boundp 'aquamacs-140-custom-file-upgraded)
+            (with-temp-buffer
+              (princ "
 ;; for compatibility with older Aquamacs versions
  (defvar aquamacs-140-custom-file-upgraded t)
  (unless (fboundp 'auto-detect-longlines) (defun auto-detect-longlines () t))"
-		     (current-buffer))
-	      (append-to-file (point-min) (point-max) custom-file)))
-	(error nil)))
+                     (current-buffer))
+              (append-to-file (point-min) (point-max) custom-file)))
+        (error nil)))
 
     (when (< aquamacs-customization-version-id 146)
       (condition-case nil
-	  (aq-replace-in-list text-mode-hook 'turn-on-longlines 'turn-on-word-wrap)
-	(error nil)))
+          (aq-replace-in-list text-mode-hook 'turn-on-longlines 'turn-on-word-wrap)
+        (error nil)))
 
     (when (< aquamacs-customization-version-id 160)
       ;; did the user not explicitly set obof or tabbar?
       (when (eq tabbar-mode 'default)
-	(custom-set-variables '(tabbar-mode nil)))
+        (custom-set-variables '(tabbar-mode nil)))
       (when (eq one-buffer-one-frame-mode 'default)
-	(custom-set-variables '(one-buffer-one-frame-mode t))))
+        (custom-set-variables '(one-buffer-one-frame-mode t))))
 
-    
+
     (when (< aquamacs-customization-version-id 162)
       (aquamacs-import-frame-parameters-to-auto-faces))
     (when (< aquamacs-customization-version-id 208)
       (setq aquamacs-tool-bar-user-customization
-	    (mapcar (lambda (x)
-		      (cons (logand 67108863 (car x)) (cdr x))) ;; ?\x3FFFFFF
-		    aquamacs-tool-bar-user-customization))
+            (mapcar (lambda (x)
+                      (cons (logand 67108863 (car x)) (cdr x))) ;; ?\x3FFFFFF
+                    aquamacs-tool-bar-user-customization))
       (setcar (or (member 'turn-on-word-wrap text-mode-hook) (cons nil nil)) 'set-word-wrap)
       (setcar (or (member 'turn-on-auto-fill text-mode-hook) (cons nil nil)) 'set-auto-fill))
     ;; (when (< aquamacs-customization-version-id 307)
 
     ;;   (when global-linum-mode
-    ;; 	(global-linum-mode 0)
-    ;; 	(global-nlinum-mode 1)))
+    ;;  (global-linum-mode 0)
+    ;;  (global-nlinum-mode 1)))
 
 ;; Emacs 23 transition
 
@@ -237,53 +237,56 @@ Separate paths from file names with --."
     (mapc
      (lambda (font-string)
        (when (and font-string (string-match "^fontset-\\([a-z]+\\)\\([0-9]+\\)$" font-string))
-	 (let ((font (intern (match-string 1 font-string)))
-	       (size (list (string-to-number (match-string 2 font-string)))))
+         (let ((font (intern (match-string 1 font-string)))
+               (size (list (string-to-number (match-string 2 font-string)))))
 
-	   (let ((font-alist  '((monaco "apple" "Monaco*" "medium" "r" "normal")
-				(lucida  "apple" "Lucida Grande*" "medium" "r" "normal")
-				(lucida_typewriter "apple" "Lucida sans typewrite*" "medium" "r" "normal")
-				(lucida_console  "apple" "Lucida console*" "medium" "r")
-				(courier "courier*" "medium" "r" nil)
-				(vera_mono "bitstream vera sans mono" "medium" "r" "normal"))))
-	     (require 'aquamacs-mac-fontsets)
-	     (apply #'create-aquamacs-fontset (append (cdr (assq font font-alist)) (list size) (list (symbol-name font))))))))
+           (let ((font-alist  '((monaco "apple" "Monaco*" "medium" "r" "normal")
+                                (lucida  "apple" "Lucida Grande*" "medium" "r" "normal")
+                                (lucida_typewriter "apple" "Lucida sans typewrite*" "medium" "r" "normal")
+                                (lucida_console  "apple" "Lucida console*" "medium" "r")
+                                (courier "courier*" "medium" "r" nil)
+                                (vera_mono "bitstream vera sans mono" "medium" "r" "normal"))))
+             (require 'aquamacs-mac-fontsets)
+             (apply #'create-aquamacs-fontset (append (cdr (assq font font-alist)) (list size) (list (symbol-name font))))))))
      (list (cdr-safe (assq 'font default-frame-alist)) (cdr-safe (assq 'font special-display-frame-alist))))
 
 
     (if (boundp 'mac-reverse-ctrl-meta)
-	(message "Warning: `mac-reverse-ctrl-meta' is not used any more from
+        (message "Warning: `mac-reverse-ctrl-meta' is not used any more from
 Aquamacs 0.9.7 on. This variable had been deprecated for several versions.
 Use `mac-{control|command|option|function}-modifier' instead."))
     (if (boundp 'mac-command-key-is-meta)
-	(message "Warning: `mac-command-key-is-meta' is not used any more from
+        (message "Warning: `mac-command-key-is-meta' is not used any more from
 Aquamacs 0.9.7 on. This variable had been deprecated for several versions.
 Use `mac-command-modifier' instead."))
 
 
     (when (and (boundp 'mac-pass-option-to-system)
-	       (not (eq mac-pass-option-to-system 'deprecated)))
+               (not (eq mac-pass-option-to-system 'deprecated)))
       (when mac-pass-option-to-system
-	   (setq mac-option-modifier-enabled-value mac-option-modifier)
-	   (setq mac-option-modifier nil))
+           (setq mac-option-modifier-enabled-value mac-option-modifier)
+           (setq mac-option-modifier nil))
       (if (> aquamacs-customization-version-id 096.0)
-	(message "Warning: `mac-pass-option-to-system' is deprecated from
+        (message "Warning: `mac-pass-option-to-system' is deprecated from
 Aquamacs 0.9.7 on. `mac-option-modifier' has been set for you.")))
 
-    (if (< aquamacs-customization-version-id 310.0)
-        ;; make sure that the new aquamacs themes are part of custom-enabled-themes
-        (when (not (memq 'aquamacs-frame-look custom-enabled-themes))
-          (let ((cet custom-enabled-themes))
-            (enable-theme 'aquamacs-frame-look)
-            (mapc (lambda (x) (enable-theme x))
-                  (reverse cet))
-          ))))
+    ;; Do not use custom themes for Aquamacs
+    ;; They cannot be undone anyway
+    ;; (if (< aquamacs-customization-version-id 310.0)
+    ;;     ;; make sure that the new aquamacs themes are part of custom-enabled-themes
+    ;;     (when (not (memq 'aquamacs-frame-look custom-enabled-themes))
+    ;;       (let ((cet custom-enabled-themes))
+    ;;         (enable-theme 'aquamacs-frame-look)
+    ;;         (mapc (lambda (x) (enable-theme x))
+    ;;               (reverse cet))
+    ;;       )))
+    )
     )
 
 (defun aquamacs-cua-warning ()
     (and (not cua-mode)
-	 (message
-	  "Warning: You have turned off `cua-mode' in your customizations
+         (message
+          "Warning: You have turned off `cua-mode' in your customizations
 or init file. Without this mode, Aquamacs will behave in an
 un-Mac-like way when you select text and copy&paste it.")))
 
@@ -321,8 +324,8 @@ un-Mac-like way when you select text and copy&paste it.")))
 
    ;; have fringe-mode reflect user settings
    (setq fringe-mode
-	 (cons (cdr-safe (assq 'left-fringe default-frame-alist))
-	       (cdr-safe (assq 'right-fringe default-frame-alist))))
+         (cons (cdr-safe (assq 'left-fringe default-frame-alist))
+               (cdr-safe (assq 'right-fringe default-frame-alist))))
    (if (eq fringe-mode '(nil)) (setq fringe-mode nil))
 
    ;; run this after the frames have been established
@@ -332,15 +335,15 @@ un-Mac-like way when you select text and copy&paste it.")))
     (lambda ()
       (mapc
        (lambda (frame)
-	 (let ((fs (frame-parameter frame 'fullscreen)))
-	   (when (memq fs '(fullboth fullheight fullwidth))
-	     (modify-frame-parameters
-	      frame (list (cons 'fullscreen nil)))
-	     (modify-frame-parameters
-	      frame (list (cons 'fullscreen fs)))
-	     (message
-	      (substitute-command-keys
-	       "Press \\[aquamacs-toggle-full-frame] to exit full screen editing.")))))
+         (let ((fs (frame-parameter frame 'fullscreen)))
+           (when (memq fs '(fullboth fullheight fullwidth))
+             (modify-frame-parameters
+              frame (list (cons 'fullscreen nil)))
+             (modify-frame-parameters
+              frame (list (cons 'fullscreen fs)))
+             (message
+              (substitute-command-keys
+               "Press \\[aquamacs-toggle-full-frame] to exit full screen editing.")))))
        (frame-list))))))
 
 ; (aquamacs-notice-user-settings)
@@ -354,7 +357,8 @@ un-Mac-like way when you select text and copy&paste it.")))
        'face (list :family "Lucida Grande" :height 140))
      ;;The GPL stipulates that the following message is shown.
      (propertize
-      (substitute-command-keys " It is Free Software: you can improve and redistribute it under the GNU General Public License, version 3 or later. (C) 2016 Free Software Foundation, and D. Reitter. No Warranty.")
+      (substitute-command-keys " It is Free Software: you can improve and redistribute it under the GNU General Public License, version 3 or later. (C) 2016
+Free Software Foundation, and D. Reitter. No Warranty.")
       'face (list :family "Lucida Grande" :height 110))))
 
 ;; (progn (message "%s" (startup-echo-area-message)) (sit-for 4))
@@ -365,22 +369,22 @@ un-Mac-like way when you select text and copy&paste it.")))
   "Makes a backup of the customization file upon version upgrades."
   ;; Version upgrade?
   (when (and custom-file
-	     (file-exists-p custom-file)
-	     aquamacs-customization-version-id
-	     (numberp aquamacs-customization-version-id)
-	     (> aquamacs-customization-version-id 0) ; actually read?
-	     (> (floor (/ aquamacs-version-id 10.0))
-		(floor (/ aquamacs-customization-version-id 10.0))))
+             (file-exists-p custom-file)
+             aquamacs-customization-version-id
+             (numberp aquamacs-customization-version-id)
+             (> aquamacs-customization-version-id 0) ; actually read?
+             (> (floor (/ aquamacs-version-id 10.0))
+                (floor (/ aquamacs-customization-version-id 10.0))))
     ;; do not delete a-b-c-f - repeated Save Options shouldn't delete it!
     (setq aquamacs-backup-custom-file
-	  (concat (file-name-directory custom-file)
-		  (format "customizations.%.1f.el"
-			  (/ (/ aquamacs-customization-version-id 10) 10.0))))
+          (concat (file-name-directory custom-file)
+                  (format "customizations.%.1f.el"
+                          (/ (/ aquamacs-customization-version-id 10) 10.0))))
     (condition-case nil
-	(progn
-	  (copy-file custom-file aquamacs-backup-custom-file
-		     'overwrite 'keep-time 'preserve)
-	  (message "Previous customization file backed up to %s" aquamacs-backup-custom-file))
+        (progn
+          (copy-file custom-file aquamacs-backup-custom-file
+                     'overwrite 'keep-time 'preserve)
+          (message "Previous customization file backed up to %s" aquamacs-backup-custom-file))
       (error (setq aquamacs-backup-custom-file nil)))))
 
 (defadvice custom-save-variables (after backwards-compatibility activate)
@@ -394,25 +398,25 @@ un-Mac-like way when you select text and copy&paste it.")))
   (custom-save-delete 'dummy-sym) ;; move to end of file
 
   (when (and aquamacs-backup-custom-file  ; do not insert cruft
-	     (file-exists-p aquamacs-backup-custom-file))
+             (file-exists-p aquamacs-backup-custom-file))
     (insert (format "
 ;; Check custom-file compatibility
 \(when (and (boundp 'aquamacs-version-id)
-	   (< (floor (/ aquamacs-version-id 10))
-	   (floor (/ aquamacs-customization-version-id 10))))
+           (< (floor (/ aquamacs-version-id 10))
+           (floor (/ aquamacs-customization-version-id 10))))
   (defadvice frame-notice-user-settings (before show-version-warning activate)
     (defvar aquamacs-backup-custom-file nil \"Backup of `custom-file', if any.\")
     (setq aquamacs-backup-custom-file %S)
     (let ((msg \"Aquamacs options were saved by a more recent program version.
 Errors may occur.  Save Options to overwrite the customization file. %s\"))
       (if window-system
-	  (x-popup-dialog t (list msg '(\"OK\" . nil) 'no-cancel) \"Warning\")
-	(message msg)))))
+          (x-popup-dialog t (list msg '(\"OK\" . nil) 'no-cancel) \"Warning\")
+        (message msg)))))
 ;; End compatibility check
 " aquamacs-backup-custom-file
     (if aquamacs-backup-custom-file
-	(format "The original, older customization file was backed up to %s."
-		aquamacs-backup-custom-file)
+        (format "The original, older customization file was backed up to %s."
+                aquamacs-backup-custom-file)
       "")))))
 
 (defvar aquamacs-faces-changed)
@@ -427,32 +431,32 @@ MAYBE-SAVE t means: only save if needed"
       ;; These are set with menu-bar-make-mm-toggle, which does not
       ;; put on a customized-value property.
       (dolist (elt aquamacs-menu-bar-options-to-save)
-	(and (customize-mark-to-save elt)
-	     (setq need-save (cons elt need-save))))
+        (and (customize-mark-to-save elt)
+             (setq need-save (cons elt need-save))))
       ;; These are set with `customize-set-variable'.
       (dolist (elt aquamacs-menu-bar-customize-options-to-save)
-	(and (get elt 'customized-value)
-	     (customize-mark-to-save elt)
-	     (setq need-save (cons elt need-save))))
+        (and (get elt 'customized-value)
+             (customize-mark-to-save elt)
+             (setq need-save (cons elt need-save))))
       ;; Save if we changed anything.
       (if (or aquamacs-faces-changed need-save (not maybe-save))
-	  (progn (custom-save-all)
-		 (setq aquamacs-faces-changed nil)
-		 (message "Options saved."))
-	(message "There's no need to save your options."))
+          (progn (custom-save-all)
+                 (setq aquamacs-faces-changed nil)
+                 (message "Options saved."))
+        (message "There's no need to save your options."))
       need-save))
 ;; (aquamacs-menu-bar-changed-options)
 ;; aquamacs-customization-version-id
   (defun aquamacs-menu-bar-changed-options ()
     (let ((need-save nil))
       (dolist (elt aquamacs-menu-bar-options-to-save)
-	(and (not (eq elt 'default-frame-alist)) ;; work around a bug: saved-value of this is incorrect for tool-bar-lines
-	     (aquamacs-variable-customized-p elt)
-	     (setq need-save (cons elt need-save))))
+        (and (not (eq elt 'default-frame-alist)) ;; work around a bug: saved-value of this is incorrect for tool-bar-lines
+             (aquamacs-variable-customized-p elt)
+             (setq need-save (cons elt need-save))))
       (dolist (elt aquamacs-menu-bar-customize-options-to-save)
-	(and (get elt 'customized-value)
-	     (aquamacs-variable-customized-p elt)
-	     (setq need-save (cons elt need-save))))
+        (and (get elt 'customized-value)
+             (aquamacs-variable-customized-p elt)
+             (setq need-save (cons elt need-save))))
       need-save))
 
 ;; make sure the old variant isn't called, overwriting the
@@ -478,40 +482,40 @@ have changed."
     "Returns t if variable SYMBOL has a different value from what was saved."
     (custom-load-symbol symbol)
     (let* ((get (or (get symbol 'custom-get) 'default-value))
-	   (value (funcall get symbol))
-	   (customized-value  (car-safe (get symbol 'customized-value)))
-	   (saved (or (get symbol 'saved-value)
-		      ;; variable alias?  (saved value may be incorrect)
-		      (if (indirect-variable symbol)
-			  (get (indirect-variable symbol) 'saved-value))))
+           (value (funcall get symbol))
+           (customized-value  (car-safe (get symbol 'customized-value)))
+           (saved (or (get symbol 'saved-value)
+                      ;; variable alias?  (saved value may be incorrect)
+                      (if (indirect-variable symbol)
+                          (get (indirect-variable symbol) 'saved-value))))
 
-	   (standard (get symbol 'standard-value))
-	   (standard2 (get symbol 'alternative-standard-value))
-	   (comment (get symbol 'customized-variable-comment)))
+           (standard (get symbol 'standard-value))
+           (standard2 (get symbol 'alternative-standard-value))
+           (comment (get symbol 'customized-variable-comment)))
 
       (if (or (eq customized-value value) ;; otherwise it's rogue
-	      (and (eq customized-value nil) value)
-	      (eq (condition-case nil (eval customized-value) (error nil)) value))
-	  (let ((cmp (or saved
-			 (condition-case nil
-			     (eval (car standard))
-			   (error nil))))
-		(cmp2 (condition-case nil
-			  (eval (car standard2))
-			(error nil))))
-	    (not (or (equal cmp (list (custom-quote value)))
-		     (equal cmp2 (list (custom-quote value)))
-		     ;; not quite clear why this is doubled
-		    (equal (custom-quote cmp) (custom-quote value))
-		    (equal (custom-quote cmp2) (custom-quote value))
-		    (and (listp value) (string-match "-alist$" (symbol-name symbol)) ;; heuristic...
-			 (condition-case nil
-			     (equal (sort (copy-alist (eval (car cmp))) (lambda (x y) (string< (car x) (car y))))
-				    (sort (copy-alist value) (lambda (x y) (string< (car x) (car y)))))
-			   (error nil)))))))))
+              (and (eq customized-value nil) value)
+              (eq (condition-case nil (eval customized-value) (error nil)) value))
+          (let ((cmp (or saved
+                         (condition-case nil
+                             (eval (car standard))
+                           (error nil))))
+                (cmp2 (condition-case nil
+                          (eval (car standard2))
+                        (error nil))))
+            (not (or (equal cmp (list (custom-quote value)))
+                     (equal cmp2 (list (custom-quote value)))
+                     ;; not quite clear why this is doubled
+                    (equal (custom-quote cmp) (custom-quote value))
+                    (equal (custom-quote cmp2) (custom-quote value))
+                    (and (listp value) (string-match "-alist$" (symbol-name symbol)) ;; heuristic...
+                         (condition-case nil
+                             (equal (sort (copy-alist (eval (car cmp))) (lambda (x y) (string< (car x) (car y))))
+                                    (sort (copy-alist value) (lambda (x y) (string< (car x) (car y)))))
+                           (error nil)))))))))
 
 ;;  (filter-list (aquamacs-menu-bar-changed-options)
-;;			  (list 'aquamacs-customization-version-id
+;;                        (list 'aquamacs-customization-version-id
 ;;				'smart-frame-prior-positions
 ;;				'aquamacs-additional-fontsets
 ;;				'initial-frame-alist
@@ -523,21 +527,21 @@ Returns t."
   (condition-case nil
       (let* ((changed (aquamacs-menu-bar-changed-options)))
     (if (and (or aquamacs-faces-changed
-		 (filter-list changed
-			  (list 'aquamacs-customization-version-id
-				'smart-frame-prior-positions
-				'aquamacs-additional-fontsets
-				'initial-frame-alist
-				'transient-mark-mode)))
-	     ;; depends on return value of `aquamacs-menu-bar-options-save'
-	     ;; NOT implemented for the standard menu-bar-options-save!
-	     ;; ask user whether to accept these saved changes
-	     (if (eq aquamacs-save-options-on-quit 'ask)
-		 (progn
-		   ;;		   (print changed)
-		   (aquamacs-ask-for-confirmation "Options have changed - save them? \nYour customizations will be lost if you don't save them." nil "Save" "Don't Save"))
-	       aquamacs-save-options-on-quit))
-	(aquamacs-menu-bar-options-save)))
+                 (filter-list changed
+                          (list 'aquamacs-customization-version-id
+                                'smart-frame-prior-positions
+                                'aquamacs-additional-fontsets
+                                'initial-frame-alist
+                                'transient-mark-mode)))
+             ;; depends on return value of `aquamacs-menu-bar-options-save'
+             ;; NOT implemented for the standard menu-bar-options-save!
+             ;; ask user whether to accept these saved changes
+             (if (eq aquamacs-save-options-on-quit 'ask)
+                 (progn
+                   ;;              (print changed)
+                   (aquamacs-ask-for-confirmation "Options have changed - save them? \nYour customizations will be lost if you don't save them." nil "Save" "Don't Save"))
+               aquamacs-save-options-on-quit))
+        (aquamacs-menu-bar-options-save)))
     (error nil)) ;; in case of quit
   t)
 
@@ -546,8 +550,8 @@ Returns t."
   "Insert a warning into .emacs to use Preferences.el if custom-file overrides settings"
   ;; modeled after custom-save-all
   (let* ((filename "~/.emacs")  ;; support ~/emacs.d/init.el ??
-	 (old-buffer (find-buffer-visiting filename))
-	 old-buffer-name)
+         (old-buffer (find-buffer-visiting filename))
+         old-buffer-name)
     (when (file-readable-p filename)
       (with-current-buffer (let ((find-file-visit-truename t))
                              (or old-buffer
@@ -590,26 +594,22 @@ Returns t."
   (let ((warning (format
 ";; ____________________________________________________________________________
 ;; %s
-;; Warning: The .emacs file is loaded before `custom-file' (customizations.el),
-;; where customizations set in Aquamacs are saved.
-;; For this reason, settings made here may be unreliable.
-;; A standard customization saved in `custom-file' is the
-;; `aquamacs-frame-look' theme, which will set the following variables:
-;; %s
+;; Warning: After loading this .emacs file, Aquamacs will also load
+;; customizations from `custom-file' (customizations.el). Any settings there
+;; will override those made here.
 ;; Consider moving your startup settings to the Preferences.el file, which
 ;; is loaded after `custom-file':
 ;; %s
 ;; _____________________________________________________________________________
-" marker (aquamacs-vars-changed-by-theme 'aquamacs-frame-look)
-                    (car (last aquamacs-preference-files)))))
+" marker (car (last aquamacs-preference-files)))))
       warning))
 
-(defun aquamacs-vars-changed-by-theme (theme)
-  (mapcar
-   (lambda (c) 
-     (when (eq 'theme-value (car c))
-       (car (cdr c))))
-   (get theme 'theme-settings)))
+;; (defun aquamacs-vars-changed-by-theme (theme)
+;;   (mapcar
+;;    (lambda (c)
+;;      (when (eq 'theme-value (car c))
+;;        (car (cdr c))))
+;;    (get theme 'theme-settings)))
 
 (defun aquamacs-save-buffers-kill-emacs (&optional arg)
     "Offer to save each buffer, then kill this Emacs process.
@@ -620,34 +620,34 @@ if modified buffers exist."
     (aquamacs-create-preferences-dirs)
     (let ((saved-timer-idle-list timer-idle-list))
       (unwind-protect
-	  (progn
-	    ;; deactivate all idle timers so that
-	    ;; our prompt is not being overwritten by obnoxious
-	    ;; echo area messages
-	    ;; Caveat: this may impede useful functionality in "view"
-	    ;; when reviewing stuff.
-	    (setq timer-idle-list nil)
-	    (save-some-buffers arg t)
-	    (and (or (not (fboundp 'process-list))
-		     ;; process-list is not defined on VMS.
-		     (let ((processes (process-list))
-			   active)
-		       (while processes
-			 (and (memq (process-status (car processes))
-				    '(run stop open listen))
-			      (process-query-on-exit-flag (car processes))
-			      (setq active t))
-			 (setq processes (cdr processes)))
-		       (or (not active)
-			   (list-processes t)
-			   (yes-or-no-p
-			    "Active processes exist; kill them and exit anyway? "))))
-		 ;; Query the user for other things, perhaps.
-		 (run-hook-with-args-until-failure 'kill-emacs-query-functions)
-	       (or (null confirm-kill-emacs)
-		   (funcall confirm-kill-emacs "Really exit Aquamacs? "))
-	       (kill-emacs)))
-	(setq timer-idle-list saved-timer-idle-list))))
+          (progn
+            ;; deactivate all idle timers so that
+            ;; our prompt is not being overwritten by obnoxious
+            ;; echo area messages
+            ;; Caveat: this may impede useful functionality in "view"
+            ;; when reviewing stuff.
+            (setq timer-idle-list nil)
+            (save-some-buffers arg t)
+            (and (or (not (fboundp 'process-list))
+                     ;; process-list is not defined on VMS.
+                     (let ((processes (process-list))
+                           active)
+                       (while processes
+                         (and (memq (process-status (car processes))
+                                    '(run stop open listen))
+                              (process-query-on-exit-flag (car processes))
+                              (setq active t))
+                         (setq processes (cdr processes)))
+                       (or (not active)
+                           (list-processes t)
+                           (yes-or-no-p
+                            "Active processes exist; kill them and exit anyway? "))))
+                 ;; Query the user for other things, perhaps.
+                 (run-hook-with-args-until-failure 'kill-emacs-query-functions)
+               (or (null confirm-kill-emacs)
+                   (funcall confirm-kill-emacs "Really exit Aquamacs? "))
+               (kill-emacs)))
+        (setq timer-idle-list saved-timer-idle-list))))
 
 
 ;; workaround for people who still call this in their .emacs
@@ -681,56 +681,56 @@ No errors are signaled."
   (when (and aquamacs-scratch-file (get-buffer "*scratch*"))
     (aquamacs-set-defaults
      '((desktop-buffers-not-to-save
-	"\\(^nn\\.a[0-9]+\\|\\.log\\|\\*scratch\\*\\)$")))
+        "\\(^nn\\.a[0-9]+\\|\\.log\\|\\*scratch\\*\\)$")))
     (with-current-buffer "*scratch*"
       (condition-case nil
-	  (progn
-	    (let (;(coding-system-for-read 'utf-8)
-		  (buffer-undo-list t))
-	      (if (file-exists-p aquamacs-scratch-file)
-		  ;; if file unreadable, this will trip the condition-case
-		  (insert-file-contents aquamacs-scratch-file
-					nil nil nil 'replace))
-	      (set-buffer-modified-p nil))
-	    (setq buffer-undo-list nil)
-	    (setq buffer-file-name (expand-file-name aquamacs-scratch-file))
-	    (setq buffer-offer-save nil)
-	    ;; Buffer auto save caused severe problems on occasion:
-	    ;; Aquamacs would ask about the file being changed upon exit,
-	    ;; answering "no" would cancel exiting emacs,
-	    ;; answer "yes" would delete the file!
-	    (aquamacs-set-defaults
-	     `((recentf-exclude ,(append (list
-					  (expand-file-name aquamacs-scratch-file)
-					  ;; this is for LaTeX preview
-					  "\\.*/_region_.tex") recentf-exclude))))
-	    (setq buffer-save-without-query t)
-	    (put 'buffer-save-without-query 'permanent-local t)
-;	    (setq buffer-file-coding-system 'utf-8)
-	    (add-hook 'before-save-hook
-		      'aquamacs-do-not-save-without-query-if-saved-elsewhere
-		      nil 'local)
-	    (funcall initial-major-mode)) ; ensure mode hooks are run
+          (progn
+            (let (;(coding-system-for-read 'utf-8)
+                  (buffer-undo-list t))
+              (if (file-exists-p aquamacs-scratch-file)
+                  ;; if file unreadable, this will trip the condition-case
+                  (insert-file-contents aquamacs-scratch-file
+                                        nil nil nil 'replace))
+              (set-buffer-modified-p nil))
+            (setq buffer-undo-list nil)
+            (setq buffer-file-name (expand-file-name aquamacs-scratch-file))
+            (setq buffer-offer-save nil)
+            ;; Buffer auto save caused severe problems on occasion:
+            ;; Aquamacs would ask about the file being changed upon exit,
+            ;; answering "no" would cancel exiting emacs,
+            ;; answer "yes" would delete the file!
+            (aquamacs-set-defaults
+             `((recentf-exclude ,(append (list
+                                          (expand-file-name aquamacs-scratch-file)
+                                          ;; this is for LaTeX preview
+                                          "\\.*/_region_.tex") recentf-exclude))))
+            (setq buffer-save-without-query t)
+            (put 'buffer-save-without-query 'permanent-local t)
+;           (setq buffer-file-coding-system 'utf-8)
+            (add-hook 'before-save-hook
+                      'aquamacs-do-not-save-without-query-if-saved-elsewhere
+                      nil 'local)
+            (funcall initial-major-mode)) ; ensure mode hooks are run
       ;; we aso need to avoid asking whether to save this
       ;; do this here so that we never save the scratch file
       ;; if it hasn't been successfully loaded initially
       ;; (or if the file simply doesn't exist yet)
-	(error (insert (format "Scratch file %s could not be read.\nThis buffer will not be saved automatically." aquamacs-scratch-file)) nil)))))
+        (error (insert (format "Scratch file %s could not be read.\nThis buffer will not be saved automatically." aquamacs-scratch-file)) nil)))))
 
 
 (defun toggle-text-mode-smart-spacing (&optional on)
   "Toggle `smart-spacing-mode' in `text-mode-hook'"
   (interactive)
   (let ((enable (cond ((eq on 1) t)
-		      ((eq on 0) nil)
-		      (t (not (memq 'smart-spacing-mode text-mode-hook))))))
+                      ((eq on 0) nil)
+                      (t (not (memq 'smart-spacing-mode text-mode-hook))))))
    (if enable
-	(add-hook 'text-mode-hook 'smart-spacing-mode)
+        (add-hook 'text-mode-hook 'smart-spacing-mode)
       (remove-hook 'text-mode-hook 'smart-spacing-mode))
     (dolist (buffer (buffer-list))
       (with-current-buffer buffer
-	(if (or (derived-mode-p 'text-mode) text-mode-variant)
-	    (smart-spacing-mode (if enable 1 0)))))))
+        (if (or (derived-mode-p 'text-mode) text-mode-variant)
+            (smart-spacing-mode (if enable 1 0)))))))
 
 ;; preload these
 
@@ -750,15 +750,15 @@ yes-or-no prompts - y or n will do."
   (defun aquamacs-repl-yes-or-no-p (&rest args)
     "Like `old-yes-or-no-p' - use that function instead."
     (aquamacs-ask-for-confirmation (if (cdr args)
-				       (apply #'format args)
-				     (car args))
-				     t nil nil t))
+                                       (apply #'format args)
+                                     (car args))
+                                     t nil nil t))
   (defun aquamacs-y-or-n-p (&rest args)
     "Like `old-y-or-n-p' - use that function instead."
     (aquamacs-ask-for-confirmation (if (cdr args)
-				       (apply #'format args)
-				     (car args))
-				   nil nil nil t))
+                                       (apply #'format args)
+                                     (car args))
+                                   nil nil nil t))
 
   (unless (fboundp 'old-yes-or-no-p)
     (fset 'old-yes-or-no-p (symbol-function 'yes-or-no-p)))
@@ -800,10 +800,10 @@ yes-or-no prompts - y or n will do."
 
   (defun font-exists-p (fontorfontset)
     (condition-case nil
-	(or
-	 (font-info fontorfontset)
-	 (fontset-info fontorfontset)
-	 )
+        (or
+         (font-info fontorfontset)
+         (fontset-info fontorfontset)
+         )
       (error nil)
       )
     )
@@ -813,21 +813,21 @@ yes-or-no prompts - y or n will do."
 
   (defun aquamacs-set-modeline-faces (&optional theme)
     (set-face-attribute 'mode-line nil
-			:inherit 'aquamacs-variable-width
-			:weight 'normal
-			:width 'normal
-			:slant 'normal
-			:underline nil
-			:strike-through nil)
+                        :inherit 'aquamacs-variable-width
+                        :weight 'normal
+                        :width 'normal
+                        :slant 'normal
+                        :underline nil
+                        :strike-through nil)
     (set-face-attribute 'mode-line-inactive nil
-			:inherit 'aquamacs-variable-width
-			:weight 'normal
-			:width 'normal
-			:slant 'normal
-			:underline nil
-			:strike-through nil)
+                        :inherit 'aquamacs-variable-width
+                        :weight 'normal
+                        :width 'normal
+                        :slant 'normal
+                        :underline nil
+                        :strike-through nil)
     (set-face-attribute 'mode-line-flags nil
-			:family "Monaco"))
+                        :family "Monaco"))
   (defvar color-theme-install-hook nil)
   ;; some themes override mode-line faces;
   ;; while they should be able to set colors, they should not remove :family or :inherit attribues
@@ -837,15 +837,15 @@ yes-or-no prompts - y or n will do."
   ;; Give the Echo Area(s) a face
   (defun aquamacs-setup-echo-areas (&optional frame)
     (mapc (lambda (bname)
-	    (with-current-buffer (get-buffer-create bname)
-		(set (make-local-variable 'face-remapping-alist)
-		     (cons '(default . echo-area)
-			   (default-value 'face-remapping-alist)))))
-	  '(" *Echo Area 0*" " *Echo Area 1*" " *Echo Area 2*")))
+            (with-current-buffer (get-buffer-create bname)
+                (set (make-local-variable 'face-remapping-alist)
+                     (cons '(default . echo-area)
+                           (default-value 'face-remapping-alist)))))
+          '(" *Echo Area 0*" " *Echo Area 1*" " *Echo Area 2*")))
   (defun aquamacs-set-minibuffer-face ()
     (set (make-local-variable 'face-remapping-alist)
-	 (cons '(default . minibuffer)
-	       face-remapping-alist)))
+         (cons '(default . minibuffer)
+               face-remapping-alist)))
 
   (add-hook 'after-make-frame-functions 'aquamacs-setup-echo-areas)
   (add-hook 'after-init-hook 'aquamacs-setup-echo-areas)
@@ -872,9 +872,9 @@ yes-or-no prompts - y or n will do."
   (defadvice error (around ring-bell (&rest args) activate protect)
 
     (if aquamacs-ring-bell-on-error-flag
-	(progn
-	  (aquamacs-bell)
-	  ad-do-it)
+        (progn
+          (aquamacs-bell)
+          ad-do-it)
       ;; else
       ad-do-it))
 
@@ -883,7 +883,7 @@ yes-or-no prompts - y or n will do."
   (if (running-on-a-mac-p)
       ;; force loading of our own toolbar
       (let ((load-path (cons (expand-file-name "../lisp/aquamacs/tabbar" data-directory) load-path)))
-	(require 'aquamacs-tabbar))
+        (require 'aquamacs-tabbar))
     ;; aquamacs-tabbar doesn't work without windows
     (require 'tabbar))
 
@@ -918,17 +918,17 @@ yes-or-no prompts - y or n will do."
   (aquamacs-set-defaults '((visual-order-cursor-movement t)))
 
   ;; overwrites CUA stuff
-  (global-set-key [remap scroll-up]	      'aquamacs-page-down)
-  (global-set-key [remap cua-scroll-up]	      'aquamacs-page-down)
+  (global-set-key [remap scroll-up]           'aquamacs-page-down)
+  (global-set-key [remap cua-scroll-up]       'aquamacs-page-down)
   (global-set-key [remap scroll-up-mark]      'aquamacs-page-down-extend-region)
-  (global-set-key [next]	      'aquamacs-page-down)
-  (global-set-key [\S-next]	      'aquamacs-page-down-extend-region)
-  (global-set-key [\M-up]	      'aquamacs-page-up)
-  (global-set-key [remap scroll-down]	      'aquamacs-page-up)
-  (global-set-key [remap cua-scroll-down]	      'aquamacs-page-up)
+  (global-set-key [next]              'aquamacs-page-down)
+  (global-set-key [\S-next]           'aquamacs-page-down-extend-region)
+  (global-set-key [\M-up]             'aquamacs-page-up)
+  (global-set-key [remap scroll-down]         'aquamacs-page-up)
+  (global-set-key [remap cua-scroll-down]             'aquamacs-page-up)
   (global-set-key [remap scroll-down-mark]      'aquamacs-page-up-extend-region)
-  (global-set-key [prior]	      'aquamacs-page-up)
-  (global-set-key [\S-prior]	      'aquamacs-page-up-extend-region)
+  (global-set-key [prior]             'aquamacs-page-up)
+  (global-set-key [\S-prior]          'aquamacs-page-up-extend-region)
 
   ;; was here in 0.9.5, taken out
   ;;(global-set-key [C-up]        'pager-row-up)
@@ -957,19 +957,19 @@ yes-or-no prompts - y or n will do."
      (save-place-forget-unreadable-files nil) ;; too slow
      (mail-setup-with-from nil)
      (send-mail-function mailclient-send-it)
-					; Colorized fonts
-					; Turn on font-lock in all modes that support it
+                                        ; Colorized fonts
+                                        ; Turn on font-lock in all modes that support it
      (global-font-lock-mode t)
 
      (font-lock-maximum-decoration t)
 
-					; Make Text mode the default mode for new buffers
-					; turn on Auto Fill mode automatically in Text mode
+                                        ; Make Text mode the default mode for new buffers
+                                        ; turn on Auto Fill mode automatically in Text mode
      (initial-major-mode text-mode)
 
      (frame-resize-pixelwise t)
      (window-resize-pixelwise t)
-					; scroll just one line when hitting the bottom of the window
+                                        ; scroll just one line when hitting the bottom of the window
      (scroll-step 1)
      (scroll-conservatively 99)
      ;; Start scrolling when 2 lines from top/bottom
@@ -984,7 +984,7 @@ yes-or-no prompts - y or n will do."
      ;; no flash instead of that annoying bell
      (visible-bell nil)
 
-					; Display the column number of the point in the mode line
+                                        ; Display the column number of the point in the mode line
      (column-number-mode t)
 
      ;; Isearch
@@ -1012,12 +1012,12 @@ yes-or-no prompts - y or n will do."
 
      (minibuffer-prompt-properties
       ,(plist-put minibuffer-prompt-properties
-		  'cursor-intangible t))))
+                  'cursor-intangible t))))
 
 ;; on by default
 (if (and (fboundp 'mac-inline-input-method-mode)
-	 (not (boundp 'mac-inline-input-method-missing))
-	 (running-on-a-mac-p))
+         (not (boundp 'mac-inline-input-method-missing))
+         (running-on-a-mac-p))
     (progn
       (aquamacs-set-defaults '((mac-inline-input-method-mode t))))
   ;; otherwise, redefine the mode function
@@ -1034,7 +1034,7 @@ yes-or-no prompts - y or n will do."
   (if (getenv "NNTPSERVER") ;; (gnus-getenv-nntpserver)
       nil
     (aquamacs-set-defaults '((setq gnus-select-method
-				   '(nntp "news.readfreenews.net")))))
+                                   '(nntp "news.readfreenews.net")))))
 
 ;; activate the modes now
   (save-place-mode 1)
@@ -1062,22 +1062,25 @@ Use this argument instead of explicitly setting `view-exit-action'."
 
     (interactive "bView buffer: ")
     (let ((undo-window (list (window-buffer) (window-start) (window-point)))
-	  (obof one-buffer-one-frame) ;;may be buffer-local!
-	  )
+          (obof one-buffer-one-frame) ;;may be buffer-local!
+          )
       (switch-to-buffer buffer)
       (view-mode-enter (cons (selected-window) (cons (cons nil undo-window) obof))
-		       exit-action)))
+                       exit-action)))
 
 
 (require 'color-theme-autoloads)
 
-  
+
 ;; add aquamacs themes to load path
-(add-to-list 'custom-theme-load-path
-             (concat (mac-resources-path)
-                     "lisp/aquamacs/themes"))
-(load-theme 'aquamacs-frame-look 'no-confirm)
-(enable-theme 'aquamacs-frame-look)
+
+;; Do not load any themes for now.  Future development might use them.
+
+;; (add-to-list 'custom-theme-load-path
+;;              (concat (mac-resources-path)
+;;                      "lisp/aquamacs/themes"))
+;; (load-theme 'aquamacs-frame-look 'no-confirm)
+;; (enable-theme 'aquamacs-frame-look)
 
 (unless (equal init-file-user nil)
   (aquamacs-add-warning-to-dotemacs))
@@ -1110,15 +1113,15 @@ Use this argument instead of explicitly setting `view-exit-action'."
 (assq-set 'width 75 'special-display-frame-alist)
 (assq-set 'user-position nil 'special-display-frame-alist)
 
+(assq-set 'cursor-color "Red" 'default-frame-alist)
+
+
 ;; set some defaults which will be set by other functions anyways
 ;; just so we save them to standard-value
 
-;; This is now handled by aquamacs-frame-theme.el
-;; (assq-set 'menu-bar-lines 1 'default-frame-alist)
-;; (assq-set 'tool-bar-lines 1 'default-frame-alist)
-
-;; (aquamacs-set-defaults `((default-frame-alist ,default-frame-alist)
-;; 			   (special-display-frame-alist ,special-display-frame-alist)))
+;; default-frame-alist settings are defaults in Aquamacs
+(aquamacs-set-defaults `((default-frame-alist ,default-frame-alist)
+                           (special-display-frame-alist ,special-display-frame-alist)))
 
 (ats "fontsets done")
 
@@ -1139,8 +1142,8 @@ to the selected frame."
   (modify-frame-parameters
    nil
    (list (cons 'tool-bar-lines
-	       (if (tool-bar-enabled-p)
-		   0 1)))))
+               (if (tool-bar-enabled-p)
+                   0 1)))))
 
 
 ;; ----------- SMART FRAME POSITIONING ----------------
@@ -1149,7 +1152,7 @@ to the selected frame."
 
   (require 'smart-frame-positioning)
   (ats "sfp loaded")
-  
+
   (aquamacs-set-defaults
    '((smart-frame-positioning-mode t)
      ( smart-frame-positioning-enforce t))) ;; and enforce it
@@ -1182,14 +1185,14 @@ to the selected frame."
 
 
 (aquamacs-set-defaults '((mouse-drag-copy-region t) ;; needed in Emacs 24
-			 (cua-use-hyper-key only) ;;this avoids shift-return
-			 (cua-enable-cua-keys nil)))
+                         (cua-use-hyper-key only) ;;this avoids shift-return
+                         (cua-enable-cua-keys nil)))
 
 ;; enable cua-keep-region-after-copy only for the mac like commands
 (defadvice cua-copy-region (around keep-region activate)
   (if (eq this-original-command 'clipboard-kill-ring-save)
       (let ((cua-keep-region-after-copy t))
-	ad-do-it)
+        ad-do-it)
     ;; respect user's setting of cua-keep-region-after-copy for M-w etc.
     ad-do-it))
 
@@ -1222,9 +1225,9 @@ to the selected frame."
 ;; enable flyspell's corrections on mouse-3
 (setq flyspell-mouse-map
       (let ((map (make-sparse-keymap)))
-	(define-key map (if (featurep 'xemacs) [button3] [down-mouse-3])
-	  #'flyspell-correct-word)
-	map))
+        (define-key map (if (featurep 'xemacs) [button3] [down-mouse-3])
+          #'flyspell-correct-word)
+        map))
 
 (defun mouse-save (click)
   "Set the region according to CLICK.
@@ -1242,7 +1245,7 @@ be killed."
   (let ((last-command)) ;; do not kill
     (mouse-secondary-save-then-kill click)))
 
-	      
+
 (global-set-key (vector '(shift down-mouse-1)) 'mouse-save)
 ;; does not work:
 ;; (global-set-key (vector '(shift drag-mouse-1)) 'mouse-save)
@@ -1260,23 +1263,23 @@ be killed."
   (while (and list (not (funcall predicate (car list))))
     (setq list (cdr list)))
   (car list))
-    
-  
+
+
 (defun fancy-splash-frame ()
   "Return the frame to use for the fancy splash screen.
 Returning non-nil does not mean we should necessarily
 use the fancy splash screen, but if we do use it,
 we put it on this frame."
-  (make-frame 
+  (make-frame
    `((name . "About Aquamacs Emacs")
      (font . ,(first-that 'font-exists-p
                 '("-apple-lucida grande-medium-r-normal--0-0-0-0-m-0-mac-roman"
                 "-*-Lucida Grande-normal-normal-normal-*-14-*-*-*-p-0-iso10646-1")))
      (width . 75) (height . 40) (minibuffer . t)
-     (background-color . "White") 
+     (background-color . "White")
      (foreground-color . "Black") (tool-bar-lines . 0)
-     (vertical-scroll-bars . auto) 
-     (horizontal-scroll-bars . nil) 
+     (vertical-scroll-bars . auto)
+     (horizontal-scroll-bars . nil)
      (left-fringe . 5) (right-fringe . 0)
      (internal-border-width . 0) (unsplittable . t))))
 
@@ -1346,8 +1349,8 @@ we put it on this frame."
 (defun aquamacs-turn-on-buffer-offer-save-in-scratch ()
     (protect
      (if (get-buffer "*scratch*")
-	 (with-current-buffer "*scratch*"
-	   (setq buffer-offer-save t)))))
+         (with-current-buffer "*scratch*"
+           (setq buffer-offer-save t)))))
 (add-hook 'after-init-hook 'aquamacs-turn-on-buffer-offer-save-in-scratch)
 
 ;; -------- CUSTOMIZATION -------------
@@ -1373,7 +1376,7 @@ we put it on this frame."
     (select-enable-clipboard  custom-variable)
     (special-display-regexps custom-variable)
     )
-  "Options specific to Aquamacs Emacs.  
+  "Options specific to Aquamacs Emacs.
 Some of these customizations values exist in GNU Emacs as well,
 but have default values different from those in GNU
 Emacs. Customize them to achieve the GNU Emacs behavior.  Note
@@ -1383,37 +1386,37 @@ listed here."
 
 (defvar aquamacs-menu-bar-options-to-save
   (append '(global-linum-mode
-	    column-number-mode
-	    size-indication-mode
-	    global-hl-line-mode
-	    global-show-newlines-mode
-	    global-flyspell-mode
-	    show-paren-mode
-	    transient-mark-mode
-	    global-font-lock-mode
-	    display-time-mode
-	    display-battery-mode
-	    one-buffer-one-frame-mode
-	    visual-line-mode ; set by line wrapping menu functions
-	    aquamacs-autoface-mode
-	    aquamacs-tool-bar-user-customization
-	    ns-tool-bar-display-mode ;; can be set through GUI by user
-	    ns-tool-bar-size-mode ;; can be set through GUI by user
+            column-number-mode
+            size-indication-mode
+            global-hl-line-mode
+            global-show-newlines-mode
+            global-flyspell-mode
+            show-paren-mode
+            transient-mark-mode
+            global-font-lock-mode
+            display-time-mode
+            display-battery-mode
+            one-buffer-one-frame-mode
+            visual-line-mode ; set by line wrapping menu functions
+            aquamacs-autoface-mode
+            aquamacs-tool-bar-user-customization
+            ns-tool-bar-display-mode ;; can be set through GUI by user
+            ns-tool-bar-size-mode ;; can be set through GUI by user
             ;; default-frame-alist should not be saved in customizations
             ;;   it interferes with themes.
-;;;	     do not save initial-frame-alist - it is stored by smart-frame-positions
+;;;          do not save initial-frame-alist - it is stored by smart-frame-positions
 ;;;  to do: frame-notice-user-settings should use default-frame-alist in addition to
 ;;; initial-frame-alist, so "adopt frame parameters as default" should work.
-	    ns-alternate-modifier
-	    ns-right-alternate-modifier
-	    ns-right-command-modifier)
-	  (and (boundp 'aquamacs-additional-fontsets)
-	       '(aquamacs-additional-fontsets))
-	  ;; retain for backwards compatibility
-	  (mapcar (lambda (x)
-		    (emkm-name (car x)))
-		  (and (boundp 'emulate-mac-keyboard-mode-maps)
-		       emulate-mac-keyboard-mode-maps))))
+            ns-alternate-modifier
+            ns-right-alternate-modifier
+            ns-right-command-modifier)
+          (and (boundp 'aquamacs-additional-fontsets)
+               '(aquamacs-additional-fontsets))
+          ;; retain for backwards compatibility
+          (mapcar (lambda (x)
+                    (emkm-name (car x)))
+                  (and (boundp 'emulate-mac-keyboard-mode-maps)
+                       emulate-mac-keyboard-mode-maps))))
 (put 'ns-tool-bar-display-mode 'alternative-standard-value '((quote both)))   ; default is nil, but that means C code sets it to system's default.
 (put 'ns-tool-bar-size-mode 'alternative-standard-value '((quote regular)))   ; default is nil, but that means C code sets it to system's default.
 
@@ -1457,7 +1460,7 @@ listed here."
   (global-set-key [ns-power-off] 'aquamacs-save-buffers-kill-emacs))
 
 (global-set-key [remap save-buffers-kill-emacs]
-		'aquamacs-save-buffers-kill-emacs)
+                'aquamacs-save-buffers-kill-emacs)
 
 
 ;; this is initialized to the current version
@@ -1468,7 +1471,7 @@ to write the `custom-file'.")
 ;; the following ensures that it gets saved
 ;; as customized variable.
 (customize-set-variable 'aquamacs-customization-version-id
-			aquamacs-customization-version-id)
+                        aquamacs-customization-version-id)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Temporary stuff for releases according to admin/FOR-RELEASE
@@ -1480,11 +1483,11 @@ to write the `custom-file'.")
 ;; workarounds for current bugs
 ;; can't get rid of the menu bar on a Mac
 (easy-menu-remove-item global-map
-		       '("menu-bar" "options" "showhide") 'menu-bar-mode)
+                       '("menu-bar" "options" "showhide") 'menu-bar-mode)
 
 ;; can't show a frame on a different display
 (easy-menu-remove-item global-map
-		       '("menu-bar" "file") 'make-frame-on-display)
+                       '("menu-bar" "file") 'make-frame-on-display)
 
 ;; the check for crashes must be done BEFORE checking for updates
 ;; as the latter updates the .id file.
@@ -1511,7 +1514,7 @@ to write the `custom-file'.")
 (unless (boundp 'revive:app-restore-path)
   (message "Inadequate version of Revive package loaded: %s.
 The one that comes with Aquamacs will restore tabs and all frames and supports post-OSX 10.7 application resume."
-	   (locate-library "revive")))
+           (locate-library "revive")))
 ;; this will bind all necessary
 
 
@@ -1520,7 +1523,7 @@ The one that comes with Aquamacs will restore tabs and all frames and supports p
 (when (running-on-a-mac-p)
   (unless (mac-read-environment-vars-from-shell-2)
     (message "Warning - environment variable reading delayed.")
-					; wait one second
+                                        ; wait one second
     ;; we should not delay this via run-with-timer, because
     ;; some code may depend on the PATH (exec-path!) being set correctly,
     ;; for example the (autoloaded!) ispell package.
