@@ -5,6 +5,6 @@
 ;; safely undone using (unload-feature 'tex-site).
 ;;
 (autoload 'TeX-load-hack
-  "/Users/dr/emacs/aquamacs/src/site-lisp/tex-site.el")
+  (expand-file-name "tex-site.el" (file-name-directory load-file-name)))
 (TeX-load-hack)
 

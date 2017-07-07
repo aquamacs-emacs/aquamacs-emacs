@@ -43,7 +43,8 @@
    ;; New environments
    (mapc 'LaTeX-add-environments LaTeX-comment-env-list)
    ;; Fontification
-   (when (and (featurep 'font-latex)
+   (when (and (fboundp 'font-latex-add-keywords)
+	      (fboundp 'font-latex-update-font-lock)
 	      (eq TeX-install-font-lock 'font-latex-setup))
      ;; For syntactic fontification.
      (add-to-list 'font-latex-syntactic-keywords-extra
@@ -56,15 +57,13 @@
 		  `(,(format "^\\(\\\\\\)end *{\\(?:%s\\)}"
 			     (regexp-opt LaTeX-comment-env-list))
 		    (1 ">" t)))
-     (font-latex-set-syntactic-keywords)
      (font-latex-add-keywords '(("includecomment" "{")
 				("excludecomment" "{")
 				("specialcomment" "{{{")
 				("processcomment" "{{{{"))
 			      'variable)
      ;; Tell font-lock about the update.
-     (setq font-lock-set-defaults nil)
-     (font-lock-set-defaults)))
+     (font-latex-update-font-lock t)))
  LaTeX-dialect)
 
 ;;; comment.el ends here

@@ -1,6 +1,6 @@
 ;;; plain-tex.el --- Support for plain TeX documents.
 
-;; Copyright (C) 2010 Free Software Foundation, Inc.
+;; Copyright (C) 2010, 2013, 2016  Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
@@ -103,6 +103,12 @@ Install tool bar if `plain-TeX-enable-toolbar' is non-nil."
 
 ;;; The mode
 
+(defconst plain-TeX-dialect :plain-tex
+  "Default dialect for use with function `TeX-add-style-hook' for
+argument DIALECT-EXPR when the hook is to be run only on
+plain-TeX file, or any mode derived thereof. See variable
+`TeX-style-hook-dialect'." )
+
 (defcustom plain-TeX-mode-hook nil
   "A hook run in plain TeX mode buffers."
   :type 'hook
@@ -143,6 +149,7 @@ of plain-TeX-mode-hook."
   (VirTeX-common-initialization)
   (set-syntax-table TeX-mode-syntax-table)
   (setq local-abbrev-table plain-tex-mode-abbrev-table)
+  (set (make-local-variable 'TeX-style-hook-dialect) plain-TeX-dialect)
   (setq paragraph-start
 	(concat
 	 "\\(^[ \t]*$"

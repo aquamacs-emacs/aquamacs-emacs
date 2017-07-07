@@ -1,6 +1,6 @@
 ;;; latex.el --- Support for LaTeX documents.
 
-;; Copyright (C) 1991, 1993-2015 Free Software Foundation, Inc.
+;; Copyright (C) 1991, 1993-2016 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
@@ -30,6 +30,7 @@
 
 (require 'tex)
 (require 'tex-style)
+(require 'tex-ispell)
 (eval-when-compile (require 'cl))       ;FIXME: Use cl-lib.
 
 ;;; Syntax
@@ -720,7 +721,9 @@ environment just inserted, the buffer position just before
     (if active-mark
 	(progn
 	  (or (assoc environment LaTeX-indent-environment-list)
-	      (LaTeX-fill-region content-start (line-beginning-position 2)))
+	      (if auto-fill-function
+		  ;; Fill the region only when `auto-fill-mode' is active.
+		  (LaTeX-fill-region content-start (line-beginning-position 2))))
 	  (set-mark content-start))
       (indent-according-to-mode))
     (save-excursion (beginning-of-line 2) (indent-according-to-mode))
@@ -1032,16 +1035,35 @@ The inserted label is returned, nil if it is empty."
 	      label)
 	  nil)))))
 
+(defcustom LaTeX-short-caption-prompt-length 40
+  "The length that the caption of a figure should be before
+  propting for \\caption's optional short-version."
+  :group 'LaTeX-environment
+  :type 'integer)
+
+(defun LaTeX-compose-caption-macro (caption &optional short-caption)
+  "Return a \\caption macro for a given CAPTION as a string.
+If SHORT-CAPTION is non-nil pass it as an optional argument to
+\\caption."
+  (let ((short-caption-string
+         (if (and short-caption
+                  (not (string= short-caption "")))
+             (concat LaTeX-optop short-caption LaTeX-optcl))))
+    (concat TeX-esc "caption" short-caption-string
+            TeX-grop caption TeX-grcl)))
+
 (defun LaTeX-env-figure (environment)
   "Create ENVIRONMENT with \\caption and \\label commands."
-  (let ((float (and LaTeX-float		; LaTeX-float can be nil, i.e.
+  (let* ((float (and LaTeX-float		; LaTeX-float can be nil, i.e.
 					; do not prompt
-		    (TeX-read-string "(Optional) Float position: " LaTeX-float)))
-	(caption (TeX-read-string "Caption: "))
-	(center (y-or-n-p "Center? "))
-	(active-mark (and (TeX-active-mark)
-			  (not (eq (mark) (point)))))
-	start-marker end-marker)
+                     (TeX-read-string "(Optional) Float position: " LaTeX-float)))
+         (caption (TeX-read-string "Caption: "))
+         (short-caption (when (>= (length caption) LaTeX-short-caption-prompt-length)
+                          (TeX-read-string "(Optional) Short caption: ")))
+         (center (y-or-n-p "Center? "))
+         (active-mark (and (TeX-active-mark)
+                           (not (eq (mark) (point)))))
+         start-marker end-marker)
     (when active-mark
       (if (< (mark) (point))
 	  (exchange-point-and-mark))
@@ -1064,7 +1086,7 @@ The inserted label is returned, nil if it is empty."
       (if (member environment LaTeX-top-caption-list)
 	  ;; top caption
 	  (progn
-	    (insert TeX-esc "caption" TeX-grop caption TeX-grcl)
+	    (insert (LaTeX-compose-caption-macro caption short-caption))
 	    ;; If `auto-fill-mode' is active, fill the caption.
 	    (if auto-fill-function (LaTeX-fill-paragraph))
 	    (LaTeX-newline)
@@ -1082,7 +1104,7 @@ The inserted label is returned, nil if it is empty."
 	  ;; If there is an active region point is before the backslash of
 	  ;; "\end" macro, go one line upwards.
 	  (when active-mark (forward-line -1) (indent-according-to-mode))
-	  (insert TeX-esc "caption" TeX-grop caption TeX-grcl)
+	  (insert (LaTeX-compose-caption-macro caption short-caption))
 	  ;; If `auto-fill-mode' is active, fill the caption.
 	  (if auto-fill-function (LaTeX-fill-paragraph))
 	  ;; ask for a label and if necessary insert a new line between caption
@@ -1238,7 +1260,8 @@ You may use `LaTeX-item-list' to change the routines used to insert the item."
 
 (defun LaTeX-item-argument ()
   "Insert a new item with an optional argument."
-  (let ((TeX-arg-item-label-p t))
+  (let ((TeX-arg-item-label-p t)
+	(TeX-insert-macro-default-style 'show-optional-args))
     (TeX-insert-macro "item")))
 
 (defun LaTeX-item-bib ()
@@ -1350,12 +1373,31 @@ right number."
 
 	;; The below block accounts for one unit of move for
 	;; one column.
-	(setq cols (+ cols (skip-chars-forward
-			    LaTeX-array-column-letters end)))
+	(setq cols (+ cols
+		      ;; treat *-operator specially.
+		      (if (eq (following-char) ?*)
+			  ;; *-operator is there.
+			  (progn
+			    ;; pick up repetition number and count
+			    ;; how many columns are repeated.
+			    (re-search-forward
+			     "\\*[ \t\r\n%]*{[ \t\r\n%]*\\([0-9]+\\)[ \t\r\n%]*}" end)
+			    (let ((n (string-to-number
+				      (match-string-no-properties 1)))
+				  ;; get start and end of repeated spec.
+				  (s (progn (down-list 1) (point)))
+				  (e (progn (up-list 1) (1- (point)))))
+			      (* n (1+ (LaTeX-array-count-columns s e)))))
+			;; not *-operator.
+			(skip-chars-forward
+			 LaTeX-array-column-letters end))))
+	;; Do not skip over `*' (see above) and `[' (siunitx has `S[key=val]':):
 	(skip-chars-forward (concat
-			     "^" LaTeX-array-column-letters
-			     TeX-grop) end)
-	(if (eq (following-char) ?{) (forward-list 1))
+			     "^" LaTeX-array-column-letters "*"
+			     TeX-grop LaTeX-optop) end)
+	(when (or (eq (following-char) ?\{)
+		  (eq (following-char) ?\[))
+	  (forward-list 1))
 
 	;; Not sure whether this is really necessary or not, but
 	;; prepare for possible infinite loop anyway.
@@ -1745,6 +1787,7 @@ It will setup BibTeX to store keys in an auto file."
   (if (boundp 'local-write-file-hooks)
       (add-hook 'local-write-file-hooks 'TeX-safe-auto-write)
     (add-hook 'write-file-hooks 'TeX-safe-auto-write))
+  (TeX-bibtex-set-BibTeX-dialect)
   (set (make-local-variable 'TeX-auto-update) 'BibTeX)
   (set (make-local-variable 'TeX-auto-untabify) nil)
   (set (make-local-variable 'TeX-auto-parse-length) 999999)
@@ -1968,6 +2011,35 @@ string.  `TeX-read-label-prefix' is used as initial input for the
 label."
   (TeX-arg-label optional prompt t))
 
+(defun TeX-arg-default-argument-value (optional &optional prompt)
+  "Prompt for the default value for the first argument of a LaTeX macro.
+
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string."
+  (TeX-argument-insert
+   (TeX-read-string
+    (TeX-argument-prompt optional prompt "Default value for first argument"))
+   optional))
+
+(defun TeX-arg-define-macro-arguments (optional &optional prompt)
+  "Prompt for the number of arguments for a LaTeX macro.  If this
+is non-zero, also prompt for the default value for the first
+argument.
+
+If OPTIONAL is non-nil, insert the resulting value as an optional
+argument, otherwise as a mandatory one.  Use PROMPT as the prompt
+string."
+  (let ((arg-count (TeX-read-string
+                    (TeX-argument-prompt optional prompt
+                                         "Number of arguments"
+                                         nil))))
+    (unless (or (string= arg-count "0")
+                (string= arg-count ""))
+      (TeX-argument-insert arg-count optional)
+      (unless (string-equal LaTeX-version "2")
+        (TeX-arg-default-argument-value optional)))))
+
 (defun TeX-arg-define-macro (optional &optional prompt)
   "Prompt for a TeX macro with completion.
 If OPTIONAL is non-nil, insert the resulting value as an optional
@@ -2058,7 +2130,7 @@ OPTIONAL and IGNORE are ignored."
 		  TeX-arg-input-file-search)
 		(progn
 		  (message "Searching for LaTeX classes...")
-		  (mapcar 'identity (TeX-search-files-by-type 'texinputs 'global t t)))
+		  (TeX-search-files-by-type 'texinputs 'global t t))
 	      LaTeX-style-list)))
     (setq style (completing-read
 		 (concat "Document class: (default " LaTeX-default-style ") ")
@@ -2732,6 +2804,9 @@ Programs should not use this variable directly but the function
 including values of the variable
 `LaTeX-verbatim-macros-with-delims' as well.")
 (make-variable-buffer-local 'LaTeX-verbatim-macros-with-delims-local)
+(put 'LaTeX-verbatim-macros-with-delims-local 'safe-local-variable
+     #'TeX--list-of-string-p)
+
 
 (defcustom LaTeX-verbatim-macros-with-braces nil
   "Macros for inline verbatim with arguments in braces, like \\foo{...}.
@@ -2754,6 +2829,8 @@ Programs should not use this variable directly but the function
 including values of the variable
 `LaTeX-verbatim-macros-with-braces' as well.")
 (make-variable-buffer-local 'LaTeX-verbatim-macros-with-braces-local)
+(put 'LaTeX-verbatim-macros-with-braces-local 'safe-local-variable
+     #'TeX--list-of-string-p)
 
 (defcustom LaTeX-verbatim-environments
   '("verbatim" "verbatim*")
@@ -2776,6 +2853,8 @@ Programs should not use this variable directly but the function
 `LaTeX-verbatim-environments' which returns a value including
 values of the variable `LaTeX-verbatim-environments' as well.")
 (make-variable-buffer-local 'LaTeX-verbatim-environments-local)
+(put 'LaTeX-verbatim-environments-local 'safe-local-variable
+     #'TeX--list-of-string-p)
 
 (defun LaTeX-verbatim-macros-with-delims ()
   "Return list of verbatim macros with delimiters."
@@ -2940,12 +3019,13 @@ consideration just as is in the non-commented source code."
     ("equation")
     ("equation*")
     ("picture")
-    ("tabbing")
-    ("table")
-    ("table*"))
+    ("tabbing"))
     "Alist of environments with special indentation.
 The second element in each entry is the function to calculate the
-indentation level in columns."
+indentation level in columns.
+
+Environments present in this list are not filled by filling
+functions, see `LaTeX-fill-region-as-paragraph'."
     :group 'LaTeX-indentation
     :type '(repeat (list (string :tag "Environment")
 			 (option function))))
@@ -3407,7 +3487,11 @@ Break lines to fit `fill-column', but leave all lines ending with
 \\\\ \(plus its optional argument) alone.  Lines with code
 comments and lines ending with `\par' are included in filling but
 act as boundaries.  Prefix arg means justify too.  From program,
-pass args FROM, TO and JUSTIFY-FLAG."
+pass args FROM, TO and JUSTIFY-FLAG.
+
+You can disable filling inside a specific environment by adding
+it to `LaTeX-indent-environment-list', only indentation is
+performed in that case."
   (interactive "*r\nP")
   (let ((end-marker (save-excursion (goto-char to) (point-marker))))
     (if (or (assoc (LaTeX-current-environment) LaTeX-indent-environment-list)
@@ -4776,6 +4860,7 @@ file, or any mode derived thereof. See variable
     (nil "Longrightarrow" "Arrows" 10233) ;; #X27F9
     (nil "longleftrightarrow" "Arrows" 10231) ;; #X27F7
     (nil "Longleftrightarrow" "Arrows" 10234) ;; #X27FA
+    (nil "iff" "Arrows" 10234) ;; #X27FA
     (nil "longmapsto" "Arrows" 10236) ;; #X27FC
     (nil "hookrightarrow" "Arrows" 8618) ;; #X21AA
     (nil "rightharpoonup" "Arrows" 8640) ;; #X21C0
@@ -4929,6 +5014,8 @@ file, or any mode derived thereof. See variable
     ("v W" "varOmega" ("AMS" "Greek Uppercase") 120570) ;; #X1D6FA
     (nil "dashrightarrow" ("AMS" "Arrows"))
     (nil "dashleftarrow" ("AMS" "Arrows"))
+    (nil "impliedby" ("AMS" "Arrows") 10232) ;; #X27F8
+    (nil "implies" ("AMS" "Arrows") 10233) ;; #X27F9
     (nil "leftleftarrows" ("AMS" "Arrows") 8647) ;; #X21C7
     (nil "leftrightarrows" ("AMS" "Arrows") 8646) ;; #X21C6
     (nil "Lleftarrow" ("AMS" "Arrows") 8666) ;; #X21DA
@@ -5879,6 +5966,17 @@ i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
   :type '(repeat regexp)
   :group 'TeX-command)
 
+(defun LaTeX--after-math-macro-prefix-p ()
+  "Return non-nil if point is after a macro prefix in math mode.
+Also sets `match-data' so that group 1 is the already typed
+prefix.
+
+For example, in $a + \a| - 17$ with | denoting point, the
+function would return non-nil and `(match-string 1)' would return
+\"a\" afterwards."
+  (and (texmathp)
+       (TeX-looking-at-backward "\\\\\\([a-zA-Z]*\\)")))
+
 (defun LaTeX-common-initialization ()
   "Common initialization for LaTeX derived modes."
   (VirTeX-common-initialization)
@@ -5951,7 +6049,12 @@ i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
 		  ("\\\\renewenvironment\\*?{\\([A-Za-z]*\\)"
 		   1 LaTeX-environment-list-filtered "}")
                   ("\\\\\\(this\\)?pagestyle{\\([A-Za-z]*\\)"
-		   2 LaTeX-pagestyle-list "}"))
+		   2 LaTeX-pagestyle-list "}")
+		  (LaTeX--after-math-macro-prefix-p
+		   1 (lambda ()
+		       (append (mapcar #'cadr LaTeX-math-list)
+			       (mapcar #'cadr LaTeX-math-default)))
+		   (if TeX-insert-braces "{}")))
 		TeX-complete-list))
 
   (LaTeX-add-environments
@@ -6020,16 +6123,16 @@ i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
    '("label" TeX-arg-define-label)
    '("pageref" TeX-arg-ref)
    '("ref" TeX-arg-ref)
-   '("newcommand" TeX-arg-define-macro [ "Number of arguments" ] t)
-   '("renewcommand" TeX-arg-macro [ "Number of arguments" ] t)
+   '("newcommand" TeX-arg-define-macro [ TeX-arg-define-macro-arguments ] t)
+   '("renewcommand" TeX-arg-macro [ TeX-arg-define-macro-arguments ] t)
    '("newenvironment" TeX-arg-define-environment
      [ "Number of arguments"] t t)
    '("renewenvironment" TeX-arg-environment
      [ "Number of arguments"] t t)
-   '("providecommand" TeX-arg-define-macro [ "Number of arguments" ] t)
-   '("providecommand*" TeX-arg-define-macro [ "Number of arguments" ] t)
-   '("newcommand*" TeX-arg-define-macro [ "Number of arguments" ] t)
-   '("renewcommand*" TeX-arg-macro [ "Number of arguments" ] t)
+   '("providecommand" TeX-arg-define-macro [ TeX-arg-define-macro-arguments ] t)
+   '("providecommand*" TeX-arg-define-macro [ TeX-arg-define-macro-arguments ] t)
+   '("newcommand*" TeX-arg-define-macro [ TeX-arg-define-macro-arguments ] t)
+   '("renewcommand*" TeX-arg-macro [ TeX-arg-define-macro-arguments ] t)
    '("newenvironment*" TeX-arg-define-environment
      [ "Number of arguments"] t t)
    '("renewenvironment*" TeX-arg-environment
@@ -6216,6 +6319,7 @@ i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
      '("suppressfloats" [ TeX-arg-tb "Suppress floats position" ])
      '("ensuremath" "Math commands")
      '("textsuperscript" "Text")
+     '("textsubscript" "Text")
      '("textcircled" "Text")
      '("mathring" t)
 
@@ -6241,21 +6345,21 @@ i.e. you do _not_ have to cater for this yourself by adding \\\\' or $."
     (setq TeX-font-replace-function 'TeX-font-replace-macro)
     (TeX-add-symbols
      '("newcommand" TeX-arg-define-macro
-       [ "Number of arguments" ] [ "Default value for first argument" ] t)
+       [ TeX-arg-define-macro-arguments ] t)
      '("renewcommand" TeX-arg-macro
-       [ "Number of arguments" ] [ "Default value for first argument" ] t)
+       [ TeX-arg-define-macro-arguments ] t)
      '("providecommand" TeX-arg-define-macro
-       [ "Number of arguments" ] [ "Default value for first argument" ] t)
+       [ TeX-arg-define-macro-arguments ] t)
      '("providecommand*" TeX-arg-define-macro
-       [ "Number of arguments" ] [ "Default value for first argument" ] t)
+       [ TeX-arg-define-macro-arguments ] t)
      '("newcommand*" TeX-arg-define-macro
-       [ "Number of arguments" ] [ "Default value for first argument" ] t)
+       [ TeX-arg-define-macro-arguments ] t)
      '("renewcommand*" TeX-arg-macro
-       [ "Number of arguments" ] [ "Default value for first argument" ] t)
+       [ TeX-arg-define-macro-arguments ] t)
      '("newenvironment" TeX-arg-define-environment
-       [ "Number of arguments" ] [ "Default value for first argument" ] t t)
+       [ TeX-arg-define-macro-arguments ]  t t)
      '("renewenvironment" TeX-arg-environment
-       [ "Number of arguments" ] [ "Default value for first argument" ] t t)
+       [ TeX-arg-define-macro-arguments ] t t)
      '("usepackage" LaTeX-arg-usepackage)
      '("RequirePackage" LaTeX-arg-usepackage)
      '("ProvidesPackage" (TeX-arg-file-name-sans-extension "Package name")

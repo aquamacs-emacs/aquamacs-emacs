@@ -1,9 +1,9 @@
 ;;; fancyvrb.el --- AUCTeX style for `fancyvrb.sty' version 2.8.
 
-;; Copyright (C) 2013 Free Software Foundation, Inc.
+;; Copyright (C) 2013, 2014, 2016 Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
-;; Author: Mosè Giordano <giordano.mose@libero.it>
+;; Author: Mosè Giordano <mose@gnu.org>
 ;; Keywords: tex
 
 ;; This file is part of AUCTeX.
@@ -165,17 +165,17 @@
    (add-to-list 'LaTeX-verbatim-environments-local "SaveVerbatim")
    (add-to-list 'LaTeX-verbatim-environments-local "VerbatimOut")
    (make-local-variable 'LaTeX-indent-environment-list)
-   (add-to-list 'LaTeX-indent-environment-list '("Verbatim" current-indentation))
-   (add-to-list 'LaTeX-indent-environment-list '("BVerbatim" current-indentation))
-   (add-to-list 'LaTeX-indent-environment-list '("LVerbatim" current-indentation))
-   (add-to-list 'LaTeX-indent-environment-list '("SaveVerbatim" current-indentation))
-   (add-to-list 'LaTeX-indent-environment-list '("VerbatimOut" current-indentation))
+   (add-to-list 'LaTeX-indent-environment-list '("Verbatim" current-indentation) t)
+   (add-to-list 'LaTeX-indent-environment-list '("BVerbatim" current-indentation) t)
+   (add-to-list 'LaTeX-indent-environment-list '("LVerbatim" current-indentation) t)
+   (add-to-list 'LaTeX-indent-environment-list '("SaveVerbatim" current-indentation) t)
+   (add-to-list 'LaTeX-indent-environment-list '("VerbatimOut" current-indentation) t)
    (add-to-list 'LaTeX-verbatim-macros-with-delims-local "Verb")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "Verb")
 
    ;; Fontification
    (when (and (fboundp 'font-latex-add-keywords)
-	      (fboundp 'font-latex-set-syntactic-keywords)
+	      (fboundp 'font-latex-update-font-lock)
 	      (eq TeX-install-font-lock 'font-latex-setup))
      (font-latex-add-keywords '(("DefineVerbatimEnvironment" "{{{")
 				("CustomVerbatimEnvironment" "{{{")
@@ -189,11 +189,8 @@
 					; actually be verbatim.
 			      'textual)
      (font-latex-add-keywords '(("fvset" "{")) 'variable)
-     ;; For syntactic fontification, e.g. verbatim constructs.
-     (font-latex-set-syntactic-keywords)
      ;; Tell font-lock about the update.
-     (setq font-lock-set-defaults nil)
-     (font-lock-set-defaults)))
+     (font-latex-update-font-lock t)))
  LaTeX-dialect)
 
 (defvar LaTeX-fancyvrb-package-options nil

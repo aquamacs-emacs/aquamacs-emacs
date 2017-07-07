@@ -1,6 +1,6 @@
 ;;; tex-site.el - Site specific variables.  Don't edit.
 
-;; Copyright (C) 2005 Free Software Foundation, Inc.
+;; Copyright (C) 2005, 2013, 2016 Free Software Foundation, Inc.
 ;;
 ;; completely rewritten.
 
@@ -39,7 +39,7 @@
 ;;; Code:
 
 (if (< emacs-major-version 21)
-  (error "AUCTeX requires Emacs 21 or later"))
+    (error "AUCTeX requires Emacs 21 or later"))
 
 ;; Define here in order for `M-x customize-group <RET> AUCTeX <RET>'
 ;; to work if the main AUCTeX files are not loaded yet.
@@ -87,21 +87,23 @@ shared by all users of a site."
 
 (add-hook 'tex-site-unload-hook
 	  (lambda ()
-	    (let ((list after-load-alist))
-	      (while list
-		;; Adapted copy of the definition of `assq-delete-all'
-		;; from Emacs 21 as substitute for
-		;; `(assq-delete-all'TeX-modes-set (car list))' which
-		;; fails on non-list elements in Emacs 21.
-		(let* ((alist (car list))
-		       (tail alist)
-		       (key 'TeX-modes-set))
-		  (while tail
-		    (if (and (consp (car tail))
-			     (eq (car (car tail)) key))
-			(setq alist (delq (car tail) alist)))
-		    (setq tail (cdr tail))))
-		(setq list (cdr list))))
+	    (if (fboundp 'advice-add)
+		(TeX-modes-set 'TeX-modes nil)
+	      (let ((list after-load-alist))
+		(while list
+		  ;; Adapted copy of the definition of `assq-delete-all'
+		  ;; from Emacs 21 as substitute for
+		  ;; `(assq-delete-all'TeX-modes-set (car list))' which
+		  ;; fails on non-list elements in Emacs 21.
+		  (let* ((alist (car list))
+			 (tail alist)
+			 (key 'TeX-modes-set))
+		    (while tail
+		      (if (and (consp (car tail))
+			       (eq (car (car tail)) key))
+			  (setq alist (delq (car tail) alist)))
+		      (setq tail (cdr tail))))
+		  (setq list (cdr list)))))
 	    (setq load-path (delq TeX-lisp-directory load-path))))
 
 (defun TeX-modes-set (var value &optional update)
@@ -130,14 +132,14 @@ definition."
               (get elt 'tex-saved))))))))
 
 (defcustom TeX-modes
-  (mapcar 'car TeX-mode-alist)
+  (mapcar #'car TeX-mode-alist)
   "List of modes provided by AUCTeX.
 
 This variable can't be set normally; use customize for that, or
 set it with `TeX-modes-set'."
   :type (cons 'set
 	      (mapcar (lambda(x) (list 'const (car x))) TeX-mode-alist))
-  :set 'TeX-modes-set
+  :set #'TeX-modes-set
   :group 'AUCTeX
   :initialize(lambda (var value)
 	       (custom-initialize-reset var value)
@@ -148,11 +150,11 @@ set it with `TeX-modes-set'."
 		       `(TeX-modes-set ',var ,var t))
 		     (setq list (cdr list)))))) )
 
-(defconst AUCTeX-version "11.89"
+(defconst AUCTeX-version "11.90"
     "AUCTeX version.
 If not a regular release, the date of the last change.")
 
-(defconst AUCTeX-date "2015-11-13"
+(defconst AUCTeX-date "2017-01-10"
   "AUCTeX release date using the ISO 8601 format, yyyy-mm-dd.")
 
 ;; Store bibitems when saving a BibTeX buffer
@@ -163,11 +165,10 @@ If not a regular release, the date of the last change.")
 ;;; Code:
 
 
-;;;### (autoloads (turn-on-bib-cite bib-cite-minor-mode) "bib-cite"
-;;;;;;  "bib-cite.el" (22371 43962))
+;;;### (autoloads nil "bib-cite" "bib-cite.el" (22645 21408 0 0))
 ;;; Generated autoloads from bib-cite.el
 
-(autoload (quote bib-cite-minor-mode) "bib-cite" "\
+(autoload 'bib-cite-minor-mode "bib-cite" "\
 Toggle bib-cite mode.
 When bib-cite mode is enabled, citations, labels and refs are highlighted
 when the mouse is over them.  Clicking on these highlights with [mouse-2]
@@ -175,19 +176,19 @@ runs bib-find, and [mouse-3] runs bib-display.
 
 \(fn ARG)" t nil)
 
-(autoload (quote turn-on-bib-cite) "bib-cite" "\
+(autoload 'turn-on-bib-cite "bib-cite" "\
 Unconditionally turn on Bib Cite mode.
 
 \(fn)" nil nil)
 
 ;;;***
 
-;;;### (autoloads (context-mode) "context" "context.el" (22371 43962))
+;;;### (autoloads nil "context" "context.el" (22645 21408 0 0))
 ;;; Generated autoloads from context.el
 
-(defalias (quote ConTeXt-mode) (quote context-mode))
+(defalias 'ConTeXt-mode 'context-mode)
 
-(autoload (quote context-mode) "context" "\
+(autoload 'context-mode "context" "\
 Major mode in AUCTeX for editing ConTeXt files.
 
 Special commands:
@@ -201,11 +202,11 @@ of ConTeXt-mode-hook.
 
 ;;;***
 
-;;;### (autoloads (context-en-mode) "context-en" "context-en.el"
-;;;;;;  (22371 43962))
+;;;### (autoloads nil "context-en" "context-en.el" (22645 21408 0
+;;;;;;  0))
 ;;; Generated autoloads from context-en.el
 
-(autoload (quote context-en-mode) "context-en" "\
+(autoload 'context-en-mode "context-en" "\
 Major mode for editing files for ConTeXt using its english interface.
 
 Special commands:
@@ -219,11 +220,11 @@ of context-mode-hook.
 
 ;;;***
 
-;;;### (autoloads (context-nl-mode) "context-nl" "context-nl.el"
-;;;;;;  (22371 43962))
+;;;### (autoloads nil "context-nl" "context-nl.el" (22645 21408 0
+;;;;;;  0))
 ;;; Generated autoloads from context-nl.el
 
-(autoload (quote context-nl-mode) "context-nl" "\
+(autoload 'context-nl-mode "context-nl" "\
 Major mode for editing files for ConTeXt using its dutch interface.
 
 Special commands:
@@ -237,32 +238,31 @@ of context-mode-hook.
 
 ;;;***
 
-;;;### (autoloads (font-latex-setup) "font-latex" "font-latex.el"
-;;;;;;  (22371 43962))
+;;;### (autoloads nil "font-latex" "font-latex.el" (22645 21408 0
+;;;;;;  0))
 ;;; Generated autoloads from font-latex.el
 
-(autoload (quote font-latex-setup) "font-latex" "\
+(autoload 'font-latex-setup "font-latex" "\
 Setup this buffer for LaTeX font-lock.  Usually called from a hook.
 
 \(fn)" nil nil)
 
 ;;;***
 
-;;;### (autoloads (docTeX-mode TeX-latex-mode BibTeX-auto-store)
-;;;;;;  "latex" "latex.el" (22371 43962))
+;;;### (autoloads nil "latex" "latex.el" (22645 21408 0 0))
 ;;; Generated autoloads from latex.el
 
-(autoload (quote BibTeX-auto-store) "latex" "\
+(autoload 'BibTeX-auto-store "latex" "\
 This function should be called from `bibtex-mode-hook'.
 It will setup BibTeX to store keys in an auto file.
 
 \(fn)" nil nil)
 
-(add-to-list (quote auto-mode-alist) (quote ("\\.drv\\'" . latex-mode)))
+(add-to-list 'auto-mode-alist '("\\.drv\\'" . latex-mode))
 
-(add-to-list (quote auto-mode-alist) (quote ("\\.hva\\'" . latex-mode)))
+(add-to-list 'auto-mode-alist '("\\.hva\\'" . latex-mode))
 
-(autoload (quote TeX-latex-mode) "latex" "\
+(autoload 'TeX-latex-mode "latex" "\
 Major mode in AUCTeX for editing LaTeX files.
 See info under AUCTeX for full documentation.
 
@@ -275,24 +275,24 @@ of `LaTeX-mode-hook'.
 
 \(fn)" t nil)
 
-(add-to-list (quote auto-mode-alist) (quote ("\\.dtx\\'" . doctex-mode)))
+(add-to-list 'auto-mode-alist '("\\.dtx\\'" . doctex-mode))
 
-(autoload (quote docTeX-mode) "latex" "\
+(autoload 'docTeX-mode "latex" "\
 Major mode in AUCTeX for editing .dtx files derived from `LaTeX-mode'.
 Runs `LaTeX-mode', sets a few variables and
 runs the hooks in `docTeX-mode-hook'.
 
 \(fn)" t nil)
 
-(defalias (quote TeX-doctex-mode) (quote docTeX-mode))
+(defalias 'TeX-doctex-mode 'docTeX-mode)
 
 ;;;***
 
-;;;### (autoloads (multi-prompt-key-value multi-prompt) "multi-prompt"
-;;;;;;  "multi-prompt.el" (22371 43962))
+;;;### (autoloads nil "multi-prompt" "multi-prompt.el" (22645 21408
+;;;;;;  0 0))
 ;;; Generated autoloads from multi-prompt.el
 
-(autoload (quote multi-prompt) "multi-prompt" "\
+(autoload 'multi-prompt "multi-prompt" "\
 Completing prompt for a list of strings.  
 The first argument SEPARATOR should be the string (of length 1) to
 separate the elements in the list.  The second argument UNIQUE should
@@ -301,7 +301,7 @@ are the arguments to `completing-read'.  See that.
 
 \(fn SEPARATOR UNIQUE PROMPT TABLE &optional MP-PREDICATE REQUIRE-MATCH INITIAL HISTORY)" nil nil)
 
-(autoload (quote multi-prompt-key-value) "multi-prompt" "\
+(autoload 'multi-prompt-key-value "multi-prompt" "\
 Read multiple strings, with completion and key=value support.
 PROMPT is a string to prompt with, usually ending with a colon
 and a space.  TABLE is an alist.  The car of each element should
@@ -318,11 +318,10 @@ The return value is the string as entered in the minibuffer.
 
 ;;;***
 
-;;;### (autoloads (ams-tex-mode TeX-plain-tex-mode) "plain-tex" "plain-tex.el"
-;;;;;;  (22371 43962))
+;;;### (autoloads nil "plain-tex" "plain-tex.el" (22645 21408 0 0))
 ;;; Generated autoloads from plain-tex.el
 
-(autoload (quote TeX-plain-tex-mode) "plain-tex" "\
+(autoload 'TeX-plain-tex-mode "plain-tex" "\
 Major mode in AUCTeX for editing plain TeX files.
 See info under AUCTeX for documentation.
 
@@ -335,7 +334,7 @@ of plain-TeX-mode-hook.
 
 \(fn)" t nil)
 
-(autoload (quote ams-tex-mode) "plain-tex" "\
+(autoload 'ams-tex-mode "plain-tex" "\
 Major mode in AUCTeX for editing AmS-TeX files.
 See info under AUCTeX for documentation.
 
@@ -350,13 +349,12 @@ of `AmS-TeX-mode-hook'.
 
 ;;;***
 
-;;;### (autoloads (TeX-submit-bug-report TeX-auto-generate-global
-;;;;;;  TeX-auto-generate TeX-tex-mode) "tex" "tex.el" (22371 43963))
+;;;### (autoloads nil "tex" "tex.el" (22645 21408 0 0))
 ;;; Generated autoloads from tex.el
 
-(defalias (quote TeX-assoc-string) (symbol-function (if (featurep (quote xemacs)) (quote assoc) (quote assoc-string))))
+(defalias 'TeX-assoc-string (symbol-function (if (featurep 'xemacs) 'assoc 'assoc-string)))
 
-(autoload (quote TeX-tex-mode) "tex" "\
+(autoload 'TeX-tex-mode "tex" "\
 Major mode in AUCTeX for editing TeX or LaTeX files.
 Tries to guess whether this file is for plain TeX or LaTeX.
 
@@ -370,18 +368,18 @@ The algorithm is as follows:
 
 \(fn)" t nil)
 
-(autoload (quote TeX-auto-generate) "tex" "\
+(autoload 'TeX-auto-generate "tex" "\
 Generate style file for TEX and store it in AUTO.
 If TEX is a directory, generate style files for all files in the directory.
 
 \(fn TEX AUTO)" t nil)
 
-(autoload (quote TeX-auto-generate-global) "tex" "\
+(autoload 'TeX-auto-generate-global "tex" "\
 Create global auto directory for global TeX macro definitions.
 
 \(fn)" t nil)
 
-(autoload (quote TeX-submit-bug-report) "tex" "\
+(autoload 'TeX-submit-bug-report "tex" "\
 Submit a bug report on AUCTeX via mail.
 
 Don't hesitate to report any problems or inaccurate documentation.
@@ -394,48 +392,45 @@ information about your AUCTeX version and AUCTeX configuration.
 
 ;;;***
 
-;;;### (autoloads (LaTeX-install-toolbar TeX-install-toolbar) "tex-bar"
-;;;;;;  "tex-bar.el" (22371 43963))
+;;;### (autoloads nil "tex-bar" "tex-bar.el" (22645 21408 0 0))
 ;;; Generated autoloads from tex-bar.el
 
-(autoload (quote TeX-install-toolbar) "tex-bar" "\
+(autoload 'TeX-install-toolbar "tex-bar" "\
 Install toolbar buttons for TeX mode.
 
 \(fn)" t nil)
 
-(autoload (quote LaTeX-install-toolbar) "tex-bar" "\
+(autoload 'LaTeX-install-toolbar "tex-bar" "\
 Install toolbar buttons for LaTeX mode.
 
 \(fn)" t nil)
 
 ;;;***
 
-;;;### (autoloads nil "tex-fold" "tex-fold.el" (22371 43963))
+;;;### (autoloads nil "tex-fold" "tex-fold.el" (22645 21408 0 0))
 ;;; Generated autoloads from tex-fold.el
  (autoload 'TeX-fold-mode "tex-fold" "Minor mode for hiding and revealing macros and environments." t)
 
-(defalias (quote tex-fold-mode) (quote TeX-fold-mode))
+(defalias 'tex-fold-mode 'TeX-fold-mode)
 
 ;;;***
 
-;;;### (autoloads (tex-font-setup) "tex-font" "tex-font.el" (22371
-;;;;;;  43963))
+;;;### (autoloads nil "tex-font" "tex-font.el" (22645 21408 0 0))
 ;;; Generated autoloads from tex-font.el
 
-(autoload (quote tex-font-setup) "tex-font" "\
+(autoload 'tex-font-setup "tex-font" "\
 Setup font lock support for TeX.
 
 \(fn)" nil nil)
 
 ;;;***
 
-;;;### (autoloads (TeX-texinfo-mode) "tex-info" "tex-info.el" (22371
-;;;;;;  43963))
+;;;### (autoloads nil "tex-info" "tex-info.el" (22645 21408 0 0))
 ;;; Generated autoloads from tex-info.el
 
-(defalias (quote Texinfo-mode) (quote texinfo-mode))
+(defalias 'Texinfo-mode 'texinfo-mode)
 
-(autoload (quote TeX-texinfo-mode) "tex-info" "\
+(autoload 'TeX-texinfo-mode "tex-info" "\
 Major mode in AUCTeX for editing Texinfo files.
 
 Special commands:
@@ -448,17 +443,16 @@ value of `Texinfo-mode-hook'.
 
 ;;;***
 
-;;;### (autoloads (japanese-latex-mode japanese-plain-tex-mode) "tex-jp"
-;;;;;;  "tex-jp.el" (22371 43963))
+;;;### (autoloads nil "tex-jp" "tex-jp.el" (22645 21408 0 0))
 ;;; Generated autoloads from tex-jp.el
 
-(autoload (quote japanese-plain-tex-mode) "tex-jp" "\
+(autoload 'japanese-plain-tex-mode "tex-jp" "\
 Major mode in AUCTeX for editing Japanese plain TeX files.
 Set `japanese-TeX-mode' to t, and enter `TeX-plain-tex-mode'.
 
 \(fn)" t nil)
 
-(autoload (quote japanese-latex-mode) "tex-jp" "\
+(autoload 'japanese-latex-mode "tex-jp" "\
 Major mode in AUCTeX for editing Japanese LaTeX files.
 Set `japanese-TeX-mode' to t, and enter `TeX-latex-mode'.
 
@@ -466,11 +460,10 @@ Set `japanese-TeX-mode' to t, and enter `TeX-latex-mode'.
 
 ;;;***
 
-;;;### (autoloads (texmathp-match-switch texmathp) "texmathp" "texmathp.el"
-;;;;;;  (22371 43963))
+;;;### (autoloads nil "texmathp" "texmathp.el" (22645 21408 0 0))
 ;;; Generated autoloads from texmathp.el
 
-(autoload (quote texmathp) "texmathp" "\
+(autoload 'texmathp "texmathp" "\
 Determine if point is inside (La)TeX math mode.
 Returns t or nil.  Additional info is placed into `texmathp-why'.
 The functions assumes that you have (almost) syntactically correct (La)TeX in
@@ -479,7 +472,7 @@ See the variable `texmathp-tex-commands' about which commands are checked.
 
 \(fn)" t nil)
 
-(autoload (quote texmathp-match-switch) "texmathp" "\
+(autoload 'texmathp-match-switch "texmathp" "\
 Search backward for any of the math switches.
 Limit searched to BOUND.
 
@@ -487,16 +480,18 @@ Limit searched to BOUND.
 
 ;;;***
 
-;;;### (autoloads nil "toolbar-x" "toolbar-x.el" (22371 43963))
+;;;### (autoloads nil "toolbar-x" "toolbar-x.el" (22645 21408 0 0))
 ;;; Generated autoloads from toolbar-x.el
  (autoload 'toolbarx-install-toolbar "toolbar-x")
 
 ;;;***
 
+(provide 'auto-loads)
 ;; Local Variables:
 ;; version-control: never
 ;; no-byte-compile: t
 ;; no-update-autoloads: t
+;; coding: utf-8
 ;; End:
 ;;; auto-loads.el ends here
 (provide 'tex-site)

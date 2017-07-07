@@ -41,11 +41,8 @@
  "expl3"
  (lambda ()
    (set-syntax-table LaTeX-expl3-syntax-table)
-   (when (and (featurep 'font-latex)
+   (when (and (fboundp 'font-latex-update-font-lock)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     ;; For syntactic fontification, e.g. verbatim constructs.
-     (font-latex-set-syntactic-keywords)
      ;; Tell font-lock about the update.
-     (setq font-lock-set-defaults nil)
-     (font-lock-set-defaults)))
+     (font-latex-update-font-lock t)))
  LaTeX-dialect)

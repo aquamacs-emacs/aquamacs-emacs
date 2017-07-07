@@ -4,6 +4,9 @@
 
 echo "compile with ./configure; make and copy folder over"
 echo "copy tex-site.el from auctex folder and adjust manually (path: TeX-auto-global)"
+
+echo ./configure --with-lispdir=~/aquamacs-emacs/aquamacs/src/site-lisp/edit-modes/auctex --with-texmf-dir=/usr/local/texlive/texmf-local
+
 #no longer done as it seems:
 #echo "adjust paths in auctex/preview/preview-latex.el, e.g. like this:
 #
@@ -16,21 +19,21 @@ echo "copy tex-site.el from auctex folder and adjust manually (path: TeX-auto-gl
 cd doc
 rm *.texi
 gzip *.info
-cd ..
+cd -
 
-find . -name *.log -delete
-find . -name *~ -delete
-find . -name ChangeLog* -delete
+find . -name \*.log -delete
+find . -name \*~ -delete
+find . -name ChangeLog\* -delete
 find . -name configure -delete
 find . -name Makefile -delete
 
-cd preview
-gzip *.el
-cd ..
+
 cd style
 gzip *.el
-cd ..
+cd -
 
 gzip *.el
 
-rm INSTALL* 
+pwd
+
+rm INSTALL* TODO 

@@ -1,6 +1,6 @@
 ;;; toolbar-x.el --- fancy toolbar handling in Emacs and XEmacs
 
-;; Copyright (C) 2004, 2005, 2008, 2014 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2008, 2014, 2016 Free Software Foundation, Inc.
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -127,7 +127,7 @@
 			      ;;(file-directory-p x)
 			      x))
 		     load-path))
-   (list (concat data-directory "images")))
+   (list data-directory))
   "List of directories where toolbarx finds its images.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -149,8 +149,6 @@
 (defun toolbarx-make-string-from-symbol (symbol)
   "Return a string from the name of a SYMBOL.
 Upcase initials and replace dashes by spaces."
-  (if (eq symbol 'separator)
-      "--"
   (let* ((str (upcase-initials (symbol-name symbol)))
 	 (str2))
     (dolist (i (append str nil))
@@ -158,7 +156,6 @@ Upcase initials and replace dashes by spaces."
 	  (push 32 str2)
 	(push i str2)))			; else push identical
     (concat (nreverse str2))))
-  )
 
 (defun toolbarx-make-symbol-from-string (string)
   "Return a (intern) symbol from STRING.
@@ -278,6 +275,11 @@ command, COMM is returned."
 ;; handle `menu titles' differently) meanwhile in XEmacs, menus are lists of
 ;; vectors
 
+(defmacro toolbarx--if-when-compile (test then else)
+  (declare (indent 1) (debug t))
+  (if (eval test) then else))
+
+(toolbarx--if-when-compile (not (featurep 'xemacs))
 (defun toolbarx-emacs-mount-popup-menu
   (strings var type &optional title save)
   "Return an interactive `lambda'-expression that shows a popup menu.
@@ -365,7 +367,8 @@ inside XEmacs. See documentation of that function for more."
     ;; warn if type is not `radio' ot `toggle'; use `radio' if incorrect.
     (unless (eq type real-type)
       (warn (concat "TYPE should be symbols `radio' or `toggle', "
-		    "but %s found; using `radio'") type))
+		    "but %s found; using `radio'")
+            type))
     ;; warn if save is not `nil', `offer' or `always'; use nil when incorrect
     (unless (eq save real-save)
       (setq real-save nil)
@@ -404,7 +407,7 @@ inside XEmacs. See documentation of that function for more."
     ;; returnung the lambda-expression
     `(lambda nil (interactive)
        (let ((popup-menu-titles ,(if title t nil)))
-	 (popup-menu (quote ,menu))))))
+	 (popup-menu (quote ,menu)))))))
 
 (defun toolbarx-mount-popup-menu (strings var type &optional title save)
   "Return a command that show a popup menu.
@@ -633,10 +636,8 @@ object VAL of a dropdown group (see documentation of function
   (let* ((props-types-alist
 	  '((:image	      toolbarx-test-image-type)
 	    (:command	      toolbarx-test-any-type)
-	    (:title          toolbarx-test-string-or-nil)
 	    (:enable	      toolbarx-test-any-type)
 	    (:visible	      toolbarx-test-any-type)
-	    (:label          toolbarx-test-string-or-nil)
 	    (:help	      toolbarx-test-string-or-nil)
 	    (:insert	      toolbarx-test-any-type	   . and)
 	    (:toolbar	      toolbarx-test-toolbar-type)
@@ -1126,16 +1127,14 @@ an extension.  If the extension is omitted, `xpm', `xbm' and
   ;; following should hopefully get us to all images ultimately.
 
   (let ((file))
-    (dolist (i '("" ".png" ".tiff" ".xpm" ".xbm" ".pbm"))
+    (dolist (i '("" ".xpm" ".xbm" ".pbm"))
       (unless file
 	(setq file (locate-library (concat image i) t toolbarx-image-path))))
     (if (featurep 'xemacs)
 	(and file (make-glyph file))
       (if file
 	  (create-image file)
-	(find-image `((:type png :file ,(concat image ".png"))
-		      (:type tiff :file ,(concat image ".tiff"))
-		      (:type xpm :file ,(concat image ".xpm"))
+	(find-image `((:type xpm :file ,(concat image ".xpm"))
 		      (:type xbm :file ,(concat image ".xbm"))
 		      (:type pbm :file ,(concat image ".pbm"))))))))
 
@@ -1145,9 +1144,10 @@ an extension.  If the extension is omitted, `xpm', `xbm' and
 This variable can store different values for the different buffers.")
 
 
+(toolbarx--if-when-compile (not (featurep 'xemacs))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Second engine: display parsed buttons in Emacs
-
+(progn
 (defun toolbarx-emacs-add-button (button used-keys keymap)
   "Insert a button where BUTTON is its description.
 USED-KEYS should be a list of symbols, where the first element is
@@ -1242,14 +1242,11 @@ function `toolbar-install-toolbar'."
 			     (cadr (memq :enable filtered-props))))
 	       (visible (cons (memq :visible filtered-props)
 			      (cadr (memq :visible filtered-props))))
-	       (label (cons (memq :label filtered-props)
-			    (cadr (memq :label filtered-props))))
 	       (button (cons (memq :button filtered-props)
 			     (cadr (memq :button filtered-props))))
 	       (menuitem (append
 			  (list 'menu-item
-				(or (cadr (memq :title filtered-props)) 
-				    (toolbarx-make-string-from-symbol symbol))
+				(toolbarx-make-string-from-symbol symbol)
 				command
 				:image image-descriptor)
 			  (when (car help)
@@ -1258,8 +1255,6 @@ function `toolbar-install-toolbar'."
 			    (list :enable (cdr enable)))
 			  (when (car visible)
 			    (list :visible (cdr visible)))
-			  (when (car label)
-			    (list :label (cdr label)))
 			  (when (car button)
 			    (list :button (cdr button)))))
 	       (key-not-used
@@ -1310,12 +1305,12 @@ is used and the default value of `toolbarx-map' is changed."
 							  tool-bar-map-temp)
     (if global-flag
 	(setq-default tool-bar-map tool-bar-map-temp)
-      (setq tool-bar-map tool-bar-map-temp))))
+      (setq tool-bar-map tool-bar-map-temp)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Third engine: display parsed buttons in XEmacs
-
+(progn
 (defun toolbarx-xemacs-image-properties (image)
   "Return a list of properties of IMAGE.
 IMAGE should be a string or a list of one to six strings or
@@ -1681,7 +1676,7 @@ the lists are built reversed."
 	  (set-specifier left-toolbar left locale))
       (remove-specifier left-toolbar locale)
       (remove-specifier left-toolbar-visible-p locale)
-      (remove-specifier left-toolbar-width locale))))
+      (remove-specifier left-toolbar-width locale))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -1,6 +1,6 @@
 ;;; listings.el --- AUCTeX style for `listings.sty'
 
-;; Copyright (C) 2004, 2005, 2009, 2013, 2015 Free Software Foundation, Inc.
+;; Copyright (C) 2004, 2005, 2009, 2013-2016 Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@iwi.uni-sb.de>
 ;; Maintainer: auctex-devel@gnu.org
@@ -290,8 +290,10 @@ with user-defined values via the \"lstdefinestyle\" macro."
 			  (list env (string-to-number args))))
 	    (t ; No args
 	     (add-to-list 'LaTeX-auto-environment (list env))))
-      (add-to-list 'LaTeX-indent-environment-list `(,env current-indentation))
-      (add-to-list 'LaTeX-verbatim-environments-local env)))
+      (add-to-list 'LaTeX-indent-environment-list `(,env current-indentation) t)
+      (add-to-list 'LaTeX-verbatim-environments-local env)
+      ;; Add new env's to `ispell-tex-skip-alist': skip the entire env
+      (TeX-ispell-skip-setcdr `(,(cons env (concat "\\\\end{" env "}"))))))
   (when (LaTeX-listings-lstdefinestyle-list)
     (LaTeX-listings-update-style-key)))
 
@@ -342,15 +344,14 @@ with user-defined values via the \"lstdefinestyle\" macro."
     '("lstlisting" LaTeX-env-args
       [TeX-arg-key-val LaTeX-listings-key-val-options-local]))
    ;; Filling
-   (make-local-variable 'LaTeX-indent-environment-list)
-   (add-to-list 'LaTeX-indent-environment-list
-		'("lstlisting" current-indentation))
+   (add-to-list (make-local-variable 'LaTeX-indent-environment-list)
+		'("lstlisting" current-indentation) t)
    (add-to-list 'LaTeX-verbatim-environments-local "lstlisting")
    (add-to-list 'LaTeX-verbatim-macros-with-delims-local "lstinline")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "lstinline")
    ;; Fontification
    (when (and (fboundp 'font-latex-add-keywords)
-	      (fboundp 'font-latex-set-syntactic-keywords)
+	      (fboundp 'font-latex-update-font-lock)
 	      (eq TeX-install-font-lock 'font-latex-setup))
      (font-latex-add-keywords '(("lstnewenvironment" "{[[{{")) 'function)
      (font-latex-add-keywords '(("lstinputlisting" "[{")) 'reference)
@@ -362,11 +363,8 @@ with user-defined values via the \"lstdefinestyle\" macro."
 				("lstdefinestyle" "{{")
 				("lstset" "{"))
 			      'variable)
-     ;; For syntactic fontification, e.g. verbatim constructs.
-     (font-latex-set-syntactic-keywords)
      ;; Tell font-lock about the update.
-     (setq font-lock-set-defaults nil)
-     (font-lock-set-defaults)))
+     (font-latex-update-font-lock t)))
  LaTeX-dialect)
 
 (defvar LaTeX-listings-package-options '("draft" "final" "savemem"

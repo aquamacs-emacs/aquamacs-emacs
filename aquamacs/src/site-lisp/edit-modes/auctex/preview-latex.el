@@ -3,11 +3,10 @@
 ;;; Code:
 
 
-;;;### (autoloads (preview-report-bug LaTeX-preview-setup preview-install-styles)
-;;;;;;  "preview" "preview.el" (22371 44022))
+;;;### (autoloads nil "preview" "preview.el" (22879 42926 0 0))
 ;;; Generated autoloads from preview.el
 
-(autoload (quote preview-install-styles) "preview" "\
+(autoload 'preview-install-styles "preview" "\
 Installs the TeX style files into a permanent location.
 This must be in the TeX search path.  If FORCE-OVERWRITE is greater
 than 1, files will get overwritten without query, if it is less
@@ -20,23 +19,25 @@ files are no longer needed in the search path.
 
 \(fn DIR &optional FORCE-OVERWRITE FORCE-SAVE)" t nil)
 
-(autoload (quote LaTeX-preview-setup) "preview" "\
+(autoload 'LaTeX-preview-setup "preview" "\
 Hook function for embedding the preview package into AUCTeX.
 This is called by `LaTeX-mode-hook' and changes AUCTeX variables
 to add the preview functionality.
 
 \(fn)" nil nil)
 
-(autoload (quote preview-report-bug) "preview" "\
+(autoload 'preview-report-bug "preview" "\
 Report a bug in the preview-latex package.
 
 \(fn)" t nil)
 
 ;;;***
 
+(provide 'preview-latex)
 ;; Local Variables:
 ;; version-control: never
 ;; no-byte-compile: t
 ;; no-update-autoloads: t
+;; coding: utf-8
 ;; End:
 ;;; preview-latex.el ends here

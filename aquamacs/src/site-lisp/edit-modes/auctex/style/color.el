@@ -1,8 +1,8 @@
 ;;; color.el --- AUCTeX style for `color.sty' (v1.1a)
 
-;; Copyright (C) 2015 Free Software Foundation, Inc.
+;; Copyright (C) 2015, 2016 Free Software Foundation, Inc.
 
-;; Author: Arash Esbati <esbati'at'gmx.de>
+;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
 ;; Created: 2015-01-16
 ;; Keywords: tex
@@ -259,44 +259,45 @@ package.")
 		  (LaTeX-provided-package-options-member "color" "dvipsnames")))
      (apply #'LaTeX-add-color-definecolors LaTeX-color-dvipsnames-colors))
 
-   (TeX-add-symbols
-    ;; \definecolor{<name>}{<model>}{<color spec>}
-    '("definecolor" TeX-arg-color-definecolor)
+   (unless (member "xcolor" (TeX-style-list))
+     (TeX-add-symbols
+      ;; \definecolor{<name>}{<model>}{<color spec>}
+      '("definecolor" TeX-arg-color-definecolor)
 
-    ;; \color{<name>} or \color[<model>]{<color spec>}
-    '("color" TeX-arg-color)
+      ;; \color{<name>} or \color[<model>]{<color spec>}
+      '("color" TeX-arg-color)
 
-    ;; \textcolor{<name>}{<text>} or
-    ;; \textcolor[<model>]{<color spec>}{<text>}
-    '("textcolor" TeX-arg-color "Text")
+      ;; \textcolor{<name>}{<text>} or
+      ;; \textcolor[<model>]{<color spec>}{<text>}
+      '("textcolor" TeX-arg-color "Text")
 
-    ;; \pagecolor{<name>} or
-    ;; \pagecolor[<model>]{<color spec>}
-    '("pagecolor" TeX-arg-color)
+      ;; \pagecolor{<name>} or
+      ;; \pagecolor[<model>]{<color spec>}
+      '("pagecolor" TeX-arg-color)
 
-    ;; \nopagecolor
-    '("nopagecolor" 0)
+      ;; \nopagecolor
+      '("nopagecolor" 0)
 
-    ;; \colorbox{<name>}{<text>} or
-    ;; \colorbox[<model>]{<color spec>}{<text>}
-    '("colorbox" TeX-arg-color "Text")
+      ;; \colorbox{<name>}{<text>} or
+      ;; \colorbox[<model>]{<color spec>}{<text>}
+      '("colorbox" TeX-arg-color "Text")
 
-    ;; \fcolorbox{<frame color name>}{<box color name>}{<text>} or
-    ;; \fcolorbox[<model>]{<frame color spec>}{<box color spec>}{<text>}
-    '("fcolorbox" TeX-arg-color-fcolorbox "Text"))
+      ;; \fcolorbox{<frame color name>}{<box color name>}{<text>} or
+      ;; \fcolorbox[<model>]{<frame color spec>}{<box color spec>}{<text>}
+      '("fcolorbox" TeX-arg-color-fcolorbox "Text"))
 
-   ;; Fontification
-   (when (and (featurep 'font-latex)
-	      (eq TeX-install-font-lock 'font-latex-setup))
-     (font-latex-add-keywords '(("color"         "[{")
-				("pagecolor"     "[{"))
-			      'type-declaration)
-     (font-latex-add-keywords '(("textcolor"     "[{{")
-				("colorbox"      "[{{" )
-				("fcolorbox"     "[{{{"))
-			      'type-command)
-     (font-latex-add-keywords '(("definecolor"    "{{{"))
-			      'function)))
+     ;; Fontification
+     (when (and (featurep 'font-latex)
+		(eq TeX-install-font-lock 'font-latex-setup))
+       (font-latex-add-keywords '(("color"         "[{")
+				  ("pagecolor"     "[{"))
+				'type-declaration)
+       (font-latex-add-keywords '(("textcolor"     "[{{")
+				  ("colorbox"      "[{{" )
+				  ("fcolorbox"     "[{{{"))
+				'type-command)
+       (font-latex-add-keywords '(("definecolor"    "{{{"))
+				'function))))
  LaTeX-dialect)
 
 (defvar LaTeX-color-package-options
