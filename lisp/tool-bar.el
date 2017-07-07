@@ -106,8 +106,8 @@ E.g. foo_dis.xpm becomes foo_sel.xpm if EXTENSION is '_sel'."
 			  nil
 			(list :type 'xpm :file
                               (concat "low-color/" icon ".xpm"))))
-	 (tiff-spec (if (image-type-available-p 'png)
-		       (list :type 'png :file (concat icon ".tiff") 
+	 (tiff-spec (if (image-type-available-p 'tiff)
+		       (list :type 'tiff :file (concat icon ".tiff") 
 			     :background "grey")))
 	 (png-spec (if (image-type-available-p 'png)
 		       (list :type 'png :file (concat icon ".png") 
