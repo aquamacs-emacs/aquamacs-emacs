@@ -101,6 +101,7 @@
 ;; no text available if this is compiled in. 
 ;;(aq-preload "aquamacs-mode-specific-themes")
 
+(load "emacs-lisp/gv") ;; setf
 (aq-preload "aquamacs-macros")
 (aq-preload "aquamacs-tool-bar")
 (aq-preload "macosx/osx_defaults")

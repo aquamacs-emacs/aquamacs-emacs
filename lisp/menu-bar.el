@@ -106,9 +106,9 @@
                                     revert-buffer-insert-file-contents-function
                                     'revert-buffer-insert-file-contents--default-function))
                               (and buffer-file-number
-			       (or (and buffer-file-name
-					(file-remote-p buffer-file-name))
-				   (buffer-modified-p)
+                               (or (and buffer-file-name
+                                        (file-remote-p buffer-file-name))
+                                   (buffer-modified-p)
                                        (not (verify-visited-file-modtime
                                              (current-buffer))))))
                   :help "Re-read current buffer from its file"))
@@ -121,7 +121,7 @@
       '(menu-item "Save" save-buffer
                   :enable (and (buffer-modified-p)
                                (buffer-file-name)
-			   (menu-bar-menu-frame-live-and-visible-p)
+                           (menu-bar-menu-frame-live-and-visible-p)
                                (menu-bar-non-minibuffer-window-p))
                   :help "Save current buffer to its file"))
 
@@ -135,14 +135,14 @@
                   :help ,(purecopy "Discard (kill) current buffer")))
     (bindings--define-key menu [insert-file]
       `(menu-item ,(purecopy "Insert File...") insert-file
-	      :enable (and (menu-bar-non-minibuffer-window-p)
-			   (menu-bar-menu-frame-live-and-visible-p))
+              :enable (and (menu-bar-non-minibuffer-window-p)
+                           (menu-bar-menu-frame-live-and-visible-p))
                   :help ,(purecopy "Insert another file into current buffer")))
     (bindings--define-key menu [dired]
       `(menu-item ,(purecopy "Open Directory...") dired
-	      :enable (and (menu-bar-non-minibuffer-window-p)
-			   (menu-bar-menu-frame-live-and-visible-p))
-	      :help ,(purecopy "Read a directory, to operate on its files")))
+              :enable (and (menu-bar-non-minibuffer-window-p)
+                           (menu-bar-menu-frame-live-and-visible-p))
+              :help ,(purecopy "Read a directory, to operate on its files")))
     (bindings--define-key menu [open-file]
       `(menu-item ,(purecopy "Open File...") menu-find-file-existing
                   :enable (menu-bar-non-minibuffer-window-p)
@@ -158,10 +158,10 @@
   "Edit the existing file FILENAME."
   (interactive)
   (let* ((mustmatch (not (and (fboundp 'x-uses-old-gtk-dialog)
-			      (x-uses-old-gtk-dialog))))
-	 (filename (car (find-file-read-args "Find file: " mustmatch))))
+                              (x-uses-old-gtk-dialog))))
+         (filename (car (find-file-read-args "Find file: " mustmatch))))
     (if mustmatch
-	(find-file-existing filename)
+        (find-file-existing filename)
       (find-file filename))))
 
 ;; The "Edit->Search" submenu
@@ -173,10 +173,10 @@
   (interactive)
   (cond
    ((and (eq menu-bar-last-search-type 'string)
-	 search-ring)
+         search-ring)
     (nonincremental-search-forward))
    ((and (eq menu-bar-last-search-type 'regexp)
-	 regexp-search-ring)
+         regexp-search-ring)
     (re-search-forward (car regexp-search-ring)))
    (t
     (error "No previous search"))))
@@ -186,10 +186,10 @@
   (interactive)
   (cond
    ((and (eq menu-bar-last-search-type 'string)
-	 search-ring)
+         search-ring)
     (nonincremental-search-backward))
    ((and (eq menu-bar-last-search-type 'regexp)
-	 regexp-search-ring)
+         regexp-search-ring)
     (re-search-backward (car regexp-search-ring)))
    (t
     (error "No previous search"))))
@@ -265,7 +265,7 @@
       `(menu-item ,(purecopy "--")))
     (bindings--define-key menu [grep]
       `(menu-item ,(purecopy "Search Files (Grep)...") grep
-		  :help ,(purecopy "Search files for strings or regexps (with Grep)")))
+                  :help ,(purecopy "Search files for strings or regexps (with Grep)")))
     (bindings--define-key menu [separator-grep-search]
       `(menu-item ,(purecopy "--")))
 
@@ -335,10 +335,10 @@
 ;;; Assemble the top-level Edit menu items.
 (defvar menu-bar-edit-menu
   (let ((menu (make-sparse-keymap "Edit")))
-   
+
     (bindings--define-key menu [props]
       `(menu-item ,(purecopy "Text Properties") facemenu-menu
-		  :enable (menu-bar-menu-frame-live-and-visible-p)))
+                  :enable (menu-bar-menu-frame-live-and-visible-p)))
 
 (defvar menu-bar-goto-menu
   (let ((menu (make-sparse-keymap "Go To")))
@@ -414,22 +414,22 @@
 
     (bindings--define-key menu [goto]
       `(menu-item ,(purecopy "Go To") ,menu-bar-goto-menu
-		  :enable (menu-bar-menu-frame-live-and-visible-p)))
+                  :enable (menu-bar-menu-frame-live-and-visible-p)))
 
     (bindings--define-key menu [replace]
       `(menu-item ,(purecopy "Replace") ,menu-bar-replace-menu
-		  :enable (menu-bar-menu-frame-live-and-visible-p)))
+                  :enable (menu-bar-menu-frame-live-and-visible-p)))
 
     (bindings--define-key menu [search]
       `(menu-item ,(purecopy "Search") ,menu-bar-search-menu
-		  :enable (menu-bar-menu-frame-live-and-visible-p)))
+                  :enable (menu-bar-menu-frame-live-and-visible-p)))
 
     (bindings--define-key menu [separator-search]
       menu-bar-separator)
 
     (bindings--define-key menu [mark-whole-buffer]
       `(menu-item ,(purecopy "Select All") mark-whole-buffer
-	      :enable (menu-bar-menu-frame-live-and-visible-p)
+              :enable (menu-bar-menu-frame-live-and-visible-p)
                   :help ,(purecopy "Mark the whole buffer for a subsequent cut/copy")))
 
     (bindings--define-key menu [clear]
@@ -472,8 +472,8 @@
                            "\\[kill-ring-save]")))
     (bindings--define-key menu [cut]
       `(menu-item ,(purecopy "Cut") kill-region
-	      :enable (and mark-active (not buffer-read-only)
-			   (menu-bar-menu-frame-live-and-visible-p))
+              :enable (and mark-active (not buffer-read-only)
+                           (menu-bar-menu-frame-live-and-visible-p))
                   :help
                   "Cut (kill) text in region between mark and current position"))
     ;; ns-win.el said: Separate undo from cut/paste section.
@@ -483,7 +483,7 @@
     (bindings--define-key menu [undo]
       '(menu-item "Undo" undo
                   :enable (and (not buffer-read-only)
-			   (menu-bar-menu-frame-live-and-visible-p)
+                           (menu-bar-menu-frame-live-and-visible-p)
                                (not (eq t buffer-undo-list))
                                (if (eq last-command 'undo)
                                    (listp pending-undo-list)
@@ -599,36 +599,36 @@ DOC is the text to use for the menu entry.
 HELP is the text to use for the tooltip.
 PROPS are additional properties."
   `'(menu-item ,doc ,fname
-	       ,@props
-	       :help ,help
-	       :button (:toggle . (and (default-boundp ',fname)
-				       (default-value ',fname)))))
+               ,@props
+               :help ,help
+               :button (:toggle . (and (default-boundp ',fname)
+                                       (default-value ',fname)))))
 
 (defmacro menu-bar-make-toggle (name variable doc message help &rest body)
   `(progn
      (defun ,name (&optional interactively)
        ,(concat "Toggle whether to " (downcase (substring help 0 1))
-		(substring help 1) ".
+                (substring help 1) ".
 In an interactive call, record this option as a candidate for saving
 by \"Save Options\" in Custom buffers.")
        (interactive "p")
        (if ,(if body `(progn . ,body)
-	      `(progn
-		 (custom-load-symbol ',variable)
-		 (let ((set (or (get ',variable 'custom-set) 'set-default))
-		       (get (or (get ',variable 'custom-get) 'default-value)))
-		   (funcall set ',variable (not (funcall get ',variable))))))
-	   (message ,message "enabled globally")
-  	 (message ,message "disabled globally"))
+              `(progn
+                 (custom-load-symbol ',variable)
+                 (let ((set (or (get ',variable 'custom-set) 'set-default))
+                       (get (or (get ',variable 'custom-get) 'default-value)))
+                   (funcall set ',variable (not (funcall get ',variable))))))
+           (message ,message "enabled globally")
+         (message ,message "disabled globally"))
        ;; The function `customize-mark-as-set' must only be called when
        ;; a variable is set interactively, as the purpose is to mark it as
        ;; a candidate for "Save Options", and we do not want to save options
        ;; the user have already set explicitly in his init file.
        (if interactively (customize-mark-as-set ',variable)))
      '(menu-item ,doc ,name
-		 :help ,help
-		 :button (:toggle . (and (default-boundp ',variable)
-					 (default-value ',variable))))))
+                 :help ,help
+                 :button (:toggle . (and (default-boundp ',variable)
+                                         (default-value ',variable))))))
 
 ;; Function for setting/saving default font.
 
@@ -638,9 +638,9 @@ by \"Save Options\" in Custom buffers.")
 The selected font will be the default on both the existing and future frames."
   (interactive)
   (set-frame-font (if (fboundp 'x-select-font)
-		      (x-select-font)
-		    (mouse-select-font))
-		  nil t))
+                      (x-select-font)
+                    (mouse-select-font))
+                  nil t))
 
 (defun menu-bar-options-save ()
   "Save current values of Options menu items using Custom."
@@ -649,32 +649,32 @@ The selected font will be the default on both the existing and future frames."
     ;; These are set with menu-bar-make-mm-toggle, which does not
     ;; put on a customized-value property.
     (dolist (elt '(global-show-newlines-mode global-linum-mode
-		   column-number-mode size-indication-mode
-		   cua-mode show-paren-mode transient-mark-mode
-		   display-time-mode display-battery-mode
-		   visual-line-mode))
+                   column-number-mode size-indication-mode
+                   cua-mode show-paren-mode transient-mark-mode
+                   display-time-mode display-battery-mode
+                   visual-line-mode))
       (and (customize-mark-to-save elt)
-	   (setq need-save t)))
+           (setq need-save t)))
     ;; These are set with `customize-set-variable'.
     (dolist (elt '(scroll-bar-mode
-		   debug-on-quit debug-on-error
-		   ;; Somehow this works, when tool-bar and menu-bar don't.
-		   tooltip-mode window-divider-mode
-		   save-place uniquify-buffer-name-style fringe-mode
-		   indicate-empty-lines indicate-buffer-boundaries
-		   case-fold-search font-use-system-font
-		   current-language-environment default-input-method
-		   ;; Saving `text-mode-hook' is somewhat questionable,
-		   ;; as we might get more than we bargain for, if
-		   ;; other code may has added hooks as well.
-		   ;; Nonetheless, not saving it would like be confuse
-		   ;; more often.
-		   ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
-		   text-mode-hook tool-bar-position
-		   word-wrap truncate-lines global-visual-line-mode global-auto-fill-mode))
+                   debug-on-quit debug-on-error
+                   ;; Somehow this works, when tool-bar and menu-bar don't.
+                   tooltip-mode window-divider-mode
+                   save-place uniquify-buffer-name-style fringe-mode
+                   indicate-empty-lines indicate-buffer-boundaries
+                   case-fold-search font-use-system-font
+                   current-language-environment default-input-method
+                   ;; Saving `text-mode-hook' is somewhat questionable,
+                   ;; as we might get more than we bargain for, if
+                   ;; other code may has added hooks as well.
+                   ;; Nonetheless, not saving it would like be confuse
+                   ;; more often.
+                   ;; -- Per Abrahamsen <abraham@dina.kvl.dk> 2002-02-11.
+                   text-mode-hook tool-bar-position
+                   word-wrap truncate-lines global-visual-line-mode global-auto-fill-mode))
       (and (get elt 'customized-value)
-	   (customize-mark-to-save elt)
-	   (setq need-save t)))
+           (customize-mark-to-save elt)
+           (setq need-save t)))
     (when (get 'default 'customized-face)
       (put 'default 'saved-face (get 'default 'customized-face))
       (put 'default 'customized-face nil)
@@ -732,48 +732,48 @@ The selected font will be the default on both the existing and future frames."
                   :help "Display window divider on the bottom and right of each window"
                   :visible (memq (window-system) '(x w32))
                   :button (:radio
-			   . (and (window-divider-width-valid-p
-				   (cdr (assq 'bottom-divider-width
-					      (frame-parameters))))
-				  (window-divider-width-valid-p
-				   (cdr (assq 'right-divider-width
-					      (frame-parameters))))))))
+                           . (and (window-divider-width-valid-p
+                                   (cdr (assq 'bottom-divider-width
+                                              (frame-parameters))))
+                                  (window-divider-width-valid-p
+                                   (cdr (assq 'right-divider-width
+                                              (frame-parameters))))))))
     (bindings--define-key menu [right-only]
       '(menu-item "Right Only"
                   menu-bar-right-window-divider
                   :help "Display window divider on the right of each window only"
                   :visible (memq (window-system) '(x w32))
                   :button (:radio
-			   . (and (not (window-divider-width-valid-p
-					(cdr (assq 'bottom-divider-width
-						   (frame-parameters)))))
-				  (window-divider-width-valid-p
-				   (cdr (assq 'right-divider-width
-						     (frame-parameters))))))))
+                           . (and (not (window-divider-width-valid-p
+                                        (cdr (assq 'bottom-divider-width
+                                                   (frame-parameters)))))
+                                  (window-divider-width-valid-p
+                                   (cdr (assq 'right-divider-width
+                                                     (frame-parameters))))))))
     (bindings--define-key menu [bottom-only]
       '(menu-item "Bottom Only"
                   menu-bar-bottom-window-divider
                   :help "Display window divider on the bottom of each window only"
                   :visible (memq (window-system) '(x w32))
                   :button (:radio
-			   . (and (window-divider-width-valid-p
-				   (cdr (assq 'bottom-divider-width
-					      (frame-parameters))))
-				  (not (window-divider-width-valid-p
-					(cdr (assq 'right-divider-width
-						   (frame-parameters)))))))))
+                           . (and (window-divider-width-valid-p
+                                   (cdr (assq 'bottom-divider-width
+                                              (frame-parameters))))
+                                  (not (window-divider-width-valid-p
+                                        (cdr (assq 'right-divider-width
+                                                   (frame-parameters)))))))))
     (bindings--define-key menu [no-divider]
       '(menu-item "None"
                   menu-bar-no-window-divider
                   :help "Do not display window dividers"
                   :visible (memq (window-system) '(x w32))
                   :button (:radio
-			   . (and (not (window-divider-width-valid-p
-					(cdr (assq 'bottom-divider-width
-						   (frame-parameters)))))
-				  (not (window-divider-width-valid-p
-					(cdr (assq 'right-divider-width
-						   (frame-parameters)))))))))
+                           . (and (not (window-divider-width-valid-p
+                                        (cdr (assq 'bottom-divider-width
+                                                   (frame-parameters)))))
+                                  (not (window-divider-width-valid-p
+                                        (cdr (assq 'right-divider-width
+                                                   (frame-parameters)))))))))
     menu))
 
 (defun menu-bar-showhide-fringe-ind-customize ()
@@ -785,13 +785,13 @@ The selected font will be the default on both the existing and future frames."
   "Display top and bottom indicators in opposite fringes, arrows in right."
   (interactive)
   (customize-set-variable 'indicate-buffer-boundaries
-			  '((t . right) (top . left))))
+                          '((t . right) (top . left))))
 
 (defun menu-bar-showhide-fringe-ind-box ()
   "Display top and bottom indicators in opposite fringes."
   (interactive)
   (customize-set-variable 'indicate-buffer-boundaries
-			  '((top . left) (bottom . right))))
+                          '((top . left) (bottom . right))))
 (defun menu-bar-showhide-fringe-ind-right ()
   "Display buffer boundaries and arrows in the right fringe."
   (interactive)
@@ -968,7 +968,7 @@ Only available in Aquamacs."
                   :help "Horizontal scroll bar"
                   :visible (horizontal-scroll-bars-available-p)
                   :button (:radio . (cdr (assq 'horizontal-scroll-bars
-					       (frame-parameters))))))
+                                               (frame-parameters))))))
 
     (bindings--define-key menu [none-horizontal]
       '(menu-item "None-horizontal"
@@ -985,7 +985,7 @@ Only available in Aquamacs."
                   :visible (display-graphic-p)
                   :button (:radio . (eq (cdr (assq 'vertical-scroll-bars
                                                    (frame-parameters)))
-					'right))))
+                                        'right))))
 
     (bindings--define-key menu [left]
       '(menu-item "On the Left"
@@ -994,7 +994,7 @@ Only available in Aquamacs."
                   :visible (display-graphic-p)
                   :button (:radio . (eq (cdr (assq 'vertical-scroll-bars
                                                    (frame-parameters)))
-					'left))))
+                                        'left))))
 
     (bindings--define-key menu [none]
       '(menu-item "None"
@@ -1003,13 +1003,13 @@ Only available in Aquamacs."
                   :visible (display-graphic-p)
                   :button (:radio . (eq (cdr (assq 'vertical-scroll-bars
                                                    (frame-parameters)))
-					nil))))
+                                        nil))))
     menu))
 
 (defun menu-bar-frame-for-menubar ()
   "Return the frame suitable for updating the menu bar."
   (or (and (framep menu-updating-frame)
-	   menu-updating-frame)
+           menu-updating-frame)
       (selected-frame)))
 
 (defun menu-bar-positive-p (val)
@@ -1107,19 +1107,19 @@ Only available in Aquamacs."
 
     (bindings--define-key menu [showhide-battery]
       (menu-bar-make-mm-toggle display-battery-mode
-			       "Battery Status"
-			       "Display battery status information in mode line"
-			       (:visible (not (eq window-system 'ns)))))
-    
+                               "Battery Status"
+                               "Display battery status information in mode line"
+                               (:visible (not (eq window-system 'ns)))))
+
     (bindings--define-key menu [showhide-date-time]
       (menu-bar-make-mm-toggle display-time-mode
-			       "Time, Load and Mail"
-			       "Display time, system load averages and \
+                               "Time, Load and Mail"
+                               "Display time, system load averages and \
 mail status in mode line"
-			       (:visible (not (eq window-system 'ns)))))
+                               (:visible (not (eq window-system 'ns)))))
 
     (bindings--define-key menu [datetime-separator] `(menu-item "" nil
-			  :visible (not (eq window-system ns))))
+                          :visible (not (eq window-system ns))))
 
     (bindings--define-key menu [column-number-mode]
       (menu-bar-make-mm-toggle column-number-mode
@@ -1142,9 +1142,9 @@ mail status in mode line"
     ;; let's not show tooltips in Aquamacs
     ;; (bindings--define-key menu [showhide-tooltip-mode]
     ;;   '(menu-item "Tooltips" tooltip-mode
-    ;; 		  :help "Turn tooltips on/off"
-    ;; 		  :visible (and (display-graphic-p) (fboundp 'x-show-tip))
-    ;; 		  :button (:toggle . tooltip-mode)))
+    ;;            :help "Turn tooltips on/off"
+    ;;            :visible (and (display-graphic-p) (fboundp 'x-show-tip))
+    ;;            :button (:toggle . tooltip-mode)))
 
 
     ;; (bindings--define-key menu [tooltip-separator] menu-bar-separator)
@@ -1163,54 +1163,61 @@ mail status in mode line"
 
     (bindings--define-key menu [showhide-fringe]
       `(menu-item "Fringe" ,menu-bar-showhide-fringe-menu
-    	    :help "Settings for Fringe display in the margins of windows."
+            :help "Settings for Fringe display in the margins of windows."
                   :visible (display-graphic-p)))
+
 
     ;; No scroll bar options shown in Aquamacs
     ;; (bindings--define-key menu [showhide-scroll-bar]
     ;;   `(menu-item "Scroll-bar" ,menu-bar-showhide-scroll-bar-menu
-    ;; 		  :visible (display-graphic-p)))
+    ;;            :visible (display-graphic-p)))
 
     ;; No Toolbar customization button shown in Aquamacs
     ;; available via right-click on toolbar
-    ;; (if (and (boundp 'menu-bar-showhide-tool-bar-menu)
-    ;; 	     (keymapp menu-bar-showhide-tool-bar-menu))
-    ;; 	(bindings--define-key menu [showhide-tool-bar]
-    ;; 	  `(menu-item "Tool-bar" ,menu-bar-showhide-tool-bar-menu
-    ;; 		      :visible (display-graphic-p)))
-    ;;   ;; else not tool bar that can move.
-    ;;   (bindings--define-key menu [showhide-tool-bar]
-    ;; 	'(menu-item "Tool-bar" toggle-tool-bar-mode-from-frame
-    ;; 		    :help "Turn tool-bar on/off"
-    ;; 		    :visible (display-graphic-p)
-    ;; 		    :button
-    ;; 		    (:toggle . (menu-bar-positive-p
-    ;; 				(frame-parameter (menu-bar-frame-for-menubar)
-    ;; 						 'tool-bar-lines))))))
+    (if (and (boundp 'menu-bar-showhide-tool-bar-menu)
+             (keymapp menu-bar-showhide-tool-bar-menu))
+        (bindings--define-key menu [showhide-tool-bar]
+          `(menu-item "Toolbar" ,menu-bar-showhide-tool-bar-menu
+                      :visible (display-graphic-p)))
+      ;; else not tool bar that can move.
+      (bindings--define-key menu [showhide-tool-bar]
+        '(menu-item "Toolbar" toggle-tool-bar-mode-from-frame
+                    :help "Turn toolbar on/off"
+                    :visible (display-graphic-p)
+                    :button
+                    (:toggle . (menu-bar-positive-p
+                                (frame-parameter (menu-bar-frame-for-menubar)
+                                                 'tool-bar-lines))))))
 
-    ;; (bindings--define-key menu [ns-tool-bar]
-    ;;   `(menu-item "Toolbar..."
-    ;; 	      customize-tool-bar
-    ;; 	      :help ,(purecopy "Display the Toolbar customization panel")
-    ;; 	      :visible (and ,(fboundp 'ns-tool-bar-customize) (display-graphic-p))))
+    ;; not necessary:
+    ;; (bindings--define-key menu-bar-showhide-menu [toolbar-mode]
+    ;;   (menu-bar-make-mm-toggle tool-bar-mode
+    ;;                         "Tool Bar"
+    ;;                         "Show the tool bar in all frames"))
+
+    (bindings--define-key menu [ns-tool-bar]
+      `(menu-item "Customize toolbar..."
+              customize-tool-bar
+              :help ,(purecopy "Display the Toolbar customization panel")
+              :visible (and ,(fboundp 'ns-tool-bar-customize) (display-graphic-p))))
 
     (bindings--define-key menu [newlines-separator] menu-bar-separator)
     (bindings--define-key menu [hl-line-mode]
       (menu-bar-make-mm-toggle global-hl-line-mode
-			       "Line Highlighting"
-			       "Highlight current line (hl-line-mode)"))
+                               "Line Highlighting"
+                               "Highlight current line (hl-line-mode)"))
     (bindings--define-key menu [show-newlines-mode]
       (menu-bar-make-mm-toggle global-show-newlines-mode
-			       "Show Newlines"
-			       "Show hard newlines"))
+                               "Show Newlines"
+                               "Show hard newlines"))
     (bindings--define-key menu [linum-mode]
       (menu-bar-make-mm-toggle global-linum-mode
-			       "Line Numbering"
-			       "Show the current line number next to each line"))
+                               "Line Numbering"
+                               "Show the current line number next to each line"))
     (bindings--define-key menu [highlight-paren-mode]
       (menu-bar-make-mm-toggle show-paren-mode
-			       "Paren Match Highlighting"
-			       "Highlight matching/mismatched parentheses at cursor (Show Paren mode)"))
+                               "Paren Match Highlighting"
+                               "Highlight matching/mismatched parentheses at cursor (Show Paren mode)"))
 
     menu))
 
@@ -1219,63 +1226,63 @@ mail status in mode line"
 
     (bindings--define-key menu [auto-wrap]
       '(menu-item "Auto-Detect Line Wrap in Text Files"
-		  toggle-text-mode-auto-detect-wrap
-		  :help "Automatically use hard or soft word wrap (Auto Fill / Longlines) in text modes."
-		  :button (:toggle . (if (listp text-mode-hook)
-					 (or (member 'auto-detect-wrap text-mode-hook)
-					     (member 'auto-detect-longlines text-mode-hook))
-				       (or (eq 'auto-detect-wrap text-mode-hook)
-					   (eq 'auto-detect-longlines text-mode-hook))))))
+                  toggle-text-mode-auto-detect-wrap
+                  :help "Automatically use hard or soft word wrap (Auto Fill / Longlines) in text modes."
+                  :button (:toggle . (if (listp text-mode-hook)
+                                         (or (member 'auto-detect-wrap text-mode-hook)
+                                             (member 'auto-detect-longlines text-mode-hook))
+                                       (or (eq 'auto-detect-wrap text-mode-hook)
+                                           (eq 'auto-detect-longlines text-mode-hook))))))
 
     (bindings--define-key menu [wrapping-set-default]
       `(menu-item (if (menu-bar-local-wrapping-p)
-		      "Adopt as Default"
-		    "Adopted as Default")
-		  menu-bar-set-wrapping-default
-		  :help "Set current wrapping style as default for other buffers."
-		  :enable (and (menu-bar-menu-frame-live-and-visible-p)
-			       (menu-bar-local-wrapping-p))
-		  :button (:toggle . (not (menu-bar-local-wrapping-p)))))
+                      "Adopt as Default"
+                    "Adopted as Default")
+                  menu-bar-set-wrapping-default
+                  :help "Set current wrapping style as default for other buffers."
+                  :enable (and (menu-bar-menu-frame-live-and-visible-p)
+                               (menu-bar-local-wrapping-p))
+                  :button (:toggle . (not (menu-bar-local-wrapping-p)))))
 
     (bindings--define-key menu [default-separator]
       '("--"))
 
     (bindings--define-key menu [auto-fill-mode]
       `(menu-item (format "Break Lines (Auto Fill) at %s" fill-column)
-		  set-auto-fill
-		  :help "Automatically fill text between left and right margins (Auto Fill) in this buffer and in new buffers."
-		  :enable (menu-bar-menu-frame-live-and-visible-p)
-		  :button (:radio . auto-fill-function)))
+                  set-auto-fill
+                  :help "Automatically fill text between left and right margins (Auto Fill) in this buffer and in new buffers."
+                  :enable (menu-bar-menu-frame-live-and-visible-p)
+                  :button (:radio . auto-fill-function)))
 
     (bindings--define-key menu [word-wrap]
       `(menu-item "Word Wrap"
-		  set-word-wrap
-		  :help "Wrap long lines at word boundaries in this buffer and in new buffers."
-		  :button (:radio . (and (null truncate-lines)
+                  set-word-wrap
+                  :help "Wrap long lines at word boundaries in this buffer and in new buffers."
+                  :button (:radio . (and (null truncate-lines)
                                   (not (truncated-partial-width-window-p))
                                   word-wrap))
-		  :enable (menu-bar-menu-frame-live-and-visible-p)))
+                  :enable (menu-bar-menu-frame-live-and-visible-p)))
 
 
     (bindings--define-key menu [window-wrap]
       `(menu-item "Wrap"
-		  set-line-wrap
-		  :help "Wrap long lines at window edge in this buffer and in new buffers."
-		  :button (:radio . (and (null truncate-lines)
+                  set-line-wrap
+                  :help "Wrap long lines at window edge in this buffer and in new buffers."
+                  :button (:radio . (and (null truncate-lines)
                                   (not (truncated-partial-width-window-p))
-					 (not word-wrap)
-					 (null auto-fill-function)))
+                                         (not word-wrap)
+                                         (null auto-fill-function)))
                   :visible (menu-bar-menu-frame-live-and-visible-p)
                   :enable (not (truncated-partial-width-window-p))))
 
     (bindings--define-key menu [truncate]
       `(menu-item "Truncate"
-		  set-truncate-lines
-		  :help "Truncate long lines at window edge in this buffer and in new buffers."
-		  :button (:radio . (or (truncated-partial-width-window-p)
-					truncate-lines)) ; truncate takes precedence over word-wrap
-		  :visible (menu-bar-menu-frame-live-and-visible-p)
-		  :enable (not (truncated-partial-width-window-p))))
+                  set-truncate-lines
+                  :help "Truncate long lines at window edge in this buffer and in new buffers."
+                  :button (:radio . (or (truncated-partial-width-window-p)
+                                        truncate-lines)) ; truncate takes precedence over word-wrap
+                  :visible (menu-bar-menu-frame-live-and-visible-p)
+                  :enable (not (truncated-partial-width-window-p))))
     menu))
 
 (defvar menu-bar-search-options-menu
@@ -1359,7 +1366,7 @@ mail status in mode line"
 
     (bindings--define-key menu [search-options]
       `(menu-item "Default Search Options"
-		  ,menu-bar-search-options-menu))
+                  ,menu-bar-search-options-menu))
 
     (bindings--define-key menu [mule]
       ;; It is better not to use backquote here,
@@ -1373,7 +1380,7 @@ mail status in mode line"
     ;;(setq menu-bar-final-items (cons 'mule menu-bar-final-items))
     ;;(bindings--define-key menu [preferences]
     ;;  `(menu-item "Preferences" ,menu-bar-preferences-menu
-    ;;	      :help "Toggle important global options"))
+    ;;        :help "Toggle important global options"))
 
     (bindings--define-key menu [mule-separator]
       menu-bar-separator)
@@ -1404,11 +1411,11 @@ mail status in mode line"
   "Sets global minor mode GLOBAL-MODE in this buffer, and as default
 for future buffers."
   (let ((sgmh-this-buffer (current-buffer))
-	(saved (symbol-function 'buffer-list)))
+        (saved (symbol-function 'buffer-list)))
     (unwind-protect
-	(progn
-	  (fset 'buffer-list (lambda (&optional frame) (list sgmh-this-buffer)))
-	  (funcall global-mode enable))
+        (progn
+          (fset 'buffer-list (lambda (&optional frame) (list sgmh-this-buffer)))
+          (funcall global-mode enable))
       (fset 'buffer-list saved))))
 
 ;; (defvar line-wrapping--saved-state nil)
@@ -1421,41 +1428,41 @@ for future buffers."
 ; could add something to minor-mode-alist as a lighter for the
 ; mode-line
 (setq minor-mode-alist (cons (list 'truncate-lines " Trunc")
-			   minor-mode-alist))
+                           minor-mode-alist))
 
 (defun menu-bar-set-wrapping-default ()
   "Set current buffer's line wrapping style as default."
   (interactive)
 
   (let ((variables '(word-wrap truncate-lines line-move-visual
-			       visual-line-mode auto-fill-function
-			       fringe-indicator-alist)))
+                               visual-line-mode auto-fill-function
+                               fringe-indicator-alist)))
 
     (let ((vlf (member (cons 'continuation visual-line-fringe-indicators)
-		       fringe-indicator-alist)))
+                       fringe-indicator-alist)))
 
       (unless (eq (if vlf t nil)
-		  (if (member (cons 'continuation visual-line-fringe-indicators)
-			      (default-value 'fringe-indicator-alist)) t nil))
-	(if vlf
-	    (set-default 'fringe-indicator-alist
-			 (cons (cons 'continuation visual-line-fringe-indicators)
-			       (default-value 'fringe-indicator-alist)))
-	  (set-default 'fringe-indicator-alist
-		       (remove (cons 'continuation visual-line-fringe-indicators)
-			       (default-value 'fringe-indicator-alist))))))
+                  (if (member (cons 'continuation visual-line-fringe-indicators)
+                              (default-value 'fringe-indicator-alist)) t nil))
+        (if vlf
+            (set-default 'fringe-indicator-alist
+                         (cons (cons 'continuation visual-line-fringe-indicators)
+                               (default-value 'fringe-indicator-alist)))
+          (set-default 'fringe-indicator-alist
+                       (remove (cons 'continuation visual-line-fringe-indicators)
+                               (default-value 'fringe-indicator-alist))))))
 
     ;; create local bindings in all buffers
     ;; in order to just set the default for future buffers
     ;; WE DON'T NEED THIS IF USERS CALL THIS FUNCTION EXPLICITLY
     ;; (dolist (buf (buffer-list))
     ;;   (when (buffer-live-p buf)
-    ;; 	(with-current-buffer buf
-    ;; 	  (unless (eq major-mode 'fundamental-mode)
-    ;; 	    (dolist (v variables)
-    ;; 	      ;; create local binding
-    ;; 	      (set v (symbol-value v)))))))
-    
+    ;;  (with-current-buffer buf
+    ;;    (unless (eq major-mode 'fundamental-mode)
+    ;;      (dolist (v variables)
+    ;;        ;; create local binding
+    ;;        (set v (symbol-value v)))))))
+
     ;; set default values and remove local bindings in current buffer
     (dolist (v variables)
       (set-default v (symbol-value v))
@@ -1473,10 +1480,10 @@ for future buffers."
 ;; (bindings--define-key menu-bar-line-wrapping-menu [auto-fill-text-mode]
 ;;   `(menu-item ,(purecopy "Hard Word Wrap as Default in Text Modes")
 ;;               menu-bar-text-mode-auto-fill
-;; 	      :help ,(purecopy "Automatically fill text while typing (Auto Fill mode)")
+;;            :help ,(purecopy "Automatically fill text while typing (Auto Fill mode)")
 ;;               :button (:toggle . (if (listp text-mode-hook)
-;; 				     (member 'turn-on-auto-fill text-mode-hook)
-;; 				   (eq 'turn-on-auto-fill text-mode-hook)))))
+;;                                   (member 'turn-on-auto-fill text-mode-hook)
+;;                                 (eq 'turn-on-auto-fill text-mode-hook)))))
 (defun menu-bar-local-wrapping-p ()
   (or (local-variable-p 'word-wrap)
       (local-variable-p 'truncate-lines)
@@ -1847,7 +1854,7 @@ key, a click, or a menu-item"))
                   :help ,(purecopy "Read the Introduction to Emacs Lisp Programming")))
     (bindings--define-key menu [emacs-psychotherapist]
       `(menu-item ,(purecopy "Emacs Psychotherapist") doctor
-		  :help ,(purecopy "Our doctor will help you feel better")))
+                  :help ,(purecopy "Our doctor will help you feel better")))
     menu))
 
 (defun help-with-tutorial-spec-language ()
@@ -1933,7 +1940,7 @@ key, a click, or a menu-item"))
 The menu frame is the frame for which we are updating the menu."
   (let ((menu-frame (or menu-updating-frame (selected-frame))))
     (and (frame-live-p menu-frame)
-	 (frame-visible-p menu-frame))))
+         (frame-visible-p menu-frame))))
 
 (defun menu-bar-non-minibuffer-window-p ()
   "Return non-nil if the menu frame's selected window is no minibuffer window.
@@ -1942,8 +1949,8 @@ minibuffer window.  The menu frame is the frame for which we are
 updating the menu."
   (let ((menu-frame (or menu-updating-frame (selected-frame))))
     (and (frame-live-p menu-frame)
-	 (not (window-minibuffer-p
-	       (frame-selected-window menu-frame))))))
+         (not (window-minibuffer-p
+               (frame-selected-window menu-frame))))))
 
 (defun kill-this-buffer ()	; for the menu bar
   "Kill the current buffer.
@@ -1967,14 +1974,14 @@ otherwise it could decide to silently do nothing."
   (and (menu-bar-menu-frame-live-and-visible-p)
   (or (not (menu-bar-non-minibuffer-window-p))
       (let (found-1)
-	;; Instead of looping over entire buffer list, stop once we've
-	;; found two "killable" buffers (Bug#8184).
-	(catch 'found-2
-	  (dolist (buffer (buffer-list))
-	    (unless (string-match-p "^ " (buffer-name buffer))
-	      (if (not found-1)
-		  (setq found-1 t)
-		(throw 'found-2 t))))))))
+        ;; Instead of looping over entire buffer list, stop once we've
+        ;; found two "killable" buffers (Bug#8184).
+        (catch 'found-2
+          (dolist (buffer (buffer-list))
+            (unless (string-match-p "^ " (buffer-name buffer))
+              (if (not found-1)
+                  (setq found-1 t)
+                (throw 'found-2 t))))))))
   )
 
 (put 'dired 'menu-enable '(menu-bar-non-minibuffer-window-p))
@@ -1983,10 +1990,10 @@ otherwise it could decide to silently do nothing."
 (defun delete-frame-enabled-p ()
   "Return non-nil if `delete-frame' should be enabled in the menu bar."
   (let ((frames (frame-list))
-	(count 0))
+        (count 0))
     (while frames
       (if (frame-visible-p (car frames))
-	  (setq count (1+ count)))
+          (setq count (1+ count)))
       (setq frames (cdr frames)))
     (> count 1)))
 
@@ -1997,29 +2004,29 @@ otherwise it could decide to silently do nothing."
 
 (defun menu-bar-update-yank-menu (string old)
   (let ((front (car (cdr yank-menu)))
-	(menu-string (if (<= (length string) yank-menu-length)
-			 string
-		       (concat
-			(substring string 0 (/ yank-menu-length 2))
-			"..."
-			(substring string (- (/ yank-menu-length 2)))))))
+        (menu-string (if (<= (length string) yank-menu-length)
+                         string
+                       (concat
+                        (substring string 0 (/ yank-menu-length 2))
+                        "..."
+                        (substring string (- (/ yank-menu-length 2)))))))
     ;; Don't let the menu string start with two dashes, or be empty
     ;; string or single dash; those have special meaning (separators) in a menu.
     (if (or (string-match "\\`--" menu-string)
-	    (string-match "\\`-?\\'" menu-string))
-	;; append a soft hyphen, which isn't displayed, at beginning
-	(setq menu-string (concat "\u00ad" menu-string)))
+            (string-match "\\`-?\\'" menu-string))
+        ;; append a soft hyphen, which isn't displayed, at beginning
+        (setq menu-string (concat "\u00ad" menu-string)))
     ;; If we're supposed to be extending an existing string, and that
     ;; string really is at the front of the menu, then update it in place.
     (if (and old (or (eq old (car front))
-		     (string= old (car front))))
-	(progn
-	  (setcar front string)
-	  (setcar (cdr front) menu-string))
+                     (string= old (car front))))
+        (progn
+          (setcar front string)
+          (setcar (cdr front) menu-string))
       (setcdr yank-menu
-	      (cons
-	       (cons string (cons menu-string 'menu-bar-select-yank))
-	       (cdr yank-menu)))))
+              (cons
+               (cons string (cons menu-string 'menu-bar-select-yank))
+               (cdr yank-menu)))))
   (if (> (length (cdr yank-menu)) kill-ring-max)
       (setcdr (nthcdr kill-ring-max yank-menu) nil)))
 
@@ -2040,7 +2047,7 @@ If this is 10, then only the ten most-recently-selected buffers are shown.
 If this is nil, then all buffers are shown.
 A large number or nil slows down menu responsiveness."
   :type '(choice integer
-		 (const :tag "All" nil))
+                 (const :tag "All" nil))
   :group 'menu)
 
 (defcustom buffers-menu-buffer-name-length 30
@@ -2049,7 +2056,7 @@ If this is a number, then buffer names are truncated to this length.
 If this is nil, then buffer names are shown in full.
 A large number or nil makes the menu too wide."
   :type '(choice integer
-		 (const :tag "Full length" nil))
+                 (const :tag "Full length" nil))
   :group 'menu)
 
 (defcustom buffers-menu-show-directories 'unless-uniquify
@@ -2062,12 +2069,12 @@ from other buffers).
 Setting this variable directly does not take effect until next time the
 Buffers menu is regenerated."
   :set (lambda (symbol value)
-	 (set symbol value)
-	 (menu-bar-update-buffers t))
+         (set symbol value)
+         (menu-bar-update-buffers t))
   :initialize 'custom-initialize-default
   :type '(choice (const :tag "Never" nil)
-		 (const :tag "Unless uniquify is enabled" unless-uniquify)
-		 (const :tag "Always" t))
+                 (const :tag "Unless uniquify is enabled" unless-uniquify)
+                 (const :tag "Always" t))
   :group 'menu)
 
 (defcustom buffers-menu-show-status t
@@ -2075,8 +2082,8 @@ Buffers menu is regenerated."
 Setting this variable directly does not take effect until next time the
 Buffers menu is regenerated."
   :set (lambda (symbol value)
-	 (set symbol value)
-	 (menu-bar-update-buffers t))
+         (set symbol value)
+         (menu-bar-update-buffers t))
   :initialize 'custom-initialize-default
   :type 'boolean
   :group 'menu)
@@ -2095,36 +2102,36 @@ Buffers menu is regenerated."
   (select-frame frame))
 
 
-;; FIXME: move these in common place 
+;; FIXME: move these in common place
 ;; (shared with mouse.el)
 (defvar buffer-menu-modified-string "*")
 (defvar buffer-menu-read-only-string "%")
 
 (defun menu-bar-update-buffers-1 (elt)
   (let* ((buf (car elt))
-	 (file
-	  (and (if (eq buffers-menu-show-directories 'unless-uniquify)
-		   (or (not (boundp 'uniquify-buffer-name-style))
-		       (null uniquify-buffer-name-style))
-		 buffers-menu-show-directories)
-	       (or (buffer-file-name buf)
-		   (buffer-local-value 'list-buffers-directory buf)))))
+         (file
+          (and (if (eq buffers-menu-show-directories 'unless-uniquify)
+                   (or (not (boundp 'uniquify-buffer-name-style))
+                       (null uniquify-buffer-name-style))
+                 buffers-menu-show-directories)
+               (or (buffer-file-name buf)
+                   (buffer-local-value 'list-buffers-directory buf)))))
     (when file
       (setq file (file-name-directory file)))
     (when (and file (> (length file) 20))
       (setq file (concat "..." (substring file -17))))
     (cons (if buffers-menu-show-status
-	      (let ((mod (if (buffer-modified-p buf) buffer-menu-modified-string ""))  ; on NS this indicates modification. To Do: show on the left
-		    ;; (icon (if (buffer-modified-p buf) "\u2666 " ""))
-		    (ro (if (buffer-local-value 'buffer-read-only buf) buffer-menu-read-only-string ""))
-		    )
-		(if file
-		    (format "%s  %s%s    \t%s" (cdr elt) mod ro file)
-		  (format "%s  %s%s" (cdr elt) mod ro)))
-	    (if file
-		(format "%s    \t%s"  (cdr elt) file)
-	      (cdr elt)))
-	  buf)))
+              (let ((mod (if (buffer-modified-p buf) buffer-menu-modified-string ""))  ; on NS this indicates modification. To Do: show on the left
+                    ;; (icon (if (buffer-modified-p buf) "\u2666 " ""))
+                    (ro (if (buffer-local-value 'buffer-read-only buf) buffer-menu-read-only-string ""))
+                    )
+                (if file
+                    (format "%s  %s%s    \t%s" (cdr elt) mod ro file)
+                  (format "%s  %s%s" (cdr elt) mod ro)))
+            (if file
+                (format "%s    \t%s"  (cdr elt) file)
+              (cdr elt)))
+          buf)))
 
 ;; Used to cache the menu entries for commands in the Buffers menu
 (defvar menu-bar-buffers-menu-command-entries nil)
@@ -2152,101 +2159,101 @@ It must accept a buffer as its only required argument.")
        (or force (frame-or-buffer-changed-p))
        ;; buffers list in menu should be stable (rather than reflecting Emacs buffer ordering)
        (let ((buffers (sort (buffer-list) (lambda (a b) (string< (buffer-name a) (buffer-name b)))))
-	     (frames (frame-list))
-	     buffers-menu)
+             (frames (frame-list))
+             buffers-menu)
 
-	 ;; Make the menu of buffers proper.
-	 (setq buffers-menu
+         ;; Make the menu of buffers proper.
+         (setq buffers-menu
                (let ((i 0)
                      (limit (if (and (integerp buffers-menu-max-size)
                                      (> buffers-menu-max-size 1))
                                 buffers-menu-max-size most-positive-fixnum))
                      alist)
-		 ;; Put into each element of buffer-list
-		 ;; the name for actual display,
-		 ;; perhaps truncated in the middle.
+                 ;; Put into each element of buffer-list
+                 ;; the name for actual display,
+                 ;; perhaps truncated in the middle.
                  (while buffers
                    (let* ((buf (pop buffers))
                           (name (buffer-name buf)))
                      (unless (eq ?\s (aref name 0))
                        (push (menu-bar-update-buffers-1
                               (cons buf
-				    (if (and (integerp buffers-menu-buffer-name-length)
-					     (> (length name) buffers-menu-buffer-name-length))
-					(concat
-					 (substring
-					  name 0 (/ buffers-menu-buffer-name-length 2))
-					 "..."
-					 (substring
-					  name (- (/ buffers-menu-buffer-name-length 2))))
-				      name)
+                                    (if (and (integerp buffers-menu-buffer-name-length)
+                                             (> (length name) buffers-menu-buffer-name-length))
+                                        (concat
+                                         (substring
+                                          name 0 (/ buffers-menu-buffer-name-length 2))
+                                         "..."
+                                         (substring
+                                          name (- (/ buffers-menu-buffer-name-length 2))))
+                                      name)
                                     ))
                              alist)
                        ;; If requested, list only the N most recently
                        ;; selected buffers.
                        (when (= limit (setq i (1+ i)))
                          (setq buffers nil)))))
-		 (list (menu-bar-buffer-vector alist))))
+                 (list (menu-bar-buffer-vector alist))))
 
-	 ;; Make a Frames menu if we have more than one frame.
-	   (let* ((frames-vec (make-vector (length frames) nil))
+         ;; Make a Frames menu if we have more than one frame.
+           (let* ((frames-vec (make-vector (length frames) nil))
                   (frames-menu
                    (cons 'keymap
                          (list "Select Frame" frames-vec)))
                   (i 0))
              (dolist (frame frames)
-	     (let ((name (frame-parameter frame 'name)))
-	       (when (or (frame-visible-p frame)
-			 (not (and (> (length name) 0)
-				   (string= (substring name 0 1) " "))))
+             (let ((name (frame-parameter frame 'name)))
+               (when (or (frame-visible-p frame)
+                         (not (and (> (length name) 0)
+                                   (string= (substring name 0 1) " "))))
                (aset frames-vec i
                      (cons
                       (frame-parameter frame 'name)
                       `(lambda ()
                          (interactive) (menu-bar-select-frame ,frame))))
-		 (setq i (1+ i)))))
-	     ;; Put it after the normal buffers
-	     (setq buffers-menu
-		   (nconc buffers-menu
-			  `((frames-separator "--")
-			  (frames menu-item "Frames" ,frames-menu :enable ,(> i 1) )))))
+                 (setq i (1+ i)))))
+             ;; Put it after the normal buffers
+             (setq buffers-menu
+                   (nconc buffers-menu
+                          `((frames-separator "--")
+                          (frames menu-item "Frames" ,frames-menu :enable ,(> i 1) )))))
 
-	 ;; Add in some normal commands at the end of the menu.  We use
-	 ;; the copy cached in `menu-bar-buffers-menu-command-entries'
-	 ;; if it's been set already.  Note that we can't use constant
-	 ;; lists for the menu-entries, because the low-level menu-code
-	 ;; modifies them.
-	 (unless menu-bar-buffers-menu-command-entries
-	   (setq menu-bar-buffers-menu-command-entries
-		 (list '(command-separator "--")
-		       (list 'next-buffer
-			     'menu-item
-			     "Next Buffer"
-			     'next-buffer
-			     :help "Switch to the \"next\" buffer in a cyclic order")
-		       (list 'previous-buffer
-			     'menu-item
-			     "Previous Buffer"
-			     'previous-buffer
-			     :help "Switch to the \"previous\" buffer in a cyclic order")
-		       (list 'select-named-buffer
-			     'menu-item
-			     "Select Named Buffer..."
-			     'switch-to-buffer
-			     :help "Prompt for a buffer name, and select that buffer in the current window")
-		       (list 'list-all-buffers
-			     'menu-item
-			     "List All Buffers"
-			     'list-buffers
-			     :help "Pop up a window listing all Emacs buffers"
-			     ))))
-	 (setq buffers-menu
-	       (nconc buffers-menu menu-bar-buffers-menu-command-entries))
+         ;; Add in some normal commands at the end of the menu.  We use
+         ;; the copy cached in `menu-bar-buffers-menu-command-entries'
+         ;; if it's been set already.  Note that we can't use constant
+         ;; lists for the menu-entries, because the low-level menu-code
+         ;; modifies them.
+         (unless menu-bar-buffers-menu-command-entries
+           (setq menu-bar-buffers-menu-command-entries
+                 (list '(command-separator "--")
+                       (list 'next-buffer
+                             'menu-item
+                             "Next Buffer"
+                             'next-buffer
+                             :help "Switch to the \"next\" buffer in a cyclic order")
+                       (list 'previous-buffer
+                             'menu-item
+                             "Previous Buffer"
+                             'previous-buffer
+                             :help "Switch to the \"previous\" buffer in a cyclic order")
+                       (list 'select-named-buffer
+                             'menu-item
+                             "Select Named Buffer..."
+                             'switch-to-buffer
+                             :help "Prompt for a buffer name, and select that buffer in the current window")
+                       (list 'list-all-buffers
+                             'menu-item
+                             "List All Buffers"
+                             'list-buffers
+                             :help "Pop up a window listing all Emacs buffers"
+                             ))))
+         (setq buffers-menu
+               (nconc buffers-menu menu-bar-buffers-menu-command-entries))
 
          ;; We used to "(bindings--define-key (current-global-map) [menu-bar buffer]"
          ;; but that did not do the right thing when the [menu-bar buffer]
          ;; entry above had been moved (e.g. to a parent keymap).
-	 (setcdr global-buffers-menu-map (cons "Buffers" buffers-menu)))))
+         (setcdr global-buffers-menu-map (cons "Buffers" buffers-menu)))))
 
 (add-hook 'menu-bar-update-hook 'menu-bar-update-buffers)
 
@@ -2261,53 +2268,53 @@ It must accept a buffer as its only required argument.")
 ;;    (with-current-buffer buffer
 ;;     (let ((size (buffer-size)))
 ;;       (format "%s%s %-19s %6s %-15s %s"
-;;	       (if (buffer-modified-p) "*" " ")
-;;	       (if buffer-read-only "%" " ")
-;;	       (buffer-name)
-;;	       size
-;;	       mode-name
-;;	       (or (buffer-file-name) ""))))))
+;;             (if (buffer-modified-p) "*" " ")
+;;             (if buffer-read-only "%" " ")
+;;             (buffer-name)
+;;             size
+;;             mode-name
+;;             (or (buffer-file-name) ""))))))
 
 ;;; Set up a menu bar menu for the minibuffer.
 
 (dolist (map (list minibuffer-local-map
-		   ;; This shouldn't be necessary, but there's a funny
-		   ;; bug in keymap.c that I don't understand yet.  -stef
-		   minibuffer-local-completion-map))
+                   ;; This shouldn't be necessary, but there's a funny
+                   ;; bug in keymap.c that I don't understand yet.  -stef
+                   minibuffer-local-completion-map))
   (bindings--define-key map [menu-bar minibuf]
     (cons "Minibuf" (make-sparse-keymap "Minibuf"))))
 
 (let ((map minibuffer-local-completion-map))
   (bindings--define-key map [menu-bar minibuf ?\?]
     '(menu-item "List Completions" minibuffer-completion-help
-		:help "Display all possible completions"))
+                :help "Display all possible completions"))
   (bindings--define-key map [menu-bar minibuf space]
     '(menu-item "Complete Word" minibuffer-complete-word
-		:help "Complete at most one word"))
+                :help "Complete at most one word"))
   (bindings--define-key map [menu-bar minibuf tab]
     '(menu-item "Complete" minibuffer-complete
-		:help "Complete as far as possible")))
+                :help "Complete as far as possible")))
 
 (let ((map minibuffer-local-map))
   (bindings--define-key map [menu-bar minibuf quit]
     '(menu-item "Quit" abort-recursive-edit
-		:help "Abort input and exit minibuffer"))
+                :help "Abort input and exit minibuffer"))
   (bindings--define-key map [menu-bar minibuf return]
     '(menu-item "Enter" exit-minibuffer
-		:key-sequence "\r"
-		:help "Terminate input and exit minibuffer"))
+                :key-sequence "\r"
+                :help "Terminate input and exit minibuffer"))
   (bindings--define-key map [menu-bar minibuf isearch-forward]
     '(menu-item "Isearch History Forward" isearch-forward
-		:help "Incrementally search minibuffer history forward"))
+                :help "Incrementally search minibuffer history forward"))
   (bindings--define-key map [menu-bar minibuf isearch-backward]
     '(menu-item "Isearch History Backward" isearch-backward
-		:help "Incrementally search minibuffer history backward"))
+                :help "Incrementally search minibuffer history backward"))
   (bindings--define-key map [menu-bar minibuf next]
     '(menu-item "Next History Item" next-history-element
-		:help "Put next minibuffer history element in the minibuffer"))
+                :help "Put next minibuffer history element in the minibuffer"))
   (bindings--define-key map [menu-bar minibuf previous]
     '(menu-item "Previous History Item" previous-history-element
-		:help "Put previous minibuffer history element in the minibuffer")))
+                :help "Put previous minibuffer history element in the minibuffer")))
 
 (define-minor-mode menu-bar-mode
   "Toggle display of a menu bar on each frame (Menu Bar mode).
@@ -2329,16 +2336,16 @@ created in the future."
     ;; If the user has given `default-frame-alist' a `menu-bar-lines'
     ;; parameter, replace it.
     (if (assq 'menu-bar-lines default-frame-alist)
-	(setq default-frame-alist
-	      (cons (cons 'menu-bar-lines val)
-		    (assq-delete-all 'menu-bar-lines
-				     default-frame-alist)))))
+        (setq default-frame-alist
+              (cons (cons 'menu-bar-lines val)
+                    (assq-delete-all 'menu-bar-lines
+                                     default-frame-alist)))))
   ;; Make the message appear when Emacs is idle.  We can not call message
   ;; directly.  The minor-mode message "Menu-bar mode disabled" comes
   ;; after this function returns, overwriting any message we do here.
   (when (and (called-interactively-p 'interactive) (not menu-bar-mode))
     (run-with-idle-timer 0 nil 'message
-			 "Menu-bar mode disabled.  Use M-x menu-bar-mode to make the menu bar appear.")))
+                         "Menu-bar mode disabled.  Use M-x menu-bar-mode to make the menu bar appear.")))
 
 ;;;###autoload
 ;; (This does not work right unless it comes after the above definition.)
@@ -2357,8 +2364,8 @@ See `menu-bar-mode' for more information."
   (if (eq arg 'toggle)
       (menu-bar-mode
        (if (menu-bar-positive-p
-	    (frame-parameter (menu-bar-frame-for-menubar) 'menu-bar-lines))
-	    0 1))
+            (frame-parameter (menu-bar-frame-for-menubar) 'menu-bar-lines))
+            0 1))
     (menu-bar-mode arg)))
 
 (declare-function x-menu-bar-open "term/x-win" (&optional frame))
@@ -2380,55 +2387,55 @@ For the form of POSITION, see `popup-menu-normalize-position'.
 PREFIX is the prefix argument (if any) to pass to the command.
 FROM-MENU-BAR, if non-nil, means we are dropping one of menu-bar's menus."
   (let* ((map (cond
-	       ((keymapp menu) menu)
-	       ((and (listp menu) (keymapp (car menu))) menu)
-	       (t (let* ((map (easy-menu-create-menu (car menu) (cdr menu)))
-			 (filter (when (symbolp map)
-				   (plist-get (get map 'menu-prop) :filter))))
-		    (if filter (funcall filter (symbol-function map)) map)))))
-	 (frame (selected-frame))
-	 event cmd)
+               ((keymapp menu) menu)
+               ((and (listp menu) (keymapp (car menu))) menu)
+               (t (let* ((map (easy-menu-create-menu (car menu) (cdr menu)))
+                         (filter (when (symbolp map)
+                                   (plist-get (get map 'menu-prop) :filter))))
+                    (if filter (funcall filter (symbol-function map)) map)))))
+         (frame (selected-frame))
+         event cmd)
     (if from-menu-bar
-	(let* ((xy (posn-x-y position))
-	       (menu-symbol (menu-bar-menu-at-x-y (car xy) (cdr xy))))
-	  (setq position (list menu-symbol (list frame '(menu-bar)
-						 xy 0))))
+        (let* ((xy (posn-x-y position))
+               (menu-symbol (menu-bar-menu-at-x-y (car xy) (cdr xy))))
+          (setq position (list menu-symbol (list frame '(menu-bar)
+                                                 xy 0))))
       (setq position (popup-menu-normalize-position position)))
     ;; The looping behavior was taken from lmenu's popup-menu-popup
     (while (and map (setq event
-			  ;; map could be a prefix key, in which case
-			  ;; we need to get its function cell
-			  ;; definition.
-			  (x-popup-menu position (indirect-function map))))
+                          ;; map could be a prefix key, in which case
+                          ;; we need to get its function cell
+                          ;; definition.
+                          (x-popup-menu position (indirect-function map))))
       ;; Strangely x-popup-menu returns a list.
       ;; mouse-major-mode-menu was using a weird:
       ;; (key-binding (apply 'vector (append '(menu-bar) menu-prefix events)))
       (setq cmd
-	    (cond
-	     ((and from-menu-bar
-		   (consp event)
-		   (numberp (car event))
-		   (numberp (cdr event)))
-	      (let ((x (car event))
-		    (y (cdr event))
-		    menu-symbol)
-		(setq menu-symbol (menu-bar-menu-at-x-y x y))
-		(setq position (list menu-symbol (list frame '(menu-bar)
-						 event 0)))
-		(setq map
-		      (key-binding (vector 'menu-bar menu-symbol)))))
-	     ((and (not (keymapp map)) (listp map))
-	      ;; We were given a list of keymaps.  Search them all
-	      ;; in sequence until a first binding is found.
-	      (let ((mouse-click (apply 'vector event))
-		    binding)
-		(while (and map (null binding))
-		  (setq binding (lookup-key-ignore-too-long (car map) mouse-click))
-		  (setq map (cdr map)))
+            (cond
+             ((and from-menu-bar
+                   (consp event)
+                   (numberp (car event))
+                   (numberp (cdr event)))
+              (let ((x (car event))
+                    (y (cdr event))
+                    menu-symbol)
+                (setq menu-symbol (menu-bar-menu-at-x-y x y))
+                (setq position (list menu-symbol (list frame '(menu-bar)
+                                                 event 0)))
+                (setq map
+                      (key-binding (vector 'menu-bar menu-symbol)))))
+             ((and (not (keymapp map)) (listp map))
+              ;; We were given a list of keymaps.  Search them all
+              ;; in sequence until a first binding is found.
+              (let ((mouse-click (apply 'vector event))
+                    binding)
+                (while (and map (null binding))
+                  (setq binding (lookup-key-ignore-too-long (car map) mouse-click))
+                  (setq map (cdr map)))
                 binding))
-	     (t
-	      ;; We were given a single keymap.
-	      (lookup-key map (apply 'vector event)))))
+             (t
+              ;; We were given a single keymap.
+              (lookup-key map (apply 'vector event)))))
       ;; Clear out echoing, which perhaps shows a prefix arg.
       (message "")
       ;; Maybe try again but with the submap.
@@ -2457,7 +2464,7 @@ If nil, the current mouse position is used, or nil if there is no mouse."
     ((pred posnp)
      (let ((xy (posn-x-y position)))
        (list (list (car xy) (cdr xy))
-	     (posn-window position))))
+             (posn-window position))))
     ;; Event.
     ((pred eventp)
      (popup-menu-normalize-position (event-end position)))
@@ -2470,7 +2477,7 @@ If nil, \\[menu-bar-open] will drop down the menu corresponding to the
 first (leftmost) menu-bar item; you can select other items by typing
 \\[forward-char], \\[backward-char], \\[right-char] and \\[left-char]."
   :type '(choice (const :tag "F10 drops down TTY menus" nil)
-		 (const :tag "F10 invokes tmm-menubar" t))
+                 (const :tag "F10 invokes tmm-menubar" t))
   :group 'display
   :version "24.4")
 
@@ -2495,7 +2502,7 @@ If FRAME is nil or not given, use the selected frame."
      ((eq type 'x) (x-menu-bar-open frame))
      ((eq type 'w32) (w32-menu-bar-open frame))
      ((and (null tty-menu-open-use-tmm)
-	   (not (zerop (or (frame-parameter nil 'menu-bar-lines) 0))))
+           (not (zerop (or (frame-parameter nil 'menu-bar-lines) 0))))
       ;; Make sure the menu bar is up to date.  One situation where
       ;; this is important is when this function is invoked by name
       ;; via M-x, in which case the menu bar includes the "Minibuf"
@@ -2503,15 +2510,15 @@ If FRAME is nil or not given, use the selected frame."
       (force-mode-line-update)
       (redisplay)
       (let* ((x tty-menu--initial-menu-x)
-	     (menu (menu-bar-menu-at-x-y x 0 frame)))
-	(popup-menu (or
-		     (lookup-key-ignore-too-long
+             (menu (menu-bar-menu-at-x-y x 0 frame)))
+        (popup-menu (or
+                     (lookup-key-ignore-too-long
                       global-map (vector 'menu-bar menu))
-		     (lookup-key-ignore-too-long
+                     (lookup-key-ignore-too-long
                       (current-local-map) (vector 'menu-bar menu))
-		     (cdar (minor-mode-key-binding (vector 'menu-bar menu)))
+                     (cdar (minor-mode-key-binding (vector 'menu-bar menu)))
                      (mouse-menu-bar-map))
-		    (posn-at-x-y x 0 nil t) nil t)))
+                    (posn-at-x-y x 0 nil t) nil t)))
      (t (with-selected-frame (or frame (selected-frame))
           (tmm-menubar))))))
 
@@ -2558,7 +2565,7 @@ This is the keyboard interface to \\[mouse-buffer-menu]."
                     (previous-line . tty-menu-prev-item)
                     (newline . tty-menu-select)
                     (newline-and-indent . tty-menu-select)
-		    (menu-bar-open . tty-menu-exit)))
+                    (menu-bar-open . tty-menu-exit)))
       (substitute-key-definition (car bind) (cdr bind)
                                  map (current-global-map)))
 

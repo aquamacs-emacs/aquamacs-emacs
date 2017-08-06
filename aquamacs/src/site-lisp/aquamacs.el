@@ -1388,6 +1388,7 @@ listed here."
   (append '(global-linum-mode
             column-number-mode
             size-indication-mode
+            tool-bar-mode
             global-hl-line-mode
             global-show-newlines-mode
             global-flyspell-mode

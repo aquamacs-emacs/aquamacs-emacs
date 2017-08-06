@@ -792,7 +792,7 @@ contains `turn-on-auto-fill', `turn-on-word-wrap' or `auto-detect-wrap'."
     )
 
 (define-key menu-bar-options-menu [showhide]
-  (list 'menu-item "View" menu-bar-showhide-menu))
+  (list 'menu-item "User Interface" menu-bar-showhide-menu))
 
 (define-key menu-bar-showhide-menu [mac-font-panel-mode] nil)
 
@@ -889,9 +889,8 @@ contains `turn-on-auto-fill', `turn-on-word-wrap' or `auto-detect-wrap'."
 
 ;; remove this entry, because in Aquamacs, no global tool-bar-mode
 ;; is present
-(define-key menu-bar-showhide-menu [showhide-tool-bar]
-    nil)
-
+;; (define-key menu-bar-showhide-menu [showhide-tool-bar]
+    ;; nil)
 
 (define-key menu-bar-custom-menu [customize]
   `(menu-item "Top-level Customization Group" 
