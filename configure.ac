@@ -23,7 +23,7 @@ dnl  along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
 
 AC_PREREQ(2.65)
 dnl Note this is parsed by (at least) make-dist and lisp/cedet/ede/emacs.el.
-AC_INIT(GNU Emacs, 25.2.50, bug-gnu-emacs@gnu.org)
+AC_INIT(GNU Emacs, 25.3.50, bug-gnu-emacs@gnu.org)
 
 dnl Set emacs_config_options to the options of 'configure', quoted for the shell,
 dnl and then quoted again for a C string.  Separate options with spaces.
@@ -953,6 +953,8 @@ AS_IF([test "$gl_gcc_warnings" != yes],
     gl_WARN_ADD([$w])
   done
   gl_WARN_ADD([-Wredundant-decls])     # Prefer this, as we don't use Bison.
+  gl_WARN_ADD([-Wno-bool-operation])   # Emacs 26 is clean, 25 is not.
+  gl_WARN_ADD([-Wno-implicit-fallthrough]) # Emacs 26 is clean, 25 is not.
   gl_WARN_ADD([-Wno-missing-field-initializers]) # We need this one
   gl_WARN_ADD([-Wno-sign-compare])     # Too many warnings for now
   gl_WARN_ADD([-Wno-type-limits])      # Too many warnings for now
