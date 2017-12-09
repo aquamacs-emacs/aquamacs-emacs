@@ -1210,7 +1210,9 @@ Adds default fonts such as `monospace' where appropriate."
     (let ((size-list
 	   (loop
 	    for f in face-list
-	    for h = (htmlize-face-attribute-in-buffer f :height)
+            ;; give 'inherit, otherwise face-attribute returns either a
+            ;; float or an int
+	    for h = (* 0.01 (htmlize-face-attribute-in-buffer f :height nil 'default)) ;; Aquamacs
 	    collect (if (eq h 'unspecified) nil h))))
       (let ((size
 	     (reduce 'htmlize-merge-size (cons nil size-list))))

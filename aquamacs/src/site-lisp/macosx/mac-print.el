@@ -39,7 +39,7 @@
 
 (require 'aquamacs-macros)
  
-(defcustom mac-print-font-size-scaling-factor 0.5
+(defcustom mac-print-font-size-scaling-factor 0.7
   "The factor by which fonts are rescaled during PDF export and printing."
   :type 'float
   :group 'print)
@@ -75,7 +75,9 @@ Remove from your load-path for optimal printing / export results.")
 	(htmlize-before-hook nil)
 	(htmlize-after-hook nil)
 	(htmlize-generate-hyperlinks nil)
-	(htmlize-white-background t))
+	(htmlize-white-background t)
+        (htmlize-font-size-scaling-factor
+         (or mac-print-font-size-scaling-factor htmlize-font-size-scaling-factor)))
     
     (let ((html-buf (aquamacs-convert-to-html-buffer)))
       (ns-popup-print-panel nil html-buf)
