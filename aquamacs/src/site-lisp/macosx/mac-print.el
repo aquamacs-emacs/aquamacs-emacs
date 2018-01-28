@@ -35,7 +35,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006, 2009, David Reitter
+;; Copyright (C) 2005, 2006, 2009, 2018, David Reitter
 
 (require 'aquamacs-macros)
  
@@ -78,7 +78,6 @@ Remove from your load-path for optimal printing / export results.")
 	(htmlize-white-background t)
         (htmlize-font-size-scaling-factor
          (or mac-print-font-size-scaling-factor htmlize-font-size-scaling-factor)))
-    
     (let ((html-buf (aquamacs-convert-to-html-buffer)))
       (ns-popup-print-panel nil html-buf)
       (kill-buffer html-buf)))

@@ -994,7 +994,7 @@ If no rgb.txt file is found, return nil."
 Like `face-attribute', but respects `face-remapping-alist' for
 the current buffer."
    (let* ((value (face-attribute (htmlize-resolve-face face buffer)
-		     attribute frame inherit)))
+                                 attribute frame inherit)))
      (if inherit
 	 (setq value (face-attribute-merged-with 
 		      attribute
@@ -1194,29 +1194,10 @@ Adds default fonts such as `monospace' where appropriate."
 (defun htmlize-face-size (face)
   ;; The size (height) of FACE, taking inheritance into account.
   ;; Only works in Emacs 21 and later.
-  (let* ((face-list (list face))
-         (head face-list)
-         (tail face-list))
-    (while head
-      (let ((inherit (face-attribute (car head) :inherit)))
-        (cond ((listp inherit)
-               (setcdr tail (copy-list inherit))
-               (setq tail (last tail)))
-              ((eq inherit 'unspecified))
-              (t
-               (setcdr tail (list inherit))
-               (setq tail (cdr tail)))))
-      (pop head))
-    (let ((size-list
-	   (loop
-	    for f in face-list
-            ;; give 'inherit, otherwise face-attribute returns either a
-            ;; float or an int
-	    for h = (* 0.01 (htmlize-face-attribute-in-buffer f :height nil 'default)) ;; Aquamacs
-	    collect (if (eq h 'unspecified) nil h))))
-      (let ((size
-	     (reduce 'htmlize-merge-size (cons nil size-list))))
-	(if size (* htmlize-font-size-scaling-factor size)))))) ;; Aquamacs
+  ;; give inherit 'default, so that face-attribute returns the final float
+  ;; this handles inheritance
+  ;; This function redefined in Aquamacs.
+  (* 0.01 (htmlize-face-attribute-in-buffer face :height nil 'default htmlize-source-buffer)))
 
 (defun htmlize-face-css-name (face)
   ;; Generate the css-name property for the given face.  Emacs places
@@ -1269,7 +1250,8 @@ Adds default fonts such as `monospace' where appropriate."
         (let ((value (htmlize-face-attribute-in-buffer face attr nil t htmlize-source-buffer)))
           (when (and value (not (eq value 'unspecified)))
             (htmlize-face-set-from-keyword-attr fstruct attr value))))
-      (let ((size (htmlize-face-size face)))
+      ;;override size
+      (let ((size (* htmlize-font-size-scaling-factor (htmlize-face-size face))))
         (unless (eql size 1.0) 	; ignore non-spec
           (setf (htmlize-fstruct-size fstruct) size))))
     (setf (htmlize-fstruct-css-name fstruct) (htmlize-face-css-name face))
@@ -1598,7 +1580,10 @@ it's called with the same value of KEY.  All other times, the cached
     (let ((size (htmlize-fstruct-size fstruct)))
       (when (and size (not (eq htmlize-ignore-face-size t)))
 	(cond ((floatp size)
-	       (push (format "font-size: %d%%;" (* 100 size)) result))
+               ;; Font sizes in % in HTML cascade.
+               ;; font sizes calculated from faces (with inheritance) are absolute.
+               (push (format "font-size: %spt;" (* 10 size)) result))
+;;	       (push (format "font-size: %d%%;" (* 100 size)) result))
 	      ((not (eq htmlize-ignore-face-size 'absolute))
 	       (push (format "font-size: %spt;" (/ size 10.0)) result)))))
     (when (htmlize-fstruct-boldp fstruct)
