@@ -1,6 +1,6 @@
 ;;; color.el --- AUCTeX style for `color.sty' (v1.1a)
 
-;; Copyright (C) 2015, 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2015--2017 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -61,37 +61,18 @@
 ;; Needed for auto-parsing.
 (require 'tex)
 
-;; Plug color into the parser -- after that we have the following:
-;; 1. LaTeX-auto-color-definecolor: Name of temporary variable used
-;; when parsing.
-;; 2. LaTeX-add-color-definecolors: Name of function to add
-;; information to add to #3.
-;; 3. LaTeX-color-definecolor-list: Name of variable holding buffer
-;; local information.
-;; 4. LaTeX-color-definecolors-changed: Name of variable indicating
-;; that #3 has changed.
+;; Plug \definecolor into the parser
 (TeX-auto-add-type "color-definecolor" "LaTeX")
 
 (defvar LaTeX-color-definecolor-regexp
-  '("\\\\definecolor{\\([^}]+\\)}{\\([^}]+\\)}{\\([^}]+\\)}"
-    1 LaTeX-auto-color-definecolor)
-  "Matches the arguments of `\\definecolor' from `color'
-package.")
+  '("\\\\definecolor{\\([^}]+\\)}" 1 LaTeX-auto-color-definecolor)
+  "Matches the argument of \\definecolor from color package.")
 
 (defun LaTeX-color-auto-prepare ()
   "Clear `LaTeX-auto-color-definecolor' before parsing."
-  (setq	LaTeX-auto-color-definecolor nil))
-
-(defun LaTeX-color-auto-cleanup ()
-  "Move parsed colors from `LaTeX-auto-color-definecolor' to
-`LaTeX-color-definecolor-list'."
-  ;; \definecolor{<name>}{<model>}{<colour-spec>}
-  ;; color=<name>, ignored=<model>, ignored=<colour-spec>
-  (dolist (color LaTeX-auto-color-definecolor)
-    (add-to-list 'LaTeX-color-definecolor-list (list color))))
+  (setq LaTeX-auto-color-definecolor nil))
 
 (add-hook 'TeX-auto-prepare-hook #'LaTeX-color-auto-prepare t)
-(add-hook 'TeX-auto-cleanup-hook #'LaTeX-color-auto-cleanup t)
 (add-hook 'TeX-update-style-hook #'TeX-auto-parse t)
 
 (defun TeX-arg-color-definecolor (optional &optional prompt)

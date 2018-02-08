@@ -1,9 +1,9 @@
-This is auctex.info, produced by makeinfo version 6.3 from auctex.texi.
+This is auctex.info, produced by makeinfo version 6.5 from auctex.texi.
 
-This manual is for AUCTeX (version 11.90 from 2017-01-10), a
+This manual is for AUCTeX (version 12.1 from 2017-12-04), a
 sophisticated TeX environment for Emacs.
 
-   Copyright (C) 1992-1995, 2001, 2002, 2004-2016 Free Software
+   Copyright (C) 1992-1995, 2001, 2002, 2004-2017 Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
@@ -258,17 +258,6 @@ A.3.3 Bugs
    * Correct indentation for tabular, tabbing, table, math, and array
      environments.
 
-   * No syntactic font locking of verbatim macros and environments.
-     (XEmacs only)
-
-   * Font locking inside of verbatim macros and environments is not
-     inhibited.  This may result in syntax highlighting of unbalanced
-     dollar signs and the like spilling out of the verbatim content.
-     (XEmacs only)
-
-   * Folding of LaTeX constructs spanning more than one line may result
-     in overfull lines.  (XEmacs only)
-
 
 File: auctex.info,  Node: FAQ,  Next: Texinfo mode,  Prev: Development,  Up: Appendices
 
@@ -299,11 +288,10 @@ A.4 Frequently Asked Questions
 
           (setq debug-on-error t)
 
-     as the first line into your init file.  XEmacs users might want to
-     add '(setq stack-trace-on-error t)' as well.  After Emacs has
-     started, you can load a file which triggers the error and a new
-     window should pop up showing the backtrace.  If you get such a
-     backtrace, please include it in the bug report.
+     as the first line into your init file.  After Emacs has started,
+     you can load a file which triggers the error and a new window
+     should pop up showing the backtrace.  If you get such a backtrace,
+     please include it in the bug report.
 
      Second, you can try to figure out if something in your personal or
      site configuration triggers the error by starting Emacs without
@@ -315,25 +303,10 @@ A.4 Frequently Asked Questions
      search either in the site configuration file or your personal init
      file for statements related to the problem.
 
-  2. What versions of Emacs and XEmacs are supported?
+  2. What versions of Emacs are supported?
 
-     AUCTeX was tested with Emacs 21 and XEmacs 21.4.15.  Older versions
-     may work but are unsupported.  Older versions of XEmacs might
-     possibly made to work by updating the 'xemacs-base' package through
-     the XEmacs package system.  If you are looking for a
-     recommendation, it would appear that the smoothest working platform
-     on all operating systems at the current point of time would be
-     Emacs 22 or higher.
-
-     Our success with XEmacs has been less than convincing.  Code for
-     core functionality like formatting and syntax highlighting tends to
-     be different and often older than even Emacs 21.4, and Unicode
-     support as delivered is problematic at best, missing on Windows.
-     Both AUCTeX and XEmacs developers don't hear much from active users
-     of the combination.  Partly for that reason, problems tend to go
-     unnoticed for long amounts of time and are often found, if at all,
-     after releases.  No experiences or recommendations can be given for
-     beta or developer versions of XEmacs.
+     AUCTeX was tested with GNU Emacs 24.  Older versions may work but
+     are unsupported.
 
   3. What should I do when './configure' does not find programs like
      latex?
@@ -607,10 +580,10 @@ Indices
 
 * Menu:
 
-* Key Index::                   
-* Function Index::              
-* Variable Index::              
-* Concept Index::               
+* Key Index::
+* Function Index::
+* Variable Index::
+* Concept Index::
 
 
 File: auctex.info,  Node: Key Index,  Next: Function Index,  Up: Indices
@@ -654,6 +627,8 @@ Key Index
 * C-c C-f C-s <1>:                       Font Specifiers.     (line  25)
 * C-c C-f C-t:                           Editing Facilities.  (line  91)
 * C-c C-f C-t <1>:                       Font Specifiers.     (line  34)
+* C-c C-f g:                             Japanese.            (line 117)
+* C-c C-f m:                             Japanese.            (line 121)
 * C-c C-k:                               Control.             (line  10)
 * C-c C-l:                               Control.             (line  14)
 * C-c C-m:                               Completion.          (line  69)
@@ -814,7 +789,7 @@ Function Index
 * TeX-declare-expert-macros:             Adding Macros.       (line 261)
 * TeX-documentation-texdoc:              Documentation.       (line   6)
 * TeX-electric-macro:                    Completion.          (line 106)
-* TeX-error-overview:                    Error overview.      (line  11)
+* TeX-error-overview:                    Error overview.      (line  10)
 * TeX-fold-buffer:                       Folding.             (line  43)
 * TeX-fold-clearout-buffer:              Folding.             (line 121)
 * TeX-fold-clearout-item:                Folding.             (line 133)
@@ -885,7 +860,7 @@ Variable Index
 * font-latex-fontify-script:             Fontification of math.
                                                               (line  20)
 * font-latex-fontify-script-max-level:   Fontification of math.
-                                                              (line  39)
+                                                              (line  34)
 * font-latex-fontify-sectioning:         Fontification of macros.
                                                               (line  95)
 * font-latex-match-bold-command-keywords: Fontification of macros.
@@ -933,7 +908,7 @@ Variable Index
 * font-latex-quotes:                     Fontification of quotes.
                                                               (line  15)
 * font-latex-script-display:             Fontification of math.
-                                                              (line  63)
+                                                              (line  58)
 * font-latex-sectioning-0-face:          Fontification of macros.
                                                               (line  96)
 * font-latex-sectioning-1-face:          Fontification of macros.
@@ -949,11 +924,13 @@ Variable Index
 * font-latex-slide-title-face:           Fontification of macros.
                                                               (line 114)
 * font-latex-user-keyword-classes:       Fontification of macros.
-                                                              (line 191)
+                                                              (line 194)
 * japanese-LaTeX-default-style:          Japanese.            (line   6)
-* japanese-LaTeX-default-style <1>:      Japanese.            (line  34)
+* japanese-LaTeX-default-style <1>:      Japanese.            (line  75)
 * japanese-TeX-engine-default:           Japanese.            (line   6)
-* japanese-TeX-engine-default <1>:       Japanese.            (line  29)
+* japanese-TeX-engine-default <1>:       Japanese.            (line  36)
+* japanese-TeX-use-kanji-opt-flag:       Japanese.            (line   6)
+* japanese-TeX-use-kanji-opt-flag <1>:   Japanese.            (line  87)
 * LaTeX-amsmath-label:                   Equations.           (line  15)
 * LaTeX-auto-class-regexp-list:          Parsing Files.       (line 105)
 * LaTeX-auto-counter-regexp-list:        Parsing Files.       (line 111)
@@ -964,9 +941,9 @@ Variable Index
 * LaTeX-auto-pagestyle-regexp-list:      Parsing Files.       (line 108)
 * LaTeX-auto-regexp-list:                Parsing Files.       (line 120)
 * LaTeX-auto-savebox-regexp-list:        Parsing Files.       (line 117)
-* LaTeX-babel-hyphen:                    European.            (line 152)
-* LaTeX-babel-hyphen-after-hyphen:       European.            (line 160)
-* LaTeX-babel-hyphen-language-alist:     European.            (line 139)
+* LaTeX-babel-hyphen:                    European.            (line 151)
+* LaTeX-babel-hyphen-after-hyphen:       European.            (line 159)
+* LaTeX-babel-hyphen-language-alist:     European.            (line 138)
 * LaTeX-biblatex-use-Biber:              Selecting a Command. (line  51)
 * LaTeX-clean-intermediate-suffixes:     Cleaning.            (line   7)
 * LaTeX-clean-output-suffixes:           Cleaning.            (line   7)
@@ -1077,19 +1054,21 @@ Variable Index
 * TeX-debug-warnings:                    Ignoring warnings.   (line  15)
 * TeX-default-macro:                     Completion.          (line  91)
 * TeX-default-mode:                      Japanese.            (line   6)
-* TeX-default-mode <1>:                  Japanese.            (line  21)
+* TeX-default-mode <1>:                  Japanese.            (line  67)
 * TeX-display-help:                      Debugging.           (line  47)
 * TeX-DVI-via-PDFTeX:                    Processor Options.   (line  22)
 * TeX-electric-escape:                   Completion.          (line  98)
 * TeX-electric-math:                     Quotes.              (line  72)
 * TeX-electric-sub-and-superscript:      Mathematics.         (line  68)
 * TeX-engine:                            Processor Options.   (line 103)
+* TeX-engine <1>:                        Japanese.            (line   6)
 * TeX-engine-alist:                      Processor Options.   (line 120)
 * TeX-engine-alist <1>:                  Processor Options.   (line 131)
+* TeX-engine-alist <2>:                  Japanese.            (line   6)
 * TeX-engine-alist-builtin:              Processor Options.   (line 120)
-* TeX-error-overview-frame-parameters:   Error overview.      (line  44)
-* TeX-error-overview-open-after-TeX-run: Error overview.      (line  26)
-* TeX-error-overview-setup:              Error overview.      (line  35)
+* TeX-error-overview-frame-parameters:   Error overview.      (line  43)
+* TeX-error-overview-open-after-TeX-run: Error overview.      (line  25)
+* TeX-error-overview-setup:              Error overview.      (line  34)
 * TeX-expand-list:                       Selecting a Command. (line  14)
 * TeX-file-line-error:                   Processor Options.   (line 191)
 * TeX-file-recurse:                      Automatic.           (line  44)
@@ -1117,36 +1096,43 @@ Variable Index
 * TeX-install-font-lock:                 Font Locking.        (line  13)
 * TeX-interactive-mode:                  Processor Options.   (line  30)
 * TeX-ispell-extend-skip-list:           Selecting a Command. (line  82)
-* TeX-language-bg-hook:                  European.            (line  53)
-* TeX-language-cz-hook:                  European.            (line  53)
-* TeX-language-de-hook:                  European.            (line  53)
-* TeX-language-dk-hook:                  European.            (line  53)
-* TeX-language-en-hook:                  European.            (line  53)
-* TeX-language-is-hook:                  European.            (line  53)
-* TeX-language-it-hook:                  European.            (line  53)
-* TeX-language-nl-hook:                  European.            (line  53)
-* TeX-language-pl-hook:                  European.            (line  53)
-* TeX-language-sk-hook:                  European.            (line  53)
-* TeX-language-sv-hook:                  European.            (line  53)
+* TeX-ispell-verb-delimiters:            Selecting a Command. (line 174)
+* TeX-japanese-process-input-coding-system: Japanese.         (line   6)
+* TeX-japanese-process-input-coding-system <1>: Japanese.     (line  95)
+* TeX-japanese-process-output-coding-system: Japanese.        (line   6)
+* TeX-japanese-process-output-coding-system <1>: Japanese.    (line  99)
+* TeX-language-bg-hook:                  European.            (line  49)
+* TeX-language-cz-hook:                  European.            (line  49)
+* TeX-language-de-hook:                  European.            (line  49)
+* TeX-language-dk-hook:                  European.            (line  49)
+* TeX-language-en-hook:                  European.            (line  49)
+* TeX-language-is-hook:                  European.            (line  49)
+* TeX-language-it-hook:                  European.            (line  49)
+* TeX-language-nl-hook:                  European.            (line  49)
+* TeX-language-pl-hook:                  European.            (line  49)
+* TeX-language-sk-hook:                  European.            (line  49)
+* TeX-language-sv-hook:                  European.            (line  49)
 * TeX-macro-global:                      Customizing.         (line  19)
 * TeX-macro-global <1>:                  Automatic Global.    (line  16)
 * TeX-macro-private:                     Automatic Private.   (line  12)
 * TeX-master:                            Starting a Command.  (line  16)
 * TeX-master <1>:                        Starting a Command.  (line  32)
 * TeX-master <2>:                        Multifile.           (line  40)
+* TeX-math-input-method-off-regexp:      Mathematics.         (line  74)
 * TeX-newline-function:                  Indenting.           (line  29)
 * TeX-newline-function <1>:              Indenting.           (line 110)
 * TeX-Omega-command:                     Processor Options.   (line 120)
 * TeX-one-master:                        Multifile.           (line  58)
 * TeX-open-quote:                        Quotes.              (line  21)
 * TeX-outline-extra:                     Outline.             (line  13)
-* TeX-output-view-style:                 Starting Viewers.    (line 105)
+* TeX-output-view-style:                 Starting Viewers.    (line 116)
 * TeX-parse-all-errors:                  Debugging.           (line  35)
 * TeX-parse-self:                        Parsing Files.       (line  37)
+* TeX-parse-self <1>:                    Japanese.            (line   6)
 * TeX-PDF-from-DVI:                      Processor Options.   (line  71)
 * TeX-PDF-mode:                          Processor Options.   (line  16)
 * TeX-quote-after-quote:                 Quotes.              (line  29)
-* TeX-quote-language-alist:              European.            (line 126)
+* TeX-quote-language-alist:              European.            (line 125)
 * TeX-raise-frame-function:              I/O Correlation.     (line  76)
 * TeX-region:                            Starting a Command.  (line  32)
 * TeX-region <1>:                        Starting a Command.  (line  65)
@@ -1165,10 +1151,11 @@ Variable Index
 * TeX-suppress-ignored-warnings:         Ignoring warnings.   (line  39)
 * TeX-trailer-start:                     Starting a Command.  (line  32)
 * TeX-trailer-start <1>:                 Starting a Command.  (line  74)
+* TeX-view-evince-keep-focus:            Starting Viewers.    (line  92)
 * TeX-view-predicate-list:               Starting Viewers.    (line  56)
 * TeX-view-program-list:                 Starting Viewers.    (line  65)
 * TeX-view-program-selection:            Starting Viewers.    (line  36)
-* TeX-view-style:                        Starting Viewers.    (line 114)
+* TeX-view-style:                        Starting Viewers.    (line 125)
 * Texinfo-clean-intermediate-suffixes:   Cleaning.            (line   7)
 * Texinfo-clean-output-suffixes:         Cleaning.            (line   7)
 * Texinfo-mode-hook:                     Modes and Hooks.     (line  21)
@@ -1203,8 +1190,10 @@ Concept Index
 * \subsection <1>:                       Sectioning.          (line   6)
 * \textbf:                               Editing Facilities.  (line  73)
 * \textbf <1>:                           Font Specifiers.     (line  16)
+* \textgt:                               Japanese.            (line 117)
 * \textit:                               Editing Facilities.  (line  76)
 * \textit <1>:                           Font Specifiers.     (line  19)
+* \textmc:                               Japanese.            (line 121)
 * \textrm:                               Editing Facilities.  (line  85)
 * \textrm <1>:                           Font Specifiers.     (line  28)
 * \textsc:                               Editing Facilities.  (line  94)
@@ -1223,7 +1212,7 @@ Concept Index
 * Adding macros:                         Adding Macros.       (line   6)
 * Adding other information:              Adding Other.        (line   6)
 * Adding to PATH in Windows:             Installation under MS Windows.
-                                                              (line  51)
+                                                              (line  42)
 * amsmath:                               Equations.           (line   6)
 * amsmath <1>:                           Tabular-like.        (line   6)
 * ANSI:                                  European.            (line   5)
@@ -1231,8 +1220,8 @@ Concept Index
 * ASCII pTeX:                            Internationalization.
                                                               (line   6)
 * ASCII pTeX <1>:                        Japanese.            (line   6)
-* auctex.el:                             Loading the package. (line  14)
-* auctex.el <1>:                         Changes.             (line 437)
+* auctex.el:                             Loading the package. (line  11)
+* auctex.el <1>:                         Changes.             (line 550)
 * auto directories.:                     Automatic.           (line   6)
 * Auto-Reveal:                           Folding.             (line   6)
 * Automatic:                             Automatic.           (line   6)
@@ -1250,7 +1239,7 @@ Concept Index
 * book.el:                               Simple Style.        (line   6)
 * Braces:                                Quotes.              (line   6)
 * Brackets:                              Quotes.              (line   6)
-* Bulgarian:                             European.            (line  53)
+* Bulgarian:                             European.            (line  49)
 * Changing font:                         Font Specifiers.     (line   6)
 * Changing the parser:                   Hacking the Parser.  (line   6)
 * Chapters:                              Editing Facilities.  (line  26)
@@ -1279,8 +1268,8 @@ Concept Index
 * Customization:                         Customizing.         (line   6)
 * Customization, personal:               Customizing.         (line   6)
 * Customization, site:                   Customizing.         (line   6)
-* Czech:                                 European.            (line  53)
-* Danish:                                European.            (line  53)
+* Czech:                                 European.            (line  49)
+* Danish:                                European.            (line  49)
 * Debugging:                             Debugging.           (line   6)
 * Default command:                       Commands.            (line   6)
 * Defining bibliographies in style hooks: Adding Other.       (line   6)
@@ -1299,8 +1288,8 @@ Concept Index
 * Dollar signs, color bleed with:        Known problems.      (line   6)
 * Dollars:                               Quotes.              (line   6)
 * Double quotes:                         Quotes.              (line   6)
-* Dutch:                                 European.            (line  53)
-* English:                               European.            (line  53)
+* Dutch:                                 European.            (line  49)
+* English:                               European.            (line  49)
 * Enumerates:                            Itemize-like.        (line   6)
 * Environments:                          Environments.        (line   6)
 * Environments, adding:                  Adding Environments. (line   6)
@@ -1338,7 +1327,7 @@ Concept Index
 * Free software:                         Copying.             (line   6)
 * General Public License:                Copying.             (line   6)
 * Generating symbols:                    Automatic.           (line   6)
-* German:                                European.            (line  53)
+* German:                                European.            (line  49)
 * Global directories:                    Automatic Global.    (line   6)
 * Global macro directory:                Automatic Global.    (line   6)
 * Global style hook directory:           Automatic Global.    (line   6)
@@ -1364,10 +1353,10 @@ Concept Index
 * Inverse search:                        I/O Correlation.     (line   6)
 * ISO 8859 Latin 1:                      European.            (line   6)
 * ISO 8859 Latin 2:                      European.            (line   6)
-* iso-cvt.el:                            European.            (line  28)
+* iso-cvt.el:                            European.            (line  27)
 * ispell:                                Selecting a Command. (line  73)
-* ispell <1>:                            European.            (line  40)
-* Italian:                               European.            (line  53)
+* ispell <1>:                            European.            (line  36)
+* Italian:                               European.            (line  49)
 * Itemize:                               Itemize-like.        (line   6)
 * Items:                                 Itemize-like.        (line   6)
 * Japan:                                 Japanese.            (line   6)
@@ -1443,7 +1432,7 @@ Concept Index
 * Parsing TeX <1>:                       Automatic.           (line   6)
 * Parsing TeX output:                    Debugging.           (line   6)
 * PATH in Windows:                       Installation under MS Windows.
-                                                              (line  51)
+                                                              (line  42)
 * PDF mode:                              Processor Options.   (line  16)
 * PDFSync:                               Processor Options.   (line  36)
 * PDFSync <1>:                           I/O Correlation.     (line   6)
@@ -1452,10 +1441,10 @@ Concept Index
 * Personal macro directory:              Automatic Private.   (line   6)
 * Personal TeX macro directory:          Automatic Private.   (line   6)
 * pLaTeX:                                Japanese.            (line   6)
-* Polish:                                European.            (line  53)
+* Polish:                                European.            (line  49)
 * Prefix for labels:                     Sectioning.          (line 110)
 * Prefix for labels <1>:                 Floats.              (line  32)
-* preview-install-styles:                Configure.           (line 102)
+* preview-install-styles:                Configure.           (line  83)
 * Previewing:                            Viewing.             (line   6)
 * Printing:                              Commands.            (line   6)
 * Private directories:                   Automatic Private.   (line   6)
@@ -1502,7 +1491,7 @@ Concept Index
 * Site initialization:                   Customizing.         (line   6)
 * Site macro directory:                  Automatic Global.    (line   6)
 * Site TeX macro directory:              Automatic Global.    (line   6)
-* Slovak:                                European.            (line  53)
+* Slovak:                                European.            (line  49)
 * Source specials:                       Processor Options.   (line  36)
 * Source specials <1>:                   I/O Correlation.     (line   6)
 * Specifying a font:                     Font Specifiers.     (line   6)
@@ -1518,7 +1507,7 @@ Concept Index
                                                               (line   6)
 * Superscript, fontification of:         Fontification of math.
                                                               (line   6)
-* Swedish:                               European.            (line  53)
+* Swedish:                               European.            (line  49)
 * Symbols:                               Mathematics.         (line   6)
 * SyncTeX:                               Processor Options.   (line  36)
 * SyncTeX <1>:                           I/O Correlation.     (line   6)
@@ -1531,10 +1520,10 @@ Concept Index
 * TeX parsing:                           Automatic.           (line   6)
 * tex-jp.el:                             Japanese.            (line   6)
 * tex-mik.el:                            Installation under MS Windows.
-                                                              (line 286)
-* tex-site.el:                           Loading the package. (line  14)
+                                                              (line 256)
+* tex-site.el:                           Loading the package. (line  11)
 * tex-site.el <1>:                       Customizing.         (line   6)
-* tex-site.el <2>:                       Changes.             (line 437)
+* tex-site.el <2>:                       Changes.             (line 550)
 * tool bar, toolbar:                     Processing.          (line  11)
 * Trailer:                               Commands.            (line   6)
 * Underfull boxes:                       Debugging.           (line   6)
@@ -1544,10 +1533,11 @@ Concept Index
                                                               (line   6)
 * Untabify:                              Parsing Files.       (line   6)
 * Updating style hooks:                  Automatic Local.     (line   6)
+* upLaTeX:                               Japanese.            (line   6)
+* upTeX:                                 Japanese.            (line   6)
 * Verbatim, fontification of:            Verbatim content.    (line   6)
 * Viewing:                               Viewing.             (line   6)
 * Warranty:                              Copying.             (line   6)
 * Writing to a printer:                  Commands.            (line   6)
-* x-compose.el:                          European.            (line  31)
-* X-Symbol:                              European.            (line  34)
+* X-Symbol:                              European.            (line  30)
 

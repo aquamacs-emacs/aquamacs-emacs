@@ -135,7 +135,7 @@ make them available as new environments.  Update
 	 (let ((nthm (TeX-read-string
 		      (TeX-argument-prompt nil nil "Environment"))))
 	   (LaTeX-add-amsthm-newtheorems nthm)
-	   (LaTeX-add-environments (list nthm 'LaTeX-theorem-env-label))
+	   (LaTeX-add-environments (list nthm 'LaTeX-amsthm-env-label))
 	   (format "%s" nthm))))
       [ TeX-arg-environment "Numbered like" ]
       t [ (TeX-arg-eval progn (if (eq (save-excursion

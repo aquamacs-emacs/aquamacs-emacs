@@ -1,6 +1,6 @@
 ;;; bicaption.el --- AUCTeX style for `bicaption.sty' (v1.1-158)
 
-;; Copyright (C) 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2016, 2017 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -151,8 +151,9 @@ square brackets."
     '("bisubcaptionbox"  (LaTeX-arg-bicaption-bicaption "sub-" nil  t   t) t)
     '("bisubcaptionbox*" (LaTeX-arg-bicaption-bicaption "sub-"  t   t   t) t))
 
-   ;; Everything starting with \bi(sub)?caption should get its own line
-   (LaTeX-paragraph-commands-add-locally '("bicaption" "bisubcaption"))
+   ;; \bi(sub)?caption(box)? macros should get their own lines
+   (LaTeX-paragraph-commands-add-locally '("bicaption"    "bicaptionbox"
+					   "bisubcaption" "bisubcaptionbox"))
 
    ;; Fontification
    (when (and (featurep 'font-latex)

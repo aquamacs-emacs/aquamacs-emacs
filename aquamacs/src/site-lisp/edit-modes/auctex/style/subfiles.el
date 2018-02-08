@@ -36,6 +36,15 @@
 (defvar LaTeX-subfiles-package-options nil
   "Package options for the subfiles package.")
 
+(defun LaTeX-subfiles-class-options ()
+  "Return name of the main file relative to current subfile."
+  (file-relative-name
+   (read-file-name
+    "Main file: " nil nil nil nil
+    (lambda (texfiles)
+      (string-match "\\.tex$" texfiles)))
+   (TeX-master-directory)))
+
 (TeX-add-style-hook
  "subfiles"
  (lambda ()
@@ -43,8 +52,10 @@
    ;; The following code will run `TeX-run-style-hooks' on the subfile
    ;; master file.  Thanks to Mosè Giordano <mose@gnu.org> for
    ;; presenting a better solution using `assoc'.
-   (TeX-run-style-hooks
-    (file-name-base (cadr (assoc "subfiles" LaTeX-provided-class-options))))
+   (let ((master-file (cadr (assoc "subfiles" LaTeX-provided-class-options))))
+     (when (stringp master-file)
+       (TeX-run-style-hooks
+	(file-name-sans-extension master-file))))
 
    (TeX-add-symbols
     '("subfile" TeX-arg-file))

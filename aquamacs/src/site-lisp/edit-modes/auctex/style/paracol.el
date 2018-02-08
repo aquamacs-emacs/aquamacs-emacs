@@ -51,9 +51,10 @@
 If OPTIONAL is non-nil, insert the result in square brackets."
   (let ((col (TeX-read-string
 	      (TeX-argument-prompt optional nil "Column"))))
-    (save-excursion
-      (backward-char 1)
-      (TeX-argument-insert col optional))))
+    (when (and col (not (string= col "")))
+      (save-excursion
+	(backward-char 1)
+	(TeX-argument-insert col optional)))))
 
 (TeX-add-style-hook
  "paracol"

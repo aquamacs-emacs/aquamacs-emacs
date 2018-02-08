@@ -1,10 +1,12 @@
 ;;; tex-jp.el --- Support for Japanese TeX.  -*- coding: iso-2022-jp-unix; -*-
 
-;; Copyright (C) 1999, 2001-2007, 2012, 2016  Free Software Foundation, Inc.
+;; Copyright (C) 1999, 2001-2008, 2012-2013, 2016-2017
+;;   Free Software Foundation, Inc.
 
 ;; Author:     KOBAYASHI Shinji <koba@flab.fujitsu.co.jp>,
 ;;             Hidenobu Nabetani <nabe@debian.or.jp>
 ;; Maintainer: Masayuki Ataka <masayuki.ataka@gmail.com>
+;;             Ikumi Keita <ikumikeita@jcom.home.ne.jp>
 ;; Keywords: tex
 
 ;; This file is part of AUCTeX.
@@ -111,11 +113,25 @@ For detail, see `TeX-command-list', to which this list is appended."
 				     (const :tag "AmSTeX" ams-tex-mode)))
 			(repeat :tag "Menu elements" :inline t sexp))))
 
-;; Define before first use.
-(defvar japanese-TeX-mode nil
-  "Non-nil means the current buffer handles Japanese TeX/LaTeX.")
-(make-variable-buffer-local 'japanese-TeX-mode)
-(put 'japanese-TeX-mode 'permanent-local t)
+;; customize option の初期値や saved value そのものを改変しないように
+;; するため、setcar の使用は避ける。
+(setq TeX-command-list
+      ;; `TeX-command-list' と同じ構造の新しい list を作る。
+      ;; 各要素の list を l として、l そのものを使ったり、l を
+      ;; 若干修正した list を作ったりして `mapcar' で集める。
+      (mapcar
+       (lambda (l)
+	 (cond
+	  ;; l の第1要素が "BibTeX" や "Index" だったら、l の第2要素
+	  ;; だけを入れ替えた別の list を作る。
+	  ((equal (car l) "BibTeX")
+	   (append (list (car l) "%(bibtex) %s") (cddr l)))
+	  ((equal (car l) "Index")
+	   (append (list (car l) "%(makeindex) %s") (cddr l)))
+	  ;; それ以外の場合は l そのものを使う。
+	  (t
+	   l)))
+       TeX-command-list))
 
 ;; 順調に行けば不要になる。
 (setq TeX-command-list
@@ -123,14 +139,15 @@ For detail, see `TeX-command-list', to which this list is appended."
 	      '(("-" "" ignore nil t)) ;; separator for command menu
 	      TeX-command-list))
 
-;; 暫定処置。tex.el に取り込んでもらえるとよい。
-(setcar (cdr (assoc "BibTeX" TeX-command-list)) "%(bibtex) %s")
-(setcar (cdr (assoc "Index" TeX-command-list)) "%(makeindex) %s")
+;; Define before first use.
+(defvar japanese-TeX-mode nil
+  "Non-nil means the current buffer handles Japanese TeX/LaTeX.")
+(make-variable-buffer-local 'japanese-TeX-mode)
+(put 'japanese-TeX-mode 'permanent-local t)
 
-;; 暫定処置。tex.el に取り込んでもらえるとよい。
-(setq TeX-expand-list
+(setq TeX-expand-list-builtin
       (append
-       TeX-expand-list
+       TeX-expand-list-builtin
        '(
         ;; -kanji オプションの文字列を作る。
         ("%(kanjiopt)" (lambda ()
@@ -155,10 +172,21 @@ For detail, see `TeX-command-list', to which this list is appended."
                         ((eq TeX-engine 'jtex) "jbibtex")
                         ((eq TeX-engine 'uptex) "upbibtex")
                         (t "bibtex"))))
-        ;; mendex と makeindex の適切な方を選択する。
+        ;; mendex, upmendex, makeindex のうち適切なものを選択する。
         ("%(makeindex)" (lambda ()
-                          (if (memq TeX-engine '(ptex uptex))
-                              "mendex %(mendexkopt)" "makeindex")))
+                          (cond
+			   ;; upmendex は XeLaTeX や LuaLaTeX でも
+			   ;; 使える。see
+			   ;; http://www.t-lab.opal.ne.jp/tex/README_upmendex.md
+			   ;; FIXME: XeLaTeX や LuaLaTeX だけを使う
+			   ;; 利用者の場合は、tex-jp は load されな
+			   ;; いのでこの設定は意味がない。
+                           ((and (memq TeX-engine '(uptex xetex luatex))
+                                 (executable-find "upmendex"))
+                            "upmendex %(dic)")
+                           ((memq TeX-engine '(ptex uptex))
+                            "mendex %(mendexkopt) %(dic)")
+                           (t "makeindex"))))
         ;; mendex 用日本語コードオプション。
         ("%(mendexkopt)" (lambda ()
                            (if (and (featurep 'mule)
@@ -168,6 +196,21 @@ For detail, see `TeX-command-list', to which this list is appended."
                                  (if str (format " -%c " (upcase (aref str 0)))
                                    ""))
                              "")))
+	;; (up)mendex 用辞書指定オプション。
+	("%(dic)" (lambda ()
+		    ;; master と同名で拡張子が .dic のファイルがあれば
+		    ;; それを辞書名として -d オプションに与える。
+		    ;; C-c C-r 等の場合 _region_.dic にすべきでは
+		    ;; ないので、`TeX-master-file' を陽に呼ぶ。
+		    (let ((dicname (TeX-master-file "dic" t)))
+		      (if (file-exists-p
+			   (expand-file-name dicname (TeX-master-directory)))
+			  (let ((result (format "-d %s" dicname)))
+			    ;; Advance past the file name in order to
+			    ;; prevent expanding any substring of it.
+			    (setq pos (+ pos (length result)))
+			    result)
+			""))))
         ;; pxdvi と %(o?)xdvi の適切な方を選択する。
         ("%(xdvi)" (lambda ()
                      ;; pxdvi は ptex, jtex 共用なので、
@@ -177,67 +220,57 @@ For detail, see `TeX-command-list', to which this list is appended."
 
 ;;; Viewing (new implementation)
 
-(unless (get 'TeX-view-predicate-list 'saved-value)
-  (setq TeX-view-predicate-list
+(setq TeX-view-predicate-list-builtin
+      (append
        '((paper-a4
-          (TeX-match-style
-           "\\`\\(a4j\\|a4paper\\|a4dutch\\|a4wide\\|sem-a4\\)\\'"))
+	  (let ((regex "\\`\\(?:a4j\\|a4paper\\|a4dutch\\|a4wide\\|sem-a4\\)\\'"))
+	    (or (TeX-match-style regex)
+		(and (fboundp 'LaTeX-match-class-option)
+		     (LaTeX-match-class-option regex)))))
          (paper-a5
-          (TeX-match-style
-           "\\`\\(a5j\\|a5paper\\|a5comb\\)\\'"))
+	  (let ((regex "\\`\\(?:a5j\\|a5paper\\|a5comb\\)\\'"))
+	    (or (TeX-match-style regex)
+		(and (fboundp 'LaTeX-match-class-option)
+		     (LaTeX-match-class-option regex)))))
          ;; jarticle などだと b4paper, b5paper は JIS B 系列。
          ;; j-article などの方には a4j, b5j といったオプションはない。
          (paper-b5    ; ISO B5
-          (and (TeX-match-style "\\`b5paper\\'")
-               (not (memq TeX-engine '(ptex uptex)))))
+          (and (fboundp 'LaTeX-match-class-option)
+	       (LaTeX-match-class-option "\\`b5paper\\'")
+               (not (TeX-match-style "\\`u?[jt]s?\\(?:article\\|report\\|book\\)\\'"))))
          (paper-b5jis ; JIS B5
-          (or (TeX-match-style "\\`b5j\\'")
-              (and (TeX-match-style "\\`b5paper\\'")
-                   (memq TeX-engine '(ptex uptex)))))
+	  (and (fboundp 'LaTeX-match-class-option)
+	       (or (LaTeX-match-class-option "\\`b5j\\'")
+		   (and (LaTeX-match-class-option "\\`b5paper\\'")
+			(TeX-match-style "\\`u?[jt]s?\\(?:article\\|report\\|book\\)\\'")))))
          ;; article などには b4paper というオプションはない。
          ;; b4paper というオプションがあったら JIS B4 と見なす。
          (paper-b4jis
-          (TeX-match-style "\\`\\(b4j\\|b4paper\\)\\'")))))
-;; jsarticle だと他にももっと判型のオプションがあるが、
-;; 全部面倒見てるとキリがないので、これくらいでいいだろう。
-;; jsarticle.el や jsbook.el で追加分の処理を仕込めばいいのかも知れない。
+	  (and (fboundp 'LaTeX-match-class-option)
+	       (LaTeX-match-class-option "\\`\\(?:b4j\\|b4paper\\)\\'"))))
+       ;; jsclasses だと他にももっと判型のオプションがあるが、全部面倒
+       ;; 見てるとキリがないので、これくらいでいいだろう。
+       ;; jsarticle.el や jsbook.el で追加分の処理を仕込めばいいのかも知れない。
+       TeX-view-predicate-list-builtin))
 
-;; 暫定処置。tex.el に取り込んでもらえるとよい。
-(unless (get 'TeX-view-program-list 'saved-value)
-  (setq TeX-view-program-list
-       (cond
-        ;; http://oku.edu.mie-u.ac.jp/~okumura/texwiki/?AUCTeX
-        ;; を参考にしてみた。
-        ((eq system-type 'windows-nt)
-         '(("TeXworks" "TeXworks %o" "texworks")
-           ("MuPDF" "mupdf %o" "mupdf")))
-        ;; これでいいのかどうかは不安。
-        ((eq system-type 'darwin)
-         '(("TeXShop" "open -a TeXShop.app %o" "open")
-           ("TeXworks" "open -a TeXworks.app %o" "open")
-           ("PictPrinter" "open -a PictPrinter.app %d" "open")
-           ("Mxdvi" "open -a Mxdvi.app %d" "open")))
-        (t
-         (setcar (cadr (assoc "xdvi" TeX-view-program-list-builtin))
-                 "%(xdvi) -unique")
-         '(("TeXworks" "texworks %o" "texworks")
-           ("MuPDF" "mupdf %o" "mupdf"))))))
+(unless (memq system-type '(windows-nt darwin))
+  (let ((l (assoc "xdvi" TeX-view-program-list-builtin)))
+    (when l
+      (setcar (cadr l) "%(xdvi) -unique")
+      (setcdr (cdr l) '("%(xdvi)"))))
+  (setq TeX-view-program-list-builtin
+	(append TeX-view-program-list-builtin
+		'(("MuPDF" "mupdf %o" "mupdf")))))
 
 ;; これは tex.el に取り入れてもらうのは難しいか？
 ;; tex-jp.el が読み込まれるだけで、dvi viewer のデフォルトが dviout に
 ;; なってしまうのは抵抗が大きいかも。
 (unless (get 'TeX-view-program-selection 'saved-value)
-  (setq TeX-view-program-selection
-       (append
-        (cond
-         ((eq system-type 'windows-nt)
-          '((output-dvi "dviout")
-            (output-pdf "TeXworks")))
-         ((eq system-type 'darwin)
-          '((output-pdf "Preview.app")))
-         (t
-          nil))
-        TeX-view-program-selection)))
+  (if (eq system-type 'windows-nt)
+      (setq TeX-view-program-selection
+	    (append
+	     '((output-dvi "dviout"))
+	     TeX-view-program-selection))))
 
 (mapc (lambda (dir) (add-to-list 'TeX-macro-global dir t))
       (or (TeX-tree-expand
@@ -250,16 +283,6 @@ For detail, see `TeX-command-list', to which this list is appended."
 	   '("$SYSTEXMF" "$TEXMFLOCAL" "$TEXMFMAIN" "$TEXMFDIST")
 	   "jlatex" '("/jtex/" "/jbibtex/bst/"))
 	  '("/usr/share/texmf/jtex/" "/usr/share/texmf/jbibtex/bst/")))
-
-;; 順調に行けば不要になる。
-(setq LaTeX-command-style
-      (append '(("\\`u[jt]\\(article\\|report\\|book\\)\\'\\|\\`uplatex\\'"
-                "%(PDF)uplatex %S%(PDFout)")
-               ("\\`[jt]s?\\(article\\|report\\|book\\)\\'"
-                "%(PDF)platex %(kanjiopt)%S%(PDFout)")
-               ("\\`j-\\(article\\|report\\|book\\)\\'"
-                "%(PDF)jlatex %S%(PDFout)"))
-	      LaTeX-command-style))
 
 (defcustom japanese-TeX-error-messages t
   "*If non-nil, explain TeX error messages in Japanese."
@@ -315,12 +338,19 @@ See also a user custom option `TeX-japanese-process-input-coding-system'."
     ;; for upLaTeX
     ("ujarticle") ("ujreport") ("ujbook")
     ("utarticle") ("utreport") ("utbook"))
-  "*List of Japanese document styles."
+  "*List of Japanese document classes."
   :group 'AUCTeX-jp
   :type '(repeat (group (string :format "%v"))))
 
 (setq LaTeX-style-list
       (append japanese-LaTeX-style-list LaTeX-style-list))
+
+;; text〜系の明朝体・ゴシック体指定コマンドは jLaTeX にはないようで、
+;; (u)pLaTeX でしか使えないが、問題になることはないだろう。
+(setq LaTeX-font-list
+      (append '((?m "\\textmc{" "}" "\\mathmc{" "}")
+                (?g "\\textgt{" "}" "\\mathgt{" "}"))
+	      LaTeX-font-list))
 
 ;;; Coding system
 
@@ -355,7 +385,7 @@ See also a user custom option `TeX-japanese-process-input-coding-system'."
 		   ((eq TeX-engine 'ptex)
 		    (cond ((eq system-type 'darwin)
 			   'utf-8)
-			  (japanese-TeX-use-kanji-opt-flag
+			  ((and japanese-TeX-use-kanji-opt-flag kanji)
 			   kanji)
 			  (t 'shift_jis)))
 		   ;; jtex なら sjis に固定する。
@@ -374,15 +404,38 @@ See also a user custom option `TeX-japanese-process-input-coding-system'."
 		   ;; ただし、locale が日本語をサポートしない場合は
 		   ;; euc に固定する。
 		   (t
-		    (if (japanese-TeX-coding-ejsu locale-coding-system)
-			locale-coding-system 'euc-jp))))))
+		    (let ((lcs
+			   (cond
+			    ((boundp 'locale-coding-system)
+			     locale-coding-system)
+			    ;; XEmacs doesn't have `locale-coding-system'.
+			    ;; Instead xemacs 21.5 has
+			    ;; `get-coding-system-from-locale' and
+			    ;; `current-locale'.  They aren't available on
+			    ;; xemacs 21.4.
+			    ((and
+			      (featurep 'xemacs)
+			      (fboundp 'get-coding-system-from-locale))
+			     (get-coding-system-from-locale
+			      (if (fboundp 'current-locale)
+				  (current-locale)
+				;; I don't know XEmacs well, so incorporate
+				;; the suggestion of
+				;; http://lists.gnu.org/archive/html/auctex-devel/2017-02/msg00079.html
+				;; as well.
+				(or (getenv "LC_ALL")
+				    (getenv "LC_CTYPE")
+				    (getenv "LANG")
+				    "")))))))
+		      (if (and lcs (japanese-TeX-coding-ejsu lcs))
+			  lcs 'euc-jp)))))))
 
 	   ;; process に与える入力の文字コード。
 	   (enc (cond
 		 ;; ptex で -kanji オプションありなら、その文字コード。
 		 ;; なしなら utf-8 か sjis。
 		 ((eq TeX-engine 'ptex)
-		  (if japanese-TeX-use-kanji-opt-flag
+		  (if (and japanese-TeX-use-kanji-opt-flag kanji)
 		      kanji
 		    (if (eq system-type 'windows-nt)
 			'shift_jis 'utf-8)))
@@ -393,13 +446,20 @@ See also a user custom option `TeX-japanese-process-input-coding-system'."
 		 ;; uptex なら utf-8 に固定する。
 		 (t
 		  'utf-8))))
+
+	;; 改行コードを指定。
+	(setq dec (coding-system-change-eol-conversion
+		   dec
+		   (if (eq system-type 'windows-nt) 'dos 'unix))
+	      enc (coding-system-change-eol-conversion
+		   enc
+		   (if (eq system-type 'windows-nt) 'dos 'unix)))
+
 	;; Customize 値があればそれを優先。
-	(set-process-coding-system process
-				   (or TeX-japanese-process-output-coding-system dec)
-				   (or TeX-japanese-process-input-coding-system enc))))))
-(when (featurep 'mule)
-  (setq TeX-after-start-process-function
-        #'japanese-TeX-set-process-coding-system))
+	(set-process-coding-system
+	 process
+	 (or TeX-japanese-process-output-coding-system dec)
+	 (or TeX-japanese-process-input-coding-system enc))))))
 
 (defun japanese-TeX-coding-ejsu (coding-system)
   "Convert japanese CODING-SYSTEM to mnemonic string.
@@ -421,16 +481,16 @@ Return nil otherwise."
                 (mule-utf-8 . "utf8") ; for emacs 21, 22
                 ;; utf-8-auto や utf-8-emacs を入れる必要はあるのか？
 
-                ;; xemacs で jisx0213 は使えるのか？使えるとして、
-                ;; その coding system 名は？
+                ;; xemacs 21.5 with mule には、jisx0213 の charset は
+                ;; あるがそれ用の coding system はない。
                 (euc-jis-2004 . "euc")
                 (iso-2022-jp-2004 . "jis")
                 (japanese-shift-jis-2004 . "sjis")
 
-                ;; xemacs に cp932 系の coding system があるのか
-                ;; どうかもよくわからない。
                 (japanese-cp932 . "sjis")
-                (eucjp-ms . "euc"))))))
+                (eucjp-ms . "euc")
+                (windows-932 . "sjis") ; for xemacs 21.5 with mule
+		)))))
 
 (defun japanese-TeX-get-encoding-string ()
   "Return coding option string for Japanese pTeX family.
@@ -466,17 +526,16 @@ Set `japanese-TeX-mode' to t, and enter `TeX-plain-tex-mode'."
 (defun japanese-plain-tex-mode-initialization ()
   "Japanese plain-TeX specific initializations."
   (when japanese-TeX-mode
-;    (setq TeX-command-default japanese-TeX-command-default)
     (TeX-engine-set japanese-TeX-engine-default)
 
     ;; For the intent of the following lines, see the comments below
     ;; in `japanese-latex-mode-initialization'.
     (when enable-local-variables
       (setq major-mode 'japanese-plain-tex-mode)
-      (add-hook 'hack-local-variables-hook 'japanese-TeX-reset-mode-name
+      (add-hook 'hack-local-variables-hook #'japanese-TeX-reset-mode-name
 		nil t))))
 
-(add-hook 'plain-TeX-mode-hook 'japanese-plain-tex-mode-initialization)
+(add-hook 'plain-TeX-mode-hook #'japanese-plain-tex-mode-initialization)
 
 ;;;###autoload
 (defun japanese-latex-mode ()
@@ -489,23 +548,24 @@ Set `japanese-TeX-mode' to t, and enter `TeX-latex-mode'."
 (defun japanese-latex-mode-initialization ()
   "Japanese LaTeX specific initializations."
   (when japanese-TeX-mode
-;    (setq TeX-command-default japanese-LaTeX-command-default)
-    (TeX-engine-set
-     ;; class file 名に頼るのは正しいのか？
-     ;; jLaTeX にも jarticle は一応あるし、pLaTeX でも自分で j-article を
-     ;; インストールして使っていけない法はない。
-     (cond
-      ((TeX-match-style "\\`u[jt]\\(article\\|report\\|book\\)\\'\\|\\`uplatex\\'")
-       'uptex)
-      ((TeX-match-style "\\`[jt]s?\\(article\\|report\\|book\\)\\'")
-       'ptex)
-      ((TeX-match-style "\\`j-\\(article\\|report\\|book\\)\\'")
-       'jtex)
-      (t japanese-TeX-engine-default)))
+    ;; `TeX-match-style' を使うのは `TeX-update-style' の後に遅らせる。
+    ;; この段階で使うと、その中で呼ぶ `TeX-style-list' の中で
+    ;; `TeX-update-style' が呼ばれてしまい、local variable 等の準備が
+    ;; 整ってない段階で style hook が実行されて不適な結果になることが
+    ;; ある。また、`TeX-update-style' は後から `find-file-hook' 中でも
+    ;; う一度呼ばれるので、`TeX-parse-self' が t だと parse 処理も無駄
+    ;; に 2 回行われてしまう。
+    (add-hook 'TeX-update-style-hook
+	      #'japanese-LaTeX-guess-engine nil t)
     (setq LaTeX-default-style japanese-LaTeX-default-style)
-;    (setq TeX-command-BibTeX
-;        (if (and (eq TeX-engine 'ptex) (executable-find "pbibtex"))
-;            "pBibTeX" "jBibTeX"))
+
+    (when (and (fboundp 'font-latex-add-keywords)
+	       (eq TeX-install-font-lock 'font-latex-setup))
+      ;; jLaTeX にはないコマンドだが、それはもう気にしなくていいだろう。
+      (font-latex-add-keywords '(("textgt" "{") ("mathgt" "{"))
+			       'bold-command)
+      (font-latex-add-keywords '("gtfamily")
+			       'bold-declaration))
 
     ;; The value of `major-mode' should be `latex-mode', not
     ;; `japanese-latex-mode', because the name `latex-mode' is hard
@@ -524,10 +584,10 @@ Set `japanese-TeX-mode' to t, and enter `TeX-latex-mode'."
     ;; `hack-local-variables' is done.
     (when enable-local-variables
       (setq major-mode 'japanese-latex-mode)
-      (add-hook 'hack-local-variables-hook 'japanese-TeX-reset-mode-name
+      (add-hook 'hack-local-variables-hook #'japanese-TeX-reset-mode-name
 		nil t))))
 
-(add-hook 'LaTeX-mode-hook 'japanese-latex-mode-initialization)
+(add-hook 'LaTeX-mode-hook #'japanese-latex-mode-initialization)
 
 ;; This function is useful only within `hack-local-variables-hook'.
 (defun japanese-TeX-reset-mode-name ()
@@ -535,13 +595,32 @@ Set `japanese-TeX-mode' to t, and enter `TeX-latex-mode'."
 	 (setq major-mode 'latex-mode))
 	((eq major-mode 'japanese-plain-tex-mode)
 	 (setq major-mode 'plain-tex-mode)))
-  (remove-hook 'hack-local-variables-hook 'japanese-TeX-reset-mode-name t))
+  (remove-hook 'hack-local-variables-hook #'japanese-TeX-reset-mode-name t))
 
 ;; Make `hack-dir-local-variables' to regard `latex-mode' as parent
 ;; of `japanese-latex-mode', and `plain-tex-mode' as parent of
 ;; `japanese-plain-tex-mode'.
 (put 'japanese-plain-tex-mode 'derived-mode-parent 'plain-tex-mode)
 (put 'japanese-latex-mode 'derived-mode-parent 'latex-mode)
+
+(defun japanese-LaTeX-guess-engine ()
+  "Guess Japanese TeX engine and set it to `TeX-engine'.
+Document class and its option is considered in the guess.  Do not
+overwrite the value already set locally."
+  ;; `TeX-engine' may be set by the file local variable or by the menu
+  ;; Command->TeXing Options manually.  Don't override the user
+  ;; preference set in such ways.
+  (unless (local-variable-p 'TeX-engine (current-buffer))
+    (TeX-engine-set
+     (cond
+      ((TeX-match-style "\\`u[jt]\\(?:article\\|report\\|book\\)\\'")
+       'uptex)
+      ((TeX-match-style "\\`[jt]s?\\(?:article\\|report\\|book\\)\\'")
+       (if (LaTeX-match-class-option "\\`uplatex\\'")
+	   'uptex 'ptex))
+      ((TeX-match-style "\\`j-\\(?:article\\|report\\|book\\)\\'")
+       'jtex)
+      (t japanese-TeX-engine-default)))))
 
 ;;; Support for various self-insert-command
 
@@ -561,7 +640,7 @@ Set `japanese-TeX-mode' to t, and enter `TeX-latex-mode'."
   (expand-abbrev)
   (if (TeX-looking-at-backward "\\\\/\\(}+\\)" 50)
       (replace-match "\\1" t))
-  (call-interactively 'japanese-TeX-self-insert-command))
+  (call-interactively #'japanese-TeX-self-insert-command))
 
 ;;; Error Messages
 

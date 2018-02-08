@@ -1,6 +1,6 @@
-;;; XCharter.el --- AUCTeX style for `XCharter.sty' (v1.05)
+;;; XCharter.el --- AUCTeX style for `XCharter.sty' (v1.094)
 
-;; Copyright (C) 2014 Free Software Foundation, Inc.
+;; Copyright (C) 2014, 2017 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -26,7 +26,7 @@
 
 ;;; Commentary:
 
-;; This file adds support for `XCharter.sty' (v1.05) from 2014/07/03.
+;; This file adds support for `XCharter.sty' (v1.094) from 2017/08/08.
 ;; `XCharter.sty' is part of TeXLive.
 
 ;;; Code:
@@ -48,21 +48,35 @@
     ;; Text commands
     '("textsu"     t)   ; superior figures
     '("sustyle"   -1)   ;
+    '("textin"     t)   ; inferior figures
+    '("instyle"   -1)   ;
     '("textlf"     t)   ; lining figures
     '("lfstyle"   -1)   ;
     '("textosf"    t)   ; oldstyle figures
     '("textosfI"   t)   ; oldstyle figures alternate
-    '("osfstyle"  -1))  ; whatever oldstyle option is in force
+    '("osfstyle"  -1)   ; whatever oldstyle option is in force
+    '("textnumerator"   t) ; numerators
+    '("textnu"          t) ;
+    '("textdenominator" t) ; denominators
+    '("textde"          t) ;
+    '("textfrac"        2))
 
    ;; Fontification
    (when (and (featurep 'font-latex)
               (eq TeX-install-font-lock 'font-latex-setup))
      (font-latex-add-keywords '(("textsu"    "{")
+				("textin"    "{")
                                 ("textlf"    "{")
                                 ("textosf"   "{")
-                                ("textosfI"  "{"))
+                                ("textosfI"  "{")
+				("textnumerator"   "{")
+				("textnu"          "{")
+				("textdenominator" "{")
+				("textde"          "{")
+				("textfrac"        "{{"))
                               'type-command)
      (font-latex-add-keywords '(("sustyle"   "")
+				("instyle"   "")
                                 ("lfstyle"   "")
                                 ("osfstyle"  ""))
                               'type-declaration)))
@@ -70,7 +84,7 @@
 
 (defvar LaTeX-XCharter-package-options
   '("lining" "lf" "oldstyle" "osf" "oldstyleI" "osfI"
-    "scaled" "sups")
+    "scaled" "sups" "scosf")
   "Package options for the XCharter package.")
 
 ;;; XCharter.el ends here

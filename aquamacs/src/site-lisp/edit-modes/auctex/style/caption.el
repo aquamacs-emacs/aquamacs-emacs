@@ -1,6 +1,6 @@
 ;;; caption.el --- AUCTeX style for `caption.sty' (v3.3-111)
 
-;; Copyright (C) 2015, 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2015--2017 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -176,9 +176,9 @@ in `caption'-completions."
 	      (when (and (string-equal key "labelformat")
 			 (boundp 'LaTeX-subcaption-key-val-options))
 		(pushnew (list "subrefformat"
-			       (delete-dups (apply #'append (list val) val-match)))
+			       (TeX-delete-duplicate-strings (apply #'append (list val) val-match)))
 			 opts :test #'equal))
-	      (pushnew (list key (delete-dups (apply #'append (list val) val-match)))
+	      (pushnew (list key (TeX-delete-duplicate-strings (apply #'append (list val) val-match)))
 		       opts :test #'equal))
 	  (pushnew (list key (list val)) opts :test #'equal)))
       (setq LaTeX-caption-key-val-options-local (copy-alist opts))))
@@ -192,7 +192,7 @@ in `caption'-completions."
 	     (val-match (cdr (assoc key LaTeX-caption-key-val-options-local)))
 	     (temp (copy-alist LaTeX-caption-key-val-options-local))
 	     (opts (assq-delete-all (car (assoc key temp)) temp)))
-	(pushnew (list key (delete-dups (apply #'append val val-match)))
+	(pushnew (list key (TeX-delete-duplicate-strings (apply #'append val val-match)))
 		 opts :test #'equal)
 	(setq LaTeX-caption-key-val-options-local (copy-alist opts))))))
 
@@ -293,25 +293,25 @@ STAR is non-nil, do not query for a short-caption and a label."
       (insert LaTeX-optop short-caption LaTeX-optcl))
     (TeX-argument-insert caption optional)
     (LaTeX-fill-paragraph)
-    (unless star
-      ;; Check if `envtype' is a figure or a table, also consult
-      ;; `LaTeX-label-alist' for additions from user or newfloat.el,
-      ;; then run `LaTeX-label' w/ 'environment arg, otherwise w/o.
-      (save-excursion
-	(if (or (member envtype figtypes)
-		(member envtype tabtypes)
-		(assoc envtype LaTeX-label-alist))
-	    (LaTeX-label (cond ((member envtype figtypes)
-				"figure")
-			       ((member envtype tabtypes)
-				"table")
-			       (t envtype))
-			 'environment)
-	  (LaTeX-label envtype)))
-      (when (looking-at-p "\\\\label{")
-	(LaTeX-newline)
-	(indent-according-to-mode)
-	(end-of-line)))))
+    (when (and (not star)
+	       ;; Check if `envtype' is a figure or a table, also
+	       ;; consult `LaTeX-label-alist' for additions from user
+	       ;; or newfloat.el, then run `LaTeX-label' w/
+	       ;; 'environment arg, otherwise w/o.
+	       (save-excursion
+		 (if (or (member envtype figtypes)
+			 (member envtype tabtypes)
+			 (assoc envtype LaTeX-label-alist))
+		     (LaTeX-label (cond ((member envtype figtypes)
+					 "figure")
+					((member envtype tabtypes)
+					 "table")
+					(t envtype))
+				  'environment)
+		   (LaTeX-label envtype))))
+      (LaTeX-newline)
+      (indent-according-to-mode)
+      (end-of-line))))
 
 (TeX-add-style-hook
  "caption"
@@ -426,6 +426,9 @@ STAR is non-nil, do not query for a short-caption and a label."
     '("bothIfFirst" 2)
 
     '("bothIfSecond" 2))
+
+   ;; \caption(box|of) macros should get their own lines
+   (LaTeX-paragraph-commands-add-locally '("captionbox" "captionof"))
 
    ;; Fontification
    (when (and (featurep 'font-latex)

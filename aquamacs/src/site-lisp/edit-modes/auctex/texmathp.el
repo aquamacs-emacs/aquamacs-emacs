@@ -1,6 +1,6 @@
 ;;; texmathp.el -- Code to check if point is inside LaTeX math environment
 
-;; Copyright (C) 1998, 2004 Free Software Foundation, Inc.
+;; Copyright (C) 1998, 2004, 2017 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <dominik@strw.LeidenUniv.nl>
 ;; Maintainer: auctex-devel@gnu.org
@@ -143,7 +143,16 @@
     ("\\text"        arg-off)     ("\\intertext"   arg-off)
 
     ;; mathtools
-    ("\\shortintertext"   arg-off))
+    ("\\shortintertext"   arg-off)
+
+    ;; empheq
+    ("empheq"        env-on)
+    ("AmSequation"   env-on)      ("AmSequation*"  env-on)
+    ("AmSalign"      env-on)      ("AmSalign*"     env-on)
+    ("AmSgather"     env-on)      ("AmSgather*"    env-on)
+    ("AmSmultline"   env-on)      ("AmSmultline*"  env-on)
+    ("AmSflalign"    env-on)      ("AmSflalign*"   env-on)
+    ("AmSalignat"    env-on)      ("AmSalignat*"   env-on))
   "The default entries for `texmathp-tex-commands', which see.")
 
 (defun texmathp-compile ()

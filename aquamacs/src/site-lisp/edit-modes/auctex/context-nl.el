@@ -1,6 +1,6 @@
 ;;; context-nl.el --- Support for the ConTeXt dutch interface.
 
-;; Copyright (C) 2003, 2004 Free Software Foundation, Inc.
+;; Copyright (C) 2003, 2004, 2006, 2010, 2015 Free Software Foundation, Inc.
 
 ;; Maintainer: Berend de Boer <berend@pobox.com>
 ;; Keywords: tex

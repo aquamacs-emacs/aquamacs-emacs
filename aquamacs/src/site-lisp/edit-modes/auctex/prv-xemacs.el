@@ -1,6 +1,6 @@
 ;;; prv-xemacs.el --- XEmacs support for preview-latex
 
-;; Copyright (C) 2001-2006 Free Software Foundation, Inc.
+;; Copyright (C) 2001-2006, 2017 Free Software Foundation, Inc.
 
 ;; Author: David Kastrup
 ;; Keywords: convenience, tex, wp
@@ -413,10 +413,9 @@ stream before the buffer characters can be identified.  XEmacs
 21.4 is rather bad at preserving incomplete multibyte characters
 in that process.  This variable makes it possible to use a
 reconstructable coding system in the run buffer instead.  Specify
-an alist of base coding system names here, which you can get
-using
+an alist of coding system names here, which you can get using
 
-  \(coding-system-name (coding-system-base buffer-file-coding-system))
+  \(coding-system-name buffer-file-coding-system)
 
 in properly detected buffers."
   :group 'preview-latex
@@ -430,6 +429,17 @@ in properly detected buffers."
   (or (cdr (assq (coding-system-name base)
 		 preview-buffer-recoding-alist))
       base))
+
+(if (and (featurep 'mule)
+	 (= emacs-major-version 21)
+	 (< emacs-minor-version 5))
+    (defadvice coding-system-change-eol-conversion
+	(after fallback activate)
+      "Return CODING-SYSTEM as-is if the result is nil.
+XEmacs 21.4 mule-ucs fails to define utf-8 to respond properly to
+this function."
+      (unless ad-return-value
+	(setq ad-return-value (ad-get-arg 0)))))
 
 (defun preview-mode-setup ()
   "Setup proper buffer hooks and behavior for previews."
@@ -733,6 +743,12 @@ of an insertion."
 	 (preview-create-icon-1 (nth 0 image)
 				(nth 1 image)
 				(nth 2 image)))))
+
+(if (eq system-type 'windows-nt)
+    (defadvice preview-ps-quote-filename (around path-sep-to-slash)
+      "Make path separator to slash so that the function will not be confused."
+      (let ((directory-sep-char ?/))
+	ad-do-it)))
 
 (provide 'prv-xemacs)
 

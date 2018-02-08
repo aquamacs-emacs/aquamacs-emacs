@@ -1,9 +1,9 @@
-This is auctex.info, produced by makeinfo version 6.3 from auctex.texi.
+This is auctex.info, produced by makeinfo version 6.5 from auctex.texi.
 
-This manual is for AUCTeX (version 11.90 from 2017-01-10), a
+This manual is for AUCTeX (version 12.1 from 2017-12-04), a
 sophisticated TeX environment for Emacs.
 
-   Copyright (C) 1992-1995, 2001, 2002, 2004-2016 Free Software
+   Copyright (C) 1992-1995, 2001, 2002, 2004-2017 Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
@@ -175,11 +175,11 @@ Writing Your Own Style Support
 
 Copying, Changes, Development, FAQ
 
-* Copying this Manual::         
-* Changes::                     
-* Development::                 
-* FAQ::                         
-* Texinfo mode::                
+* Copying this Manual::
+* Changes::
+* Development::
+* FAQ::
+* Texinfo mode::
 
 Copying this Manual
 
@@ -187,10 +187,10 @@ Copying this Manual
 
 Indices
 
-* Key Index::                   
-* Function Index::              
-* Variable Index::              
-* Concept Index::               
+* Key Index::
+* Function Index::
+* Variable Index::
+* Concept Index::
 
 
 
@@ -199,15 +199,15 @@ File: auctex.info,  Node: Copying,  Next: Introduction,  Prev: Top,  Up: Top
 Copying
 *******
 
-AUCTeX primarily consists of Lisp files for Emacs (and XEmacs), but
-there are also installation scripts and files and TeX support files.
-All of those are "free"; this means that everyone is free to use them
-and free to redistribute them on a free basis.  The files of AUCTeX are
-not in the public domain; they are copyrighted and there are
-restrictions on their distribution, but these restrictions are designed
-to permit everything that a good cooperating citizen would want to do.
-What is not allowed is to try to prevent others from further sharing any
-version of these programs that they might get from you.
+AUCTeX primarily consists of Lisp files for Emacs, but there are also
+installation scripts and files and TeX support files.  All of those are
+"free"; this means that everyone is free to use them and free to
+redistribute them on a free basis.  The files of AUCTeX are not in the
+public domain; they are copyrighted and there are restrictions on their
+distribution, but these restrictions are designed to permit everything
+that a good cooperating citizen would want to do.  What is not allowed
+is to try to prevent others from further sharing any version of these
+programs that they might get from you.
 
    Specifically, we want to make sure that you have the right to give
 away copies of the files that constitute AUCTeX, that you receive source
@@ -252,7 +252,7 @@ File: auctex.info,  Node: Summary,  Next: Installation,  Up: Introduction
 
 AUCTeX is a comprehensive customizable integrated environment for
 writing input files for TeX, LaTeX, ConTeXt, Texinfo, and docTeX using
-Emacs or XEmacs.
+Emacs.
 
    It supports you in the insertion of macros, environments, and
 sectioning commands by providing completion alternatives and prompting
@@ -353,13 +353,10 @@ File: auctex.info,  Node: Prerequisites,  Next: Configure,  Up: Installation
 1.2.1 Prerequisites
 -------------------
 
-   * A recent version of Emacs, alternatively XEmacs
+   * GNU Emacs 24 or higher
 
-     Emacs 20 is no longer supported, and neither is XEmacs with a
-     version of 'xemacs-base' older than 1.84 (released in sumo from
-     02/02/2004).  Using preview-latex requires a version of Emacs
-     compiled with image support.  While the X11 version of Emacs 21
-     will likely work, Emacs 22 and later is preferred.
+     Using preview-latex requires a version of Emacs compiled with image
+     support.
 
      Windows
           Precompiled versions are available from
@@ -375,19 +372,7 @@ File: auctex.info,  Node: Prerequisites,  Next: Configure,  Up: Installation
           Compiling Emacs yourself requires a C compiler and a number of
           tools and development libraries.  Details are beyond the scope
           of this manual.  Instructions for checking out the source code
-          can be found at <https://savannah.gnu.org/bzr/?group=emacs>.
-
-     If you really need to use Emacs 21 on platforms where this implies
-     missing image support, you should disable the installation of
-     preview-latex (see below).
-
-     While XEmacs (version 21.4.15, 21.4.17 or later) is supported,
-     doing this in a satisfactory manner has proven to be difficult.
-     This is mostly due to technical shortcomings and differing API's
-     which are hard to come by.  If AUCTeX is your main application for
-     XEmacs, you are likely to get better results and support by
-     switching to Emacs.  Of course, you can improve support for your
-     favorite editor by giving feedback in case you encounter bugs.
+          can be found at <https://savannah.gnu.org/git/?group=emacs>.
 
    * A working TeX installation
 
@@ -402,6 +387,14 @@ File: auctex.info,  Node: Prerequisites,  Next: Configure,  Up: Installation
      This is needed for operation of preview-latex in both DVI and PDF
      mode.  Most versions of Ghostscript nowadays in use should work
      fine (version 7.0 and newer).
+
+   * GNU make
+
+     Recent AUCTeX uses GNU make specific capabilities in the Makefiles.
+     If your OS's default 'make' command is not GNU make, you have to
+     obtain it in order to build AUCTeX by yourself.  GNU make is
+     sometimes provided under the name 'gmake' in your OS's binary
+     package system.
 
    * The 'texinfo' package
 
@@ -452,25 +445,6 @@ it out with one of these options:
      If you are using a pretest which isn't in your '$PATH', or
      'configure' is not finding the right Emacs executable, you can
      specify it with this option.
-
-'--with-xemacs[=/PATH/TO/XEMACS]'
-     Configure for generation under XEmacs (Emacs is the default).
-     Again, the name of the right XEmacs executable can be specified,
-     complete with path if necessary.
-
-'--with-packagedir=/DIR'
-     This XEmacs-only option configures the directory for XEmacs
-     packages.  A typical user-local setting would be
-     '~/.xemacs/xemacs-packages'.  If this directory exists and is below
-     PREFIX, it should be detected automatically.  This will install and
-     activate the package.
-
-'--without-packagedir'
-     This XEmacs-only option switches the detection of a package
-     directory and corresponding installation off.  Consequently, the
-     Emacs installation scheme will be used.  This might be appropriate
-     if you are using a different package system/installer than the
-     XEmacs one and want to avoid conflicts.
 
      The Emacs installation scheme has the following options:
 
@@ -574,9 +548,6 @@ the menus after loading a LaTeX file like 'preview/circ.tex': AUCTeX
 then gives you a 'Command' menu, and preview-latex gives you a 'Preview'
 menu.
 
-   For XEmacs, if the installation occured into a valid package
-directory (which is the default), then this should work out of the box.
-
    With Emacs (or if you explicitly disabled use of the package system),
 the startup files 'auctex.el' and 'preview-latex.el' may already be in a
 directory of the 'site-start.d/' variety if your Emacs installation
@@ -639,15 +610,12 @@ therefore a good choice.
 
 in the system-wide 'site-start.el'.
 
-   If your package is intended as an XEmacs package or to accompany a
-precompiled version of Emacs, you might not know which TeX system will
-be available when preview-latex gets used.  In this case you should
-build using the '--without-texmf-dir' option described previously.  This
-can also be convenient for systems that are intended to support more
-than a single TeX distribution.  Since more often than not TeX packages
-for operating system distributions are either much more outdated or much
-less complete than separately provided systems like TeX Live, this
-method may be generally preferable when providing packages.
+   The '--without-texmf-dir' option can be convenient for systems that
+are intended to support more than a single TeX distribution.  Since more
+often than not TeX packages for operating system distributions are
+either much more outdated or much less complete than separately provided
+systems like TeX Live, this method may be generally preferable when
+providing packages.
 
    The following package structure would be adequate for a typical fully
 supported Unix-like installation:
@@ -673,21 +641,6 @@ supported Unix-like installation:
      'TeX-macro-global' to a sensible value, so running
      'TeX-auto-generate-global' does not appear useful.  This package
      would neither conflict with nor provide 'preview-tetex'.
-'auctex-xemacs-tetex'
-'auctex-xemacs'
-     Those are the obvious XEmacs equivalents.  For XEmacs, there is the
-     additional problem that the XEmacs sumo package tree already
-     possibly provides its own version of AUCTeX, and the user might
-     even have used the XEmacs package manager to updating this package,
-     or even installing a private AUCTeX version.  So you should make
-     sure that such a package will not conflict with existing XEmacs
-     packages and will be at an appropriate place in the load order
-     (after site-wide and user-specific locations, but before a
-     distribution-specific sumo package tree).  Using the
-     '--without-packagedir' option might be one idea to avoid conflicts.
-     Another might be to refrain from providing an XEmacs package and
-     just rely on the user or system administrator to instead use the
-     XEmacs package system.
 
 
 File: auctex.info,  Node: Advice for non-privileged users,  Next: Installation under MS Windows,  Prev: Advice for package providers,  Up: Installation
@@ -697,11 +650,7 @@ File: auctex.info,  Node: Advice for non-privileged users,  Next: Installation u
 
 Often people without system administration privileges want to install
 software for their private use.  In that case you need to pass more
-options to the 'configure' script.  For XEmacs users, this is fairly
-easy, because the XEmacs package system has been designed to make this
-sort of thing practical: but GNU Emacs users (and XEmacs users for whom
-the package system is for some reason misbehaving) may need to do a
-little more work.
+options to the 'configure' script.
 
    The main expedient is using the '--prefix' option to the 'configure'
 script, and let it point to the personal home directory.  In that way,
@@ -713,12 +662,6 @@ prefix argument is supported by most 'configure' scripts.
    You'll have to add something like
 '/home/myself/share/emacs/site-lisp' to your 'load-path' variable, if it
 isn't there already.
-
-   XEmacs users can achieve the same end by pointing 'configure' at an
-appropriate package directory (normally
-'--with-packagedir=~/.xemacs/xemacs-packages' will serve).  The package
-directory stands a good chance at being detected automatically as long
-as it is in a subtree of the specified PREFIX.
 
    Now here is another thing to ponder: perhaps you want to make it easy
 for other users to share parts of your personal Emacs configuration.  In
@@ -748,12 +691,6 @@ In GNU Emacs, it should be sufficient if people just do
    where the path points to your personal installation.  The rest of the
 package should be found relative from there without further ado.
 
-   In XEmacs, you should ask the other users to add symbolic links in
-the subdirectories 'lisp', 'info' and 'etc' of their
-'~/.xemacs/xemacs-packages/' directory.  (Alas, there is presently no
-easy programmatic way to do this, except to have a script do the
-symlinking for them.)
-
 Making the Info files available
 ...............................
 
@@ -763,12 +700,6 @@ startup files:
 
      (eval-after-load 'info
         '(add-to-list 'Info-directory-list "~myself/info"))
-
-   In XEmacs, as long as XEmacs can see the package, there should be no
-need to do anything at all; the info files should be immediately
-visible.  However, you might want to set 'INFOPATH' anyway, for the sake
-of standalone readers outside of XEmacs.  (The info files in XEmacs are
-normally in '~/.xemacs/xemacs-packages/info'.)
 
 Making the LaTeX style available
 ................................
@@ -791,8 +722,8 @@ case you don't understand some of this, run into trouble of some sort,
 or need more elaborate information, refer to the detailed instructions
 further below.
 
-  1. Install the prerequisites, i.e.  Emacs or XEmacs, MSYS or Cygwin, a
-     TeX system, and Ghostscript.
+  1. Install the prerequisites, i.e.  GNU Emacs, MSYS or Cygwin, a TeX
+     system, and Ghostscript.
 
   2. Open the MSYS shell or a Cygwin shell and change to the directory
      containing the unzipped file contents.
@@ -810,16 +741,7 @@ further below.
             --infodir='C:/Program Files/Emacs/info' \
             --with-texmf-dir='C:/localtexmf'
 
-     For XEmacs: You can install AUCTeX as an XEmacs package.  Assuming
-     XEmacs is installed in 'C:/Program Files/XEmacs' and the directory
-     for local additions of your TeX system, e.g.  MiKTeX, is
-     'C:/localtexmf', you can do this by typing the following command at
-     the shell prompt:
-
-          ./configure --with-xemacs='C:/Program Files/XEmacs/bin/xemacs' \
-            --with-texmf-dir='C:/localtexmf'
-
-     The commands above are examples for common usage.  More on
+     The commands above is example for common usage.  More on
      configuration options can be found in the detailed installation
      instructions below.
 
@@ -914,10 +836,8 @@ single quotes for that.
      cause trouble.  Using Cygwin either for everything or nothing might
      save headaches, _if_ things don't work out.
 
-  3. Install a current version of XEmacs from <http://www.xemacs.org/>
-     or Emacs from <ftp://ftp.gnu.org/gnu/emacs/windows/>. Emacs is the
-     recommended choice because it is currently the primary platform for
-     AUCTeX development.
+  3. Install a current version of Emacs from
+     <ftp://ftp.gnu.org/gnu/emacs/windows/>.
 
   4. You need a working TeX installation.  One popular installation
      under Windows is MiKTeX (http://www.miktex.org).  Another much more
@@ -949,13 +869,12 @@ single quotes for that.
      Typical options you'll want to specify will be
      '--prefix=DRIVE:/PATH/TO/EMACS-HIERARCHY'
           which tells 'configure' where to perform the installation.  It
-          may also make 'configure' find Emacs or XEmacs automatically;
-          if this doesn't happen, try one of '--with-emacs' or
-          '--with-xemacs' as described below.  All automatic detection
-          of files and directories restricts itself to directories below
-          the PREFIX or in the same hierarchy as the program accessing
-          the files.  Usually, directories like 'man', 'share' and 'bin'
-          will be situated right under PREFIX.
+          may also make 'configure' find Emacs automatically; if this
+          doesn't happen, try '--with-emacs' as described below.  All
+          automatic detection of files and directories restricts itself
+          to directories below the PREFIX or in the same hierarchy as
+          the program accessing the files.  Usually, directories like
+          'man', 'share' and 'bin' will be situated right under PREFIX.
 
           This option also affects the defaults for placing the Texinfo
           documentation files (see also '--infodir' below) and
@@ -975,24 +894,10 @@ single quotes for that.
           necessary (if Emacs is not within a directory specified in
           your 'PATH' environment setting).
 
-     '--with-xemacs'
-          if you are installing for a version of XEmacs.  Again, you can
-          use '--with-xemacs=DRIVE:/PATH/TO/XEMACS' to specify the name
-          of the installed XEmacs executable complete with its path if
-          necessary.  It may also be necessary to specify this option if
-          a copy of Emacs is found in your 'PATH' environment setting,
-          but you still would like to install a copy of AUCTeX for
-          XEmacs.
-
-     '--with-packagedir=DRIVE:/DIR'
-          is an XEmacs-only option giving the location of the package
-          directory.  This will install and activate the package.  Emacs
-          uses a different installation scheme:
-
      '--with-lispdir=DRIVE:/PATH/TO/SITE-LISP'
-          This Emacs-only option tells a place in 'load-path' below
-          which the files are situated.  The startup files 'auctex.el'
-          and 'preview-latex.el' will get installed here unless a
+          This option tells a place in 'load-path' below which the files
+          are situated.  The startup files 'auctex.el' and
+          'preview-latex.el' will get installed here unless a
           subdirectory 'site-start.d' exists which will then be used
           instead.  The other files from AUCTeX will be installed in a
           subdirectory called 'auctex'.
@@ -1015,8 +920,7 @@ single quotes for that.
 
      '--disable-preview'
           Use this option if your Emacs version is unable to support
-          image display.  This will be the case if you are using a
-          native variant of Emacs 21.
+          image display.
 
      '--with-texmf-dir=DRIVE:/DIR'
           This will specify the directory where your TeX installation
@@ -1048,17 +952,16 @@ single quotes for that.
 
   10. Run 'make install' in the installation directory.
 
-  11. With XEmacs, AUCTeX and preview-latex should now be active by
-     default.  With Emacs, activation depends on a working
-     'site-start.d' directory or similar setup, since then the startup
-     files 'auctex.el' and 'preview-latex.el' will have been placed
-     there.  If this has not been done, you should be able to load the
-     startup files manually with
+  11. With Emacs, activation of AUCTeX and preview-latex depends on a
+     working 'site-start.d' directory or similar setup, since then the
+     startup files 'auctex.el' and 'preview-latex.el' will have been
+     placed there.  If this has not been done, you should be able to
+     load the startup files manually with
           (load "auctex.el" nil t t)
           (load "preview-latex.el" nil t t)
      in either a site-wide 'site-start.el' or your personal startup file
-     (usually accessible as '~/.emacs' from within Emacs and
-     '~/.xemacs/init.el' from within XEmacs).
+     (usually accessible as '~/.emacs' or '~/.emacs.d/init.el' from
+     within Emacs).
 
      The default configuration of AUCTeX is probably not the best fit
      for Windows systems with MiKTeX.  You might want to add
@@ -1072,8 +975,8 @@ single quotes for that.
 
      in order to customize more stuff, or use the 'Customize' menu.
 
-  12. Load 'preview/circ.tex' into Emacs or XEmacs and see if you get
-     the 'Command' menu.  Try using it to LaTeX the file.
+  12. Load 'preview/circ.tex' into Emacs and see if you get the
+     'Command' menu.  Try using it to LaTeX the file.
 
   13. Check whether the 'Preview' menu is available in this file.  Use
      it to generate previews for the document.
@@ -1196,9 +1099,8 @@ ask you for a master file.
 
    ---------- Footnotes ----------
 
-   (1) This usually is a file in your home directory called '.emacs' if
-you are utilizing GNU Emacs or '.xemacs/init.el' if you are using
-XEmacs.
+   (1) This usually is a file in your home directory called '.emacs', or
+'.emacs.d/init.el'.
 
 
 File: auctex.info,  Node: Editing Facilities,  Next: Processing Facilities,  Up: Quick Start
@@ -1404,9 +1306,8 @@ repeated until all errors have been dealt with.  By pressing 'C-c C-w'
 ('TeX-toggle-debug-boxes') you can toggle whether AUCTeX should notify
 you of overfull and underfull boxes in addition to regular errors.
 
-   If you have a recent version of GNU Emacs (24 or later), issue 'M-x
-TeX-error-overview RET' to see a nicely formatted list of all errors and
-warnings reported by the compiler.
+   Issue 'M-x TeX-error-overview RET' to see a nicely formatted list of
+all errors and warnings reported by the compiler.
 
    If a command got stuck in a seemingly infinite loop, or you want to
 stop execution for other reasons, you can use 'C-c C-k' (for "kill").
@@ -2163,6 +2064,14 @@ to a non-nil value.
 
  -- User Option: TeX-electric-sub-and-superscript
      If non-nil, insert braces after typing <^> and <_> in math mode.
+
+   You can automatically turn off input methods, used to input non-ascii
+characters, when you begin to enter math constructs.
+
+ -- User Option: TeX-math-input-method-off-regexp
+     Input method matching this regular expression is turned off when
+     '$' is typed to begin math mode or a math environment is inserted
+     by 'C-c C-e' ('LaTeX-environment').
 
 
 File: auctex.info,  Node: Completion,  Next: Marking,  Prev: Mathematics,  Up: Editing
@@ -2971,10 +2880,11 @@ font-latex ships with predefined lists of keywords for the classes
 described above.  You can disable these defaults per class by
 customizing the variable 'font-latex-deactivated-keyword-classes'.  This
 is a list of strings for keyword classes to be deactivated.  Valid
-entries are "warning", "variable", "reference", "function" ,
-"sectioning-0", "sectioning-1", "sectioning-2", "sectioning-3",
-"sectioning-4", "sectioning-5", "textual", "bold-command",
-"italic-command", "math-command", "type-command", "bold-declaration",
+entries are "warning", "variable", "biblatexnoarg", "biblatex",
+"reference", "function" , "sectioning-0", "sectioning-1",
+"sectioning-2", "sectioning-3", "sectioning-4", "sectioning-5",
+"slide-title", "textual", "bold-command", "italic-command",
+"math-command", "type-command", "bold-declaration",
 "italic-declaration", "type-declaration".
 
    You can also get rid of certain keywords only.  For example if you
@@ -2984,7 +2894,9 @@ following stanza into your init file:
      (eval-after-load "font-latex"
        '(setq-default
          font-latex-match-reference-keywords-local
-         (remove "footnote" font-latex-match-reference-keywords-local)))
+         (remove (TeX-assoc-string "footnote"
+                 font-latex-match-reference-keywords-local)
+                     font-latex-match-reference-keywords-local)))
 
    But note that this means fiddling with font-latex's internals and is
 not guaranteed to work in future versions of font-latex.
@@ -3012,9 +2924,8 @@ variable 'font-latex-user-keyword-classes'.
      the command name and a string specifying the sequence of arguments
      for the command.
 
-     The face argument can either be an existing face or font
-     specifications made by you.  (The latter option is not available on
-     XEmacs.)
+     The face argument can either be an existing face or face attributes
+     made by you.
 
      There are three alternatives for the type of keywords--"Command
      with arguments", "Declaration inside TeX group" and "Command
@@ -3086,11 +2997,6 @@ variables 'font-latex-fontify-script' and 'font-latex-script-display'.
      Lastly, you can set this variable to 'invisible' whose behavior is
      like 'multi-level', and in addition the super-/subscript characters
      ^ and _ are not displayed.
-
-     Note that this feature is not available on XEmacs, for which it is
-     disabled per default.  In GNU Emacs raising and lowering is not
-     enabled for versions 21.3 and before due to it working not
-     properly.
 
  -- User Option: font-latex-fontify-script-max-level
      Maximum scriptification level for which script faces are applied.
@@ -3807,6 +3713,19 @@ which can be added to this variable depending on the value of
      which sees more arguments than 'ispell-tex-arg-end'.  Refer to its
      doc string for more information.
 
+   AUCTeX also provides a facility to skip the argument of in-line
+verbatim macros like '\Verb' from 'fancyvrb.sty' or '\mintinline' from
+'minted.sty'.  Characters delimiting the verbatim text are stored in
+'TeX-ispell-verb-delimiters'.
+
+ -- User Option: TeX-ispell-verb-delimiters
+     String with delimiters recognized for in-line verbatim macros.
+     This variable is initialized to '!|#~\"*/+^-'.  Since this string
+     is used to build a character alternative inside a regular
+     expression, special characters '^' and '-' should come last.  Other
+     characters like opening brace '{', asterisk '*' or at sign '@'
+     should be avoided as they are not recognized by 'font-latex.el'.
+
 
 File: auctex.info,  Node: Processor Options,  Prev: Selecting a Command,  Up: Commands
 
@@ -4110,6 +4029,17 @@ one of them or add your own definitions, you can do so via the variables
      A built-in viewer spec from 'TeX-view-program-list-builtin' can be
      overwritten by defining a new viewer spec with the same name.
 
+   After the viewer is called via either the View command or the key
+stroke 'C-c C-v', the window system focus goes and stays on the viewer.
+If you prefer that the focus is pulled back to Emacs immediately after
+that and you are using evince-compatible viewer, customize the option
+'TeX-view-enince-keep-focus'.
+
+ -- User Option: TeX-view-evince-keep-focus
+     When this option is non-nil and the viewer is compatible with
+     evince, the focus is pulled back to Emacs immediately after the
+     viewer is invoked or refreshed from within AUCTeX.
+
    Note that the viewer selection and invocation as described above will
 only work if certain default settings in AUCTeX are intact.  For one,
 the whole viewer selection machinery will only be triggered if there is
@@ -4230,8 +4160,7 @@ Atril, you can customize the following option.
      this variable set to its default value 'raise-frame'.  Otherwise,
      here are some alternative settings that work for some users.
 
-          ;; Alternative 1: For some users, `x-focus-frame' works.  Note
-          ;; that this function requires Emacs 24+.
+          ;; Alternative 1: For some users, `x-focus-frame' works.
           (setq TeX-raise-frame-function #'x-focus-frame)
 
           ;; Alternative 2: Under GNOME 3.20 (and probably others), it
@@ -4258,9 +4187,9 @@ File: auctex.info,  Node: Debugging,  Next: Checking,  Prev: Viewing,  Up: Proce
 =======================
 
 Once you've formatted your document you may 'debug' it, i.e.  browse
-through the errors (La)TeX reported.  If you have GNU Emacs 24 or later,
-you may also have a look at a nicely formatted list of all errors and
-warnings reported by the compiler.
+through the errors (La)TeX reported.  You may also have a look at a
+nicely formatted list of all errors and warnings reported by the
+compiler.
 
  -- Command: TeX-next-error ARG REPARSE
      ('C-c `') Go to the next error reported by TeX.  The view will be
@@ -4366,8 +4295,7 @@ File: auctex.info,  Node: Error overview,  Prev: Ignoring warnings,  Up: Debuggi
 
 When the option 'TeX-parse-all-errors' is non-nil, you will be also able
 to open an overview of all errors and warnings reported by the TeX
-compiler.  This feature requires 'tabulated-list-mode', shipped with GNU
-Emacs 24 or later.
+compiler.
 
  -- Command: TeX-error-overview
      Show an overview of the errors and warnings occurred in the last
@@ -4800,17 +4728,15 @@ TeX and Emacs are usable for European (Latin, Cyrillic, Greek) based
 languages.  Some LaTeX and EmacsLisp packages are available for easy
 typesetting and editing documents in European languages.
 
-   For CJK (Chinese, Japanese, and Korean) languages, Emacs or XEmacs
-with MULE (MULtilingual Enhancement to GNU Emacs) support is required.
-MULE is part of Emacs by default since Emacs 20.  XEmacs has to be
-configured with the '--with-mule' option.  Special versions of TeX are
+   For CJK (Chinese, Japanese, and Korean) languages, Emacs with MULE
+(MULtilingual Enhancement to GNU Emacs) support is required.  MULE is
+part of Emacs by default since Emacs 20.  Special versions of TeX are
 needed for CJK languages: CTeX and ChinaTeX for Chinese, ASCII pTeX and
 NTT jTeX for Japanese, HLaTeX and kTeX for Korean.  The CJK-LaTeX
 package is required for supporting multiple CJK scripts within a single
 document.
 
-   Note that Unicode is not fully supported in Emacs 21 and XEmacs 21.
-CJK characters are not usable.  Please use the MULE-UCS EmacsLisp
+   CJK characters are not usable.  Please use the MULE-UCS EmacsLisp
 package or Emacs 22 and later if you need CJK.
 
 * Menu:
@@ -4838,9 +4764,8 @@ needs.
 
    To be able to display non-ASCII characters you will need an
 appropriate font and a version of GNU Emacs capable of displaying 8-bit
-characters (e.g.  Emacs 21).  The manner in which this is supported
-differs between Emacsen, so you need to take a look at your respective
-documentation.
+characters.  The manner in which this is supported differs between
+Emacsen, so you need to take a look at your respective documentation.
 
    A compromise is to use an European character set when editing the
 file, and convert to TeX macros when reading and writing the files.
@@ -4848,12 +4773,9 @@ file, and convert to TeX macros when reading and writing the files.
 'iso-cvt.el'
      Much like 'iso-tex.el' but is bundled with Emacs 19.23 and later.
 
-'x-compose.el'
-     Similar package bundled with new versions of XEmacs.
-
 'X-Symbol'
-     a much more complete package for both Emacs and XEmacs that can
-     also handle a lot of mathematical characters and input methods.
+     a much more complete package for Emacs that can also handle a lot
+     of mathematical characters and input methods.
 
 5.4.1.2 Style Files for Different Languages
 ...........................................
@@ -4891,6 +4813,9 @@ will for example choose a Danish dictionary for documents including
      Runs style hook 'TeX-language-nl-hook'.
 
 'english'
+'australian'
+'canadian'
+'newzealand'
      Runs style hook 'TeX-language-en-hook'.
 
 'frenchb'
@@ -4990,39 +4915,102 @@ File: auctex.info,  Node: Japanese,  Prev: European,  Up: Internationalization
 5.4.2 Using AUCTeX with Japanese TeX
 ------------------------------------
 
-To write Japanese text with AUCTeX, you need to have versions of TeX and
-Emacs that support Japanese.  There exist at least two variants of TeX
-for Japanese text (NTT jTeX and ASCII pTeX).  AUCTeX can be used with
-MULE (MULtilingual Enhancement to GNU Emacs) supported Emacsen.
+To write Japanese text with AUCTeX, you need the versions of TeX and
+Emacs that support Japanese.  AUCTeX supports three Japanese TeX engines
+by default: NTT jTeX, ASCII pTeX and upTeX.
 
-   To use the Japanese TeX variants, simply activate
-'japanese-plain-tex-mode' or 'japanese-latex-mode' and everything should
-work.  If not, send mail to Masayuki Ataka
-'<ataka@milk.freemail.ne.jp>', who kindly donated the code for
-supporting Japanese in AUCTeX.  None of the primary AUCTeX maintainers
+   To use the Japanese TeX engines, activate 'japanese-plain-tex-mode'
+or 'japanese-latex-mode'.  If it doesn't work, send mail to Masayuki
+Ataka '<masayuki.ataka@gmail.com>' or Ikumi Keita
+'<ikumikeita@jcom.home.ne.jp>', who currently concern with stuff related
+to Japanese in AUCTeX.  None of the primary AUCTeX maintainers
 understand Japanese, so they cannot help you.
+
+   It is recommended to enable 'TeX-parse-self' for typical Japanese
+LaTeX users.  When enabled, 'japanese-latex-mode' selects the suitable
+Japanese TeX engine automatically based on the class file name (such as
+'jbook', 'jsarticle' and 'tjreport') and its option.  *note Parsing
+Files::.
+
+   It is important to select the suitable Japanese TeX engine because
+the selected engine determines the command name such as 'platex' and
+'uptex' to typeset the document.  If you find that wrong command is
+used, check the value of 'TeX-engine' on that buffer.  If the value does
+not suit the current document, change the value by the 'TeXing Options'
+submenu below the 'Command' menu.  *note Processor Options::.
+
+   To make the selected engine to persist across Emacs sessions, there
+are two ways from which you can choose one according to your needs:
+
+  1. If you use a specific engine (almost) exclusively, customize the
+     option 'japanese-TeX-engine-default'.
+
+      -- User Option: japanese-TeX-engine-default
+          The default TeX engine in Japanese TeX mode.
+
+          The default value is 'ptex'.
+  2. If you want to set the engine on a per file basis, use the file
+     local variables to set 'TeX-engine'.
+
+     Here is a sample code to set 'TeX-engine' to 'uptex':
+
+          %%% Local Variables:
+          %%% mode: japanese-latex
+          %%% TeX-engine: uptex
+          %%% End:
+
+   In the both cases above, the valid value is one of 'ptex', 'jtex' and
+'uptex'.
+
+   You can override the command names associated with the above three
+engines or define your own engine by customizing 'TeX-engine-alist'.
+*Note Processor Options::.
+
+   It is sometimes necessary to use an engine which differs from the one
+AUCTeX selects automatically.  For example, even when you want to use
+'j-article' document class deliberately with ASCII pLaTeX, AUCTeX
+selects NTT jLaTeX command if 'TeX-parse-self' is enabled, because
+'j-article' originally belongs to NTT jLaTeX.  In such cases, use the
+file local variable method above to select the engine you intend to use.
 
    If you usually use AUCTeX in Japanese, setting the following
 variables is useful.
 
  -- User Option: TeX-default-mode
-     Mode to enter for a new file when it cannott be determined whether
+     Mode to enter for a new file when it cannot be determined whether
      the file is plain TeX or LaTeX or what.
 
      If you want to enter Japanese LaTeX mode whenever this may happen,
      set the variable like this:
           (setq TeX-default-mode 'japanese-latex-mode)
 
- -- User Option: japanese-TeX-engine-default
-     The default TeX engine in Japanese TeX mode.
-
-     The default value is 'ptex'.
-
  -- User Option: japanese-LaTeX-default-style
      The default style/class when creating a new Japanese LaTeX
      document.
 
      The default value is '"jarticle"'.
+
+   It is recommended also for Japanese users to customize the option
+'TeX-PDF-from-DVI' to '"Dvipdfmx"'.  *Note Processor Options::
+
+   There are three customize options with regard to the encoding of
+Japanese text.
+
+ -- User Option: japanese-TeX-use-kanji-opt-flag
+     If non-nil, AUCTeX adds '-kanji' option to the typesetting command
+     when 'TeX-engine' is 'ptex'.
+
+   Usually AUCTeX guesses the right coding systems for input to and
+output from the Japanese TeX process, but you can override them by the
+following two customize options.
+
+ -- User Option: TeX-japanese-process-input-coding-system
+     If non-nil, used for encoding input to Japanese TeX process.  When
+     'nil', AUCTeX tries to choose suitable coding system.
+
+ -- User Option: TeX-japanese-process-output-coding-system
+     If non-nil, used for decoding output from Japanese TeX process.
+     When 'nil', AUCTeX tries to choose suitable coding system.
 
    The former customize options 'japanese-TeX-command-default' and
 'japanese-LaTeX-command-default' are obsolete.  Use
@@ -5033,6 +5021,20 @@ customize 'TeX-engine-alist'.
    Also, the option 'japanese-TeX-command-list' is considered as
 semi-obsolete.  It still functions as before, but in theory, it is not
 required anymore in normal use.
+
+   The following two additional font commands are available in LaTeX
+mode buffer.
+
+'C-c C-f g'
+     Insert gothic face font command '\textbf{-!-}' or '\mathbf{-!-}'
+     depending on the context.
+
+'C-c C-f m'
+     Insert mincho font command '\textmc{-!-}' or '\mathmc{-!-}'
+     depending on the context.
+
+   Although they are meaningful only with 'ptex' and 'uptex' engines, it
+won't matter in buffers with other engines.
 
    See 'tex-jp.el' for more information.
 
@@ -5808,11 +5810,11 @@ Appendix A Copying, Changes, Development, FAQ, Texinfo Mode
 
 * Menu:
 
-* Copying this Manual::         
-* Changes::                     
-* Development::                 
-* FAQ::                         
-* Texinfo mode::                
+* Copying this Manual::
+* Changes::
+* Development::
+* FAQ::
+* Texinfo mode::
 
 
 File: auctex.info,  Node: Copying this Manual,  Next: Changes,  Up: Appendices
@@ -5822,10 +5824,10 @@ A.1 Copying this Manual
 
 The copyright notice for this manual is:
 
-   This manual is for AUCTeX (version 11.90 from 2017-01-10), a
+   This manual is for AUCTeX (version 12.1 from 2017-12-04), a
 sophisticated TeX environment for Emacs.
 
-   Copyright (C) 1992-1995, 2001, 2002, 2004-2016 Free Software
+   Copyright (C) 1992-1995, 2001, 2002, 2004-2017 Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
@@ -6328,6 +6330,119 @@ File: auctex.info,  Node: Changes,  Next: Development,  Prev: Copying this Manua
 
 A.2 Changes and New Features
 ============================
+
+News in 12.1
+------------
+
+   * AUCTeX now requires GNU Emacs 24 or higher.  Support for XEmacs has
+     been dropped.
+
+   * Besides the change in the supported version of Emacs, there has
+     been no functional change in this release, which is equivalent to
+     version 11.92.
+
+News in 11.92
+-------------
+
+   * preview-latex is compatible with Ghostscript 9.22 where the
+     operator '.runandhide' is removed.  All occurrences of
+     '.runandhide' in preview-latex are replaced by alternative code
+     making it work with Ghostscript 9.22 again.
+
+   * AUCTeX has a new customize option
+     'TeX-math-input-method-off-regexp'.  When you begin to input a math
+     formula, the current input method is turned off if its name matches
+     this regular expression.
+
+     In fact this variable was introduced long before, but has not been
+     documented in info files nor turned into a customize option with
+     'defcustom' until this release.
+
+   * The window system focus is pulled back to Emacs when viewing with
+     evince-compatible viewers if a new customize option
+     'TeX-view-evince-keep-focus' is non-nil.
+
+   * The usual dose of bug fixes was administered.
+
+News in 11.91
+-------------
+
+   * Now AUCTeX has a logo.  The LaTeX code to create it is available in
+     the 'etc/' directory of the package.
+
+   * Add support for 'upmendex', an extension of 'makeindex' capable of
+     sorting indexes by unicode based ICU.
+
+   * Fix preview-latex to interact correctly with Japanese LaTeX.  The
+     parsing routine was made robust not to be confused by the 7-bit
+     encoding of Japanese text and the necessary option to LaTeX command
+     is kept even when preamble caching is enabled.
+
+   * The new "Glossaries" entry in 'TeX-command-list' runs the command
+     'makeglossaries'.
+
+   * Fontification of control symbols has been improved.  Characters
+     defined in 'font-latex-match-simple-exclude-list' do not receive
+     any fontification.  In DocTeX mode, the character '_' is removed
+     from 'font-latex-match-simple-exclude-list' in order to fontify
+     macros like '\__module_foo:nnn' correctly.
+
+   * Fontification of math environments has been improved.  Optional
+     and/or mandatory argument(s) to environments are not fontified.
+
+   * 'preview.sty' loads 'luatex85.sty' if possible and should be
+     compatible with newer luaTeX versions.
+
+   * AUCTeX has a new customize option 'TeX-ispell-verb-delimiters'.
+     This string contains usual characters used as delimiters for
+     in-line verbatim macros like '\verb'.  Text between delimiters
+     after an in-line verbatim macro will be skipped during spell
+     checking.
+
+   * Fontification of in-line verbatim macros has been improved.
+     'font-latex.el' recognizes an optional or a mandatory argument for
+     macros like '\Verb' from 'fancyvrb.sty', '\mint' and '\mintinline'
+     from 'minted.sty' and fontifies verbatim content correctly.
+
+   * AUCTeX can put and parse labels in optional argument of
+     environments.  Inserting labels is done by new function
+     'LaTeX-env-label-as-keyval'.  A new customize option
+     'LaTeX-listing-label' is available as prefix to labels in code
+     typesetting environments, e.g.  'lstlisting' environment provided
+     by 'listings' package.  'LaTeX-listing-label' defaults to 'lst:'.
+     Parsing of labels for later referencing relies on two requirements:
+       1. Label should come as last key-value argument, and
+       2. label must be enclosed in braces, e.g.
+               \begin{lstlisting}[caption=Some Caption,label={lst:foo}]
+               ...
+               \end{lstlisting}
+
+   * The function 'LaTeX-label' now takes a second optional argument
+     'NO-INSERT'.  When non-'nil', 'LaTeX-label' reads a label and
+     returns it as a string.  This argument is also passed to any
+     function bound to 'LaTeX-label-function' (see next item).
+
+   * *Incompatible change:* The signature for the function passed with
+     the customize option 'LaTeX-label-function' has changed.  The
+     function bound to this variable is now expected to take an optional
+     second argument 'NO-INSERT'.  When this argument is non-'nil', the
+     function should read and only return a label as a string; insertion
+     is done by another function.
+
+   * Directory local variables were ineffective for
+     'japanese-latex-mode' and 'japanese-plain-tex-mode'.  This bug was
+     fixed.  (This was actually done in AUCTeX 11.90, but not
+     advertised)
+
+   * The output of Japanese text from Japanese TeX engines is decoded
+     correctly for most cases, according to the encoding of the TeX
+     documents and the locale.  The difference between MS Windows, macOS
+     and unix-like OS is taken into account.  (This was actually done in
+     AUCTeX 11.90, but not advertised)
+
+   * Quite a few new LaTeX packages are supported.
+
+   * As usual, many bugs were fixed.
 
 News in 11.90
 -------------

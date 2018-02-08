@@ -1,6 +1,6 @@
 ;;; empheq.el --- AUCTeX style for `empheq.sty' (v2.14)
 
-;; Copyright (C) 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2016, 2017 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -227,8 +227,8 @@ number of ampersands if possible."
       (when (looking-at "[ \t\n\r%]*\\[")
 	(forward-sexp))
       (re-search-forward "[ \t\n\r%]*{\\([^}]+\\)}")
-      (setq match (replace-regexp-in-string "[ \t\n\r%]*" ""
-					    (match-string-no-properties 1)))
+      (setq match (TeX-replace-regexp-in-string "[ \t\n\r%]" ""
+						(match-string-no-properties 1)))
       (if (string-match "=" match)
 	  (progn
 	    (setq amsenv (car (split-string match "=")))
@@ -471,10 +471,6 @@ number of ampersands if possible."
     ;; 6.1 New empheq-like environments
     '("EmphEqMainEnv" 0)
     '("endEmphEqMainEnv" 0))
-
-   ;; Ispell skip lists
-   (TeX-ispell-skip-setcar '(("\\\\empheqset" ispell-tex-arg-end)))
-   (TeX-ispell-skip-setcdr '(("empheq" . "\\\\end{empheq}")))
 
    ;; Fontification
    (when (and (featurep 'font-latex)

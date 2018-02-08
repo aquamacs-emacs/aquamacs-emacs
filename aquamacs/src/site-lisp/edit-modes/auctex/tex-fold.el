@@ -1,6 +1,6 @@
 ;;; tex-fold.el --- Fold TeX macros.
 
-;; Copyright (C) 2004, 2005, 2006, 2007, 2008, 2011-2012, 2014
+;; Copyright (C) 2004-2008, 2011-2012, 2014, 2017
 ;;   Free Software Foundation, Inc.
 
 ;; Author: Ralf Angeli <angeli@caeruleus.net>
@@ -28,7 +28,7 @@
 ;;; Commentary:
 
 ;; This file provides support for hiding and unhiding TeX, LaTeX,
-;; ContTeXt, Texinfo and similar macros and environments inside of
+;; ConTeXt, Texinfo and similar macros and environments inside of
 ;; AUCTeX.
 ;;
 ;; Caveats:
@@ -765,7 +765,7 @@ Return non-nil if a removal happened, nil otherwise."
   "Expand instances of {<num>}, [<num>], <<num>>, and (<num>).
 Replace them with the respective macro argument."
   (let ((spec-list (split-string spec "||"))
-	(delims '((?{ . ?}) (?[ . ?]) (?< . ?>) (?\( . ?\))))
+	(delims '((?\{ . ?\}) (?\[ . ?\]) (?< . ?>) (?\( . ?\))))
 	index success)
     (catch 'success
       ;; Iterate over alternatives.

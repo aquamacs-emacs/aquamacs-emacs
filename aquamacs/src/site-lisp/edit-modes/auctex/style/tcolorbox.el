@@ -1,4 +1,4 @@
-;;; tcolorbox.el --- AUCTeX style for `tcolorbox.sty' (v3.96)
+;;; tcolorbox.el --- AUCTeX style for `tcolorbox.sty' (v4.00)
 
 ;; Copyright (C) 2015, 2016 Free Software Foundation, Inc.
 
@@ -26,7 +26,7 @@
 
 ;;; Commentary:
 
-;; This file adds support for `tcolorbox.sty' (v3.96) from 2016/11/18.
+;; This file adds support for `tcolorbox.sty' (v4.00) from 2017/02/16.
 
 ;; This style file adds support for core macros and environments and
 ;; their options provided by `tcolorbox.sty'.  Macros and environments
@@ -138,10 +138,12 @@
     ;; 4.7.4 Spacing
     ("boxsep")
     ("left")
+    ("left*")
     ("lefttitle")
     ("leftupper")
     ("leftlower")
     ("right")
+    ("right*")
     ("righttitle")
     ("rightupper")
     ("rightlower")
@@ -259,6 +261,17 @@
     ("grow to left by")
     ("grow to right by")
     ("toggle enlargement" ("none" "forced" "evenpage"))
+    ("spread inwards")
+    ("spread outwards")
+    ("move upwards")
+    ("move upwards*")
+    ;; FIXME: This one should be added w/ `breakable' lib:
+    ;; ("fill downwards")
+    ("spread upwards")
+    ("spread upwards*")
+    ("spread sidewards")
+    ("spread")
+    ("spread downwards")
     ("shrink tight")
     ("extrude left by")
     ("extrude right by")
@@ -299,8 +312,9 @@
     ("check odd page" ("true" "false"))
     ("if odd page")
     ("if odd page or oneside")
-    ;; FIXME: This one should be added w/ `breakable' lib:
+    ;; FIXME: These two should be added w/ `breakable' lib:
     ;; ("if odd page*")
+    ;; ("if odd page or oneside*")
     ;; 4.24 Miscellaneous
     ("reset")
     ("only")
@@ -439,7 +453,7 @@ e.g. \"tcolorboxlib-raster.el\"."
   (when (LaTeX-tcolorbox-tcbuselibrary-list)
     (let (libs)
       (dolist (x (LaTeX-tcolorbox-tcbuselibrary-list))
-	(push (replace-regexp-in-string "[ %\n\r\t]" "" (car x)) libs))
+	(push (TeX-replace-regexp-in-string "[ %\n\r\t]" "" (car x)) libs))
       (setq libs (mapconcat #'identity libs ","))
       (dolist (x (split-string libs "," t))
 	(TeX-run-style-hooks (concat "tcolorboxlib-" x)))))
@@ -461,7 +475,7 @@ e.g. \"tcolorboxlib-raster.el\"."
 		 "coltitle"))
 	 (tmp (copy-alist LaTeX-tcolorbox-keyval-options-local)))
     (dolist (key keys)
-      (assq-delete-all (car (assoc key tmp)) tmp)
+      (setq tmp (assq-delete-all (car (assoc key tmp)) tmp))
       (pushnew
        (list key (mapcar #'car (LaTeX-xcolor-definecolor-list))) tmp :test #'equal))
     (setq LaTeX-tcolorbox-keyval-options-local (copy-alist tmp)))

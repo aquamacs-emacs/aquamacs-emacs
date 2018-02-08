@@ -1,6 +1,6 @@
 ;;; tex-style.el --- Customizable variables for AUCTeX style files
 
-;; Copyright (C) 2005, 2007, 2009, 2012-2015
+;; Copyright (C) 2005, 2007, 2009, 2012-2017
 ;;   Free Software Foundation, Inc.
 
 ;; Author: Reiner Steib <Reiner.Steib@gmx.de>

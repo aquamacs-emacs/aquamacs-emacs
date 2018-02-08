@@ -1,6 +1,6 @@
 ;;; preview.el --- embed preview LaTeX images in source buffer
 
-;; Copyright (C) 2001-2006, 2010-2015  Free Software Foundation, Inc.
+;; Copyright (C) 2001-2006, 2010-2015, 2017  Free Software Foundation, Inc.
 
 ;; Author: David Kastrup
 ;; Keywords: tex, wp, convenience
@@ -42,8 +42,6 @@
 (require 'tex)
 (require 'tex-buf)
 (require 'latex)
-
-(defvar preview-resolution-factor 2.0 "")  ;; Aquamacs
 
 (eval-when-compile
   (condition-case nil
@@ -297,7 +295,7 @@ If `preview-fast-conversion' is set, this option is not
   :type 'number)
 
 (defvar preview-coding-system nil
-  "Coding system used for LaTeX process.")
+  "Proper coding system to decode output from LaTeX process.")
 (make-variable-buffer-local 'preview-coding-system)
 (defvar preview-parsed-font-size nil
   "Font size as parsed from the log of LaTeX run.")
@@ -448,10 +446,9 @@ dots per inch.  Buffer-local to rendering buffer.")
   "Generate resolution argument for gs.
 Calculated from real-life factor SCALE and XRES and
 YRES, the screen resolution in dpi."
-  ;; (message "scal %s, xres %s, magn %s" scale xres (preview-get-magnification))
   (format "-r%gx%g"
-	  (round (/ (* scale xres) (preview-get-magnification)))
-	  (round (/ (* scale yres) (preview-get-magnification)))))
+	  (/ (* scale xres) (preview-get-magnification))
+	  (/ (* scale yres) (preview-get-magnification))))
 
 (defun preview-gs-behead-outstanding (err)
   "Remove leading element of outstanding queue after error.
@@ -741,10 +738,10 @@ SETUP may contain a parser setup function."
 null eq{pop{pop}bind}if def\
 <</BeginPage{currentpagedevice/PageSize get dup 0 get 1 ne exch 1 get 1 ne or\
 {.preview-BP %s}{pop}ifelse}bind/PageSize[1 1]>>setpagedevice\
-/preview-do{[count 3 roll save]3 1 roll dup length 0 eq\
-{pop}{setpagedevice}{ifelse .runandhide}\
+/preview-do{/.preview-ST[count 4 roll save]def dup length 0 eq\
+{pop}{setpagedevice}{ifelse exec}\
 stopped{handleerror quit}if \
-aload pop restore}bind def "
+.preview-ST aload pop restore}bind def "
 		  (preview-gs-color-string preview-colors)))
     (preview-gs-queue-empty)
     (preview-parse-messages (or setup #'preview-gs-dvips-process-setup))))
@@ -1093,7 +1090,7 @@ NONREL is not NIL."
 .locksafe} stopped pop "
 			  (mapconcat 'preview-ps-quote-filename all-files ""))
 		  preview-gs-init-string
-		  (format "[%s(r)file]aload exch %s .runandhide aload pop "
+		  (format " %s(r)file /.preview-ST 1 index def %s exec .preview-ST "
 			  (preview-ps-quote-filename file)
 			  (preview-gs-dsc-cvx 0 preview-gs-dsc))))))
 
@@ -1852,7 +1849,7 @@ BUFFER-MISC is the appropriate data to be used."
 					    desktop-buffer-name
 					    desktop-buffer-misc)))))
 
-(defcustom preview-auto-cache-preamble t
+(defcustom preview-auto-cache-preamble 'ask
   "*Whether to generate a preamble cache format automatically.
 Possible values are nil, t, and `ask'."
   :group 'preview-latex
@@ -2502,24 +2499,24 @@ to add the preview functionality."
     (easy-menu-define preview-menu LaTeX-mode-map
       "This is the menu for preview-latex."
       '("Preview"
-	["Generate previews" :active nil]
-	["  (or toggle) at point" preview-at-point]
-	["  for environment" preview-environment]
-	["  for section" preview-section]
-	["  for region" preview-region (preview-mark-active)]
-	["  for buffer" preview-buffer]
-	["  for document" preview-document]
+	"Generate previews"
+	["(or toggle) at point" preview-at-point]
+	["for environment" preview-environment]
+	["for section" preview-section]
+	["for region" preview-region (preview-mark-active)]
+	["for buffer" preview-buffer]
+	["for document" preview-document]
 	"---"
-	["Remove previews" :active nil]
-	["  at point" preview-clearout-at-point]
-	["  from section" preview-clearout-section]
-	["  from region" preview-clearout (preview-mark-active)]
-	["  from buffer" preview-clearout-buffer]
-	["  from document" preview-clearout-document]
+	"Remove previews"
+	["at point" preview-clearout-at-point]
+	["from section" preview-clearout-section]
+	["from region" preview-clearout (preview-mark-active)]
+	["from buffer" preview-clearout-buffer]
+	["from document" preview-clearout-document]
 	"---"
-	["Turn preamble cache" :active nil]
-	["  on" preview-cache-preamble]
-	["  off" preview-cache-preamble-off]
+	"Turn preamble cache"
+	["on" preview-cache-preamble]
+	["off" preview-cache-preamble-off]
 	"---"
 	("Customize"
 	 ["Browse options"
@@ -2614,37 +2611,98 @@ later while in use."
   "Turn STRING with potential ^^ sequences into a regexp.
 To preserve sanity, additional ^ prefixes are matched literally,
 so the character represented by ^^^ preceding extended characters
-will not get matched, usually."
+will not get matched, usually.
+
+If decoding the process output was suppressed during receiving,
+decode first with RUN-CODING-SYSTEM."
   (let (output case-fold-search)
-    (when (featurep 'mule)
-      (setq string (encode-coding-string string run-coding-system)))
-    (while (string-match "\\^\\{2,\\}\\(\\([@-_?]\\)\\|[8-9a-f][0-9a-f]\\)"
-			 string)
+    ;; Some coding systems (e.g. japanese-shift-jis) use regexp meta
+    ;; characters on encoding.  Such meta characters would be
+    ;; interfered with `regexp-quote' below.  Thus the idea of
+    ;; "encoding entire string beforehand and decoding it at the last
+    ;; stage" does not work for such coding systems.
+    ;; Rather, we work consistently with decoded text.
+    (if (and (featurep 'mule)
+	     (not (eq run-coding-system
+		      (preview-buffer-recode-system run-coding-system))))
+	(setq string
+	      (decode-coding-string string run-coding-system)))
+
+    ;; Next, bytes with value from 0x80 to 0xFF represented with ^^
+    ;; form are converted to byte sequence, and decoded by the file
+    ;; coding system.
+    (setq string
+	  (preview--decode-^^ab string
+				(if (featurep 'mule)
+				    buffer-file-coding-system nil)))
+
+    ;; Then, control characters are taken into account.
+    (while (string-match "\\^\\{2,\\}\\([@-_?]\\)" string)
       (setq output
 	    (concat output
 		    (regexp-quote (substring string
 					     0
 					     (- (match-beginning 1) 2)))
-		    (if (match-beginning 2)
-			(concat
-			 "\\(?:" (regexp-quote
-				  (substring string
-					     (- (match-beginning 1) 2)
-					     (match-end 0)))
-			 "\\|"
-			 (char-to-string
-			  (logxor (aref string (match-beginning 2)) 64))
-			 "\\)")
-		      (char-to-string
-		       (string-to-number (match-string 1 string) 16))))
+		    (concat
+		     "\\(?:" (regexp-quote
+			      (substring string
+					 (- (match-beginning 1) 2)
+					 (match-end 0)))
+		     "\\|"
+		     (char-to-string
+		      (logxor (aref string (match-beginning 1)) 64))
+		     "\\)"))
 	    string (substring string (match-end 0))))
     (setq output (concat output (regexp-quote string)))
-    (if (featurep 'mule)
-	(decode-coding-string output
-			      (or (and (boundp 'TeX-japanese-process-output-coding-system)
-				       TeX-japanese-process-output-coding-system)
-				  buffer-file-coding-system))
-      output)))
+    output))
+
+(defun preview--decode-^^ab (string coding-system)
+  "Decode ^^ sequences in STRING with CODING-SYSTEM.
+Sequences of control characters such as ^^I are left untouched.
+
+Return a new string."
+  ;; Since the given string can contain multibyte characters, decoding
+  ;; should be performed seperately on each segment made up entirely
+  ;; with ASCII characters.
+  (let ((result ""))
+    (while (string-match "[\x00-\x7F]+" string)
+      (setq result
+	    (concat result
+		    (substring string 0 (match-beginning 0))
+		    (let ((text
+			   (save-match-data
+			     (preview--convert-^^ab
+			      (match-string 0 string)))))
+		      (if (featurep 'mule)
+			  (decode-coding-string text coding-system)
+			text)))
+	    string (substring string (match-end 0))))
+    (setq result (concat result string))
+    result))
+
+(defun preview--convert-^^ab (string)
+  "Convert ^^ sequences in STRING to raw 8bit.
+Sequences of control characters such as ^^I are left untouched.
+
+Return a new string."
+  (let ((result ""))
+    (while (string-match "\\^\\^[8-9a-f][0-9a-f]" string)
+      (setq result
+	    (concat result
+		    (substring string 0 (match-beginning 0))
+		    (let ((byte (string-to-number
+				 (substring string
+					    (+ (match-beginning 0) 2)
+					    (match-end 0)) 16)))
+		      ;; `char-to-string' is not appropriate in
+		      ;; Emacs >= 23 because it converts #xAB into
+		      ;; "\u00AB" (multibyte string), not "\xAB"
+		      ;; (raw 8bit unibyte string).
+		      (if (fboundp 'byte-to-string)
+			  (byte-to-string byte) (char-to-string byte))))
+	    string (substring string (match-end 0))))
+    (setq result (concat result string))
+    result))
 
 (defun preview-parse-messages (open-closure)
   "Turn all preview snippets into overlays.
@@ -2974,42 +3032,17 @@ name(\\([^)]+\\))\\)\\|\
 				  snippet)) "Parser"))))))))
 	  (preview-call-hook 'close (car open-data) close-data))))))
 
-;; Aquamacs specific function
-(defun preview-frame-monitor-resolution ()
-  (condition-case nil
-      (let* ((att (frame-monitor-attributes (selected-frame)))
-	     (geom (assq 'geometry att))
-	     (mm (assq 'mm-size att))
-	     (w (nth 3 geom))
-	     (h (nth 4 geom))
-	     (mmw (nth 1 mm))
-	     (mmh (nth 2 mm)))
-	(cons (round (/ (* 25.4 w) mmw))
-	      (round (/ (* 25.4 h) mmh))))
-    ;; default if some values aren't available
-    (error nil
-	   (condition-case nil
-	       (cons
-		(round (/ (* 25.4 (display-pixel-width))
-			  (display-mm-width)))
-		(round (/ (* 25.4 (display-pixel-height))
-			  (display-mm-height))))
-	     (error nil (cons 96 96))))))
-
 (defun preview-get-geometry ()
   "Transfer display geometry parameters from current display.
 Returns list of scale, resolution and colors.  Calculation
 is done in current buffer."
   (condition-case err
       (let* ((geometry
-	      (list
-	            ;; preview-scale:
-	            (preview-hook-enquiry preview-scale-function)
-		    ;;  preview-resolution:
-		    (let ((res (preview-frame-monitor-resolution)))
-		      (cons (* preview-resolution-factor (car res))
-			    (* preview-resolution-factor (cdr res))))
-		    ;; preview-colors:
+	      (list (preview-hook-enquiry preview-scale-function)
+		    (cons (/ (* 25.4 (display-pixel-width))
+			     (display-mm-width))
+			  (/ (* 25.4 (display-pixel-height))
+			     (display-mm-height)))
 		    (preview-get-colors)))
 	     (preview-min-spec
 	      (* (cdr (nth 1 geometry))
@@ -3504,13 +3537,28 @@ internal parameters, STR may be a log to insert into the current log."
       ((preview-format-name (shell-quote-argument
 			     (preview-dump-file-name
 			      (file-name-nondirectory master))))
+       (process-environment process-environment)
        (process
-	(TeX-run-command
-	 "Preview-LaTeX"
-	 (if (consp (cdr dumped-cons))
-	     (preview-do-replacements
-	      command preview-undump-replacements)
-	   command) file)))
+	(progn
+	  ;; Fix Bug#20773, Bug#27088.
+	  ;; Make LaTeX not to insert newline in lines necessary to
+	  ;; identify Bounding Boxes.
+	  (setenv "max_print_line" "1000")
+	  (TeX-run-command
+	   "Preview-LaTeX"
+	   (if (consp (cdr dumped-cons))
+	       (preview-do-replacements
+		command
+		(append preview-undump-replacements
+			;; Since the command options provided in
+			;; (TeX-engine-alist) are dropped, give them
+			;; back.
+			(list (list "\\`\\([^ ]+\\)"
+				    (TeX-command-expand "%(PDF)%(latex)"
+							(if TeX-current-process-region-p
+							    #'TeX-region-file
+							  #'TeX-master-file))))))
+	     command) file))))
     (condition-case err
 	(progn
 	  (when str
@@ -3522,18 +3570,20 @@ internal parameters, STR may be a log to insert into the current log."
 	  (preview-set-geometry geometry)
 	  (setq preview-gs-file pr-file)
 	  (setq TeX-sentinel-function 'preview-TeX-inline-sentinel)
+	  ;; Postpone decoding of process output for xemacs 21.4,
+	  ;; which is rather bad at preserving incomplete multibyte
+	  ;; characters.
 	  (when (featurep 'mule)
-	    (setq preview-coding-system
-		  (or (and (boundp 'TeX-japanese-process-output-coding-system)
-			   TeX-japanese-process-output-coding-system)
-		      (with-current-buffer commandbuff
-			buffer-file-coding-system)))
-	    (when preview-coding-system
-	      (setq preview-coding-system
-		    (preview-buffer-recode-system
-		     (coding-system-base preview-coding-system))))
-	    (set-process-coding-system
-	     process preview-coding-system))
+	    ;; Get process coding system set in `TeX-run-command'.
+	    (setq preview-coding-system (process-coding-system process))
+	    ;; Substitute coding system for decode with `raw-text' if
+	    ;; necessary and save the original coding system for
+	    ;; decode for later use in `preview-error-quote'.
+	    (set-process-coding-system process
+				       (preview-buffer-recode-system
+					(car preview-coding-system))
+				       (cdr preview-coding-system))
+	    (setq preview-coding-system (car preview-coding-system)))
 	  (TeX-parse-reset)
 	  (setq TeX-parse-function 'TeX-parse-TeX)
 	  (if TeX-process-asynchronous
@@ -3543,11 +3593,11 @@ internal parameters, STR may be a log to insert into the current log."
 	     (delete-process process)
 	     (preview-reraise-error process)))))
 
-(defconst preview-version "11.90"
+(defconst preview-version "2018-01-28"
   "Preview version.
 If not a regular release, the date of the last change.")
 
-(defconst preview-release-date "2017-01-10"
+(defconst preview-release-date "2018-01-28"
   "Preview release date using the ISO 8601 format, yyyy-mm-dd.")
 
 (defun preview-dump-state (buffer)

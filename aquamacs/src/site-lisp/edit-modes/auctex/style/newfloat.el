@@ -119,7 +119,7 @@ If `caption.el' is loaded, add the new floating environment to
 	     (LaTeX-add-environments `(,flt ["Float Position"]))
 	     (add-to-list (make-local-variable 'LaTeX-indent-environment-list)
 			  `(,flt current-indentation) t)
-	     (add-to-list 'LaTeX-label-alist `(,flt . "lst:") t)
+	     (add-to-list 'LaTeX-label-alist `(,flt . LaTeX-listing-label) t)
 	     (when (fboundp 'reftex-add-label-environments)
 	       (reftex-add-label-environments
 		`((,flt ?l "lst:" "~\\ref{%s}" caption nil nil)))))

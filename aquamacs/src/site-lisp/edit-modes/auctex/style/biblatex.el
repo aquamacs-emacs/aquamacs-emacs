@@ -161,6 +161,7 @@ string."
     (or (symbol-value files)
 	(set files (mapcar 'list (TeX-search-files-by-type
 				  'biberinputs 'global t nil))))
+    (message "Searching for BibLaTeX files...done")
     (setq database (completing-read
 		    (TeX-argument-prompt optional prompt "BibLaTeX files")
 		    (append (mapcar 'list (TeX-search-files-by-type
@@ -578,6 +579,8 @@ for citation keys."
 	    (?U    . "\\autocite*[][]{%l}")
 	    (?a    . "\\citeauthor{%l}")
 	    (?A    . "\\citeauthor*{%l}")
+	    (?i    . "\\citetitle{%l}")
+	    (?I    . "\\citetitle*{%l}")
 	    (?y    . "\\citeyear{%l}")
 	    (?Y    . "\\citeyear*{%l}")
 	    (?n    . "\\nocite{%l}")))))))
@@ -616,7 +619,8 @@ for citation keys."
 	(progn
 	  (message "Searching for BibLaTeX styles...")
 	  (setq BibLaTeX-global-style-files
-		(TeX-search-files-by-type 'bbxinputs 'global t t)))
+		(TeX-search-files-by-type 'bbxinputs 'global t t))
+	  (message "Searching for BibLaTeX styles...done"))
       ;; ...else, use for completion only standard BibLaTeX styles (see §3.3 of
       ;; Biblatex reference manual).
       (setq BibLaTeX-global-style-files

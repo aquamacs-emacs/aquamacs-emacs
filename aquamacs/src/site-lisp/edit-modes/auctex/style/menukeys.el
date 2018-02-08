@@ -132,7 +132,7 @@ macro.  If RENEW is non-nil, query for an already defined macro."
   (let ((macro (if renew
 		   (completing-read
 		    (concat "Macro: " TeX-esc)
-		    (delete-dups (mapcar #'car (LaTeX-menukeys-newmenumacro-list))))
+		    (TeX-delete-duplicate-strings (mapcar #'car (LaTeX-menukeys-newmenumacro-list))))
 		 (TeX-read-string (concat "Macro: " TeX-esc))))
 	(sep   (completing-read
 		(TeX-argument-prompt optional nil "Input separator (default ,)")

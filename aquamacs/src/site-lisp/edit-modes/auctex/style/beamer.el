@@ -110,7 +110,7 @@
     '("only" TeX-arg-beamer-overlay-spec 1)
     '("onslide" TeX-arg-beamer-overlay-spec)
     '("partpage")
-    '("pause")
+    '("pause" ["Slide number"])
     '("structure" TeX-arg-beamer-overlay-spec 1)
     '("temporal" TeX-arg-beamer-overlay-spec 3)
     '("titlepage")

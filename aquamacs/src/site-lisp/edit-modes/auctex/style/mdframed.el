@@ -1,6 +1,6 @@
 ;;; mdframed.el --- AUCTeX style for `mdframed.sty' (v1.9b)
 
-;; Copyright (C) 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2016, 2017 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -214,7 +214,7 @@
 	   (val (cadr (assoc "style" LaTeX-mdframed-key-val-options)))
 	   (temp (copy-alist LaTeX-mdframed-key-val-options-local))
 	   (opts (assq-delete-all (car (assoc key temp)) temp)))
-      (pushnew (list key (delete-dups
+      (pushnew (list key (TeX-delete-duplicate-strings
 			  (append val (mapcar #'car (LaTeX-mdframed-mdfdefinestyle-list)))))
 	       opts :test #'equal)
       (setq LaTeX-mdframed-key-val-options-local
@@ -241,7 +241,7 @@
 		   "subtitlebelowlinecolor"))
 	   (tmp (copy-alist LaTeX-mdframed-key-val-options-local)))
       (dolist (x keys)
-	(assq-delete-all (car (assoc x tmp)) tmp)
+	(setq tmp (assq-delete-all (car (assoc x tmp)) tmp))
 	(pushnew (list x (mapcar #'car (funcall colorcmd))) tmp :test #'equal))
       (setq LaTeX-mdframed-key-val-options-local
 	    (copy-alist tmp)))))
@@ -257,7 +257,7 @@
   (dolist (env (mapcar #'car (LaTeX-mdframed-newmdenv-list)))
     (LaTeX-add-environments
      `(,env LaTeX-env-args [ TeX-arg-key-val LaTeX-mdframed-key-val-options-local ] ))
-    (TeX-ispell-skip-setcdr `((,env ispell-tex-skip-alist 0))))
+    (TeX-ispell-skip-setcdr `((,env ispell-tex-arg-end 0))))
   (dolist (newenv (LaTeX-mdframed-mdtheorem-list))
     (let ((env (car newenv))
 	  (new (cadr newenv)))
@@ -297,7 +297,7 @@
 	   (LaTeX-add-environments
 	    `(,env LaTeX-env-args [ TeX-arg-key-val LaTeX-mdframed-key-val-options-local ]))
 	   ;; Add new env's to `ispell-tex-skip-alist': skip the optional argument
-	   (TeX-ispell-skip-setcdr `((,env ispell-tex-skip-alist 0)))
+	   (TeX-ispell-skip-setcdr `((,env ispell-tex-arg-end 0)))
 	   (format "%s" env)))))
 
     '("renewmdenv"

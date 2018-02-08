@@ -1,6 +1,6 @@
 ;;; longtable.el --- AUCTeX style for `longtable.sty'.
 
-;; Copyright (C) 2013--2016  Free Software Foundation, Inc.
+;; Copyright (C) 2013--2017  Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Author: Mosè Giordano <mose@gnu.org>
@@ -46,44 +46,47 @@ insert line break macro."
   (LaTeX-insert-ampersands
    LaTeX-longtable-skipping-regexp #'LaTeX-array-count-columns))
 
+(defun LaTeX-env-longtable (environment)
+  "Insert a longtable-like ENVIRONMENT with caption and label."
+  (let* ((pos (completing-read (TeX-argument-prompt t nil "Position")
+			       '(("l") ("r") ("c"))))
+	 (fmt (TeX-read-string "Format: " LaTeX-default-format))
+	 (caption (TeX-read-string "Caption: "))
+	 (short-caption (when (>= (length caption) LaTeX-short-caption-prompt-length)
+			  (TeX-read-string "(Optional) Short caption: "))))
+    (setq LaTeX-default-format fmt)
+    (LaTeX-insert-environment environment
+			      (concat
+			       (unless (zerop (length pos))
+				 (concat LaTeX-optop pos LaTeX-optcl))
+			       (concat TeX-grop fmt TeX-grcl)))
+    ;; top caption -- do nothing if user skips caption
+    (unless (zerop (length caption))
+      ;; insert `\caption[short-caption]{caption':
+      (insert TeX-esc "caption")
+      (when (and short-caption (not (string= short-caption "")))
+	(insert LaTeX-optop short-caption LaTeX-optcl))
+      (insert TeX-grop caption)
+      ;; ask for a label and insert it
+      (LaTeX-label environment 'environment)
+      ;; the longtable `\caption' is equivalent to a
+      ;; `\multicolumn', so it needs a `\\' at the
+      ;; end of the line.  Prior to that, add } to
+      ;; close `\caption{'
+      (insert TeX-grcl "\\\\")
+      ;; fill the caption
+      (LaTeX-fill-paragraph)
+      ;; Insert a new line and indent
+      (LaTeX-newline)
+      (indent-according-to-mode))
+    ;; Insert suitable number of &'s, suppress line break
+    (LaTeX-item-longtable t)))
+
 (TeX-add-style-hook
  "longtable"
  (lambda ()
    (LaTeX-add-environments
-    '("longtable" (lambda (environment)
-		    (let* ((pos (completing-read (TeX-argument-prompt t nil "Position")
-						 '(("l") ("r") ("c"))))
-			   (fmt (TeX-read-string "Format: " LaTeX-default-format))
-			   (caption (TeX-read-string "Caption: "))
-			   (short-caption (when (>= (length caption) LaTeX-short-caption-prompt-length)
-					    (TeX-read-string "(Optional) Short caption: "))))
-		      (setq LaTeX-default-format fmt)
-		      (LaTeX-insert-environment environment
-						(concat
-						 (unless (zerop (length pos))
-						   (concat LaTeX-optop pos LaTeX-optcl))
-						 (concat TeX-grop fmt TeX-grcl)))
-		      ;; top caption -- do nothing if user skips caption
-		      (unless (zerop (length caption))
-			;; insert `\caption[short-caption]{caption':
-			(insert TeX-esc "caption")
-			(when (and short-caption (not (string= short-caption "")))
-			  (insert LaTeX-optop short-caption LaTeX-optcl))
-			(insert TeX-grop caption)
-			;; ask for a label and insert it
-			(LaTeX-label environment 'environment)
-			;; the longtable `\caption' is equivalent to a
-			;; `\multicolumn', so it needs a `\\' at the
-			;; end of the line.  Prior to that, add } to
-			;; close `\caption{'
-			(insert TeX-grcl "\\\\")
-			;; fill the caption
-			(LaTeX-fill-paragraph)
-			;; Insert a new line and indent
-			(LaTeX-newline)
-			(indent-according-to-mode))
-		      ;; Insert suitable number of &'s, suppress line break
-		      (LaTeX-item-longtable t)))))
+    '("longtable" LaTeX-env-longtable))
 
    (TeX-add-symbols
     ;; Commands to end table rows
@@ -103,7 +106,7 @@ insert line break macro."
 
    ;; Use the enhanced table formatting.  Append to
    ;; `LaTeX-indent-environment-list' in order not to override custom settings.
-   (add-to-list (make-variable-buffer-local 'LaTeX-indent-environment-list)
+   (add-to-list (make-local-variable 'LaTeX-indent-environment-list)
 		'("longtable" LaTeX-indent-tabular) t)
 
    ;; Append longtable to `LaTeX-label-alist', in order not to override possible

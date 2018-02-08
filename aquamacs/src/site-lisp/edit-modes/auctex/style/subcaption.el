@@ -1,6 +1,6 @@
 ;;; subcaption.el --- AUCTeX style for `subcaption.sty' (v1.1-100)
 
-;; Copyright (C) 2015 Free Software Foundation, Inc.
+;; Copyright (C) 2015--2017 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -59,14 +59,12 @@ caption, insert only a caption."
     (insert TeX-grop caption TeX-grcl)
     ;; Fill the \subcaption paragraph before inserting the \label:
     (LaTeX-fill-paragraph)
-    (unless star
-      (save-excursion
-	(LaTeX-label currenv 'environment))
+    (when (and (not star)
+	       (save-excursion (LaTeX-label currenv 'environment)))
       ;; Move \label into next line if we have one:
-      (when (looking-at (regexp-quote "\\label{"))
-	(LaTeX-newline)
-	(indent-according-to-mode)
-	(end-of-line)))))
+      (LaTeX-newline)
+      (indent-according-to-mode)
+      (end-of-line))))
 
 (defun LaTeX-arg-subcaption-subcaptionbox (optional &optional star)
   "Query for the arguments of \"\\subcaptionbox\" incl. a label and insert them.
@@ -145,8 +143,8 @@ caption, insert only a caption."
 		    (TeX-argument-prompt nil nil "Type")
 		    '("figure" "table"))))
 
-   ;; Everything starting with \subcaption should get its own line
-   (LaTeX-paragraph-commands-add-locally "subcaption")
+   ;; \subcaption(box)? macros should get their own lines
+   (LaTeX-paragraph-commands-add-locally '("subcaption" "subcaptionbox"))
 
    ;; The subfigure & subtable environments
    (LaTeX-add-environments

@@ -1,6 +1,6 @@
 ;;; exam.el --- AUCTeX style for the (LaTeX) exam class
 
-;; Copyright (C) 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2016, 2017 Free Software Foundation, Inc.
 
 ;; Author: Uwe Brauer <oub@mat.ucm.es>
 ;; Created: 2016-03-06
@@ -31,7 +31,6 @@
 ;; Arash Esbati <arash@gnu.org> for a almost complete rewrite.
 
 ;;; Code:
-
 
 (defvar LaTeX-exam-class-options
   '("answers" "noanswers" "cancelspace" "nocancelspace" "addpoints")
@@ -85,6 +84,7 @@ Arguments NAME and TYPE are the same as for the function
 
    (LaTeX-add-environments
     '("solution" [ "Height" ])
+    '("select")
     '("solutionorbox" [ "Height" ])
     '("solutionorlines" [ "Height" ])
     '("solutionordottedlines" [ "Height" ])
@@ -258,8 +258,6 @@ Arguments NAME and TYPE are the same as for the function
     '("extraheadheight" 1)
     '("extrawidth" 1)
     '("fillwithdottedlines" 1)
-    '("fillwithdottedlines" 1)
-    '("fillwithlines" 1)
     '("fillwithlines" 1)
     '("firstpagefooter" 1)
     '("firstpagefootrule" 0)
@@ -320,6 +318,8 @@ Arguments NAME and TYPE are the same as for the function
     '("pointsofquestion" 1)
     '("pointsonpage" 1)
     '("printanswers" 0)
+    '("printselectedfalse" 0)
+    '("printselectedtrue" 0)
     '("qformat" 1)
     '("questionlabel" 0)
     '("questionshook" 0)

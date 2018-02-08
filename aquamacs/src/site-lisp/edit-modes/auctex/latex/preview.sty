@@ -26,12 +26,12 @@
 \NeedsTeXFormat{LaTeX2e} \def\reserved@a #1#2$#3:
 #4${\xdef#1{\reserved@c #2#4 $}} \def\reserved@c #1 #2${#1}
 \begingroup \catcode`\_=12
-\reserved@a\pr@version $Name: release_11_89 $ \ifx\pr@version\@empty
+\reserved@a\pr@version $Name: release_12_1 $ \ifx\pr@version\@empty
 \reserved@a\pr@version CVS-$Revision: 1.126 $ \endgroup \else
   \def\next release_{} \lccode`\_=`.
   \edef\next{\lowercase{\endgroup
     \def\noexpand\pr@version{\expandafter\next\pr@version}}} \next \fi
-\reserved@a\next $Date: 2010/02/14 16:19:00 $
+\reserved@a\next $Date: 2017/04/24 13:20:00 $
 \edef\next{\noexpand\ProvidesPackage{preview}%
   [\next\space \pr@version\space (AUCTeX/preview-latex)]}
 \next
@@ -40,6 +40,7 @@
 \let\pr@advise=\@gobbletwo
 \long\def\pr@advise@ship#1#2#3{}
 \def\pr@loadcfg#1{\InputIfFileExists{#1.cfg}{}{}}
+\IfFileExists{luatex85.sty}{\RequirePackage{luatex85}}{}
 \DeclareOption{noconfig}{\let\pr@loadcfg=\@gobble}
 \long\def\pr@addto@front#1#2{%
   \toks@{#2}\toks@\expandafter{\the\expandafter\toks@#1}%

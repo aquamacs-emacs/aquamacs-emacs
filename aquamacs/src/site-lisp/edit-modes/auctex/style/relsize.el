@@ -38,8 +38,8 @@
     ;; Declarations and commands
     '("relsize"     "Steps"                    )
     '("relscale"    "Scale factor"             )
-    '("larger"      [ "Steps (default: 1)" ] -1)
-    '("smaller"     [ "Steps (default: 1)" ] -1)
+    '("larger"      [ "Steps (default 1)" ] -1)
+    '("smaller"     [ "Steps (default 1)" ] -1)
     '("textlarger"  [ "Steps" ]               t)
     '("textsmaller" [ "Steps" ]               t)
     '("textscale"   "Scale factor"            t)

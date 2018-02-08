@@ -18,7 +18,7 @@ echo ./configure --with-lispdir=~/aquamacs-emacs/aquamacs/src/site-lisp/edit-mod
 
 cd doc
 rm *.texi
-gzip *.info
+#gzip *.info   no longer done
 cd -
 
 find . -name \*.log -delete
@@ -26,14 +26,23 @@ find . -name \*~ -delete
 find . -name ChangeLog\* -delete
 find . -name configure -delete
 find . -name Makefile -delete
+find . -name Makefile.in -delete
+find . -name \*.ins -delete
+find . -name \*.spec -delete
+find . -name \*.in -delete
+find . -name \*.out -delete
+rm config.status
 
+# no longer gzipping things
+#cd style
+#gzip *.el
+#cd -
 
-cd style
-gzip *.el
-cd -
-
-gzip *.el
+#gzip *.el
 
 pwd
 
 rm INSTALL* TODO 
+
+echo "Update Aquamacs-specific tex-site."
+echo "opendiff tex-site.el auctex/tex-site.el"

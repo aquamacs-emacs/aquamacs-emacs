@@ -1,6 +1,6 @@
 ;;; tex-ispell.el --- AUCTeX skip additions for Ispell
 
-;; Copyright (C) 2016 Free Software Foundation, Inc.
+;; Copyright (C) 2016-2017 Free Software Foundation, Inc.
 
 ;; Author: Arash Esbati <arash@gnu.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -44,12 +44,16 @@
 ;; amsmath.sty
 ;; attachfile.sty
 ;; booktabs.sty
+;; breqn.sty
 ;; cleveref.sty
+;; empheq.sty
 ;; enumitem.sty
 ;; fancyref.sty
 ;; fancyvrb.sty
+;; filecontents.sty
 ;; fontaxes.sty
 ;; fontspec.sty
+;; hyperref.sty
 ;; listings.sty
 ;; ltxtable.sty
 ;; mdframed.sty
@@ -62,6 +66,7 @@
 ;; tcolorbox.sty
 ;; tikz.sty
 ;; varioref.sty
+;; xltabular.sty
 
 ;; If you have further additions, drop a line to <auctex-devel@gnu.org>.
 
@@ -124,6 +129,7 @@
       ("attachfilesetup" . 1)
       ("textattachfile" . 1)
       ;; booktabs.sty
+      ("addlinespace" . 0)
       ("specialrule" . 3)
       ;; cleveref.sty
       ("cref" . 1)
@@ -142,6 +148,8 @@
       ("Cpagerefrange" . 2)
       ("crefrange*" . 2)
       ("Crefrange*" . 2)
+      ;; empheq.sty
+      ("empheqset" . 1)
       ;; fancyref.sty
       ("fref" . 1)
       ("Fref" . 1)
@@ -152,6 +160,21 @@
       ("figureversion" . 1)
       ;; fontspec.sty
       ("addfontfeatures" . 1)
+      ;; hyperref.sty
+      ("hypersetup" . 1)
+      ("href" . 1)
+      ("url" . 1)
+      ("nolinkurl" . 1)
+      ("hyperbaseurl" . 1)
+      ("hyperimage" . 1)
+      ("hyperdef" . 2)
+      ("hyperref" . 3)
+      ("hyperlink" . 1)
+      ("hypertarget" . 1)
+      ("autoref" . 1)
+      ("autoref*" . 1)
+      ("autopageref" . 1)
+      ("autopageref*" . 1)
       ;; listings.sty
       ("lstinputlisting" . 1)
       ("lstset" . 1)
@@ -219,43 +242,92 @@ argument and spell check the mandatory one."))
     "List of LaTeX environments with an opt argument to be skipped."))
 
 
+;; Add new environments which should be skipped entirely here:
+(eval-when-compile
+  (defvar TeX-ispell-skip-envs-list
+    '(;; amsmath.sty
+      "align"
+      "align*"
+      "alignat"
+      "alignat*"
+      "flalign"
+      "flalign*"
+      "gather"
+      "gather*"
+      "multline"
+      "multline*"
+      ;; breqn.sty
+      "darray"
+      "darray*"
+      "dgroup"
+      "dgroup*"
+      "dmath"
+      "dmath*"
+      "dseries"
+      "dseries*"
+      ;; empheq.sty
+      "empheq"
+      ;; fancyvrb.sty
+      "BVerbatim"
+      "BVerbatim*"
+      "LVerbatim"
+      "LVerbatim*"
+      "SaveVerbatim"
+      "Verbatim"
+      "Verbatim*"
+      "VerbatimOut"
+      ;; listings.sty
+      "lstlisting"
+      ;; minted.sty
+      "minted"
+      ;; tikz.sty
+      "tikzpicture")
+    "List of LaTeX environments which will be skipped entirely.
+Environments for math or verbatim text are candidates for this list."))
+
+
 ;; Add others delimited here:
 (TeX-ispell-skip-setcar
- '(;; LaTeX-base
+ `(;; LaTeX-base
+   ("\\\\(" . "\\\\)")
    ("\\\\raisebox" TeX-ispell-tex-arg-end 1 2 0)
    ;; booktabs.sty
-   ("\\\\cmidrule" . "\\(([^)]*)\\)?{[-0-9]+}")
+   ("\\\\cmidrule" . "{[-0-9]+}")
    ;; fontspec.sty
-   ("\\\\fontspec" TeX-ispell-tex-arg-end 1 1 0)
-   ;; minted.sty
-   ("\\\\mint\\(inline\\)?\\(\\[[^]]*\\]\\)?{\\([^}]+\\)}{" . "}")
-   ("\\\\mint\\(inline\\)?\\(\\[[^]]*\\]\\)?{\\([^}]+\\)}|" . "|")
-   ("\\\\mint\\(inline\\)?\\(\\[[^]]*\\]\\)?{\\([^}]+\\)}#" . "#")
-   ("\\\\mint\\(inline\\)?\\(\\[[^]]*\\]\\)?{\\([^}]+\\)}\\+" . "\\+")
-   ("\\\\mint\\(inline\\)?\\(\\[[^]]*\\]\\)?{\\([^}]+\\)}\\*" . "\\*")))
+   ("\\\\fontspec" TeX-ispell-tex-arg-end 1 1 0)))
+
+
+;; Special setup for verbatim macros:
+(defcustom TeX-ispell-verb-delimiters "!|#~\"/+^-"
+  "String with all delimiters for verbatim macros.
+Characters special in regexps like `^' and `-' must come last and
+not be quoted.  An opening brace `{', asterisk `*' and at-sign
+`@' should not be used as they are not recognized by
+`font-latex.el' correctly."
+  :group 'TeX-misc
+  :type 'string)
+
+;; listings.sty & fancyvrb.sty: With opt. argument only before verb content:
+(TeX-ispell-skip-setcar
+ `((,(concat "\\\\" (regexp-opt '("Verb" "lstinline")))
+    TeX-ispell-tex-arg-verb-end)))
+
+;; minted.sty: With opt. and mandatory argument before verb content:
+(TeX-ispell-skip-setcar
+ `((,(concat "\\\\" (regexp-opt '("mint" "mintinline")))
+    TeX-ispell-tex-arg-verb-end 1)))
 
 
 ;; Add environments here:
 (TeX-ispell-skip-setcdr
- '(;; amsmath.sty
-   ("\\(align\\(\\*\\|at\\*?\\)?\\|flalign\\*?\\)" .
-    "\\\\end{\\(align\\(\\*\\|at\\*?\\)?\\|flalign\\*?\\)}")
-   ("gather\\*?" . "\\\\end{gather\\*?}")
-   ("multline\\*?" . "\\\\end{multline\\*?}")
-   ;; listings.sty
-   ("lstlisting" . "\\\\end{lstlisting}")
-   ;; minted.sty
-   ("minted" . "\\\\end{minted}")
+ '(;; filecontents.sty
+   ("filecontents\\*?" ispell-tex-arg-end)
    ;; tabularx.sty, tabulary.sty, Standard LaTeX tabular*-env
    ("tabular[*xy]" TeX-ispell-tex-arg-end)
    ;; tcolorbox.sty -- raster library
    ("tcboxed\\(raster\\|itemize\\)" ispell-tex-arg-end)
-   ;; tikz.sty
-   ("tikzpicture" . "\\\\end{tikzpicture}")
-   ;; fancyvrb.sty: In practice, all verbatim environments have a *
-   ;; variant, which sets showspaces=true
-   ("\\(Save\\|[BL]\\)?Verbatim\\(\\*\\|Out\\)?" .
-    "\\\\end{\\(Save\\|[BL]\\)?Verbatim\\(\\*\\|Out\\)?}")))
+   ;; xltabular.sty
+   ("xltabular" ispell-tex-arg-end 2)))
 
 
 ;; No customization below this line
@@ -299,6 +371,11 @@ argument and spell check the mandatory one."))
     (regexp-opt TeX-ispell-skip-envs-opt-arg-list t))
   "Regexp of LaTeX environments with an opt argument to be skipped.")
 
+(defvar TeX-ispell-skip-envs-regexp
+  (eval-when-compile
+    (regexp-opt TeX-ispell-skip-envs-list t))
+  "Regexp of LaTeX environments which will be skipped entirely.")
+
 ;; Make them available to Ispell:
 (TeX-ispell-skip-setcar
  `((,TeX-ispell-skip-cmds-opt-arg-regexp ispell-tex-arg-end 0)
@@ -307,7 +384,9 @@ argument and spell check the mandatory one."))
    (,TeX-ispell-skip-cmds-three-args-regexp ispell-tex-arg-end 3)))
 
 (TeX-ispell-skip-setcdr
- `((,TeX-ispell-skip-envs-opt-arg-regexp ispell-tex-arg-end 0)))
+ `((,TeX-ispell-skip-envs-opt-arg-regexp ispell-tex-arg-end 0)
+   ,(cons TeX-ispell-skip-envs-regexp
+	  (concat "\\\\end{" TeX-ispell-skip-envs-regexp "}"))))
 
 (provide 'tex-ispell)
 

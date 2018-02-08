@@ -1,10 +1,10 @@
-This is preview-latex.info, produced by makeinfo version 6.3 from
+This is preview-latex.info, produced by makeinfo version 6.5 from
 preview-latex.texi.
 
 This manual is for preview-latex, a LaTeX preview mode for AUCTeX
-(version 11.90 from 2017-01-10).
+(version 12.1 from 2017-12-04).
 
-   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Free Software
+   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2017 Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
@@ -126,9 +126,9 @@ File: preview-latex.info,  Node: Activating preview-latex,  Next: Getting starte
 ============================
 
 After installation, the package may need to be activated (and remember
-to activate AUCTeX too).  In XEmacs, and in any prepackaged versions
-worth their salt, activation should be automatic upon installation.  If
-this seems not the case, complain to your installation provider.
+to activate AUCTeX too).  If preview-latex is installed via the Emacs
+package manager (ELPA), activation should be automatic upon
+installation.
 
    The usual activation (if it is not done automatically) would be
 
@@ -174,9 +174,7 @@ C-p' (or by clicking with the middle mouse button on the icon before the
 edited text).
 
    If you are using the 'desktop' package, previews will remain from one
-session to the next as long as you don't kill your buffer.  If you are
-using XEmacs, you will probably need to upgrade the package to the
-newest one; things are being fixed just as I am writing this.
+session to the next as long as you don't kill your buffer.
 
 
 File: preview-latex.info,  Node: Basic modes of operation,  Next: More documentation,  Prev: Getting started,  Up: Introduction
@@ -343,8 +341,8 @@ Copy a region as MML
      need to call this command explicitly again to get the newly
      generated images into the kill ring.
 
-     Preview your articles with 'mml-preview' (on 'M-m P', or 'C-c C-m
-     P' in Emacs 22) to make sure they look fine.
+     Preview your articles with 'mml-preview' (on 'C-c C-m P') to make
+     sure they look fine.
 
 'C-c C-p C-e'
 'preview-environment'
@@ -465,9 +463,7 @@ in *note For advanced users::), but some are:
      group might improve things.  With some settings, the cursor may
      cover the whole background of a preview, however.
 
-     This option is specific to the display engine in use.  Its default
-     is different in Emacs 21 and Emacs 22, and it is not available in
-     XEmacs.
+     This option is specific to the display engine in use.
 
    * Showing '\label's
 
@@ -576,10 +572,10 @@ newer versions of the problematic software or by simple patches.
 
 * Menu:
 
-* Font problems with Dvips::    
-* Too small bounding boxes::    
-* x-symbol interoperation::     
-* Middle-clicks paste instead of toggling::  
+* Font problems with Dvips::
+* Too small bounding boxes::
+* x-symbol interoperation::
+* Middle-clicks paste instead of toggling::
 
    If you find something not mentioned here, please send a bug report
 using 'M-x preview-report-bug <RET>', which will fill in a lot of
@@ -674,17 +670,12 @@ File: preview-latex.info,  Node: Middle-clicks paste instead of toggling,  Prev:
 5.4 Middle-clicks paste instead of toggling
 ===========================================
 
-This is probably the fault of your favorite package.  'flyspell.el' and
-'mouse-drag.el' are known to be affected in versions before Emacs 21.3.
-Upgrade to the most recent version.  What version of XEmacs might
-contain the fixes is unknown.
-
-   'isearch.el' also shows this effect while searches are in progress,
-but the code is such a complicated mess that no patch is in sight.
-Better just end the search with '<RET>' before toggling and resume with
-'C-s C-s' or similar afterwards.  Since previews over the current match
-will auto-open, anyway, this should not be much of a problem in
-practice.
+This is probably the fault of your favorite package.  'isearch.el' is
+known to be affected while searches are in progress, but the code is
+such a complicated mess that no patch is in sight.  Better just end the
+search with '<RET>' before toggling and resume with 'C-s C-s' or similar
+afterwards.  Since previews over the current match will auto-open,
+anyway, this should not be much of a problem in practice.
 
 
 File: preview-latex.info,  Node: For advanced users,  Next: ToDo,  Prev: Known problems,  Up: Top
@@ -698,10 +689,10 @@ Emacs-lisp part integrating the thing into Emacs (aided by AUCTeX).
 
 * Menu:
 
-* The LaTeX style file::        
-* The Emacs interface::         
-* The preview images::             
-* Misplaced previews::          
+* The LaTeX style file::
+* The Emacs interface::
+* The preview images::
+* Misplaced previews::
 
 
 File: preview-latex.info,  Node: The LaTeX style file,  Next: The Emacs interface,  Prev: For advanced users,  Up: For advanced users
@@ -717,7 +708,7 @@ generating PDF files (usually also postprocessed by Ghostscript).
 
    Current uses of the package include the preview-latex package for
 WYSIWYG functionality in the AUCTeX editing environment, generation of
-previews in LyX, as part of the operation of the ps4pdf package, the
+previews in LyX, as part of the operation of the pst-pdf package, the
 tbook XML system and some other tools.
 
    Producing EPS files with Dvips and its derivatives using the '-E'
@@ -1094,7 +1085,7 @@ File: preview-latex.info,  Node: Provided commands,  Prev: Package options,  Up:
 
      As an example for using this argument, you might want to specify
 
-          \PreviewMacro*\footnote[{[]}][#1{}]
+          \PreviewMacro*[{[]}][#1{}]{\footnote}
 
      This will replace a footnote by an empty footnote, but taking any
      optional parameter into account, since an optional paramter changes
@@ -1127,8 +1118,8 @@ File: preview-latex.info,  Node: Provided commands,  Prev: Package options,  Up:
      essential for the operation of '\PreviewOpen' that the macro
      treated with it will open an additional group even when the preview
      falls inside of another preview or inside of a 'nopreview'
-     environment.  Similarly, the macro treated with 'PreviewClose' will
-     close an environment even when inactive.
+     environment.  Similarly, the macro treated with '\PreviewClose'
+     will close an environment even when inactive.
 
 '\ifPreview'
      In case you need to know whether 'preview' is active, you can use
@@ -1296,15 +1287,6 @@ together in making preview-latex work as intended.
      when this is needed is in
      '\begin{equation}\begin{split}...\end{split}\end{equation}', and
      accordingly 'split' is one entry in 'preview-inner-environments'.
-
-'preview-use-balloon-help'
-     If you turn this XEmacs-only option 'on', then moving the mouse
-     over previews and icons will show appropriate help texts.  This
-     works by switching on 'balloon-help-mode' in the buffer if it is
-     not already enabled.  The default now is 'off' since some users
-     reported problems with their version of XEmacs.  GNU Emacs has its
-     corresponding 'tooltip-mode' enabled by default and in usable
-     condition.
 
 
 File: preview-latex.info,  Node: The preview images,  Next: Misplaced previews,  Prev: The Emacs interface,  Up: For advanced users
@@ -1561,12 +1543,12 @@ Appendix B Frequently Asked Questions
 
 * Menu:
 
-* Introduction to FAQ::         
-* Requirements::                
-* Installation Trouble::        
-* Customization::               
-* Troubleshooting::               
-* Other formats::               
+* Introduction to FAQ::
+* Requirements::
+* Installation Trouble::
+* Customization::
+* Troubleshooting::
+* Other formats::
 
 
 File: preview-latex.info,  Node: Introduction to FAQ,  Next: Requirements,  Prev: Frequently Asked Questions,  Up: Frequently Asked Questions
@@ -1593,17 +1575,7 @@ B.2.1 Which version of (X)Emacs is needed?
 See also the table at the end of the section.
 
    preview-latex nominally requires GNU Emacs with a version of at least
-21.1.  However, Emacs 22 (currently under development) offers superior
-performance and wider platform support, and is even now the recommended
-platform to use.
-
-   While recent versions of XEmacs 21.4 are supported, doing this in a
-satisfactory manner has proven to be difficult due to technical
-shortcomings and differing API's which are hard to come by.  If
-preview-latex is an important part of your editing workflow, you are
-likely to get better results and support by switching to Emacs.  Of
-course, you can improve support for your favorite editor by giving
-feedback in case you encounter bugs.
+24.1.
 
 B.2.2 Which versions of Ghostscript and AUCTeX are needed?
 ----------------------------------------------------------
@@ -1639,20 +1611,7 @@ flavors of Unix: we have reports for HP and Solaris.
    There are several development versions of Emacs around for native
 MacOS Carbon, and preview-latex is working with them, too.
 
-   With Windows, Cygwin and native ports of XEmacs should work.
-preview-latex will not work with any native version 21 of Emacs under
-Windows: you need to get a hold of Emacs 22 which is at the time of this
-writing not released but available as a developer snapshot.
-
-   The entry "X11/Unix" currently means Linux, Solaris or HP/UX, as well
-as the X-specific version for Mac/OSX.
-
-OS             Emacs version   XEmacs version
-X11/Unix       21.1            21.4.9
-Win9x cygwin   21.3.50?        21.4.8
-Win9x native   22.1            21.4.8
-MacOSX         22.1            -
-native
+   With Windows, Cygwin should work.
 
 
 File: preview-latex.info,  Node: Installation Trouble,  Next: Customization,  Prev: Requirements,  Up: Frequently Asked Questions
@@ -1701,29 +1660,13 @@ An outdated 'preview' installation
      default tree.  Make sure that the first version of those files that
      gets found is the correct one.
 
-B.3.2 I have problems with the XEmacs installation
---------------------------------------------------
-
-Please note that the XEmacs installation is different, since XEmacs has
-a package system that gets used here.  Please make sure that you read
-and follow the installation instructions for XEmacs.
-
 
 File: preview-latex.info,  Node: Customization,  Next: Troubleshooting,  Prev: Installation Trouble,  Up: Frequently Asked Questions
 
 B.4 Customization
 =================
 
-B.4.1 Why don't I get balloon help like in the screen shots?
-------------------------------------------------------------
-
-Some users have reported problems with their XEmacs version, so balloon
-help is no longer switched on by default.  Use the Preview/Customize
-menu or '<M-x> customize-variable' in order to customize
-'preview-use-balloon-help' to 'On'.  This only concerns XEmacs: tooltips
-under GNU Emacs are enabled by default and unproblematic.
-
-B.4.2 How to include additional environments like 'enumerate'
+B.4.1 How to include additional environments like 'enumerate'
 -------------------------------------------------------------
 
 By default, preview-latex is intended mainly for displaying mathematical
@@ -1755,7 +1698,7 @@ monolithic block by Emacs, one should really restrict previews to those
 elements where the improvement in visual representation more than makes
 up for the decreased editability.
 
-B.4.3 What if I don't want to change the document?
+B.4.2 What if I don't want to change the document?
 --------------------------------------------------
 
 The easiest way is to generate a configuration file in the current
@@ -1771,7 +1714,7 @@ the latter.  In that case you should write something like
 (the file name should match that, but not your own 'prauctex.cfg'), then
 you add your own stuff.
 
-B.4.4 Suddenly I get gazillions of ridiculous pages?!?
+B.4.3 Suddenly I get gazillions of ridiculous pages?!?
 ------------------------------------------------------
 
 When preview-latex works on extracting its stuff, it typesets each
@@ -1783,7 +1726,7 @@ It is an error to add the 'active' option to this invocation: you don't
 want the package to be active unless preview-latex itself enables the
 previewing operation (which it will).
 
-B.4.5 Does preview-latex work with presentation classes?
+B.4.4 Does preview-latex work with presentation classes?
 --------------------------------------------------------
 
 preview-latex should work with most presentation classes.  However,
@@ -1900,9 +1843,9 @@ Appendix C Copying this Manual
 The copyright notice for this manual is:
 
    This manual is for preview-latex, a LaTeX preview mode for AUCTeX
-(version 11.90 from 2017-01-10).
+(version 12.1 from 2017-12-04).
 
-   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Free Software
+   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2017 Free Software
 Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
@@ -2414,7 +2357,7 @@ Index
 * Activation:                            Activating preview-latex.
                                                               (line   6)
 * C-c C-k:                               Keys and lisp.       (line 160)
-* C-c C-m P:                             Keys and lisp.       (line  63)
+* C-c C-m P:                             Keys and lisp.       (line  62)
 * C-c C-p C-b:                           Keys and lisp.       (line  89)
 * C-c C-p C-c C-b:                       Keys and lisp.       (line 115)
 * C-c C-p C-c C-d:                       Keys and lisp.       (line 121)
@@ -2431,7 +2374,7 @@ Index
 * C-c C-p C-w:                           Keys and lisp.       (line  45)
 * C-u C-c C-p C-f:                       Keys and lisp.       (line 141)
 * Caching a preamble:                    Simple customization.
-                                                              (line  59)
+                                                              (line  57)
 * Contacts:                              Contacts.            (line   6)
 * Copying:                               Copying.             (line   6)
 * Copyright:                             Copying.             (line   6)
@@ -2445,10 +2388,9 @@ Index
 * GIT access:                            Availability.        (line   6)
 * GPL:                                   Copying.             (line   6)
 * Inline math:                           Simple customization.
-                                                              (line 110)
+                                                              (line 108)
 * Kill preview-generating process:       Keys and lisp.       (line 160)
 * License:                               Copying.             (line   6)
-* M-m P:                                 Keys and lisp.       (line  63)
 * M-x preview-report-bug <RET>:          Keys and lisp.       (line 152)
 * Mailing list:                          Contacts.            (line   6)
 * Menu entries:                          Keys and lisp.       (line   6)
@@ -2456,7 +2398,7 @@ Index
 * preview-at-point:                      Keys and lisp.       (line  23)
 * preview-auctex-font-size:              The Emacs interface. (line  99)
 * preview-auto-cache-preamble:           Simple customization.
-                                                              (line  59)
+                                                              (line  57)
 * preview-buffer:                        Keys and lisp.       (line  89)
 * preview-cache-preamble:                Keys and lisp.       (line 128)
 * preview-cache-preamble-off:            Keys and lisp.       (line 141)
@@ -2496,23 +2438,22 @@ Index
 * preview-parsed-font-size:              The Emacs interface. (line  99)
 * preview-prefer-TeX-bb:                 The Emacs interface. (line  69)
 * preview-preserve-counters:             Simple customization.
-                                                              (line  63)
+                                                              (line  61)
 * preview-preserve-counters <1>:         The Emacs interface. (line  47)
 * preview-reference-face:                The Emacs interface. (line  80)
 * preview-region:                        Keys and lisp.       (line  84)
 * preview-report-bug:                    Keys and lisp.       (line 152)
 * preview-required-option-list:          Simple customization.
-                                                              (line  63)
+                                                              (line  61)
 * preview-required-option-list <1>:      The Emacs interface. (line  35)
 * preview-scale-function:                The Emacs interface. (line  79)
 * preview-section:                       Keys and lisp.       (line  79)
 * preview-transparent-border:            Keys and lisp.       (line  55)
-* preview-use-balloon-help:              The Emacs interface. (line 163)
 * Readme:                                Introduction.        (line   6)
 * Report a bug:                          Keys and lisp.       (line 152)
 * Right:                                 Copying.             (line   6)
 * Showing \labels:                       Simple customization.
-                                                              (line  23)
+                                                              (line  21)
 * Using dvipng:                          Basic modes of operation.
                                                               (line  19)
 * Warranty:                              Copying.             (line   6)
@@ -2520,41 +2461,41 @@ Index
 
 
 Tag Table:
-Node: Top941
-Node: Copying2213
-Node: Introduction2667
-Node: What use is it?3341
-Node: Activating preview-latex4730
-Node: Getting started5545
-Node: Basic modes of operation7633
-Node: More documentation8835
-Node: Availability9723
-Node: Contacts10328
-Node: Installation11600
-Node: Keys and lisp11801
-Node: Simple customization18465
-Node: Known problems24225
-Node: Font problems with Dvips25013
-Node: Too small bounding boxes26186
-Node: x-symbol interoperation27582
-Node: Middle-clicks paste instead of toggling28965
-Node: For advanced users29781
-Node: The LaTeX style file30280
-Node: Package options32841
-Node: Provided commands43745
-Node: The Emacs interface51092
-Node: The preview images60263
-Node: Misplaced previews63746
-Node: ToDo67200
-Node: Frequently Asked Questions71971
-Node: Introduction to FAQ72372
-Node: Requirements72711
-Node: Installation Trouble75682
-Node: Customization78244
-Node: Troubleshooting81789
-Node: Other formats84307
-Node: Copying this Manual85622
-Node: GNU Free Documentation License86550
-Node: Index111672
+Node: Top946
+Node: Copying2218
+Node: Introduction2672
+Node: What use is it?3346
+Node: Activating preview-latex4735
+Node: Getting started5488
+Node: Basic modes of operation7435
+Node: More documentation8637
+Node: Availability9525
+Node: Contacts10130
+Node: Installation11402
+Node: Keys and lisp11603
+Node: Simple customization18243
+Node: Known problems23906
+Node: Font problems with Dvips24679
+Node: Too small bounding boxes25852
+Node: x-symbol interoperation27248
+Node: Middle-clicks paste instead of toggling28631
+Node: For advanced users29259
+Node: The LaTeX style file29718
+Node: Package options32280
+Node: Provided commands43184
+Node: The Emacs interface50534
+Node: The preview images59245
+Node: Misplaced previews62728
+Node: ToDo66182
+Node: Frequently Asked Questions70953
+Node: Introduction to FAQ71276
+Node: Requirements71615
+Node: Installation Trouble73447
+Node: Customization75710
+Node: Troubleshooting78802
+Node: Other formats81320
+Node: Copying this Manual82635
+Node: GNU Free Documentation License83568
+Node: Index108690
 
 End Tag Table

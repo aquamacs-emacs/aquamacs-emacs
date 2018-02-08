@@ -1,7 +1,7 @@
 ;;; tex-info.el --- Support for editing Texinfo source.
 
-;; Copyright (C) 1993, 1994, 1997, 2000, 2001, 2004, 2005, 2006, 2011-2015
-;;   Free Software Foundation, Inc.
+;; Copyright (C) 1993, 1994, 1997, 2000, 2001, 2004, 2005, 2006,
+;;               2011-2015, 2017  Free Software Foundation, Inc.
 
 ;; Maintainer: auctex-devel@gnu.org
 ;; Keywords: tex
@@ -335,7 +335,7 @@ commands. Return the resulting string."
 		 nodes
 		 :test (lambda (a b)
 			 (when (equal a b)
-			   (push (cons a (line-number-at-pos (point))) dups)
+			   (push (cons a (TeX-line-number-at-pos (point))) dups)
 			   t))))
       (when dups
 	(display-warning
@@ -403,9 +403,37 @@ If DEFINITION is non-nil, then chosen node name is a node name to be
 added to the list of defined node names. Current implementation
 ignored DEFINITION as the full document is scanned for node names at
 each invocation."
-  (let ((node-name (completing-read (TeX-argument-prompt optional prompt "Key")
+  (let ((node-name (completing-read (TeX-argument-prompt optional prompt "Node")
 				    (Texinfo-make-node-list))))
     (insert "{" (Texinfo-nodename-escape node-name) "}" )))
+
+(defun Texinfo-arg-lrc (optional &rest args)
+  (let ((l (read-from-minibuffer "Enter left part: "))
+	(c (read-from-minibuffer "Enter center part: "))
+	(r (read-from-minibuffer "Enter right part: ")))
+    (insert " " l " @| " c " @| " r)))
+
+(defun Texinfo-arg-next-line (optional &rest args)
+  "Go to the beginning of next line if we are at the end of line. Otherwise insert an end-of-line."
+  (if (eolp)  (forward-line) (insert "\n")))
+
+(defun Texinfo-arg-on|off (optional &optional prompt style)
+  "Prompt for a boolean input.
+OPTIONAL is ignored.
+Use PROMPT as the prompt string.
+STYLE may be one of `:on|off' or `:true|false', if omitted `:on|off'
+is assumed by default."
+(let ((collection  (cdr (assq style
+			 '((nil . #1=("on" "off"))
+			   (:on|off . #1#)
+			   (:true|false "true" "false"))))))
+  (insert (if (y-or-n-p  (TeX-argument-prompt optional prompt (concat (car collection) ", not " (cadr collection))))
+			 (car collection)
+	    (cadr collection)))))
+
+(defun Texinfo-arg-choice (optional &optional prompt collection)
+  (insert (completing-read (TeX-argument-prompt optional prompt "Key")
+			   collection)))
 
 ;; Silence the byte-compiler from warnings for variables and functions declared
 ;; in reftex.
@@ -618,9 +646,9 @@ value of `Texinfo-mode-hook'."
   (set (make-local-variable 'require-final-newline) t)
   (set (make-local-variable 'indent-tabs-mode) nil)
   (set (make-local-variable 'paragraph-separate)
-       (concat "\b\\|^@[a-zA-Z]*[ \n]\\|" paragraph-separate))
+       (concat "\b\\|@[a-zA-Z]*[ \n]\\|" paragraph-separate))
   (set (make-local-variable 'paragraph-start)
-       (concat "\b\\|^@[a-zA-Z]*[ \n]\\|" paragraph-start))
+       (concat "\b\\|@[a-zA-Z]*[ \n]\\|" paragraph-start))
   (set (make-local-variable 'fill-column) 72)
   (set (make-local-variable 'comment-start) "@c ")
   (set (make-local-variable 'comment-start-skip) "@c +\\|@comment +")
@@ -682,12 +710,14 @@ value of `Texinfo-mode-hook'."
 
   (TeX-add-symbols
    '("acronym" "Acronym")
+   '("allowcodebreaks" (TeX-arg-literal " ") (Texinfo-arg-on|off nil :true|false) (Texinfo-arg-next-line))
    '("appendix" (TeX-arg-literal " ") (TeX-arg-free "Title"))
    '("appendixsec" (TeX-arg-literal " ") (TeX-arg-free "Title"))
    '("appendixsection" (TeX-arg-literal " ") (TeX-arg-free "Title"))
    '("appendixsubsec" (TeX-arg-literal " ") (TeX-arg-free "Title"))
    '("appendixsubsubsec" (TeX-arg-literal " ") (TeX-arg-free "Title"))
    '("asis")
+   '("atchar" nil)
    '("author" (TeX-arg-literal " ") (TeX-arg-free "Author"))
    '("b" "Text")
    '("bullet")
@@ -704,6 +734,8 @@ value of `Texinfo-mode-hook'."
    '("cite" "Reference")
    '("clear" (TeX-arg-literal " ") (TeX-arg-free "Flag"))
    '("code" "Sample code")
+   '("codequotebacktick" (TeX-arg-literal " ") (Texinfo-arg-on|off) (Texinfo-arg-next-line))
+   '("codequoteundirected"  (TeX-arg-literal " ") (Texinfo-arg-on|off) (Texinfo-arg-next-line))
    '("command" "Command")
    '("comment" (TeX-arg-literal " ") (TeX-arg-free "Comment"))
    '("contents")
@@ -712,15 +744,17 @@ value of `Texinfo-mode-hook'."
    '("defindex" (TeX-arg-literal " ") (TeX-arg-free "Index name"))
    '("dfn" "Term")
    '("dmn" "Dimension")
+   '("documentlanguage"  (TeX-arg-literal " ") (Texinfo-arg-choice "Language" ("ca" "cs" "de" "en" "es" "fr" "hu" "is" "it" "ja" "nb" "nl" "nn" "pl" "pt" "ru" "sr" "tr" "uk"))  (Texinfo-arg-next-line))
+   '("documentencoding"  (TeX-arg-literal " ") (Texinfo-arg-choice "Encoding" ("US-ASCII" "UTF-8" "ISO-8859-1" "ISO-8859-15" "ISO-8859-2" "koi8-r" "koi8-u"))  (Texinfo-arg-next-line))
    '("dots" nil)
    '("emph" "Text")
    '("email" "Email address")
    '("equiv" nil)
    '("error")
-   '("evenfooting" Texinfo-lrc-argument-hook)
-   '("evenheading" Texinfo-lrc-argument-hook)
-   '("everyfooting" Texinfo-lrc-argument-hook)
-   '("everyheading" Texinfo-lrc-argument-hook)
+   '("evenfooting" Texinfo-arg-lrc)
+   '("evenheading" Texinfo-arg-lrc)
+   '("everyfooting" Texinfo-arg-lrc)
+   '("everyheading" Texinfo-arg-lrc)
    '("exdent" (TeX-arg-literal " ") (TeX-arg-free "Line of text"))
    '("expansion" nil)
    '("file" "Filename")
@@ -744,6 +778,7 @@ value of `Texinfo-mode-hook'."
    '("kbd" "Keyboard characters")
    '("key" "Key name")
    '("kindex" (TeX-arg-literal " ") (TeX-arg-free "Entry"))
+   '("LaTeX" nil)
    '("lowersections" 0)
    '("majorheading" (TeX-arg-literal " ") (TeX-arg-free "Title"))
    '("menu")
@@ -754,8 +789,8 @@ value of `Texinfo-mode-hook'."
      (TeX-arg-literal ", ") (TeX-arg-free "Previous")
      (TeX-arg-literal ", ") (TeX-arg-free "Up"))
    '("noindent")
-   '("oddfooting" Texinfo-lrc-argument-hook)
-   '("oddheading" Texinfo-lrc-argument-hook)
+   '("oddfooting" Texinfo-arg-lrc)
+   '("oddheading" Texinfo-arg-lrc)
    '("page")
    '("paragraphindent" (TeX-arg-literal " ") (TeX-arg-free "Indent"))
    '("pindex" "Entry")
@@ -774,8 +809,7 @@ value of `Texinfo-mode-hook'."
    '("sc" "Text")
    '("section" (TeX-arg-literal " ") (TeX-arg-free "Title"))
    '("set" (TeX-arg-literal " ") (TeX-arg-free "Flag"))
-   ;; XXX: Would be nice with completion.
-   '("setchapternewpage" (TeX-arg-literal " ") (TeX-arg-free "On off odd"))
+   '("setchapternewpage" (TeX-arg-literal " ") (Texinfo-arg-choice "On off odd" ("on" "off" "odd")) (Texinfo-arg-next-line))
    '("setfilename" (TeX-arg-literal " ") (TeX-arg-free "Info file name"))
    '("settitle" (TeX-arg-literal " ") (TeX-arg-free "Title"))
    '("shortcontents")
@@ -809,6 +843,7 @@ value of `Texinfo-mode-hook'."
    '("unnumberedsec" (TeX-arg-literal " ") (TeX-arg-free "Title"))
    '("unnumberedsubsec" (TeX-arg-literal " ") (TeX-arg-free "Title"))
    '("unnumberedsubsubsec" (TeX-arg-literal " ") (TeX-arg-free "Title"))
+   '("url" "Link")
    '("value" "Flag")
    '("var" "Metasyntactic variable")
    '("vindex" (TeX-arg-literal " ") (TeX-arg-free "Entry"))

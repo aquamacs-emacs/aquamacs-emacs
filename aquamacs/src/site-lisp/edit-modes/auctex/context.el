@@ -1,6 +1,6 @@
 ;;; context.el --- Support for ConTeXt documents.
 
-;; Copyright (C) 2003-2006, 2008, 2010, 2012, 2014-2016
+;; Copyright (C) 2003-2006, 2008, 2010, 2012, 2014-2017
 ;;   Free Software Foundation, Inc.
 
 ;; Maintainer: Berend de Boer <berend@pobox.com>
@@ -508,7 +508,7 @@ in your .emacs file."
 Insert this hook into `ConTeXt-numbered-section-hook' to allow the user to change
 the name of the sectioning command inserted with `\\[ConTeXt-section]'."
   (let ((string (completing-read
-		 (concat "Select level: (default " name ") ")
+		 (concat "Select level (default " name "): ")
 		 ConTeXt-numbered-section-list
 		 nil nil nil)))
     ;; Update name
@@ -520,7 +520,7 @@ the name of the sectioning command inserted with `\\[ConTeXt-section]'."
 Insert this hook into `ConTeXt-unnumbered-section-hook' to allow the user to change
 the name of the sectioning command inserted with `\\[ConTeXt-section]'."
   (let ((string (completing-read
-		 (concat "Select level: (default " name ") ")
+		 (concat "Select level (default " name "): ")
 		 ConTeXt-unnumbered-section-list
 		 nil nil nil)))
     ;; Update name
@@ -670,7 +670,7 @@ With optional ARG, modify current environment."
 		   ((TeX-near-bobp) "text")
 		   (t ConTeXt-default-environment)))
 	 (environment
-	  (completing-read (concat "Environment type: (default " default ") ")
+	  (completing-read (concat "Environment type (default " default "): ")
 			   ConTeXt-environment-list nil nil nil
 			   'ConTeXt-environment-history default)))
     ;; Use `environment' as default for the next time only if it is different
@@ -1037,7 +1037,7 @@ header is at the start of a line."
    (regexp-quote TeX-esc)
    "\\("
    (mapconcat #'ConTeXt-environment-full-start-name ConTeXt-section-block-list "\\|") "\\|"
-   (mapconcat #'car ConTeXt-numbered-section-list "\\|")
+   (mapconcat #'car ConTeXt-numbered-section-list "\\|") "\\|"
    (mapconcat #'car ConTeXt-unnumbered-section-list "\\|")
    "\\)\\b"
    (if TeX-outline-extra
@@ -1220,7 +1220,10 @@ else.  There might be text before point."
        (condition-case err
 	   (progn
 	     (backward-sexp 1)
-	     (while (> (current-column) (current-indentation))
+	     (while (or (> (current-column) (current-indentation))
+			;; Continue going back if we are
+			;; at a hanging optional group.
+			(looking-at (regexp-quote ConTeXt-optop)))
 	       (backward-sexp 1)))
 	 (scan-error
 	  (setq up-list-pos (nth 2 err))))
@@ -1542,46 +1545,55 @@ else.  There might be text before point."
 	(setq ConTeXt-menu-changed nil)
 	(message "Updating section menu...")
 	(mapc #'ConTeXt-section-enable ConTeXt-section-list)
+	(message "Updating section menu...done")
 	(message "Updating environment menu...")
 	(easy-menu-change '("ConTeXt") ConTeXt-environment-menu-name
 			  (LaTeX-split-long-menu
 			   (mapcar #'ConTeXt-environment-menu-entry
 				   (ConTeXt-environment-list))))
+	(message "Updating environment menu...done")
 	(message "Updating modify environment menu...")
 	(easy-menu-change '("ConTeXt") ConTeXt-environment-modify-menu-name
 			  (LaTeX-split-long-menu
 			   (mapcar #'ConTeXt-environment-modify-menu-entry
 				   (ConTeXt-environment-list))))
+	(message "Updating modify environment menu...done")
 	(message "Updating define menu...")
 	(easy-menu-change '("ConTeXt") ConTeXt-define-menu-name
 			  (LaTeX-split-long-menu
 			   (mapcar #'ConTeXt-define-menu-entry
 				   ConTeXt-define-list)))
+	(message "Updating define menu...done")
 	(message "Updating setup menu...")
 	(easy-menu-change '("ConTeXt") ConTeXt-setup-menu-name
 			  (LaTeX-split-long-menu
 			   (mapcar #'ConTeXt-setup-menu-entry
 				   ConTeXt-setup-list)))
+	(message "Updating setup menu...done")
 	(message "Updating referencing menu...")
 	(easy-menu-change '("ConTeXt") ConTeXt-referencing-menu-name
 			  (LaTeX-split-long-menu
 			   (mapcar #'ConTeXt-referencing-menu-entry
 				   ConTeXt-referencing-list)))
+	(message "Updating referencing menu...done")
 	(message "Updating other macro's menu...")
 	(easy-menu-change '("ConTeXt") ConTeXt-other-macro-menu-name
 			  (LaTeX-split-long-menu
 			   (mapcar #'ConTeXt-other-macro-menu-entry
 				   ConTeXt-other-macro-list)))
+	(message "Updating other macro's menu...done")
 	(message "Updating project structure menu...")
 	(easy-menu-change '("ConTeXt") ConTeXt-project-structure-menu-name
 			  (LaTeX-split-long-menu
 			   (mapcar #'ConTeXt-project-structure-menu-entry
 				   ConTeXt-project-structure-list)))
+	(message "Updating project structure menu...done")
 	(message "Updating section block menu...")
 	(easy-menu-change '("ConTeXt") ConTeXt-section-block-menu-name
 			  (LaTeX-split-long-menu
 			   (mapcar #'ConTeXt-section-block-menu-entry
 				   ConTeXt-section-block-list)))
+	(message "Updating section block menu...done")
 	(message "Updating section menu...")
 	(easy-menu-change '("ConTeXt") ConTeXt-numbered-section-menu-name
 			  (LaTeX-split-long-menu
@@ -1591,7 +1603,7 @@ else.  There might be text before point."
 			  (LaTeX-split-long-menu
 			   (mapcar #'ConTeXt-unnumbered-section-menu-entry
 				   ConTeXt-unnumbered-section-list)))
-	(message "Updating...done")
+	(message "Updating section menu...done")
 	(and menu (easy-menu-return-item ConTeXt-mode-menu menu))
 	)))
 
@@ -1623,7 +1635,7 @@ Use `ConTeXt-Mark-version' to choose the command."
    ;; In any other case fall back on Mark II.
    (t
     (concat
-     (let ((engine (eval (nth 4 (assq TeX-engine (TeX-engine-alist))))))
+     (let ((engine (eval (nth 4 (TeX-engine-in-engine-alist TeX-engine)))))
        (when engine
 	 (format "--engine=%s " engine)))
      (unless (eq ConTeXt-current-interface "en")

@@ -1,6 +1,6 @@
-;;; epigraph.el --- AUCTeX style for `epigraph.sty'
+;;; epigraph.el --- AUCTeX style for `epigraph.sty' v1.5c
 
-;; Copyright (C) 2012 Free Software Foundation, Inc.
+;; Copyright (C) 2012, 2017 Free Software Foundation, Inc.
 
 ;; Author: Mads Jensen <mje@inducks.org>
 ;; Maintainer: auctex-devel@gnu.org
@@ -26,7 +26,7 @@
 
 ;;; Commentary:
 
-;; This file adds support for `epigraph.sty'.
+;; This file adds support for `epigraph.sty' v1.5c from 2009/09/02.
 
 ;;; Code:
 
@@ -34,33 +34,57 @@
  "epigraph"
  (lambda ()
    (TeX-add-symbols
-    '("epigraph" t t)
-    '("qitem" t t)
-    '("epigraphhead" [ "Distance (a number)" ] t)
-    '("dropchapter" TeX-arg-size)
-    "epigraphwidth"
+    ;; 2.1 The epigraph command
+    '("epigraph" 2)
+    ;; 2.2 The epigraphs environment
+    '("qitem" 2)
+    ;; 2.3 General
     "textflush"
     "epigraphflush"
     "sourceflush"
     "epigraphsize"
-    "epigraphrule"
-    "beforeepigraphskip"
-    "afterepigraphskip"
+    ;; 2.4 Epigraphs before chapter headings
+    '("epigraphhead" [ "Distance (a number)" ] t)
+    '("dropchapter" TeX-arg-length)
     "undodrop"
-    "cleartoevenpage")
+    ;; \cleartoevenpage takes an optional argument.  Don't query for
+    ;; it, just insert the macro and leave the rest to the user
+    '("cleartoevenpage" 0))
 
+   ;; 2.2 The epigraphs environment
    (LaTeX-add-environments
     '("epigraphs" LaTeX-env-item))
 
-   (add-to-list 'LaTeX-item-list '("epigraphs" . LaTeX-epigraph-qitem))
+   ;; The value of these lengths can be changed with \setlength
+   (LaTeX-add-lengths "epigraphwidth" "epigraphrule"
+		      "beforeepigraphskip"
+		      "afterepigraphskip")
 
+   ;; Append epigraphs to `LaTeX-item-list':
+   (add-to-list 'LaTeX-item-list
+		'("epigraphs" . LaTeX-epigraph-qitem) t)
+
+   ;; Append qitem to `LaTeX-item-regexp':
+   (unless (string-match "qitem" LaTeX-item-regexp)
+     (set (make-local-variable 'LaTeX-item-regexp)
+	  (concat
+	   LaTeX-item-regexp
+	   "\\|"
+	   "qitem\\b"))
+     (LaTeX-set-paragraph-start))
+
+   ;; Fontification:
    (when (and (featurep 'font-latex)
 	      (eq TeX-install-font-lock 'font-latex-setup))
-     (font-latex-add-keywords '(("epigraph" "{{")
-				("qitem" "{{")
-				("dropchapter" "{")
-				("epigraphhead" "{")) 'function)
-     (font-latex-add-keywords '("cleartoevenpage") 'warning)))
+     (font-latex-add-keywords '(("epigraph"     "{{")
+				("qitem"        "{{")
+				("epigraphhead" "[{"))
+			      'textual)
+     (font-latex-add-keywords '(("dropchapter"  "{")
+				("undodrop"     ""))
+			      'variable)
+     (font-latex-add-keywords '("cleartoevenpage")
+			      'warning)))
  LaTeX-dialect)
 
 (defvar LaTeX-epigraph-package-options nil

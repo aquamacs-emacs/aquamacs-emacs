@@ -49,14 +49,14 @@
      ;; For syntactic fontification.
      (add-to-list 'font-latex-syntactic-keywords-extra
 		  ;; \begin is supposed to start at the beginning of a line.
-		  `(,(format "^\\\\begin *{\\(?:%s\\)}.*\\(\n\\)"
+		  `(,(format "^\\\\begin *{%s}.*\\(\n\\)"
 			     (regexp-opt LaTeX-comment-env-list))
-		    (1 "<" t)))
+		    (1 "!" t)))
      (add-to-list 'font-latex-syntactic-keywords-extra
 		  ;; \end is supposed to start at the beginning of a line.
-		  `(,(format "^\\(\\\\\\)end *{\\(?:%s\\)}"
+		  `(,(format "^\\(\\\\\\)end *{%s}"
 			     (regexp-opt LaTeX-comment-env-list))
-		    (1 ">" t)))
+		    (1 "!" t)))
      (font-latex-add-keywords '(("includecomment" "{")
 				("excludecomment" "{")
 				("specialcomment" "{{{")
