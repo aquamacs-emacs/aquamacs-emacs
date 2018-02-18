@@ -40,9 +40,14 @@ rm config.status
 
 #gzip *.el
 
+find . -name \*.elc -delete
+
 pwd
 
 rm INSTALL* TODO 
 
 echo "Update Aquamacs-specific tex-site."
 echo "opendiff tex-site.el auctex/tex-site.el"
+
+echo "check info - expand auctex-info.gz?"
+echo "Patch AUCTeX for Aquamacs. E.g., see rev 04222bab".
