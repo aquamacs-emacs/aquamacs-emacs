@@ -18,7 +18,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
-;; Copyright (C) 2005-2010, 2013, 2015 David Reitter
+;; Copyright (C) 2005-2010, 2013, 2015, 2018 David Reitter
 
 ;; Smart Frame Positioning Mode: In environments where many frames are
 ;;  opened, this mode shows them in useful positions on the screen so
@@ -186,15 +186,14 @@ the selected frame if visible."
 
 (defun smart-position-and-create-frame (&optional parameters)
  "Create a frame in a useful screen position.
-May be used in `frame-creation-function' or
-`frame-creation-function-alist'. `smart-frame-positioning-mode'
+May be used in `frame-creation-function'.
+`smart-frame-positioning-mode'
 should be used as the interface to this function."
  (if smart-frame-positioning-mode
   (let* ((newpos)
 	 (oldframe (smart-position-reference-frame))
 	 ;; create the frame
-	 (f (funcall smart-frame-positioning-old-frame-creation-function
-		     (append parameters '((visibility . nil))))))
+         (f (funcall #'standard-frame-creation-function (append parameters '((visibility . nil))))))
     (run-hook-with-args 'smart-frame-positioning-hook f)
     (setq newpos (or (smart-fp--get-frame-position-assigned-to-buffer-name (current-buffer))
 		     (if oldframe (find-good-frame-position oldframe f))
@@ -231,10 +230,35 @@ should be used as the interface to this function."
     ;; (make-frame-visible f)
     f)	; return the frame
   ;; not in s-m-p-mode
-  (funcall smart-frame-positioning-old-frame-creation-function
-	   parameters)))
+  (standard-frame-creation-function parameters)))
 
+(if (eq initial-window-system 'ns)
+  (progn
+    ;; override definition from ns-win
+    ;; to do -- use :around?
+    (cl-defmethod frame-creation-function (params &context (window-system ns))
+      (if smart-frame-positioning-mode
+          (smart-position-and-create-frame params)
+        ;; else
+        (x-create-frame-with-faces params)))
+    ;; this would be more elegant, but it's not working - priority issue?
+    ;; (cl-defmethod frame-creation-function (params &context (smart-frame-positioning-mode (eql t)))
+    ;;    (smart-position-and-create-frame params))
 
+    (defun standard-frame-creation-function (params)
+      (let ((smart-frame-positioning-mode nil))
+        (frame-creation-function params))))
+  ;; else - not NS as window system
+  ;; Alternative implementation without CLOS
+  ;; this works in all cases, but it might be less future-compatible
+  (unless (fboundp 'standard-frame-creation-function)
+    (fset 'standard-frame-creation-function (symbol-function 'frame-creation-function)))
+  ;; override generic function
+  (defun frame-creation-function (params)
+    (if smart-frame-positioning-mode
+        (smart-position-and-create-frame params)
+      ;; else
+      (standard-frame-creation-function params))))
 
 (defcustom smart-frame-positioning-enforce nil
   "If true and if in smart-frame-positioning-mode, ignore any user-supplied
@@ -277,20 +301,12 @@ pixels apart if possible."
        (round (- (/ (float pixels) (frame-char-height frame))
 		 (if round-to-lower .499999 0))))
 
-(defvar smart-fp-window-system (or initial-window-system 'ns))
-(defun smart-fp--get-frame-creation-function ()
-  (if (boundp 'frame-creation-function)
-      frame-creation-function
-    (if (boundp 'frame-creation-function-alist)
-	(cdr (assq smart-fp-window-system frame-creation-function-alist))
-      nil)))
+
+
+
+
 (require 'aquamacs-tools)
-(defun smart-fp--set-frame-creation-function (fun)
-  (if (boundp 'frame-creation-function)
-      (setq frame-creation-function fun)
-    (if (boundp 'frame-creation-function-alist)
-	(assq-set smart-fp-window-system fun 'frame-creation-function-alist))
-    nil))
+
 
 
 (defvar smart-fp--current-direction nil)
@@ -474,8 +490,6 @@ pixels apart if possible."
 		 ;; return this
 		 new-frame-parameters)))))))))
 
-(defvar smart-frame-positioning-old-frame-creation-function
-	(smart-fp--get-frame-creation-function))
 
 (define-minor-mode smart-frame-positioning-mode
   "If enabled, new frames are opened in a convenient position.
@@ -500,14 +514,6 @@ can be customized to configure this mode."
       ;; turn on
     (progn
 
-      (unless (eq (smart-fp--get-frame-creation-function)
-		  'smart-position-and-create-frame)
-	(setq smart-frame-positioning-old-frame-creation-function
-	      (smart-fp--get-frame-creation-function)))
-
-      (smart-fp--set-frame-creation-function
-       'smart-position-and-create-frame)
-
       (add-hook 'delete-frame-functions
 		'smart-fp--store-frame-position-for-buffer)
 
@@ -529,8 +535,6 @@ can be customized to configure this mode."
       )
 
     ;; else (turning off)
-    (smart-fp--set-frame-creation-function
-     smart-frame-positioning-old-frame-creation-function)
     (remove-hook 'minibuffer-setup-hook 'smart-move-minibuffer-inside-screen)
     (remove-hook 'delete-frame-functions
 		 'smart-fp--store-frame-position-for-buffer))
