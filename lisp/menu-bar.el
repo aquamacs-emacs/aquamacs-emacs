@@ -1119,7 +1119,7 @@ mail status in mode line"
                                (:visible (not (eq window-system 'ns)))))
 
     (bindings--define-key menu [datetime-separator] `(menu-item "" nil
-                          :visible (not (eq window-system ns))))
+                          :visible (not (eq window-system 'ns))))
 
     (bindings--define-key menu [column-number-mode]
       (menu-bar-make-mm-toggle column-number-mode
