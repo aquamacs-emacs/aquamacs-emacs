@@ -7899,6 +7899,14 @@ not_in_argv (NSString *arg)
   [NSApp registerServicesMenuSendTypes: ns_send_types
                            returnTypes: ns_return_types];
 
+  /* macOS tabbed windows cause a crash upon closing.
+     Aquamacs offers tabs anyway. */
+  /* macOS Sierra automatically enables tabbed windows.  We can't
+     allow this to be enabled until it's available on a Free system.
+     Currently it only happens by accident and is buggy anyway. */
+  if ([win respondsToSelector: @selector(setTabbingMode:)])
+    [win setTabbingMode: NSWindowTabbingModeDisallowed];
+
   ns_window_num++;
   return self;
 }
