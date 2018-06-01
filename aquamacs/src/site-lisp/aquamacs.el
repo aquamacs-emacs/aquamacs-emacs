@@ -649,11 +649,40 @@ if modified buffers exist."
                (kill-emacs)))
         (setq timer-idle-list saved-timer-idle-list))))
 
+;; MOUSE --------------
 
 ;; workaround for people who still call this in their .emacs
   (defun mwheel-install ()
-    (message "mwheel-install ignored in Aquamacs- mouse wheel support is present by default.")
+    (message "mwheel-install ignored in Aquamacs. Mouse wheel support is present by default.")
     t)
+
+(defcustom mouse-wheel-progressive-decelerator 4
+  "Decelerate progressive mouse wheel scrolling by this factor.
+Must be 1 or larger."
+  :group 'mouse
+  :group 'Aquamacs
+  :type 'float)
+
+(defun aquamacs-wheel-scroll-down (&optional amt)
+  "Scroll down (/ AMT mouse-wheel-progressive-decelerator) units"
+  (if amt
+      (scroll-down (/ amt mouse-wheel-progressive-decelerator))
+    (scroll-down)))
+
+(defun aquamacs-wheel-scroll-up (&optional amt)
+  "Scroll up (/ AMT mouse-wheel-progressive-decelerator) units"
+  (if amt
+      (scroll-up (/ amt mouse-wheel-progressive-decelerator))
+    (scroll-up)))
+
+(aquamacs-set-defaults
+ '((mouse-wheel-progressive-speed t)
+   (mouse-wheel-scroll-amount (1 ((shift) . 0.5) ((control) . 0.2) ))
+   (mwheel-scroll-up-function aquamacs-wheel-scroll-up)
+   (mwheel-scroll-down-function aquamacs-wheel-scroll-down)))
+
+;; -------------
+
 
 ;; restore *scratch*
 
@@ -1303,8 +1332,6 @@ we put it on this frame."
    (initial-scratch-message nil)
    (focus-follows-mouse nil) ;; do not mess with user's mouse!
    (resize-mini-windows t)
-   (mouse-wheel-progressive-speed nil)
-   (mouse-wheel-scroll-amount (1 ((shift) . 0.5) ((control) . 0.2) ))
    (show-paren-mode t)
    (blink-cursor-mode t)
    (cursor-type (bar . 2))
