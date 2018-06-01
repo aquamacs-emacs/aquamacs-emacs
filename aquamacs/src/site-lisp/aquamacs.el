@@ -661,7 +661,8 @@ if modified buffers exist."
   "~/Library/Application Support/Aquamacs Emacs/scratch buffer"
   "File name to save the scratch file. Set to nil to not save it."
   :group 'Aquamacs
-  :version "22.0")
+  :version "22.0"
+  :type 'file)
 
 ;; read scratch file
 ;; (aquamacs-load-scratch-file)
