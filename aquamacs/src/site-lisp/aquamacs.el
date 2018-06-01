@@ -213,9 +213,9 @@ Separate paths from file names with --."
       (when (eq one-buffer-one-frame-mode 'default)
         (custom-set-variables '(one-buffer-one-frame-mode t))))
 
-
-    (when (< aquamacs-customization-version-id 162)
-      (aquamacs-import-frame-parameters-to-auto-faces))
+    ;; This function is no longer available.
+    ;; (when (< aquamacs-customization-version-id 162)
+    ;;   (aquamacs-import-frame-parameters-to-auto-faces))
     (when (< aquamacs-customization-version-id 208)
       (setq aquamacs-tool-bar-user-customization
             (mapcar (lambda (x)
