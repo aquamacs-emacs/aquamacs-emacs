@@ -96,8 +96,11 @@ nil  )
 (setq url-show-status nil) ;;don't annoy user
 ;; (setq aquamacs-version "1.4rc2")
 ;; (setq aquamacs-version-id 142) ;; for test purposes
-(defun aquamacs-compare-version (&optional interactive-request)
-  (if aquamacs-version-check-buffer ;; just for safety
+
+;; callback from url-http
+(defun aquamacs-compare-version (&optional plist interactive-request)
+  (if (and (buffer-live-p aquamacs-version-check-buffer) ;; guard against failed retrievals/redirects
+           (not (plist-member plist :redirect)))
       (save-excursion 
 	(set-buffer aquamacs-version-check-buffer)
  
@@ -329,7 +332,7 @@ transfered data."
 	; HTTP-GET
 	(setq aquamacs-version-check-buffer   
 	      (url-http url 
-			'aquamacs-compare-version (list interactively )))
+			'aquamacs-compare-version (list nil interactively))) ; nil is empty plist as required
 	; now make sure that the Emacs won't ask to kill this 
 	; process when quitting
 	(dolist ( p (process-list))
