@@ -1,20 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2008 (1.71)
-original version by:  Nikos Drakos, CBLU, University of Leeds
-* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
-* with significant contributions from:
-  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<!--Converted with LaTeX2HTML 2018 (Released Feb 1, 2018) -->
 <HTML>
 <HEAD>
-<TITLE>14.23 Changes--0.9.9c</TITLE>
-<META NAME="description" CONTENT="14.23 Changes--0.9.9c">
+<TITLE>14.23 Changes--0.9.9d</TITLE>
+<META NAME="description" CONTENT="14.23 Changes--0.9.9d">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="aquamacs.css">
@@ -27,59 +23,164 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html1054"
+<A NAME="tex2html1059"
   HREF="node67.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html1050"
+<A NAME="tex2html1055"
   HREF="node43.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html1044"
+<A NAME="tex2html1049"
   HREF="node65.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html1052"
+<A NAME="tex2html1057"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html1055"
-  HREF="node67.html">14.24 Changes 0.9.9b</A>
-<B> Up:</B> <A NAME="tex2html1051"
+<B> Next:</B> <A NAME="tex2html1060"
+  HREF="node67.html">14.24 Changes 0.9.9c</A>
+<B> Up:</B> <A NAME="tex2html1056"
   HREF="node43.html">14 Aquamacs Emacs: What's</A>
-<B> Previous:</B> <A NAME="tex2html1045"
-  HREF="node65.html">14.22 Changes 0.9.9d</A>
- &nbsp; <B>  <A NAME="tex2html1053"
+<B> Previous:</B> <A NAME="tex2html1050"
+  HREF="node65.html">14.22 Changes 1.0b</A>
+ &nbsp; <B>  <A NAME="tex2html1058"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION0001523000000000000000">
-14.23 Changes--0.9.9c</A>
+14.23 Changes--0.9.9d</A>
 </H2>
 
 <P>
 
 <UL>
-<LI>Bugfix: Emacs-internal Input methods work again. 
+<LI>Frames (windows) now have a little icon in the title bar for the
+	selected buffer, and you can drag&amp;drop this to other applications.
+	Patch by  Mitsuharu Yamamoto
 
 <P>
 </LI>
-<LI>System-wide input methods (via the ``International'' preference
-	panel) can now be used instead of the Emacs-specific ones.  Use
-	Options - Aquamacs Multilingual Environment - Use System Input Method
-	to turn it on or off - it's switched on by default.
+<LI>Clicking the Dock icon of Aquamacs will now bring up a minimized
+	frame, if there is no other frame to be shown - just like in any
+	OS X application.
+	Suggested by Frank Atanassow
+
+<P>
+</LI>
+<LI>Fonts can now be selected comfortably with the OS X standard
+	font selector, accessible via "Options - Show Fonts".
+	Remember  - to make a setting stick, use the "Frame Appearance
+	Styles". Set the new style either for the given major mode, or as
+	a default.
+	Patch by  Mitsuharu Yamamoto
+
+<P>
+</LI>
+<LI>C-n and C-p are now mapped to `next-line' / `previous-line'
+	again, so they may be used to jump full lines (as defined by
+	carriage returns) - even if the lines are wrapped around. The
+	arrow keys move the cursor visually as before. 
+	Suggested by Tom van Vleck
+
+<P>
+</LI>
+<LI>Apple-` now cycles through all the frames, not just the topmost two.
+	Reported by William Henney
+
+<P>
+</LI>
+<LI>Apple-: now spell-checks the buffer, provided ispell is installed.
+	Suggested by Jean-Christophe Helary
+
+<P>
+</LI>
+<LI>Apple-Shift-S will now bring up a file selector rather than
+	prompting for a file name in the minibuffer. If you prefer the
+	Emacs-style prompt, you should use the Emacs-style key binding:
+	C-x C-w.
+	Suggested by Jean-Christophe Helary
+
+<P>
+</LI>
+<LI>Emulate-Mac-Keyboard-Mode: improved support for French keyboard
+	layouts
+
+<P>
+</LI>
+<LI>ESS 5.3.0 included
+
+<P>
+</LI>
+<LI>SLIME - the Superior Lisp Interaction Mode is now available with
+	Aquamacs. It's pre-configured for you. Use `lisp-mode' for your
+	Lisp editing, and run M-x slime to start a lisp inferior
+	process. You may need to set the variable `inferior-lisp-program'
+	via customization or in your Preferences.el as follows:
+
+<P>
+<PRE>
+	(setq inferior-lisp-program "path to lisp")
+</PRE>
+
+<P>
+</LI>
+<LI>C++ Mode is used automatically for .cp files.
+
+<P>
+</LI>
+<LI>Keyboard bug-fix: certain keys could not be successfully input
+	on certain keyboard layouts, most notably the key combination 
+	C-c ` as used in LaTeX mode (AUCTeX) was not available on German
+	keyboards.
 	Patch by Taiichi Hashimoto
+
+<P>
+</LI>
+<LI>Ispell/LaTeX bug-fix: ispell will now ignore TeX commands in
+	such buffers.
+	Patch by Bill Rising
+
+<P>
 </LI>
 </UL>	
 
 <P>
-<BR><HR>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1059"
+  HREF="node67.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
+ SRC="./next.png"></A> 
+<A NAME="tex2html1055"
+  HREF="node43.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
+ SRC="./up.png"></A> 
+<A NAME="tex2html1049"
+  HREF="node65.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
+ SRC="./prev.png"></A> 
+<A NAME="tex2html1057"
+  HREF="node1.html">
+<IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
+ SRC="./contents.png"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1060"
+  HREF="node67.html">14.24 Changes 0.9.9c</A>
+<B> Up:</B> <A NAME="tex2html1056"
+  HREF="node43.html">14 Aquamacs Emacs: What's</A>
+<B> Previous:</B> <A NAME="tex2html1050"
+  HREF="node65.html">14.22 Changes 1.0b</A>
+ &nbsp; <B>  <A NAME="tex2html1058"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
 <ADDRESS>
-<I>DR</I>
-<BR><I>2016-09-19</I>
+<I>David Reitter</I>
+<BR><I>2018-07-23</I>
 </ADDRESS>
 </BODY>
 </HTML>

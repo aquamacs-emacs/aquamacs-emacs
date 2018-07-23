@@ -1,20 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 
-<!--Converted with LaTeX2HTML 2008 (1.71)
-original version by:  Nikos Drakos, CBLU, University of Leeds
-* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
-* with significant contributions from:
-  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<!--Converted with LaTeX2HTML 2018 (Released Feb 1, 2018) -->
 <HTML>
 <HEAD>
-<TITLE>14.4 Changes-- 3.0</TITLE>
-<META NAME="description" CONTENT="14.4 Changes-- 3.0">
+<TITLE>14.4 Changes-- 3.1a</TITLE>
+<META NAME="description" CONTENT="14.4 Changes-- 3.1a">
 <META NAME="keywords" CONTENT="aquamacs">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2008">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2018">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
 <LINK REL="STYLESHEET" HREF="aquamacs.css">
@@ -27,123 +23,142 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 
 <BODY >
 <!--Navigation Panel-->
-<A NAME="tex2html826"
+<A NAME="tex2html831"
   HREF="node48.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html822"
+<A NAME="tex2html827"
   HREF="node43.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html816"
+<A NAME="tex2html821"
   HREF="node46.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html824"
+<A NAME="tex2html829"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html827"
-  HREF="node48.html">14.5 Changes  2.x</A>
-<B> Up:</B> <A NAME="tex2html823"
+<B> Next:</B> <A NAME="tex2html832"
+  HREF="node48.html">14.5 Changes  3.0</A>
+<B> Up:</B> <A NAME="tex2html828"
   HREF="node43.html">14 Aquamacs Emacs: What's</A>
-<B> Previous:</B> <A NAME="tex2html817"
-  HREF="node46.html">14.3 Changes  3.1a</A>
- &nbsp; <B>  <A NAME="tex2html825"
+<B> Previous:</B> <A NAME="tex2html822"
+  HREF="node46.html">14.3 Changes  3.2</A>
+ &nbsp; <B>  <A NAME="tex2html830"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR>
 <!--End of Navigation Panel-->
 
 <H2><A NAME="SECTION000154000000000000000">
-14.4 Changes-- 3.0</A>
+14.4 Changes-- 3.1a</A>
 </H2>
 
-<P>
+<UL>
+<LI>Command-Shift-Left/Right now select the text from point to the left or right side of the line, as they did in Aquamacs 2. 
+Reported by Daniel Stegm&#252;ller.
+</LI>
+<LI>The order of menu items in the Options/Line Wrapping submenu has been restored.
+Reported by Gracjan Polak.
+</LI>
+<LI>Isearch using the Mac key bindings (A-f, A-g) has seen some improvements.  A-g will now highlight all other search results (just like regular isearch), and it will continue a regexp isearch (started with C-u A-f).  Because you remain in `isearch-mode' after a A-g, additional simple keys will just extend the search string.  (You may, as before, do other things like insert text clippings with A-v.)
+</LI>
+<LI>During Isearch started with A-f or A-g, you may now use the Enter (RET) key to advance to the next location, and S-RET to go back to the previous one (same bindings as A-g and A-S-g).  This is in accordance with search functions in other Mac applications.  Traditional Emacs behavior of isearch when started with C-s is not affected.
+Suggested by Jeremy Cole.
+</LI>
+<LI>Cursor motion with arrow keys will follow the
+visual order of characters on the screen: <I>left</I> always moves to the
+left, <I>right</I> always moves to the right, disregarding the surrounding
+bidirectional context.  You may change this setting with the customization variable `visual-order-cursor-movement'.
+</LI>
+<LI>Aquamacs is now based on Emacs 24.4.  Please see etc/NEWS for detailed information.  Some more important, user-visible changes are:
 
 <UL>
-<LI>This Aquamacs is based on Emacs 24. Highlights:
-
-<UL>
-<LI>A major addition to Emacs 24 is its package managing system.  (Start with M-x list-packages.  Re-installing included packages is not recommended.)
+<LI>Frames and windows now resize smoothly, pixel by pixel.
 </LI>
-<LI>There is a new word count function (see Aquamacs Edit menu).
+<LI>In keymaps where SPC scrolls forward, S-SPC now scrolls backward.
+This affects View mode, etc.
 </LI>
-<LI>Right-to-left text (Arabic, Persian, Hebrew) is well supported now even when mixed with left-to-right text.
+<LI>The cursor stops blinking after 10 blinks (by default) on X and Nextstep.
+You can change the default by customizing `blink-cursor-blinks'.
 </LI>
-<LI>Completion has been improved (e.g., it is connected to the CEDET Semantic library.  When enabled, you can use M-Tab to complete symbols in C mode, for instance.)
+<LI>`electric-indent-mode' is now enabled by default.
+Typing RET reindents the current line and indents the new line.
+C-j inserts a newline but does not indent.  In some programming modes,
+additional characters are electric (eg `{').
 </LI>
-<LI>Please refer to <TT><A NAME="tex2html38"
-  HREF="http://www.gnu.org/software/emacs/news/">http://www.gnu.org/software/emacs/news/</A></TT> for a list of changes in GNU Emacs 24.
+<LI>The behavior of C-x TAB (`indent-rigidly') has changed.
+When invoked without a prefix argument, it now activates a transient
+mode in which typing left, right, S-left, and S-right adjusts
+the text indentation in the region.  Typing any other key resumes
+normal editing behavior.
+</LI>
+<LI>New command C-x SPC (`rectangle-mark-mode') makes a rectangular region.
+Most commands are still unaware of it, but kill/yank do work on the rectangle.
 </LI>
 </UL>
 </LI>
-<LI>Aquamacs 3.x is distributed as a binary for 64-bit Intel Macs only.  If you would like to run Aquamacs on a 32-bit Mac, or a PowerPC based Mac, you may still build it yourself from source, or use Aquamacs 2.5.
+<LI>Package-specific information is now stored in ~/Library/Preferences/Aquamacs Emacs/Packages.  Files are automatically moved to the new location so that correctly implemented packages should not be affected.  (Switching to a previous Aquamacs version, however, will cause some settings to be lost.)
 </LI>
-<LI>High-resolution retina screens are better supported by the `preview' function in LaTeX mode.  Previews are rendered in a size adjusted to the font used to edit the document.
+<LI>Tramp reliability improved.
+Reported by Steve Bellan. 
 </LI>
-<LI>New, high-resolution icons appear in the toolbar (for LaTeX); standard visual effects and animations are used for new frames.
+<LI>`ams-tex-mode' is functional again.
+Reported by Albert Fisher. 
 </LI>
-<LI>`mouse-drag-copy-region' is enabled (non-nil), which maintain behavior similar to that of the previous Aquamacs and Emacs versions.  Selecting some text with the mouse will add it to the kill-ring, so that users may insert it with C-y.
+<LI>Switching buffers when tabbar-mode (``Show Tabs'') is off and one-buffer-one-frame-mode (``Show Buffers in New Frames'') no longer produces an error message in certain situations. 
+Reported by Bob Berwick.
 </LI>
-<LI>The region is no longer extended when dragging the mouse while holding the Shift key, because the `mouse-sel' package is now obsolete in Emacs 24.  Users can, for the time being, bring back the functionality by adding the following to their <TT>Preferences.el</TT> file:
-<PRE>
-(require 'mouse-sel) 
-(global-set-key (vector '(shift down-mouse-1)) 'mouse-extend)
-</PRE>
+<LI>Dragging and dropping colors from the color selection panel now works more reliably.
+Reported by Konrad Podczeck.
 </LI>
-<LI>Smart spacing no longer affects text yanked with mouse-2 (Command-mouse click), for the the time being.  To get this added convenience, <TT>(global-set-key (vector `(mouse-2)) 'mouse-yank-at-click)</TT> may be used.
-These hints suggested by Konrad Podczeck.
+<LI>ESS mode was updated to version 14.09. See here for new features: <TT><A NAME="tex2html39"
+  HREF="http://ess.r-project.org/Manual/ess.html#New-features">http://ess.r-project.org/Manual/ess.html#New-features</A></TT>
 </LI>
-<LI>Abbreviations are, by default, persistant: they are saved upon quitting Aquamacs.  Configure `save-abbrevs' to change this default.
+<LI>Markdown-mode 2.0 is now provided with a default configuration of its faces, which no longer hides markup.
 </LI>
-<LI><B>paredit-mode</B> is included (version 23), which provides operations that, in Lisp, preserve the integrity of the syntax trees (i.e., keep/delete s-expressions as a whole).  See here for more information: <TT><A NAME="tex2html39"
-  HREF="http://www.emacswiki.org/emacs/ParEdit">http://www.emacswiki.org/emacs/ParEdit</A></TT>, and here for an informative screencast: <TT><A NAME="tex2html40"
-  HREF="http://emacsrocks.com/e14.html">http://emacsrocks.com/e14.html</A></TT>.
-Written by Taylor R. Campbell.
+<LI>Version 3.1a only: an incompatibility with older OS X versions (pre-10.9) and the use of secondary displays was resolved.
+Reported by Erik Marklund.
 </LI>
-<LI><B>dart-mode</B> (version 0.9) included.  Written by Nathan Weizenbaum. File endings: <TT>.dart</TT>.
+<LI>Version 3.1a only: a warning indicating a failure to create a file in the Library folder (in new installations) has been resolved.
+Reported by `xenzo' and Torsten M&#228;hne.
 </LI>
-<LI><B>markdown-mode</B> (version 2.0) included.  Written by Jason R. Blevins. File endings: <TT>.md</TT>.
-</LI>
-<LI><B>python-mode</B> updated to version 6.1.3 (pre-release 2014-01-19).  Comes with a streamlined menu and many detailed improvements, but drops Pymacs integration.  Aquamacs will bring back Ropemacs and Pymacs in a future version.  See here for changes: <TT><A NAME="tex2html41"
-  HREF="https://launchpad.net/python-mode/+announcements">https://launchpad.net/python-mode/+announcements</A></TT>
-</LI>
-<LI><B>Emacs Speaks Statistics (ESS)</B> updated to version 13.09-1. See here for changes: <TT><A NAME="tex2html42"
-  HREF="http://ess.r-project.org/Manual/news.html">http://ess.r-project.org/Manual/news.html</A></TT>
-</LI>
-</UL><HR>
+</UL>
+
+<P>
+<HR>
 <!--Navigation Panel-->
-<A NAME="tex2html826"
+<A NAME="tex2html831"
   HREF="node48.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="next"
  SRC="./next.png"></A> 
-<A NAME="tex2html822"
+<A NAME="tex2html827"
   HREF="node43.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="up"
  SRC="./up.png"></A> 
-<A NAME="tex2html816"
+<A NAME="tex2html821"
   HREF="node46.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="previous"
  SRC="./prev.png"></A> 
-<A NAME="tex2html824"
+<A NAME="tex2html829"
   HREF="node1.html">
 <IMG WIDTH="32" HEIGHT="32" ALIGN="BOTTOM" BORDER="0" ALT="contents"
  SRC="./contents.png"></A>  
 <BR>
-<B> Next:</B> <A NAME="tex2html827"
-  HREF="node48.html">14.5 Changes  2.x</A>
-<B> Up:</B> <A NAME="tex2html823"
+<B> Next:</B> <A NAME="tex2html832"
+  HREF="node48.html">14.5 Changes  3.0</A>
+<B> Up:</B> <A NAME="tex2html828"
   HREF="node43.html">14 Aquamacs Emacs: What's</A>
-<B> Previous:</B> <A NAME="tex2html817"
-  HREF="node46.html">14.3 Changes  3.1a</A>
- &nbsp; <B>  <A NAME="tex2html825"
+<B> Previous:</B> <A NAME="tex2html822"
+  HREF="node46.html">14.3 Changes  3.2</A>
+ &nbsp; <B>  <A NAME="tex2html830"
   HREF="node1.html">Contents</A></B> 
 <!--End of Navigation Panel-->
 <ADDRESS>
-<I>DR</I>
-<BR><I>2016-09-19</I>
+<I>David Reitter</I>
+<BR><I>2018-07-23</I>
 </ADDRESS>
 </BODY>
 </HTML>
