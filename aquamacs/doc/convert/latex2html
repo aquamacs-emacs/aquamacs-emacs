@@ -1,6 +1,6 @@
 #! /usr/bin/perl
 #
-# latex2html v2015 patched for Aquamacs ($LATEX -> latex)
+# $Id: latex2html.pin,v 1.71 2004/01/06 23:49:54 RRM Exp $
 #
 # Comprises patches and revisions by various authors:
 #   See Changes, the log file of LaTeX2HTML.
@@ -26,14 +26,6 @@
 #          http://www.latex2html.org/
 #
 # or see the accompanying documentation in the docs/  directory
-#
-# or
-#
-#    http://www-texdev.ics.mq.edu.au/l2h/docs/manual/
-#
-# or
-#
-#    http://www.cbl.leeds.ac.uk/nikos/tex2html/doc/latex2html/
 #
 # Original code written by Nikos Drakos, July 1993.
 #
@@ -64,6 +56,7 @@ use 5.003; # refuse to work with old and buggy perl version
 use Getopt::Long;
 use Fcntl;
 use AnyDBM_File;
+use Encode qw(decode_utf8 encode_utf8);			# for russian UTF-8 hack
 
 # The following are global variables that also appear in some modules
 use vars qw($LATEX2HTMLDIR $LATEX2HTMLPLATDIR $SCRIPT
@@ -75,13 +68,13 @@ BEGIN {
   if($ENV{'LATEX2HTMLDIR'}) {
     $LATEX2HTMLDIR = $ENV{'LATEX2HTMLDIR'};
   } else {
-    $ENV{'LATEX2HTMLDIR'} = $LATEX2HTMLDIR = '/usr/local/share/lib/latex2html';
+    $ENV{'LATEX2HTMLDIR'} = $LATEX2HTMLDIR = '/usr/local/Cellar/latex2html/2018';
   }
 
   if($ENV{'LATEX2HTMLPLATDIR'}) {
     $LATEX2HTMLPLATDIR = $ENV{'LATEX2HTMLPLATDIR'};
   } else {
-    $LATEX2HTMLPLATDIR = '/usr/local/lib/latex2html'||$LATEX2HTMLDIR;
+    $LATEX2HTMLPLATDIR = '/usr/local/Cellar/latex2html/2018'||$LATEX2HTMLDIR;
     $ENV{'LATEX2HTMLPLATDIR'} = $LATEX2HTMLPLATDIR;
   }
   if(-d $LATEX2HTMLPLATDIR) {
@@ -99,8 +92,8 @@ use L2hos; # Operating system dependent routines
 
 # $^W = 1; # turn on warnings
 
-my $RELEASE = '2008';
-my ($REVISION) = q$Revision: 1.71 $ =~ /:\s*(\S+)/;
+my $RELEASE = '2018';
+my $REVISION = 'Released Feb 1, 2018';
 
 # The key, which delimts expressions defined in the environment
 # depends on the operating system. 
@@ -132,7 +125,7 @@ if($ENV{'L2HCONFIG'}) {
 # MRO: Changed this to global value in config/config.pl
 # change these whenever you do a patch to this program and then
 # name the resulting patch file accordingly
-# $TVERSION = "2008";
+# $TVERSION = "2018";
 #$TPATCHLEVEL = " beta";
 #$TPATCHLEVEL = " release";
 #$RELDATE = "(March 30, 1999)";
@@ -168,9 +161,9 @@ $IMAGE_PREFIX = '_image';
 # Partition prefix 
 $PARTITION_PREFIX = 'part_' unless $PARTITION_PREFIX;
 
-# Author address
+# Author address - contains user name and date - not used by default
 @address_data = &address_data('ISO');
-$ADDRESS = "$address_data[0]\n$address_data[1]";
+$ADDRESS = "";
 
 # ensure non-zero defaults
 $MAX_SPLIT_DEPTH = 4 unless ($MAX_SPLIT_DEPTH);
@@ -194,9 +187,9 @@ if (-f "$HOME$dd$INIT_FILE_NAME" && -r _) {
 
 # Read the $INIT_FILE_NAME file if one is found in current directory
 if ( L2hos->Cwd() ne $HOME && -f ".$dd$INIT_FILE_NAME" && -r _) {
-    print "Note: Loading .$dd$INIT_FILE_NAME\n";
-    require(".$dd$INIT_FILE_NAME");
-    $INIT_FILE = "$INIT_FILE_NAME";
+    $INIT_FILE = ".$dd$INIT_FILE_NAME";
+    print "Note: Loading $INIT_FILE\n";
+    require($INIT_FILE);
 }
 die "Error: '.' is an incorrect setting for DESTDIR.\n" .
     "Please check your $INIT_FILE_NAME file.\n"
@@ -275,6 +268,8 @@ unless(GetOptions(\%opt, # all non-linked options go into %opt
         'rootdir=s',
         'dir=s',                \$FIXEDDIR,
         'mkdir',                \$MKDIR,
+        'use_dvipng!',          \$USE_DVIPNG,
+        'dvipng_dpi=s',         \$DVIPNG_DPI,
         'address=s',            \$ADDRESS,
         'noaddress',
         'subdir!',
@@ -415,6 +410,9 @@ if (defined $opt{math_parsing}) {
 }
 &set_if_false($NO_ISOLATIN, $opt{latin});
 if ($INIT_FILE) {
+    if ($INIT_FILE !~ /^[.$dd]/) {	# should start with / or .
+	$INIT_FILE = ".$dd$INIT_FILE";	# so that value of @INC has no effect
+    }
     if (-f $INIT_FILE && -r _) {
         print "Note: Initialising with file: $INIT_FILE\n"
             if ($DEBUG || $VERBOSITY);
@@ -441,12 +439,15 @@ if ($opt{version}) {
 }
 if ($opt{test_mode}) {
     $TITLE = 'LaTeX2HTML Test Document';
-    $TEXEXPAND = "$PERL /Users/dr/Downloads/latex2html-2015${dd}texexpand";
-    $PSTOIMG   = "$PERL /Users/dr/Downloads/latex2html-2015${dd}pstoimg";
-    $ICONSERVER = L2hos->path2URL("/Users/dr/Downloads/latex2html-2015${dd}icons");
+    $TEXEXPAND = "$PERL /private/tmp/latex2html-20180211-6292-1q5cd7k/latex2html-2018${dd}texexpand";
+    $PSTOIMG   = "$PERL /private/tmp/latex2html-20180211-6292-1q5cd7k/latex2html-2018${dd}pstoimg";
+    $ICONSERVER = L2hos->path2URL("/private/tmp/latex2html-20180211-6292-1q5cd7k/latex2html-2018${dd}icons");
     $TEST_MODE  = 1;
-    $RGBCOLORFILE = "/Users/dr/Downloads/latex2html-2015${dd}styles${dd}rgb.txt";
-    $CRAYOLAFILE = "/Users/dr/Downloads/latex2html-2015${dd}styles${dd}crayola.txt";
+    $RGBCOLORFILE = "/private/tmp/latex2html-20180211-6292-1q5cd7k/latex2html-2018${dd}styles${dd}rgb.txt";
+    $CRAYOLAFILE = "/private/tmp/latex2html-20180211-6292-1q5cd7k/latex2html-2018${dd}styles${dd}crayola.txt";
+}
+if (!$ICONSERVER) {	# if we don't have a url to find icons on the web,
+    $LOCAL_ICONS = 1;	# copy them into the directory for this document
 }
 if($DEBUG) {
     # make the OS-dependent functions more chatty, too
@@ -510,6 +511,7 @@ $DVIPS_SAFE = 1;
 
 $CHARSET = $charset || 'iso-8859-1';
 
+$DVIPNG_DPI=200 unless $DVIPNG_DPI;
 ####################################################################
 #
 # If possible, use icons of the same type as generated images
@@ -766,9 +768,9 @@ sub driver {
 	next unless (&new_dir($DESTDIR,''));
         # establish absolute path to $DESTDIR
 	$DESTDIR = L2hos->Make_directory_absolute($DESTDIR);
-        &make_tmp_dir;
-        print "\nNote: Working directory is $DESTDIR\n";
-        print "Note: Images will be generated in $TMPDIR\n\n";
+#        &make_tmp_dir;
+#        print "\nNote: Working directory is $DESTDIR\n";
+#        print "Note: Images will be generated in $TMPDIR\n\n";
 
 # Need to clean up a bit in case there's garbage left
 # from former runs.
@@ -780,6 +782,9 @@ sub driver {
 	    closedir TMP; 
 	}
 	&cleanup(1);
+        &make_tmp_dir;
+        print "\nNote: Working directory is $DESTDIR\n";
+        print "Note: Images will be generated in $TMPDIR\n\n";
 	unless(-d $TMP_) {
 	    mkdir($TMP_, 0755) ||
 	      die "Cannot create directory '$TMP_': $!\n";
@@ -1025,7 +1030,7 @@ sub restore_critical_variables {
     # undef any renewed-commands...
     # so the new defs are read from %new_command
     local($cmd,$key,$code);
-    foreach $key (keys %renew_command) {
+    foreach $key (sort keys %renew_command) {
 	$cmd = "do_cmd_$key";
 	$code = "undef \&$cmd"; eval($code) if (defined &$cmd);
 	if ($@) { print "\nundef \&do_cmd_$cmd failed"}
@@ -1181,7 +1186,7 @@ sub process_ext_file {
 	&slurp_input($file);
 	if ($ext =~ /bbl/) {
 	    # remove the \newcommand{\etalchar}{...} since not needed
-	    s/^\\newcommand{\\etalchar}[^\n\r]*[\n\r]+//s;
+	    s/^\\newcommand\{\\etalchar\}[^\n\r]*[\n\r]+//s;
 	}
 	&pre_process;
 	&substitute_meta_cmds if (%new_command || %new_environment);
@@ -1196,7 +1201,7 @@ sub process_ext_file {
 		if ($skip_to) { next unless ($eline =~ s/$O$skip_to$C//) }
 		$skip_to = '';
 		# skip lines added for pdfTeX/hyperref compatibility
-		next if ($eline =~ /^\\(ifx|else|fi|global \\let|gdef|AtEndDocument|let )/);
+		next if ($eline =~ /^\\(ifx|else|fi|global ?\\let|gdef|AtEndDocument|let )/);
 		# remove \index and \label commands, else invalid links may result
 		$eline =~ s/\\(index|label)\s*($O\d+$C).*\2//g;
 		if ($eline =~ /\\(old)?contentsline/) {
@@ -1395,7 +1400,7 @@ sub pre_process {
     }
 
     # Move all LaTeX comments into a local list
-    s/([ \t]*(^|\G|[^\\]))(%.*(\n[ \t]*|$))/print "%";
+    s/([ \t]*(^|[^\\]))(%.*(\n[ \t]*|$))/print "%";
 	$comments{++$global{'verbatim_counter'}} = "$3";
 	&write_mydb("verbatim", $global{'verbatim_counter'}, $3);
 	"$1$comment_mark".$global{'verbatim_counter'}."\n"/mge;
@@ -1439,7 +1444,7 @@ sub pre_process {
 	    push(@processedV,$before);
 	    print "'";$before = '';
 	}
- 	if ($after =~ /\s*\\end{$env[*]?}/) { # Must NOT use the s///o option!!!
+ 	if ($after =~ /\s*\\end\{$env[*]?\}/) { # Must NOT use the s///o option!!!
 	    ($contents, $after) = ($`, $');
  	    $contents =~ s/^\n+/\n/s;
 # 	    $contents =~ s/\n+$//s;
@@ -1647,7 +1652,7 @@ sub make_comment {
 
 sub wrap_other_environments {
     local($key, $env, $start, $end, $opt_env, $opt_start);
-    foreach $key (keys %other_environments) {
+    foreach $key (sort keys %other_environments) {
 	# skip bogus entries
 	next unless ($env = $other_environments{$key});
 	$key =~ s/:/($start,$end)=($`,$');':'/e;
@@ -1872,8 +1877,8 @@ sub mark_string {
     # local (*_) = @_; # Modifies $_ in the caller;
     # -> MRO: changed to $_[0] (same effect)
     # MRO: removed deprecated $*, replaced by option /m
-    $_[0] =~ s/(^|[^\\])\\{/$1tex2html_escaped_opening_bracket/gom;
-    $_[0] =~ s/(^|[^\\])\\{/$1tex2html_escaped_opening_bracket/gom; # repeat this
+    $_[0] =~ s/(^|[^\\])\\\{/$1tex2html_escaped_opening_bracket/gom;
+    $_[0] =~ s/(^|[^\\])\\\{/$1tex2html_escaped_opening_bracket/gom; # repeat this
     $_[0] =~ s/(^|[^\\])\\}/$1tex2html_escaped_closing_bracket/gom;
     $_[0] =~ s/(^|[^\\])\\}/$1tex2html_escaped_closing_bracket/gom; # repeat this
     my $id = $global{'max_id'};
@@ -2264,7 +2269,13 @@ sub translate {
     &process_aux_file 
 	if $SHOW_SECTION_NUMBERS || /\\(caption|(html|hyper)?((eq)?ref|cite))/;
 
-    require ("${PREFIX}internals.pl") if (-f "${PREFIX}internals.pl");
+    if (-f "${PREFIX}internals.pl") {
+	my $file = "${PREFIX}internals.pl";
+	if ($file !~ /^\Q$dd\E/) {
+	    $file = ".$dd$file";
+	}
+	require ($file);
+    }
 #JCL(jcl-del)
     &make_single_cmd_rx;
 #
@@ -2754,7 +2765,7 @@ sub translate_environments {
 	    $open_tags_R = [ @save_open_tags ];
 	    # check for color
 	    local($color_test) = join(',',@$open_tags_R);
-	    if ($color_test =~ /(color{[^}]*})/g ) {
+	    if ($color_test =~ /(color\{[^}]*\})/g ) {
 		$color_env = $1;
 	    } # else { $color_env = '' }
 
@@ -2765,7 +2776,7 @@ sub translate_environments {
 		$open_tags_R = [ @save_open_tags ];
 		if ($color_env) {
 		    $color_test = join(',',@saved_tags);
-		    if ($color_test =~ /(color{[^}]*})/g ) {
+		    if ($color_test =~ /(color\{[^}]*\})/g ) {
 		        $color_env = $1;
 		    }
 		}
@@ -3216,8 +3227,8 @@ sub simple_math_env {
     while ($mathcontents =~ s/_$any_next_pair_rx/<SUB>$2<\/SUB>/g){};
     while ($mathcontents =~ s/_$any_next_pair_pr_rx/<SUB>$2<\/SUB>/g){};
 
-    $mathcontents =~ s/\^(\\[a-zA-Z]+|.)/<SUP>$1<\/SUP>/g;
-    $mathcontents =~ s/_(\\[a-zA-Z]+|.)/<SUB>$1<\/SUB>/g;
+    $mathcontents =~ s/\^(\\[a-zA-Z]+|.)/<SUP><i>$1<\/i><\/SUP>/g;
+    $mathcontents =~ s/_(\\[a-zA-Z]+|.)/<SUB><i>$1<\/i><\/SUB>/g;
     $mathcontents =~ s/(^|\s|[,;:'\?\.\[\]\(\)\+\-\=\!>]|[^\\<]\/|\d)(<(I|TT|B)>)?([a-zA-Z]([a-zA-Z ]*[a-zA-Z])?)(<\/\3>)?/
 	$1.(($2)? $2 :'<I>').$4.(($6)? $6 : '<\/I>')/eig;
 
@@ -3706,7 +3717,7 @@ sub make_box {
 #	inline math --- horizontal mode, captures height/depth + \mathsurround
 sub make_hbox {
     local($id,$contents) = @_;
-    if ($id =~ /indisplay/) {
+    if ($id =~ /indisplay/ or $USE_DVIPNG) {
 	"\\lthtmlinlinemathA{". $id ."}%\n". $contents ."%\n\\lthtmlindisplaymathZ\n";
     } else {
 	"\\lthtmlinlinemathA{". $id ."}%\n". $contents ."%\n\\lthtmlinlinemathZ\n";
@@ -3780,7 +3791,7 @@ sub make_image_file {
 sub make_latex_images{
     &close_dbm_database if $DJGPP;
     local($dd) = $dd; $dd = '/' if ($dd eq "\\"); 
-    local($latex_call) = "latex .$dd${PREFIX}images.tex";
+    local($latex_call) = "$LATEX .$dd${PREFIX}images.tex";
     print "$latex_call\n" if (($DEBUG)||($VERBOSITY > 1));
     L2hos->syswait($latex_call);
     &open_dbm_database if $DJGPP;
@@ -3794,10 +3805,12 @@ sub make_off_line_images {
 
 	&make_latex_images();
 
-	print "\nGenerating postscript images using dvips ...\n";
+	print $USE_DVIPNG? "\nGenerating images using dvipng ...\n":
+    "\nGenerating postscript images using dvips ...\n";
 	&process_log_file(".$dd${PREFIX}images.log"); # Get eqn size info
 	unless ($LaTeXERROR) {
-	    local($dvips_call) = 
+    	    local($dvips_call) = 
+	$USE_DVIPNG? "$DVIPNG -D $DVIPNG_DPI -o$TMPDIR$dd$IMAGE_PREFIX%d.png -T tight .${dd}${PREFIX}images.dvi" :
 		"$DVIPS -S1 -i $DVIPSOPT -o$TMPDIR$dd${IMAGE_PREFIX} .${dd}${PREFIX}images.dvi";
 	    print "$dvips_call\n" if (($DEBUG)||($VERBOSITY > 1));
 
@@ -3823,7 +3836,8 @@ sub make_off_line_images {
         print "\n\n*** LaTeXERROR\n"; return();
     }
 
-    while ( ($name, $page_num) = each %new_id_map) {
+    for $name (sort keys %new_id_map) {
+        $page_num = $new_id_map{$name};
 	# Extract the page, convert and save it
 	&extract_image($page_num,$orig_name_map{$page_num});
     }
@@ -3885,11 +3899,12 @@ sub make_images {
             if(-e $img_path && !-e $img);
     }
     elsif ((!$NOLATEX) && ($latex_body =~ /newpage/) && !($LaTeXERROR)) {
-   	print "\nGenerating postscript images using dvips ...\n";
-        &make_tmp_dir;  # sets  $TMPDIR  and  $DESTDIR
+	print $USE_DVIPNG? "\nGenerating images using dvipng ...\n":
+    "\nGenerating postscript images using dvips ...\n";
 	$IMAGE_PREFIX =~ s/^_//o if ($TMPDIR);
 
 	local($dvips_call) = 
+	$USE_DVIPNG? "$DVIPNG -D $DVIPNG_DPI -T tight -o$TMPDIR$dd$IMAGE_PREFIX%d.png .${dd}${PREFIX}images.dvi" :
 		"$DVIPS -S1 -i $DVIPSOPT -o$TMPDIR$dd$IMAGE_PREFIX .${dd}${PREFIX}images.dvi\n";
 	print $dvips_call if (($DEBUG)||($VERBOSITY > 1));
 	
@@ -3926,7 +3941,8 @@ sub make_images {
 	    if (s/$PREFIX$img_rx\.new/$PREFIX$1.$IMAGE_TYPE/go);
     }
     print "\n *** removing unnecessary images ***\n" if ($VERBOSITY > 1);
-    while ( ($name, $page_num) = each %id_map) {
+    for $name (sort keys %id_map) {
+        $page_num = $id_map{$name};
 	$contents = $latex_body{$name};
 	if ($page_num =~ /^\d+\#\d+$/) { # If it is a page number
 	    do {		# Extract the page, convert and save it
@@ -4012,7 +4028,7 @@ sub process_log_file {
 		}
 	        $before = '';
 	    }
-	}
+	} else {s/^\:([^:]*)\:lthtmlCropMarkHeight\:\=([0-9.]*)pt/$cropmarkheight{$1} = $2;''/e;}
     $LaTeXERROR = 1 if (/^No pages of output./);
     }
 
@@ -4080,6 +4096,42 @@ sub extract_image { # clean
 		L2hos->Symlink("image.$IMAGE_TYPE", "${PREFIX}T$img");
 		$thumbnail = "${PREFIX}T$img";
 	    }
+    } elsif ($cropmarkheight{$name}) {
+        my $p="$TMPDIR$dd$IMAGE_PREFIX$new_num";
+        die $! unless -f "$p.png";
+        &close_dbm_database if $DJGPP;
+        my $imgpixeloverem=72.27/(15*$DVIPNG_DPI);
+        $imgpixeloverem *=$EXTRA_IMAGE_SCALE if $EXTRA_IMAGE_SCALE ;
+        print "imgpixeloverem=$imgpixeloverem\n";
+        if ( $name =~ /figure|table/ and $FIGURE_SCALE_FACTOR) 
+            {$imgpixeloverem*= $FIGURE_SCALE_FACTOR;}
+        else {$imgpixeloverem*=  $MATH_SCALE_FACTOR if $MATH_SCALE_FACTOR}
+        if ($name =~ /equation|eqnarray|display/){
+            $imgpixeloverem *= $DISP_SCALE_FACTOR if $DISP_SCALE_FACTOR}
+        my $millimeter=int(.04*$DVIPNG_DPI); 
+        $TRANSPARENT_COLOR='FFFFFF' unless defined $TRANSPARENT_COLOR;
+        if ($TRANSPARENT_COLOR){$transparent= "-transparent='#$TRANSPARENT_COLOR'"}
+        else{$transparent =''}
+        my $PPMTO=$IMAGE_TYPE=~m/gif/i? $PPMTOGIF : $PNMTOPNG;
+        unless (-f "strut.$IMAGE_TYPE"){
+            open STRUT, "|$PPMTO --quiet -transparent='#FFFFFF'  >strut.$IMAGE_TYPE";
+            print STRUT "P5\n1 3\n255\nEEE\n"; close STRUT}
+        #L2hos->syswait("$PNGTOPNM $p.png|$PNMCROP -sides|tee $p.ppm|$PNMCUT -top $millimeter |$PNMCROP -sides|tee $p-.ppm|$PPMTO{$IMAGE_TYPE} --quiet $transparent >img$new_num.$IMAGE_TYPE;");
+        if ($name =~ /figure|table/) {
+	  L2hos->syswait("$PNGTOPNM $p.png|$PPMTO --quiet $transparent >img$new_num.$IMAGE_TYPE;");
+	} else {
+	  L2hos->syswait("$PNGTOPNM $p.png|$PNMCROP -sides|tee $p.ppm|$PNMCUT -top $millimeter |$PNMCROP -left -right|tee $p-.ppm|$PPMTO --quiet $transparent >img$new_num.$IMAGE_TYPE;");
+	}
+        open PPM,"<$p.ppm"; read(PPM,$_,30);close PPM;
+        m/^(\d+) (\d+)$/m;
+        $pxdepth{$name}=$2-($cropmarkheight{$name}*$DVIPNG_DPI/72.27);
+        $edepth{$name}=$pxdepth{$name}*$imgpixeloverem;
+        print "edepth{$name}=$edepth{$name}\n";
+        open PPM,"<$p-.ppm"; read(PPM,$_,30);close PPM;
+        m/^(\d+) (\d+)$/m; 
+        $ewidth{$name}=$1*$imgpixeloverem; $eheigth{$name}=$2*$imgpixeloverem;
+        print "ewidth{$name}=$ewidth{$name}\n";
+        &open_dbm_database if $DJGPP;
 	} else {
 	    # RRM: deal with size data
  	    if ($width{$name} < 0) {
@@ -4316,6 +4368,7 @@ sub flatten_math {
     local ($_) = @_;
     $_ = &revert_to_raw_tex($_);
     s/[ \t]+/ /g;
+    s/^\$\s+/\$/;
     # MRO: replaced $* with /m
     s/$tex2html_wrap_rx//gm;
     s/(\\begin\s*\{[^\}]*\})(\s*(\[[^]]*\]))?[ \t]*/$1$3/gm;
@@ -5088,7 +5141,7 @@ sub substitute_meta_cmds {
     $_ = join('',@processed, $after); undef @processed;
     if ($PREAMBLE) {
 	# MRO: replaced $* with /m
-        s/((\n$comment_mark\d*)+\n)//gm;
+        s/((\n$comment_mark\d*)+\n)/\n/gm;
         s/(\\par\b\s*\n?)+/\\par\n/gm;
         s/(\\par\b\n?)+/\\par\n/gm;
     }
@@ -5104,8 +5157,8 @@ sub substitute_meta_cmds {
     #
     # Now substitute the new commands and environments:
     # (must do them all together because of cross definitions)
-    $new_cmd_rx = &make_new_cmd_rx(keys %new_command);
-    $new_cmd_no_delim_rx = &make_new_cmd_no_delim_rx(keys %new_command);
+    $new_cmd_rx = &make_new_cmd_rx(sort keys %new_command);
+    $new_cmd_no_delim_rx = &make_new_cmd_no_delim_rx(sort keys %new_command);
     $new_env_rx = &make_new_env_rx;
     $new_end_env_rx = &make_new_end_env_rx;
 #    $new_cnt_rx = &make_new_cnt_rx(keys %new_counter);
@@ -5114,7 +5167,8 @@ sub substitute_meta_cmds {
     $new_cmd_or_env_rx =~ s/^ \||\|$//;
 
     print STDOUT "\nnew commands:\n" if ($VERBOSITY > 2);
-    while (($cmd, $body) = each %new_command) {
+    for $cmd (sort keys %new_command) {
+        $body = $new_command{$cmd};
 	unless ($expanded{"CMD$cmd"}++) {
 	    print STDOUT ".$cmd " if ($VERBOSITY > 2);
 	    $new_command{$cmd} = &expand_body;
@@ -5124,7 +5178,8 @@ sub substitute_meta_cmds {
     }
 
     print STDOUT "\nnew environments:\n" if ($VERBOSITY > 2);
-    while (($cmd, $body) = each %new_environment) {
+    for $cmd (sort keys %new_environment) {
+        $body = $new_environment{$cmd};
 	unless ($expanded{"ENV$cmd"}++) {
 	    print STDOUT ".$cmd" if ($VERBOSITY > 2);
 	    $new_environment{$cmd} = &expand_body;
@@ -5134,39 +5189,42 @@ sub substitute_meta_cmds {
 
     print STDOUT "\nnew counters and dependencies:\n" if ($VERBOSITY > 2);
     &clear_mydb("dependent") if ($DEBUG);     #avoids appending to a previous version
-    while (($cmd, $body) = each %dependent) {
+    for $cmd (sort keys %dependent) {
+        $body = $dependent{$cmd};
 	print STDOUT ".($cmd,$body)" if ($VERBOSITY > 2);
         &write_mydb("dependent", $cmd, $dependent{$cmd});
     }
     &clear_mydb("img_style") if ($DEBUG);     #avoids appending to a previous version
-    while (($cmd, $body) = each %img_style) {
+    for $cmd (sort keys %img_style) {
         &write_mydb("img_style", $cmd, $img_style{$cmd});
     }
 
     &clear_mydb("depends_on") if ($DEBUG);     #avoids appending to a previous version
-    while (($cmd, $body) = each %depends_on) {
+    for $cmd (sort keys %depends_on) {
+        $body = $depends_on{$cmd};
 	print STDOUT ".($cmd,$body)" if ($VERBOSITY > 2);
         &write_mydb("depends_on", $cmd, $depends_on{$cmd});
     }
 
 
     &clear_mydb("styleID") if ($DEBUG);     #avoids appending to a previous version
-    while (($cmd, $body) = each %styleID) {
+    for $cmd (sort keys %styleID) {
         &write_mydb("styleID", $cmd, $styleID{$cmd});
     }
 
     &clear_mydb("env_style") if ($DEBUG);     #avoids appending to a previous version
-    while (($cmd, $body) = each %env_style) {
+    for $cmd (sort keys %env_style) {
         &write_mydb("env_style", $cmd, $env_style{$cmd});
     }
     &clear_mydb("txt_style") if ($DEBUG);     #avoids appending to a previous version
-    while (($cmd, $body) = each %txt_style) {
+    for $cmd (sort keys %txt_style) {
         &write_mydb("txt_style", $cmd, $txt_style{$cmd});
     }
 
     print STDOUT "\ntheorem counters:\n" if ($VERBOSITY > 2);
     &clear_mydb("new_theorem") if ($DEBUG);     #avoids appending to a previous version
-    while (($cmd, $body) = each %new_theorem) {
+    for $cmd (sort keys %new_theorem) {
+        $body = $new_theorem{$cmd};
 	print STDOUT ".($cmd,$body)" if ($VERBOSITY > 2);
         &write_mydb("new_theorem", $cmd, $new_theorem{$cmd});
     }
@@ -5652,18 +5710,19 @@ sub process_body_newcommand {
     local($no_change) = $_;
     local($argn,$newcmd,$cmd_br,$body,$body_br,$tmp,$tmp1,$opt,$pat);
     local($new_cmd) = 'command';
-    if ($renewed =~ /provide/||$renewed == 2) {
-	# $newcmd = &missing_braces unless (
-	($newcmd,$pat) = &get_next(1) unless (
-	        (s/$next_pair_pr_rx/$pat=$&;$newcmd=$2;''/e)
-	        ||(s/$next_pair_rx/$pat=$&;$newcmd=$2;''/e));
-	if (!$pat) {
-	    local($br_id) = ++$global{'max_id'};
-	    $pat = "$O$br_id$C".$newcmd."$O$br_id$C";
-	}
+
+    # read command name
+    if ((s/$next_pair_pr_rx/$pat=$&;$newcmd=$2;''/e)
+	||(s/$next_pair_rx/$pat=$&;$newcmd=$2;''/e)) {
+	# command name was in curly braces
     } else {
-	($newcmd,$pat) = &get_next(1); # Get command name
+	# didn't find curly braces, now read command name
+	($newcmd,$pat) = &get_next(2);
+	local($br_id) = ++$global{'max_id'};
+	# add synthetic curly braces
+	$pat = "$O$br_id$C".$newcmd."$O$br_id$C";
     }
+
     $pat =~ s/\\//; $new_cmd .= $pat;
     $newcmd =~ s/^\s*\\//;
     ($argn,$pat) = &get_next(0);	# Get optional no. of args
@@ -5896,7 +5955,11 @@ sub get_body_providecommand {
     (($PREAMBLE && $provide) ? 'provided'.$provide : '');
 }
 
-sub do_cmd_providedcommand{ &do_cmd_renewedcommand(@_) }
+sub do_cmd_providedcommand {	# \providecommand does not redefine, so
+    local($_) = @_;		# not setting $ALLOW_REDEFINE
+    &process_body_newcommand('provided',\$_);
+    $_ ;
+}
 
 sub get_body_DeclareRobustCommand {
     local($provide, $n_after) = &process_body_newcommand('provide',@_);
@@ -6481,7 +6544,7 @@ sub parse_keyvalues {
     print "\nATTRIBS: $saved\n" if ($VERBOSITY > 6);
 
     $saved =~ s/$percent_mark/%/g;
-    $saved =~ s/((^|[\s,=])')\\\W{(\w)}/$1$3/g
+    $saved =~ s/((^|[\s,=])')\\\W\{(\w)\}/$1$3/g
 	if $is_german;  #unwanted accents, from active "
     if (@tags) {
 	foreach $tag (@tags) {
@@ -6496,7 +6559,7 @@ sub parse_keyvalues {
 #	    s/(^|,)\s*([a-zA-Z]+)\s*\=\s*(\"([^"]*)\"|\'([^\']*)\'|([#%&@;:+-\/\w\d]*))\s*/
 	    s/(^|,)\s*([a-zA-Z]+)\s*\=\s*(\"([^"]*)\"|\'([^\']*)\'|([^<>,=\s]*))\s*/
 		$attributes{$2}=($4?$4:($5?$5:$6));' '/eg;
-	    foreach $key (keys %attributes){ 
+	    foreach $key (sort keys %attributes){ 
 		$KEY = $key;
 		$KEY =~ tr/a-z/A-Z/;
 		if ($taglist =~ /,$KEY,/i) {	        
@@ -6538,7 +6601,7 @@ sub parse_keyvalues {
 	# with no tags provided, just list the key-value pairs
 	$_ = $saved;
 	s/\s*(\w+)\s*=\s*\"?(\w+)\"?\s*,?/$attributes{$1}=$2;''/eg;
-	foreach $key (keys %attributes){ 
+	foreach $key (sort keys %attributes){ 
 	    $KEY = $key;
 	    $KEY =~ tr/a-z/A-Z/;
 	    $atts = $attributes{$key};
@@ -6607,7 +6670,7 @@ sub extract_attributes {
 	if ($$name) { $taglist = $$name }
     }
     s/\s*(\w+)\s*=\s*\"?(\w+)\"?\s*,?/$attributes{$1}=$2;''/eg;
-    foreach $key (keys %attributes){ 
+    foreach $key (sort keys %attributes){ 
 	if ($taglist =~ /\,$key\,/) {
 	    $attribs .= " $key=\"$attributes{$key}\"";
 	    &write_warnings("valid attribute $key for $tag\n");
@@ -6831,22 +6894,13 @@ sub make_latex{
     $preamble =~s/\\(begin|end)\s*\{(tex2html_(nowrap|deferred|nomath|preform)[_a-z]*|imagesonly)\}//g;
     $preamble =~s/\n?\s?<tex2html_(end)?file>\#[^#]*\#//mg;
 
-    $preamble = "\\documentclass\{article\}%\n\\usepackage{html}\n\\usepackage[dvips]{color}\n"
+    $preamble = "\\documentclass\{article\}%\n\\usepackage{html}\n"
 	unless ($preamble);
     if (($LATEX_DUMP)&&(!($preamble =~ /\\usepackage\{ldump\}/))) {
 	# MRO: replaced $* with /m
 	$preamble =~ s/(\\document(class|style)[^\n]*\n)/$1\\usepackage\{ldump\}\n/m;
     }
-    if ($preamble =~ /pstricks/) {
-	if ($LOAD_LATEX_COLOR) {
-	    $LOAD_LATEX_COLOR =~ s/\{color\}/\{pstcol\}/ ;
-	} else {
-	    $LOAD_LATEX_COLOR = "\n\\usepackage[dvips]{pstcol}\n";
-	}
-    } else {
-	$LOAD_LATEX_COLOR = "\n\\usepackage[dvips]{color}";
-    }
-    $LATEX_COLOR = "\\pagecolor[gray]{.85}\\nobreak " unless $LATEX_COLOR;
+    $LOAD_LATEX_COLOR = "\n\\usepackage{xcolor}" unless $LOAD_LATEX_COLOR;
     if ($preamble =~ /(^|\s*[^%])\s*\\documentstyle/) {
 	# \usepackage is invalid in LaTeX 2.09 and LaTeX-2e compatibility mode
 	$LATEX_COLOR = ''; $LOAD_LATEX_COLOR = '';
@@ -6855,8 +6909,13 @@ sub make_latex{
 		$&."\n\\let\\providecommand\\newcommand\n"/eo;
     }
 
-    $preamble .= $LOAD_LATEX_COLOR."\n" unless ($preamble =~ /[,\{]color[,\}]/);
-    $preamble .= "\n\n".$LATEX_COLOR."\n" unless ($preamble =~ /\\pagecolor/);
+    $preamble .= $LOAD_LATEX_COLOR."\n"
+	unless ($preamble =~ /[,\{](xcolor|color|pstricks)[,\}]/);
+    if ($LATEX_COLOR && $preamble !~ /\\pagecolor/) {
+	$preamble .= "\n\\definecolor{background}{HTML}{".$LATEX_COLOR."}\n".
+	    "\\pagecolor{background}\n";
+	$ENV{'TRANSPARENT_COLOR'} = '#'.$LATEX_COLOR;	# pass to pstoimg
+    }
     do {
 	if ($ISOLATIN_CHARS) { $INPUTENC = $INPUTENC || 'latin1' };
 	$preamble .= "\n\\usepackage[".$INPUTENC."]\{inputenc\}\n";
@@ -6912,6 +6971,34 @@ sub make_latex{
     " \\parindent=0pt\\abovedisplayskip=0pt\\belowdisplayskip=0pt}%\n" .
     " \\def\\phantompar{\\csname par\\endcsname}\\normalsize}%\n" .
     "\\def\\lthtmltypeout#1{{\\let\\protect\\string \\immediate\\write\\lthtmlwrite{#1}}}%\n" .
+    ($USE_DVIPNG? <<'</dvipng>' :
+\newbox\lthtmlPageBox
+\newdimen\lthtmlCropMarkHeight
+\newdimen\lthtmlCropMarkDepth
+\long\def\lthtmlTightVBox#1#2{%
+    \setbox\lthtmlPageBox\vbox{\catcode`\_=8 #2}%
+    \lthtmlCropMarkHeight=\ht\lthtmlPageBox \advance \lthtmlCropMarkHeight 6pt
+    \lthtmlCropMarkDepth=-\lthtmlCropMarkHeight \advance \lthtmlCropMarkDepth 1pt
+    \lthtmltypeout{^^J:#1:lthtmlCropMarkHeight:=\the\lthtmlCropMarkHeight}%
+        \hbox to \z@{\vrule width 1pt height\lthtmlCropMarkHeight 
+	   depth \lthtmlCropMarkDepth\hskip 5pt \box\lthtmlPageBox}}%
+\long\def\lthtmlTightFBox#1#2{%
+    \setbox\lthtmlPageBox\vbox{\catcode`\_=8 #2}%
+    \lthtmlCropMarkHeight=\ht\lthtmlPageBox \advance \lthtmlCropMarkHeight 6pt
+    \lthtmlCropMarkDepth=-\lthtmlCropMarkHeight \advance \lthtmlCropMarkDepth 1pt
+    \lthtmltypeout{^^J:#1:lthtmlCropMarkHeight:=\the\lthtmlCropMarkHeight}}%
+    \long\def\lthtmlinlinemathA#1#2\lthtmlindisplaymathZ{\lthtmlTightVBox{#1}{#2}}
+    \def\lthtmlinlineA#1#2\lthtmlinlineZ{\lthtmlTightVBox{#1}{#2}}
+    \long\def\lthtmldisplayA#1#2\lthtmldisplayZ{\lthtmlTightVBox{#1}{#2}}
+    \long\def\lthtmlinlinemathA#1#2\lthtmlindisplaymathZ{\lthtmlTightVBox{#1}{#2}}
+    \def\lthtmlinlineA#1#2\lthtmlinlineZ{\lthtmlTightVBox{#1}{#2}}
+    \long\def\lthtmldisplayA#1#2\lthtmldisplayZ{\lthtmlTightVBox{#1}{#2}}
+    \long\def\lthtmldisplayB#1#2\lthtmldisplayZ{\\edef\preveqno{(\theequation)}%
+        \lthtmlTightVBox{#1}{\let\@eqnnum\relax#2}}
+    \long\def\lthtmlfigureA#1#2\lthtmlfigureZ{\let\@savefreelist\@freelist
+        \lthtmlTightFBox{#1}\lthtmltypeout{#2}\global\let\@freelist\@savefreelist}
+    \long\def\lthtmlpictureA#1#2\lthtmlpictureZ{\lthtmlfigureA#1#2\lthtmlfigureZ}
+</dvipng>
     "\\newcommand\\lthtmlhboxmathA{\\adjustnormalsize\\setbox\\sizebox=\\hbox\\bgroup\\kern.05em }%\n" .
     "\\newcommand\\lthtmlhboxmathB{\\adjustnormalsize\\setbox\\sizebox=\\hbox to\\hsize\\bgroup\\hfill }%\n" .
     "\\newcommand\\lthtmlvboxmathA{\\adjustnormalsize\\setbox\\sizebox=\\vbox\\bgroup %\n".
@@ -6959,7 +7046,7 @@ sub make_latex{
     "\\def\\centerinlinemath{%\n" . 
     "  \\dimen1=\\ifdim\\ht\\sizebox<\\dp\\sizebox \\dp\\sizebox\\else\\ht\\sizebox\\fi\n" .
     "  \\advance\\dimen1by.5pt \\vrule width0pt height\\dimen1 depth\\dimen1 \n".
-    " \\dp\\sizebox=\\dimen1\\ht\\sizebox=\\dimen1\\relax}\n\n" .
+    " \\dp\\sizebox=\\dimen1\\ht\\sizebox=\\dimen1\\relax}\n\n") .
     "\\def\\lthtmlcheckvsize{\\ifdim\\ht\\sizebox<\\vsize \n" .
     "  \\ifdim\\wd\\sizebox<\\hsize\\expandafter\\hfill\\fi \\expandafter\\vfill\n" .
     "  \\else\\expandafter\\vss\\fi}%\n" .
@@ -7058,7 +7145,7 @@ sub make_head_and_body {
     local(%isolanguages) = (  'english',  'EN'   , 'USenglish', 'EN-US'
 			    , 'original', 'EN'   , 'german'   , 'DE'
 			    , 'austrian', 'DE-AT', 'french'   , 'FR'
-			    , 'spanish',  'ES'
+			    , 'spanish',  'ES', russian=>'RU'
 			    , %isolanguages );
 #    $isolanguage = $isolanguages{$default_language};  # DTD is in EN
     $isolanguage = 'EN' unless $isolanguage;
@@ -7098,10 +7185,6 @@ sub make_head_and_body {
 
     join("\n", (($DOCTYPE)? $DTDcomment : '' )
 	,"<!--Converted with LaTeX2HTML $TEX2HTMLVERSION"
-	, "original version by:  Nikos Drakos, CBLU, University of Leeds"
-	, "* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan"
-	, "* with significant contributions from:"
-	, "  Jens Lippmann, Marek Rouchal, Martin Wilck and others"
 	    . " -->\n<HTML>\n<HEAD>\n<TITLE>".$title."</TITLE>"
 	, &meta_information($title)
 	,  ($CHARSET && $HTML_VERSION ge "2.1" ? 
@@ -7171,7 +7254,8 @@ TD.eqno			{ }	/* equation-number cells */
 EOF
     }
     print "\n *** Adding document-specific styles *** ";
-    while (($env,$style) = each %env_style) {
+    for $env (sort keys %env_style) {
+        $style = $env_style{$env};
         if ($env =~ /\./) {
             $env =~ s/\.$//;
             print STYLESHEET "$env\t\t{ $style }\n";
@@ -7187,10 +7271,12 @@ EOF
             print STYLESHEET "DIV.$env\t\t{ $style }\n";
         }
     }
-    while (($env,$style) = each %txt_style) {
+    for $env (sort keys %txt_style) {
+        $style = $txt_style{$env};
         print STYLESHEET "SPAN.$env\t\t{ $style }\n";
     }
-    while (($env,$style) = each %img_style) {
+    for $env (sort keys %img_style) {
+        $style = $img_style{$env};
         print STYLESHEET "IMG.$env\t\t{ $style }\n";
     }
 
@@ -7893,8 +7979,6 @@ sub add_real_child_links {
 	    $title = '';
 	    if ($exclude) {
 		# making TOC
-		($next_depth, $file, $sec_title) =
-			split($delim,$section_info{$next});
 		($next_depth, $file, $title, $star) =
 			split($delim,$toc_section_info{$next});
 		# use the %section_info  title, in case there are images
@@ -8500,7 +8584,7 @@ sub keysort {
     # Put alphabetic characters after symbols; already downcased
     $x =~ s/^([a-z])/~~~$1/;
     $y =~ s/^([a-z])/~~~$1/;
-    $x cmp $y;
+    ($x cmp $y) || ($a cmp $b);
 }
 
 sub index_key_eq {
@@ -8806,8 +8890,9 @@ sub replace_cite_marks {
     #
     #RRM: Associate the cite_key with  $citefile , for use by other segments.
     if ($citefile) {
-	local($cite_key, $cite_ref);
-	while (($cite_key, $cite_ref) = each %cite_info) {
+        local($cite_key, $cite_ref);
+        for $cite_key (sort keys %cite_info) {
+            $cite_ref = $cite_info{$cite_key};
 	    if ($ref_files{'cite_'."$cite_key"} ne $citefile) {
 		$ref_files{'cite_'."$cite_key"} = $citefile;
 		$changed = 1; }
@@ -9005,7 +9090,7 @@ sub usage {
 
     print (@_, "\n") if @_;
 
-    my $perldoc = "/opt/local/bin${dd}perldoc";
+    my $perldoc = "/usr/bin${dd}perldoc";
     my $script = $SCRIPT || $0;
     open(PIPE, "$perldoc -t $script |")
         || die "Fatal: can't open pipe: $!";
@@ -9142,8 +9227,8 @@ sub new_dir {
 			}
 			return(1) if ($this_dir eq '.');
 			if($mode) {
-			  rmdir($this_dir);
-			  rmdir($print_dir);
+                  rmdir($this_dir);
+                  rmdir($print_dir);
                         }
 			if (!$mode) { &new_dir($this_dir,'r')};
 			return(1);
@@ -9164,6 +9249,9 @@ sub reuse {
     $print_dir = $this_dir.$dd unless ($print_dir);
     if (-f "$this_dir$dd${PREFIX}images.pl") {
 	print STDOUT "Reusing directory $print_dir:\n";
+	if ($this_dir !~ /^\Q$dd\E/) {
+	    $this_dir = ".$dd$this_dir";
+	}
 	local($key);
 	require("$this_dir$dd${PREFIX}images.pl");
     }
@@ -9491,7 +9579,7 @@ sub revert_to_raw_tex {
 #    s/$percent_mark/\\%/go;
 ##    s/$comment_mark(\d+)\n/%$comments{$1}\n/go;
     local($tmp,$tmp2);
-#    s/$comment_mark(\d+)\n/$tmp=$verbatim{$1};chomp($tmp);$tmp."\n"/ego;
+    # only applies if the comment mark is at the end of the line
     s/$comment_mark(\d+)(\n|$|(\$))/$tmp=$verbatim{$1};$tmp2 = $3;
         ($tmp=~m!^\%!s ? '':'%').$tmp.(($tmp=~ m!\n\s*$!s)?'':"\n").$tmp2/sego;
     s/${verbatim_mark}tex2html_code(\d+)\#/$verbatim{$1}/go;
@@ -9772,7 +9860,7 @@ sub replace_word {
 # for use in regular expressions;
 sub get_current_sections {
     local($_, $key);
-    foreach $key (keys %section_commands) {
+    foreach $key (sort keys %section_commands) {
 	if ($key =~ /star/) {
 	    $_ = $key . "|" . $_}
 	else {
@@ -9987,6 +10075,19 @@ sub embed_image {
 	    $result .= ">";
 	}
     }
+    if ($USE_DVIPNG){
+        $result=~s/(alt)(\=\"[^"]+\")/$1$2 title$2/is;
+        $result=~s/(height|align)(\=\"[^"]+\")//igs;
+        if ($EXTRA_IMAGE_SCALE){
+        $result=~s/(width)(\=\"[^"]+\")/sprintf "style=\"width: \%.2fem; margin-bottom: \%.2fem; line-height: \%.2fem\"",
+        $ewidth{$name} ,-$edepth{$name},$eheigth{$name}+1/esi;
+        $result.=sprintf "<IMG SRC=\"strut.$IMAGE_TYPE\" ALIGN=\"MIDDLE\" WIDTH=\"1\" HEIGHT=\"\%.0f\">",45*$edepth{$name} if $edepth{$name}>.3}
+        else
+	#{$result=~s/(width)(\=\"[^"]+\")/sprintf "style=\"margin-bottom: \%.2f; line-height: \%.2fem\"",
+	{$result=~s/(width)(\=\"[^"]+\")/sprintf "style=\"margin-bottom: \%.0f\"", -$pxdepth{$name}/esi;
+	 my $strutcoeff = ($name =~ /figure|table/) ? 1 : 2;
+        $result.=sprintf "<IMG SRC=\"strut.$IMAGE_TYPE\" ALIGN=\"MIDDLE\" WIDTH=\"1\" HEIGHT=\"\%.0f\">",$strutcoeff*$pxdepth{$name}+3 if $pxdepth{$name}>3
+        }}
     join('',$anch1, $result, $anch2);
 }
 
@@ -10190,8 +10291,9 @@ sub save_array_in_file {
 	} else {
 	    print FILE "# LaTeX2HTML $TEX2HTMLVERSION\n";
 	    print FILE "# Associate $type original text with physical files.\n\n";
-	}
-	while (($uutxt,$file) = each %array) {
+        }
+        for $uutxt (sort keys %array) {
+            $file = $array{$uutxt};
 	    $uutxt =~ s|/|\\/|g;
 	    $uutxt =~ s|\\\\/|\\/|g;
 
@@ -10556,7 +10658,7 @@ sub do_leftquote {
 
 sub do_leftquotes {
     # MRO: use $_[0] : local(*_) = @_;
-    local($quote,$lquo) = ('',($HTML_VERSION<5)? '&#8220;' : ';SPMldquo;');
+    local($quote,$lquo) = ('',($HTML_VERSION<4)? '&#8220;' : ';SPMldquo;');
     # select whole quotation, if \lq\lq matches \rq\rq or ''
     if ($_[0] =~ /^(.*)(\\rq\\rq|'')/) {
 	$quote = $1; $_[0] = $';
@@ -10582,8 +10684,8 @@ sub do_cmd_rq {
     $rquote . $_;
 }
 
-sub do_rightquote { (($HTML_VERSION < 5)? '&#8217;' : ';SPMrsquo;') }
-sub do_rightquotes { (($HTML_VERSION < 5)? '&#8221;' : ';SPMrdquo;') }
+sub do_rightquote { (($HTML_VERSION < 4)? '&#8217;' : ';SPMrsquo;') }
+sub do_rightquotes { (($HTML_VERSION < 4)? '&#8221;' : ';SPMrdquo;') }
 
 sub do_cmd_parbox {
     local($_) = @_;
@@ -10646,7 +10748,8 @@ sub do_cmd_mbox {
 sub generate_declaration_subs {
     local($key, $val, $pre, $post, $code );
     print "\n *** processing declarations ***\n";
-    while ( ($key, $val) = each %declarations) {
+    for $key (sort keys %declarations) {
+        $val = $declarations{$key};
 	if ($val) {
 	    ($pre,$post) = ('','');
 	    $val =~ m|</.*$|;
@@ -10668,7 +10771,8 @@ sub generate_declaration_subs {
 # *Generates* subroutines to handle each of the sectioning commands.
 sub generate_sectioning_subs {
     local($key, $val, $cmd, $body);
-    while ( ($key, $val) = each %standard_section_headings) {
+    for $key (sort keys %standard_section_headings) {
+        $val = $standard_section_headings{$key};
 	$numbered_section{$key} = 0;
 	eval "sub do_cmd_$key {"
 	    . 'local($after,$ot) = @_;'
@@ -10988,17 +11092,6 @@ sub do_require_package {
     #RRM: make common ps/eps-packages use  epsfig.perl
     $file = 'epsfig' if ($file =~ /^(psfig|epsf)$/);
 
-    if ($file =~ /^graphicx$/) {
-	# work-around the CVS repository bug: use graphixx , not graphicx
-	foreach $dir (split(/$envkey/,$LATEX2HTMLSTYLES)) {
-	    if (-f "$dir${dd}graphixx.perl") {
-		$file = 'graphixx';
-		last;
-	    }
-	}
-    }
-
-    
     if (! $styles_loaded{$file}) {
 	# look for a file named ${file}.perl
 	# MRO: use $texfilepath instead of `..'
@@ -11109,10 +11202,21 @@ sub do_env_itemize {
     if (/\s*$item_description_rx/) {
 	# Contains user defined optional labels
 	$bulletx = &do_cmd_mbox("${O}1$C\$$bulletx\$${O}1$C") if $bulletx;
-	&do_env_description($_, " COMPACT", $bullet.$bulletx)
+	&do_env_itemize_compact($_, $bullet.$bulletx)
     } else { &list_helper($_,'UL'); }
 }
 
+sub do_env_itemize_compact{
+    local($_, $bullet) = @_;
+    #RRM - catch nested lists
+    &protect_useritems($_);
+    $_ = &translate_environments($_) unless ($bullet);
+
+	s/\n?$item_description_rx\s*($labels_rx8)?\s*/"<\/td><\/tr>\n<tr><td align=\"right\" valign=\"top\">". 
+	    (($9)? "<A NAME=\"$9\">$1<\/A>" : $1 ) ."<\/td><td valign=\"top\">&nbsp;"/egm;
+        s/\<\/td\>\<\/tr\>\n//s;
+  "<table width=\"90%\">$_</td></tr></table>\n";
+}
 sub do_env_enumerate {
     local($_) = @_;
 # Reiner Miericke provided the main code; integrated by RRM: 14/1/97
@@ -13299,7 +13403,7 @@ sub do_cmd_textohtmlindex {
 # when using  makeidx.perl
 sub make_index_labels {
     local($key, @keys);
-    @keys = keys %index_labels;
+    @keys = sort keys %index_labels;
     foreach $key (@keys) {
 	if (($ref_files{$key}) && !($ref_files{$key} eq "$idxfile")) {
 	    local($tmp) = $ref_files{$key};
@@ -13315,7 +13419,7 @@ sub make_preindex { &make_real_preindex }
 sub make_real_preindex {
     local($key, @keys, $head, $body);
     $head = "<HR>\n<H4>Legend:</H4>\n<DL COMPACT>";
-    @keys = keys %index_segment;
+    @keys = sort keys %index_segment;
     foreach $key (@keys) {
 	local($tmp) = "segment$key";
 	$tmp = $ref_files{$tmp};
@@ -14044,7 +14148,7 @@ sub default_textohtmlinfopage {
 	, "<STRONG>latex2html</STRONG> <TT>$argv</TT>\n"
 	, (($SHOW_INIT_FILE && ($INIT_FILE ne ''))?
 	   "\n<P>with initialization from: <TT>$INIT_FILE</TT>\n$init_file_mark\n" :'')
-	, "<P>The translation was initiated by $address_data[0] on $address_data[1]"
+	, "<P>The translation was initiated on $address_data[1]"
 	, $open_all, $_)
       : join('', $close_all, "$INFO\n", $open_all, $_));
     $_;
@@ -14962,7 +15066,12 @@ sub brackets { ($OP, $CP);}
 
 sub get_date {
     local($format,$order) = @_;
-    local(@lt) = localtime;
+    local(@lt);
+    if($ENV{SOURCE_DATE_EPOCH}) {
+        @lt = gmtime($ENV{SOURCE_DATE_EPOCH})
+    } else {
+        @lt = localtime;
+    }
     local($d,$m,$y) = @lt[3,4,5];
     if ($format =~ /ISO/) {
 	sprintf("%4d-%02d-%02d", 1900+$y, $m+1, $d);
@@ -15234,6 +15343,10 @@ sub process_smallcaps {
     local($text) = @_;
     local($next, $scstr, $scbef, $special, $char);
     # is this enough for \sc and \scshape ?
+    if ($NO_UTF == 1 && $USE_UTF == 0 && $CHARSET eq 'utf-8' &&
+	$default_language eq 'russian') {
+      $text = decode_utf8($text);			# russian UTF-8 hack
+    }
     $text = &translate_environments($text);
 
     # MRO: replaced $* with /m
@@ -15259,6 +15372,10 @@ sub process_smallcaps {
 	    $scstr .= "<SMALL>" . $next ."<\/SMALL>";
 	}
 	$scstr .= $text;
+    }
+    if ($NO_UTF == 1 && $USE_UTF == 0 && $CHARSET eq 'utf-8' &&
+	$default_language eq 'russian') {
+      $scstr = encode_utf8($scstr);			# russian UTF-8 hack
     }
     $scstr;
 }
@@ -15782,7 +15899,7 @@ sub initialise {
 
     %html_specials = ( %html_specials
 		, '``', ';SPMldquo;', "''", ';SPMrdquo;'
-		) if ($HTML_VERSION >= 5 );
+		) if ($HTML_VERSION >= 4 );
 
     # This mapping is needed in sub revert_to_raw_tex
     # before passing stuff to latex for processing.
@@ -15813,7 +15930,8 @@ sub initialise {
 		  , '~', 'tilde', '.', 'dot', '=', 'bar'
 		  , '{', 'lbrace' , '}', 'rbrace', '|', 'Vert'
 		  , '#', 'esc_hash', '$', 'esc_dollar'
-                 );
+          , ',', 'enspace'      
+      );
 
     %text_accent = (  'cedil','c', 'bdot','d', 'b','b' , 'tilde','~'
                     , 'circ' ,'^', 'hat','^', 'check','v' , 'caron','v'
@@ -16094,6 +16212,7 @@ rightmargin # &ignore_numeric_argument
 rule # [] # {} # {}
 samepage
 selectfont
+spaceskip # &ignore_numeric_argument
 startdocument # \$SEGMENT=1;\$SEGMENTED=1; \$_
 strut
 suppressfloats # []
@@ -16115,6 +16234,7 @@ vfil
 vfill
 vfilll
 vline
+write # {} # {}
 _IGNORED_CMDS_
 
     # Commands which need to be passed, ALONG WITH THEIR ARGUMENTS, to TeX.
@@ -16449,7 +16569,7 @@ sub make_isolatin1_rx {
 
     # Matches math comments, from  math.pl
     $math_verbatim_rx = "$verbatim_mark#math(\\d+)#";
-    $mathend_verbatim_rx = "$verbatim_mark#mathend([^#]*)#";
+    $mathend_verbatim_rx = "$verbatim_mark.*?mathend([^#]*)#";
 
     # Matches math array environments
     $array_env_rx = "array|cases|\\w*matrix";
@@ -16747,7 +16867,7 @@ sub addto_languages {
 sub make_raw_arg_cmd_rx {
     # $1 or $2 : commands to be processed in latex (with arguments untouched)
     # $4 : delimiter
-    $raw_arg_cmd_rx = &make_new_cmd_rx(keys %raw_arg_cmds);
+    $raw_arg_cmd_rx = &make_new_cmd_rx(sort keys %raw_arg_cmds);
     $raw_arg_cmd_rx;
 }
 
@@ -16848,7 +16968,7 @@ S<[ B<-font_size> I<size> ]>
 S<[ B<->(B<no>)B<tex_defs> ]>
 S<[ B<->(B<no>)B<navigation> ]>
 S<[ B<->(B<no>)B<top_navigation> ]>
-S<[ B<->(B<no>)B<buttom_navigation> ]>
+S<[ B<->(B<no>)B<bottom_navigation> ]>
 S<[ B<->(B<no>)B<auto_navigation> ]>
 S<[ B<->(B<no>)B<index_in_navigation> ]>
 S<[ B<->(B<no>)B<contents_in_navigation> ]>
@@ -17021,9 +17141,9 @@ Put a navigation panel at the top of each page (default).
 
 Enables navigation links at the top of each page (default).
 
-=item B<->(B<no>)B<buttom_navigation>
+=item B<->(B<no>)B<bottom_navigation>
 
-Enables navigation links at the buttom of each page.
+Enables navigation links at the bottom of each page.
 
 =item B<->(B<no>)B<auto_navigation>
 
@@ -17097,8 +17217,8 @@ Allow directory specified with B<-dir> to be created if necessary.
 
 =item B<-address> I<author_address> | B<-noaddress>
 
-Supply your own string if you don't like the default 
-"E<lt>NameE<gt> E<lt>DateE<gt>". B<-noaddress> suppresses the
+Supply a string to appear in the footer inside an
+E<lt>addressE<gt> tag. B<-noaddress> suppresses the
 generation of an address footer.
 
 =item B<->(B<no>)B<subdir>
@@ -17222,6 +17342,10 @@ Hiding the section numbers encourages use of particular sections
 as standalone documents. In this case the cross reference to a section 
 is shown using the default symbol rather than the section number.
 
+=item B<->(B<no>)B<use_dvipng>
+
+MISSING_DESCRIPTION
+
 =item B<->(B<no>)B<show_init>
 
 MISSING_DESCRIPTION
@@ -17340,7 +17464,7 @@ like specifying command line switches.
 =item LATEX2HTMLDIR
 
 Path where LaTeX2HTML library files are found. On this installation
-LATEX2HTMLDIR is F</usr/local/share/lib/latex2html>
+LATEX2HTMLDIR is F</usr/local/Cellar/latex2html/2018>
 
 =item PERL5LIB
 
