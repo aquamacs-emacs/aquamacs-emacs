@@ -3791,7 +3791,7 @@ sub make_image_file {
 sub make_latex_images{
     &close_dbm_database if $DJGPP;
     local($dd) = $dd; $dd = '/' if ($dd eq "\\"); 
-    local($latex_call) = "$LATEX .$dd${PREFIX}images.tex";
+    local($latex_call) = "latex .$dd${PREFIX}images.tex";
     print "$latex_call\n" if (($DEBUG)||($VERBOSITY > 1));
     L2hos->syswait($latex_call);
     &open_dbm_database if $DJGPP;
@@ -3878,7 +3878,7 @@ sub make_images {
 	        print "${PREFIX}images.fmt failed, proceeding anyway\n";
 	    } else {
 	        print "${PREFIX}images.fmt failed, trying without it\n";
-		print "$LATEX ./${PREFIX}images.tex\n"
+		print "latex ./${PREFIX}images.tex\n"
 		    if (($DEBUG)||($VERBOSITY > 1));
 		L2hos->syswait("$LATEX ./${PREFIX}images.tex");
 	    }
