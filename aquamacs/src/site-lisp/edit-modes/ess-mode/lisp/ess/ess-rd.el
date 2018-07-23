@@ -28,6 +28,7 @@
 
 ;; To stave off byte compiler errors
 (eval-when-compile (require 'ess-help))
+(require 'ess-utils)
 
 (defvar essddr-version "0.9-1"
   "Current version of ess-rd.el.")
@@ -35,17 +36,6 @@
 (defvar essddr-maintainer-address
   "ESS Core Team <ess-core@r-project.org>"
   "Current maintainer of ess-rd.el.")
-
-(defun Rd-active-mark () nil)           ;silence compiler.
-(if (featurep 'xemacs)
-    ;; Special support for XEmacs (curtesy of auctex):
-    (defun Rd-active-mark ()
-      (and zmacs-regions (mark)))
-
-  ;; else:  special support for GNU Emacs
-  (defun Rd-active-mark ()
-    (and transient-mark-mode mark-active))
-  )
 
 (autoload 'ess-eval-region              "ess-inf" "[autoload]" t)
 (autoload 'ess-eval-line-and-step       "ess-inf" "[autoload]" t)
@@ -143,7 +133,7 @@ All Rd mode abbrevs start with a grave accent (`).")
     ;; "Alpha" "Gamma" "alpha" "beta" "epsilon" "lambda" "mu" "pi" "sigma"
     ;; "ge" "le" "left" "right"
     ;;
-    "CRANpkg" "R" "RdOpts" "S3method" "S4method" "Sexpr" "acronym"
+    "R" "RdOpts" "S3method" "S4method" "Sexpr" "acronym"
     "bold" "cite" "code" "command" "cr" "dQuote" "deqn" "dfn" "dontrun"
     "dontshow" "donttest" "dots" "email" "emph" "enc" "env" "eqn" "figure" "file"
     "href" "if" "ifelse"
@@ -151,6 +141,10 @@ All Rd mode abbrevs start with a grave accent (`).")
     "newcommand" "option" "out"
     "pkg" "sQuote" "renewcommand"
     "samp" "strong" "tab" "url" "var" "verb"
+    ;; System macros (from <R>/share/Rd/macros/system.Rd ):
+    "CRANpkg" "PR" "sspace" "doi"
+    "packageTitle" "packageDescription" "packageAuthor"
+    "packageMaintainer" "packageDESCRIPTION" "packageIndices"
     ))
 
 ;; Need to fix Rd-bold-face problem.
@@ -308,6 +302,14 @@ following lines to your `.emacs' file:
        '(Rd-font-lock-keywords nil nil))
   ;; (set (make-local-variable 'parse-sexp-ignore-comments) t)
 
+  ;; Here is a workaround for an Emacs bug related to indirect buffers and
+  ;; spurious lockfiles that rears its ugly head with .Rd files
+  ;; http://lists.gnu.org/archive/html/bug-gnu-emacs/2013-02/msg01368.html
+  ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=14328
+  (unless (featurep 'xemacs)
+    (make-local-variable 'create-lockfiles)
+    (setq create-lockfiles nil))
+
   (require 'easymenu)
   (easy-menu-define Rd-mode-menu-map Rd-mode-map
     "Menu keymap for Rd mode." Rd-mode-menu)
@@ -460,7 +462,7 @@ following lines to your `.emacs' file:
                (set-buffer "*Help*")
                (insert help))))
 
-          ((Rd-active-mark)
+          ((region-active-p)
            (save-excursion
              (cond ((> (mark) (point))
                     (insert before)
@@ -508,8 +510,9 @@ temporary one in `temporary-file-directory'.
     ;; (ess--flush-help-into-current-buffer file "tools::Rd2txt(\"%s\")\n")
     ;; instead of all this :
     (ess-setq-vars-local ess-r-customize-alist)
-    (setq ess-help-sec-regex ess-help-R-sec-regex
-          ess-help-sec-keys-alist ess-help-R-sec-keys-alist)
+    ;; FIXME: Is this really needed?
+    (setq ess-help-sec-regex ess-help-r-sec-regex
+          ess-help-sec-keys-alist ess-help-r-sec-keys-alist)
     ;; mostly cut'n'paste from ess--flush-help* (see FIXME(2)):
     (ess-help-underline)
     (ess-help-mode)
@@ -537,6 +540,8 @@ temporary one in `temporary-file-directory'.
 
 
 ;; Provide ourself
+(provide 'ess-rd)
+;; Legacy feature
 (provide 'essddr)
 
 ;; ess-rd.el ends here

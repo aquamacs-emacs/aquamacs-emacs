@@ -1,4 +1,4 @@
-;;; ess-sta-l.el --- Stata customization
+;;; ess-stata-lang.el --- Stata customization
 
 ;; Copyright (C) 1999--2000, Thomas Lumley, A. J. Rossini, Brendan Halpin.
 ;; Copyright (C) 1997--2004 A.J. Rossini, Richard M. Heiberger, Martin
@@ -82,18 +82,8 @@ regexp-search, and so specials should be quoted.
     (modify-syntax-entry ?` "(\'" tbl)
     (modify-syntax-entry ?\' ")`" tbl)
     ;;--------- begin cut-and-paste from  lisp/progmodes/c-langs.el
-    (cond
-     ;; XEmacs 19, 20, 21
-     ((memq '8-bit c-emacs-features)
-      (modify-syntax-entry ?/  ". 1456" tbl)
-      (modify-syntax-entry ?*  ". 23"   tbl))
-     ;; Emacs 19, 20, 21
-     ((memq '1-bit c-emacs-features)
-      (modify-syntax-entry ?/  ". 124b" tbl)
-      (modify-syntax-entry ?*  ". 23"   tbl))
-     ;; incompatible
-     (t (error "CC Mode is incompatible with this version of Emacs"))
-     )
+    (modify-syntax-entry ?/  ". 124b" tbl)
+    (modify-syntax-entry ?*  ". 23"   tbl)
     (modify-syntax-entry ?\n "> b"  tbl)
     ;; Give CR the same syntax as newline, for selective-display
     (modify-syntax-entry ?\^m "> b" tbl)
@@ -1098,7 +1088,7 @@ ado-mode of Bill Rising <brising@jhsph.edu>, and uses make-regexp."
    ;; All Custom ado files which are 'reliable' and which are not file killers
    ;; this might be a useless endeavor --- but I cannot generate tag files
    ;; all the s-extensions are listed under Stata's name (since they alter
-   ;; data and will be moved tot he utils directory
+   ;; data and will be moved to the utils directory
    (eval-when-compile
      (make-regexps
       "[ \t]*"
@@ -1285,7 +1275,7 @@ Active commands are Help (\\[stata-help]) and hyperlink
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(provide 'ess-sta-l)
+(provide 'ess-stata-lang)
 
  ; Local variables section
 
@@ -1304,4 +1294,4 @@ Active commands are Help (\\[stata-help]) and hyperlink
 ;;; outline-regexp: "\^L\\|\\`;\\|;;\\*\\|;;;\\*\\|(def[cvu]\\|(setq\\|;;;;\\*"
 ;;; End:
 
-;;; ess-sta-l.el ends here
+;;; ess-stata-lang.el ends here

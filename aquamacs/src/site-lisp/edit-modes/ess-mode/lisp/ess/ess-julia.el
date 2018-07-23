@@ -42,8 +42,9 @@
 ;;
 ;;; Code:
 
-(require 'compile); for compilation-* below
+(require 'compile)
 (require 'ess-utils)
+(require 'ess-r-mode)
 
 ;;;--- ALL the following only if  julia-mode is found and loaded correctly : ----------
 (condition-case nil
@@ -68,7 +69,8 @@ VISIBLY is not currently used."
 
 ;;; HELP
 (defun ess-julia-get-help-topics (&optional proc)
-  (append (ess-get-words-from-vector "ESS.all_help_topics()\n")
+  (append (with-current-buffer (ess-command "ESS.all_help_topics()\n")
+            (split-string (buffer-string) "\n"))
           (ess-julia--get-objects proc)))
 
 (defun ess-julia--retrive-topics (url)
@@ -116,6 +118,13 @@ VISIBLY is not currently used."
 
 
 ;;; COMPLETION
+(defun ess-julia-latexsub-completion ()
+  "Complete latex input, and returns in a format required by `completion-at-point-functions'."
+  (if (julia-latexsub) ; julia-latexsub returns nil if it performed a completion, the point otherwise
+      nil
+    (lambda () t) ;; bypass other completion methods
+    ))
+
 (defun ess-julia-object-completion ()
   "Return completions at point in a format required by `completion-at-point-functions'. "
   (let ((proc (ess-get-next-available-process ess-dialect t))
@@ -150,6 +159,8 @@ VISIBLY is not currently used."
 Local caching might be used. If MODULE is givven, return only
 objects from that MODULE."
   (setq proc (or proc (ess-get-process)))
+  (when (stringp proc)
+    (setq proc (get-process proc)))
   (when (process-live-p proc)
     (let ((objects (process-get proc 'objects)))
       (if (process-get proc 'busy)
@@ -227,7 +238,8 @@ objects from that MODULE."
                 (when start (buffer-substring-no-properties start (point))))))
     (candidates (let ((proc (ess-get-next-available-process)))
                   (when proc
-                    (all-completions arg (mapcar #'car (ess-julia-objects arg proc))))))
+                    (all-completions arg (mapcar (lambda (x) (or (car-safe x) x))
+                                                 (ess-julia-objects arg proc))))))
     (doc-buffer (company-doc-buffer (ess-julia-get-object-help-string arg)))))
 
 
@@ -249,10 +261,11 @@ objects from that MODULE."
 If an ESS process is not associated with the buffer, do not try
 to look up any doc strings."
   (interactive)
-  (when (and (ess-process-live-p)
+  (when (and ess-can-eval-in-background
+             (ess-process-live-p)
              (not (ess-process-get 'busy)))
     (let ((funname (or (and ess-eldoc-show-on-symbol ;; aggressive completion
-                            (symbol-at-point))
+                            (symbol-name (ess-symbol-at-point)))
                        (car (ess--funname.start)))))
       (when funname
         (let* ((args (copy-sequence (nth 2 (ess-function-arguments funname))))
@@ -266,8 +279,8 @@ to look up any doc strings."
               (setq doc (concat doc "  "
                                 (pop args))))
             (when (and args (< (length doc) W))
-              (setq doc (concat doc " {--}"))))
-          doc)))))
+              (setq doc (concat doc " {--}")))
+            doc))))))
 
 
 ;;; IMENU
@@ -301,7 +314,9 @@ to look up any doc strings."
     (ess-error-regexp              . "\\(^\\s-*at\\s-*\\(?3:.*\\):\\(?2:[0-9]+\\)\\)")
     (ess-error-regexp-alist        . ess-julia-error-regexp-alist)
     (ess-imenu-generic-expression  . ess-julia-imenu-generic-expression)
-    ;; (inferior-ess-objects-command    . inferior-R-objects-command)
+    (ess-mode-syntax-table         . julia-mode-syntax-table)
+    (ess-mode-completion-syntax-table . ess-julia-completion-syntax-table)
+    ;; (inferior-ess-objects-command    . inferior-ess-r-objects-command)
     ;; (inferior-ess-search-list-command        . "search()\n")
     (inferior-ess-help-command     . "ESS.help(\"%s\")\n")
     ;; (inferior-ess-help-command       . "help(\"%s\")\n")
@@ -310,18 +325,17 @@ to look up any doc strings."
     (ess-suffix                    . "jl")
     (ess-ac-sources                . '(ac-source-ess-julia-objects))
     (ess-company-backends          . '(company-ess-julia-objects))
-    (ess-dump-filename-template    . (ess-replace-regexp-in-string
-                                           "S$" ess-suffix ; in the one from custom:
-                                           ess-dump-filename-template-proto))
+    (ess-dump-filename-template    . (replace-regexp-in-string
+                                      "S$" ess-suffix ; in the one from custom:
+                                      ess-dump-filename-template-proto))
     (ess-mode-editing-alist        . nil)
-    (ess-change-sp-regexp          . nil );ess-R-change-sp-regexp)
-    (ess-help-sec-regex            . ess-help-R-sec-regex)
-    (ess-help-sec-keys-alist       . ess-help-R-sec-keys-alist)
+    (ess-change-sp-regexp          . nil );ess-r-change-sp-regexp)
+    (ess-help-sec-regex            . ess-help-r-sec-regex)
+    (ess-help-sec-keys-alist       . ess-help-r-sec-keys-alist)
     (ess-loop-timeout              . ess-S-loop-timeout);fixme: dialect spec.
-    (ess-cmd-delay                 . ess-R-cmd-delay)
-    (ess-function-pattern          . ess-R-function-pattern)
+    (ess-function-pattern          . ess-r-function-pattern)
     (ess-object-name-db-file       . "ess-jl-namedb.el" )
-    (ess-smart-operators           . ess-R-smart-operators)
+    (ess-smart-operators           . ess-r-smart-operators)
     (inferior-ess-help-filetype    . nil)
     (inferior-ess-exit-command     . "exit()\n")
     ;;harmful for shell-mode's C-a: -- but "necessary" for ESS-help?
@@ -329,8 +343,8 @@ to look up any doc strings."
     (inferior-ess-start-args       . "")
     (inferior-ess-language-start   . nil)
     (ess-STERM                     . "iESS")
-    (ess-editor                    . R-editor)
-    (ess-pager                     . R-pager)
+    (ess-editor                    . ess-r-editor)
+    (ess-pager                     . ess-r-pager)
     (ess-getwd-command             . "pwd()\n")
     (ess-setwd-command             . "cd(expanduser(\"%s\"))\n")
     )
@@ -341,10 +355,18 @@ to look up any doc strings."
   :group 'ess-julia
   :type 'string)
 
-(defvar ess-julia-mode-map ess-mode-map)
+(defvar ess-julia-completion-syntax-table
+  (let ((table (make-syntax-table ess-r-syntax-table)))
+    (modify-syntax-entry ?. "_" table)
+    ;; (modify-syntax-entry ?: "_" table)
+    ;; (modify-syntax-entry ?$ "_" table)
+    (modify-syntax-entry ?@ "_" table)
+    table)
+  "Syntax table used for completion and help symbol lookup.
+It makes underscores and dots word constituent chars.")
 
 ;;;###autoload
-(define-derived-mode ess-julia-mode julia-mode "ESS[julia-derived]"
+(define-derived-mode ess-julia-mode julia-mode "ESS[julia]"
   "Major mode for editing julia source.  See `ess-mode' for more help."
   (ess-mode ess-julia-customize-alist nil t)
   ;; for emacs >= 24
@@ -393,6 +415,7 @@ to julia, put them in the variable `inferior-julia-args'."
       (remove-hook 'completion-at-point-functions 'ess-filename-completion 'local) ;; should be first
       (add-hook 'completion-at-point-functions 'ess-julia-object-completion nil 'local)
       (add-hook 'completion-at-point-functions 'ess-filename-completion nil 'local)
+      (add-hook 'completion-at-point-functions 'ess-julia-latexsub-completion nil 'local)
       (setq comint-input-sender 'ess-julia-input-sender)
 
       (ess--tb-start)
@@ -401,6 +424,11 @@ to julia, put them in the variable `inferior-julia-args'."
       (goto-char (point-min))
       (while (re-search-forward "`" nil t)
         (replace-match "'"))
+      ;; remove an offending unmatched parenthesis
+      (goto-char (point-min))
+      (forward-line 4)
+      (when (re-search-forward "(" nil t)
+        (replace-match "|"))
       (goto-char (point-max))
       ;; --> julia helpers from ../etc/ess-julia.jl :
       (ess--inject-code-from-file (format "%sess-julia.jl" ess-etc-directory))

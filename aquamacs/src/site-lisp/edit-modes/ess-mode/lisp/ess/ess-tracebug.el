@@ -1,6 +1,6 @@
 ;; ess-tracebug.el --- Tracing and debugging facilities for ESS.
 ;;
-;; Copyright (C) 2011--2015 A.J. Rossini, Richard M. Heiberger, Martin Maechler,
+;; Copyright (C) 2011--2017 A.J. Rossini, Richard M. Heiberger, Martin Maechler,
 ;;      Kurt Hornik, Rodney Sparapani, Stephen Eglen and Vitalie Spinu.
 ;;
 ;; Filename: ess-tracebug.el
@@ -51,11 +51,12 @@
 ;;
 ;;; Code:
 
-(eval-when-compile
-  (require 'tramp)
-  (require 'compile)
-  (require 'overlay)
-  (require 'cl))
+(require 'tramp)
+(require 'compile)
+(require 'overlay)
+;; We can't use cl-lib whilst supporting Emacs <= 24.2 users
+(with-no-warnings (require 'cl))
+(require 'ess-utils)
 
 (autoload 'ess-helpobjs-at-point        "ess-help" "[autoload]" nil) ;;todo: rename and put into a more neutral place
 (defvar text-scale-mode-amount)
@@ -66,6 +67,16 @@
 Currently only R is supported."
   :link '(emacs-library-link :tag "Source Lisp File" "ess-tracebug.el")
   :group 'ess)
+
+(defvar ess-tracebug-indicator " TB"
+  "String to be displayed in mode-line alongside the process
+  name. Indicates that ess-tracebug-mode is turned on. ")
+
+;; (defvar ess--tracebug-p nil
+;;   "Non nil if ess-tracebug is turned on for current process.
+;; Function `ess-tracebug'  toggles on/off this variable.")
+;; (make-variable-buffer-local 'ess--tracebug-p)
+;; (add-to-list 'minor-mode-alist '(ess--tracebug-p ess-tracebug-indicator))
 
 
 (defcustom ess-tracebug-prefix nil
@@ -120,7 +131,7 @@ Use `add-hook' to insert append your functions to this list.
   :group 'ess-tracebug
   :type 'hook)
 
-(autoload 'ess-dev-map "ess-r-d" "[autoload]" nil)
+(autoload 'ess-dev-map "ess-r-mode" "[autoload]" nil)
 (defvaralias 'ess-tracebug-map 'ess-dev-map)
 
 (defvar ess--tracebug-eval-index 0
@@ -153,7 +164,7 @@ from temporary buffers.")
 (defun ess-tracebug-p ()
   (ess-process-get 'tracebug))
 
-(defun ess-make-source-refd-command (beg end &optional visibly)
+(defun ess-make-source-refd-command (beg end visibly process)
   "Saves a region to a temporary file in order to add source references.
 BEG and END delimit the region.
 
@@ -214,7 +225,7 @@ loading the temporary file.  This command conforms to VISIBLY."
                  (list filename ess--tracebug-eval-index orig-beg) ess--srcrefs)
         (with-silent-modifications
           (put-text-property beg end 'tb-index ess--tracebug-eval-index)))
-      (let ((string (buffer-substring-no-properties beg end)))
+      (let ((string (ess-process-buffer-substring process start end)))
         (or
          ;; Sending string to subprocess is considerably faster than tramp file
          ;; transfer. So, give priority to `ess-eval-command' if available
@@ -224,7 +235,10 @@ loading the temporary file.  This command conforms to VISIBLY."
            (write-region beg end tmpfile nil 'silent)
            (ess-build-load-command tmpfile visibly t)))))))
 
-(defun ess-tracebug-send-region (proc start end &optional visibly message type)
+(defun ess-process-buffer-substring (process start end)
+  (ess--run-presend-hooks process (buffer-substring-no-properties start end)))
+
+(defun ess-tracebug-send-region (process start end &optional visibly message type)
   "Send region to process adding source references as specified
 by `ess-inject-source' variable."
   (let* ((inject-p  (cond ((eq type 'function)
@@ -238,15 +252,17 @@ by `ess-inject-source' variable."
                                  (ess-r-get-evaluation-env)))))
          (ess--dbg-del-empty-p (unless inject-p ess--dbg-del-empty-p))
          (string (if inject-p
-                     (ess-make-source-refd-command start end visibly)
-                   (buffer-substring start end)))
+                     (ess-make-source-refd-command start end visibly process)
+                   (ess-process-buffer-substring process start end)))
          (message (if (fboundp ess-build-eval-message-function)
                       (funcall ess-build-eval-message-function message)
                     message))
          ;; Visible evaluation is not nice when sourcing temporary files
          ;; You get .ess.eval(*code*) instead of *code*
          (visibly (unless inject-p visibly)))
-    (ess-send-string proc string visibly message)))
+    ;; Don't run the presend hooks twice
+    (let ((ess--inhibit-presend-hooks t))
+      (ess-send-string process string visibly message))))
 
 (defun ess-tracebug-send-function (proc start end &optional visibly message)
   "Like `ess-tracebug-send-region' but with tweaks for functions."
@@ -598,7 +614,7 @@ You can bind 'no-select' versions of this commands:
           (ess-dirs)
           (message nil)
           (make-local-variable 'compilation-error-regexp-alist)
-          (setq compilation-error-regexp-alist ess-R-error-regexp-alist)
+          (setq compilation-error-regexp-alist ess-r-error-regexp-alist)
           (make-local-variable 'compilation-search-path)
           (setq compilation-search-path ess-tracebug-search-path)
           (ess-setq-vars-local alist)
@@ -1114,6 +1130,11 @@ Kill the *ess.dbg.[R_name]* buffer."
   (and (ess-process-live-p)
        (ess-process-get  'is-recover)))
 
+(defun ess-debug-active-p ()
+  (and (ess-process-live-p)
+       (or (ess-process-get 'dbg-active)
+           (ess-process-get 'is-recover))))
+
 (defvar ess--dbg-regexp-reference "debug \\w+ +\\(.+\\)#\\([0-9]+\\):")
 (defvar ess--dbg-regexp-jump "debug \\w+ ") ;; debug at ,debug bei ,etc
 (defvar ess--dbg-regexp-skip
@@ -1140,8 +1161,12 @@ Kill the *ess.dbg.[R_name]* buffer."
 
 (defvar ess-mpi-alist
   '(("message" . message)
+    ("error" . ess-mpi:error)
     ("eval" . ess-mpi:eval)
     ("y-or-n" . ess-mpi:y-or-n)))
+
+(defun ess-mpi:error (msg)
+  (message (format "Error in inferior: %s" msg)))
 
 (defun ess-mpi:eval (expr &optional callback)
   "Evaluate EXP as emacs expression.
@@ -1463,10 +1488,12 @@ TB-INDEX is not found return nil."
 If FILENAME is not found at all, ask the user where to find it if
 `ess--dbg-ask-for-file' is non-nil.  Search the directories in
 `ess-tracebug-search-path'."
-  (let ((dirs ess-tracebug-search-path)
-        (spec-dir default-directory)
-        buffsym buffer thisdir fmts name buffername)
-    (setq dirs (cons spec-dir dirs)) ;; current does not have priority!! todo:should be R working dir
+  (let ((dirs (append
+               (ess-r-package-source-dirs)
+               (cl-loop for d in ess-tracebug-search-path
+                        append (ess-r-package--all-source-dirs d))))
+        buffsym buffer fmts name buffername)
+    (setq dirs (cons default-directory dirs)) ;; TODO: should be R working dir
     ;; 1. search already open buffers for match (associated file might not even exist yet)
     (dolist (bf (buffer-list))
       (with-current-buffer  bf
@@ -1484,13 +1511,11 @@ If FILENAME is not found at all, ask the user where to find it if
             dirs (cons (file-name-directory filename) dirs)
             filename (file-name-nondirectory filename)))
     ;; 3. Now search the path.
-    (while (and (null buffer)
-                dirs )
-      (setq thisdir (car dirs))
-      (setq name (expand-file-name filename thisdir)
-            buffer (and (file-exists-p name)
-                        (find-file-noselect name)))
-      (setq dirs (cdr dirs)))
+    (while (and (null buffer) dirs)
+      (let ((thisdir (pop dirs)))
+        (setq name (expand-file-name filename thisdir)
+              buffer (and (file-exists-p name)
+                          (find-file-noselect name)))))
     ;; 4. Ask for file if not found (tothink: maybe remove this part?)
     (if (and (null buffer)
              ess-debug-ask-for-file)
@@ -1641,6 +1666,9 @@ triggered the command."
   "Digit commands in selection mode.
 If suplied ev must be a proper key event or a string representing the digit."
   (interactive)
+  (inferior-ess-force)
+  (unless (ess--dbg-is-recover-p)
+    (error "Recover is not active"))
   (unless ev
     (setq ev last-command-event))
   (let* ((ev-char (if (stringp ev)
@@ -1650,70 +1678,68 @@ If suplied ev must be a proper key event or a string representing the digit."
          (mark-pos (marker-position (process-mark proc)))
          (comint-prompt-read-only nil)
          prompt  depth)
-    (if (process-get proc 'is-recover)
-        (with-current-buffer (process-buffer proc)
-          (goto-char mark-pos)
-          (save-excursion
-            (when (re-search-backward "\\(?: \\|^\\)\\([0-9]+\\):[^\t]+Selection:" ess--tb-last-input t)
-              (setq depth (string-to-number (match-string 1)))
-              (when (> depth 9)
-                (setq ev-char (ess-completing-read "Selection" (mapcar 'number-to-string
-                                                                       (number-sequence depth 0 -1))
-                                                   nil t ev-char nil)))))
-          (setq prompt (delete-and-extract-region  (point-at-bol) mark-pos))
-          (insert (concat  prompt ev-char "\n"))
-          (ess-send-string proc ev-char)
-          (move-marker (process-mark proc) (max-char)))
-      (error "Recover is not active"))))
+    (with-current-buffer (process-buffer proc)
+      (goto-char mark-pos)
+      (save-excursion
+        (when (re-search-backward "\\(?: \\|^\\)\\([0-9]+\\):[^\t]+Selection:" ess--tb-last-input t)
+          (setq depth (string-to-number (match-string 1)))
+          (when (> depth 9)
+            (setq ev-char (ess-completing-read "Selection" (mapcar 'number-to-string
+                                                                   (number-sequence depth 0 -1))
+                                               nil t ev-char nil)))))
+      (setq prompt (delete-and-extract-region  (point-at-bol) mark-pos))
+      (insert (concat  prompt ev-char "\n"))
+      (ess-send-string proc ev-char)
+      (move-marker (process-mark proc) (max-char)))))
 
 (defun ess-debug-command-next (&optional ev)
   "Step next in debug mode.
 Equivalent to 'n' at the R prompt."
   (interactive)
-  (if (not (ess--dbg-is-active-p))
-      (error "Debugger is not active")
-    (if (ess--dbg-is-recover-p)
-        (ess-send-string (get-process ess-current-process-name) "0")
-      (ess-send-string (get-process ess-current-process-name) "n"))))
+  (inferior-ess-force)
+  (unless (ess--dbg-is-active-p)
+    (error "Debugger is not active"))
+  (if (ess--dbg-is-recover-p)
+      (ess-send-string (ess-get-process) "0")
+    (ess-send-string (ess-get-process) "n")))
 
 (defun ess-debug-command-next-multi (&optional ev N)
   "Ask for N and step (n) N times in debug mode."
   (interactive)
-  (if (not (ess--dbg-is-active-p))
-      (error "Debugger is not active")
-    (let ((N (or N (read-number "Number of steps: " 10)))
-          (proc (get-process ess-local-process-name))
-          (ess--suppress-next-output? t))
-      (while (and (ess--dbg-is-active-p) (> N 0))
-        (ess-debug-command-next)
-        (ess-wait-for-process proc)
-        (setq N (1- N))))
-    (ess-debug-command-next)))
+  (inferior-ess-force)
+  (unless (ess--dbg-is-active-p)
+    (error "Debugger is not active"))
+  (let ((N (or N (read-number "Number of steps: " 10)))
+        (ess--suppress-next-output? t))
+    (while (and (ess--dbg-is-active-p) (> N 0))
+      (ess-debug-command-next)
+      (ess-wait-for-process)
+      (setq N (1- N))))
+  (ess-debug-command-next))
 
 (defun ess-debug-command-continue-multi (&optional ev N)
   "Ask for N, and continue (c) N times in debug mode."
   (interactive)
-  (if (not (ess--dbg-is-active-p))
-      (error "Debugger is not active")
-    (let ((N (or N (read-number "Number of continuations: " 10)))
-          (proc (get-process ess-local-process-name))
-          (ess--suppress-next-output? t))
-      (while (and (ess--dbg-is-active-p) (> N 1))
-        (ess-debug-command-continue)
-        (ess-wait-for-process proc)
-        (setq N (1- N))))
-    (ess-debug-command-continue)))
-
+  (inferior-ess-force)
+  (unless (ess--dbg-is-active-p)
+    (error "Debugger is not active"))
+  (let ((N (or N (read-number "Number of continuations: " 10)))
+        (ess--suppress-next-output? t))
+    (while (and (ess--dbg-is-active-p) (> N 1))
+      (ess-debug-command-continue)
+      (ess-wait-for-process)
+      (setq N (1- N))))
+  (ess-debug-command-continue))
 
 (defun ess-debug-command-up (&optional ev)
   "Step up one call frame.
 Equivalent to 'n' at the R prompt."
   (interactive)
-  (if (not (ess--dbg-is-active-p))
-      (error "Debugger is not active")
-    (let ((proc (get-process ess-local-process-name)))
-      (ess-send-string proc
-                       "try(browserSetDebug(), silent=T)\nc\n"))))
+  (inferior-ess-force)
+  (unless (ess--dbg-is-active-p)
+    (error "Debugger is not active"))
+  (let ((up-cmd "try(browserSetDebug(), silent=T)\nc\n"))
+    (ess-send-string (ess-get-process) up-cmd)))
 
 ;; (defun ess-debug-previous-error (&optional ev)
 ;;   "Go to previous reference during the debug process.
@@ -1724,36 +1750,29 @@ Equivalent to 'n' at the R prompt."
 
 (defun ess-debug-command-quit (&optional ev)
   "Quits the browser/debug in R process.
- Equivalent to 'Q' at the R prompt."
+Equivalent of `Q' at the R prompt."
   (interactive)
-  (let ((proc (get-process ess-current-process-name) ))
-    (if (not (or (process-get proc 'dbg-active)
-                 (process-get proc 'is-recover)))
-        (error "Debugger is not active")
-      (when (ess--dbg-is-recover-p)
-        (ess-send-string proc "0")
+  (inferior-ess-force)
+  (cond ((ess--dbg-is-recover-p)
+         (ess-send-string (ess-get-process) "0"))
         ;; if recover is called in a loop the following stalls emacs
         ;; (ess-wait-for-process proc nil 0.05)
-        )
-      (if (and (process-get proc 'dbg-active)
-               (not (process-get proc 'is-recover))); still in debug mode
-          (ess-send-string proc "Q")))))
+        ((ess--dbg-is-active-p)
+         (ess-send-string (ess-get-process) "Q"))
+        (t
+         (error "Debugger is not active"))))
 
 (defun ess-debug-command-continue (&optional ev)
   "Continue the code execution.
- Equivalent of 'c' at the R prompt."
+Equivalent of `c' at the R prompt."
   (interactive)
-  (let ((proc (get-process ess-current-process-name)))
-    (if (not (or (process-get proc 'dbg-active)
-                 (process-get proc 'is-recover)))
-        (error "Debugger is not active")
-      (when (ess--dbg-is-recover-p)
-        (ess-send-string proc "0")
-        ;; (ess-wait-for-process proc nil 0.05) <- when in a loop, gets stuck
-        ) ;; get out of recover mode
-      (if (and (process-get proc 'dbg-active) ; still in debug mode
-               (not (process-get proc 'is-recover))); still in debug mode
-          (ess-send-string proc "c")))))
+  (inferior-ess-force)
+  (cond ((ess--dbg-is-recover-p)
+         (ess-send-string (ess-get-process) "0"))
+        ((ess--dbg-is-active-p)
+         (ess-send-string (ess-get-process) "c"))
+        (t
+         (error "Debugger is not active"))))
 
 (defun ess-tracebug-set-last-input (&rest ARGS)
   "Move `ess--tb-last-input' marker to the process mark.
@@ -2666,20 +2685,27 @@ for signature and trace it with browser tracer."
   (interactive)
   (ess-force-buffer-current "Process to use: ")
   (let* ((tbuffer (get-buffer-create " *ess-command-output*")) ;; output buffer name is hard-coded in ess-inf.el
+         (pkg (ess-r-package-name))
          (all-functions (ess-get-words-from-vector
-                         (if nil ;; FIXME, was checking `ess-developer-packages`
-                             (format ".ess_all_functions(c('%s'))\n"
-                                     (mapconcat 'identity ess-developer-packages "', '"))
+                         (if pkg
+                             (format ".ess_all_functions(c('%s'))\n" pkg)
                            ".ess_all_functions()\n")))
-         (obj-at-point (car (ess-helpobjs-at-point all-functions)))
-         (ufunc  (ess-completing-read "Debug" all-functions
-                                      nil nil nil nil obj-at-point))
+         (obj-at-point (ess-helpobjs-at-point--read-obj))
+         (default (and
+                   obj-at-point
+                   (let* ((reg (regexp-quote obj-at-point))
+                          (matches (loop for el in all-functions
+                                         if (string-match reg el) collect el)))
+                     (car (sort matches (lambda (a b) (< (length a) (length b))))))))
+         (ufunc (ess-completing-read "Debug" all-functions
+                                     nil nil nil nil (or default obj-at-point)))
          signature default-string out-message)
-    ;; is it generic
-    (if (equal "TRUE"
-               (car (ess-get-words-from-vector
-                     (format "as.character(isGeneric('%s'))\n" ufunc))))
-        (save-excursion ;; if so, find the signature
+    ;; FIXME: Most of the following logic should be in R
+    (if (ess-boolean-command (format "as.character(isGeneric('%s'))\n" ufunc))
+
+        ;; it's S4 generic:
+        (save-excursion
+          ;; ask for exact signature
           (setq signature
                 (ess-completing-read (concat "Method for generic '" ufunc "'")
                                      (ess--dbg-get-signatures ufunc) ;signal an error if not found
@@ -2688,13 +2714,13 @@ for signature and trace it with browser tracer."
               ;;debug, the default ufunc
               (ess-command (format "trace('%s', tracer = browser)\n" ufunc) tbuffer)
             (ess-command (format "trace('%s', tracer = browser, signature = c('%s'))\n" ufunc signature) tbuffer))
-          (set-buffer tbuffer)
-          ;; give appropriate message or error
-          (setq out-message (buffer-substring-no-properties (point-min) (point-max))))
+          (with-current-buffer tbuffer
+            ;; give appropriate message or error
+            (message (buffer-substring-no-properties (point-min) (point-max)))))
+
       ;;else, not an S4 generic
-      (when (car (ess-get-words-from-vector
-                  (format "as.character(.knownS3Generics['%s'])\n" ufunc)))
-        ;; if S3 generic:
+      (when (ess-boolean-command (format "as.character(.knownS3Generics['%s'])\n" ufunc))
+        ;; it's S3 generic:
         (setq all-functions
               (ess-get-words-from-vector
                (format "local({gens<-methods('%s');as.character(gens[attr(gens, 'info')$visible])})\n" ufunc)))
@@ -2703,18 +2729,9 @@ for signature and trace it with browser tracer."
               (delq nil (mapcar (lambda (el)
                                   (if (not (char-equal ?* (aref el (1- (length el))))) el))
                                 all-functions)))
-        ;; tothink: ess-developer?
         (setq ufunc (ess-completing-read (format "Method for S3 generic '%s'" ufunc)
                                          (cons ufunc all-functions) nil t)))
-      (save-excursion
-        ;; no quotes
-        (ess-command (format "debug(%s)\n" ufunc) tbuffer)
-        (set-buffer tbuffer)
-        (if (= (point-max) 1)
-            (setq out-message (format "Flagged function '%s' for debugging" ufunc))
-          ;; error occurred
-          (setq out-message (buffer-substring-no-properties (point-min) (point-max))))))
-    (message out-message)))
+      (ess-command (format ".ess_dbg_flag_for_debuging('%s')\n" ufunc)))))
 
 
 (defun ess-debug-unflag-for-debugging ()
@@ -2774,7 +2791,7 @@ Only do this when called interactively and  #chars is 1"
 ;; reported as bug#21368
 
 ;; ;; previous-line gets stuck if next char is intangible
-;; reported 
+;; reported
 ;; (defadvice previous-line (around ess-fix-cursor-stuck-at-intangible-text activate)
 ;;   "When about to move to previous line when next char is
 ;; intangible, step char backward first"

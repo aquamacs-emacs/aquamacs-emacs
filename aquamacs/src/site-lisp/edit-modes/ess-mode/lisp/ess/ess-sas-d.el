@@ -318,25 +318,29 @@ their own frames."
             (when (string= ess-language "SAS") ;; e.g. not for R-only users
               (local-set-key "\C-c\C-w" 'ess-multi-frame-SAS))))
 
+(defun ess-num-or-zero (arg)
+  "*If a number, then return that number, otherwise return 0."
+  (or (and (numberp arg) arg) 0))
+
  ; Provide package
 
 (provide 'ess-sas-d)
 
  ; Local variables section
 
-;;; This file is automatically placed in Outline minor mode.
-;;; The file is structured as follows:
-;;; Chapters:     ^L ;
-;;; Sections:    ;;*;;
-;;; Subsections: ;;;*;;;
-;;; Components:  defuns, defvars, defconsts
-;;;              Random code beginning with a ;;;;* comment
+;; This file is automatically placed in Outline minor mode.
+;; The file is structured as follows:
+;; Chapters:     ^L ;
+;; Sections:    ;;*;;
+;; Subsections: ;;;*;;;
+;; Components:  defuns, defvars, defconsts
+;;              Random code beginning with a ;;;;* comment
 
-;;; Local variables:
-;;; mode: emacs-lisp
-;;; outline-minor-mode: nil
-;;; mode: outline-minor
-;;; outline-regexp: "\^L\\|\\`;\\|;;\\*\\|;;;\\*\\|(def[cvu]\\|(setq\\|;;;;\\*"
-;;; End:
+;; Local variables:
+;; mode: emacs-lisp
+;; outline-minor-mode: nil
+;; mode: outline-minor
+;; outline-regexp: "\^L\\|\\`;\\|;;\\*\\|;;;\\*\\|(def[cvu]\\|(setq\\|;;;;\\*"
+;; End:
 
 ;;; ess-sas-d.el ends here

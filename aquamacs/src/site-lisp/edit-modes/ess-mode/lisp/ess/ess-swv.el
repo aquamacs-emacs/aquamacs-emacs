@@ -82,10 +82,11 @@
 
 (eval-when-compile
   (require 'ess-custom)
-  (require 'ess)
-  )
+  (require 'ess))
+
+(require 'ess-utils)
 (require 'ess-noweb-mode)
-(require 'ess-r-d); for Rnw-mode
+(require 'ess-r-mode); for Rnw-mode
 (require 'easymenu)
 
 ;; currently use exactly for "Sweave", "Stangle", "knit", and "purl"
@@ -404,19 +405,9 @@ file and latex the result."
      :style toggle :selected ess-swv-plug-into-AUCTeX-p]
     ))
 
-(if (featurep 'xemacs)
-    (add-hook 'Rnw-mode-hook
-              (lambda ()
-                ;; This adds to top menu:
-                ;; (easy-menu-add ess-swv-menu ess-noweb-minor-mode-map)
-                ;; But that's using an unnecessary extra level -- FIXME
-                (easy-menu-add-item ess-noweb-minor-mode-menu
-                                    '("Sweave");; 'nil' adds to top
-                                    ess-swv-menu)))
-  ;; normal GNU Emacs:
-  (easy-menu-add-item ess-noweb-minor-mode-menu
-                      nil ;; <= path
-                      ess-swv-menu))
+(easy-menu-add-item ess-noweb-minor-mode-menu
+                    nil ;; <= path
+                    ess-swv-menu)
 
  ; provides
 
@@ -424,19 +415,19 @@ file and latex the result."
 
  ; Local variables section
 
-;;; This file is automatically placed in Outline minor mode.
-;;; The file is structured as follows:
-;;; Chapters:     ^L ;
-;;; Sections:    ;;*;;
-;;; Subsections: ;;;*;;;
-;;; Components:  defuns, defvars, defconsts
-;;;              Random code beginning with a ;;;;* comment
+;; This file is automatically placed in Outline minor mode.
+;; The file is structured as follows:
+;; Chapters:     ^L ;
+;; Sections:    ;;*;;
+;; Subsections: ;;;*;;;
+;; Components:  defuns, defvars, defconsts
+;;              Random code beginning with a ;;;;* comment
 
-;;; Local variables:
-;;; mode: emacs-lisp
-;;; outline-minor-mode: nil
-;;; mode: outline-minor
-;;; outline-regexp: "\^L\\|\\`;\\|;;\\*\\|;;;\\*\\|(def[cvu]\\|(setq\\|;;;;\\*"
-;;; End:
+;; Local variables:
+;; mode: emacs-lisp
+;; outline-minor-mode: nil
+;; mode: outline-minor
+;; outline-regexp: "\^L\\|\\`;\\|;;\\*\\|;;;\\*\\|(def[cvu]\\|(setq\\|;;;;\\*"
+;; End:
 
 ;;; ess-swv.el ends here

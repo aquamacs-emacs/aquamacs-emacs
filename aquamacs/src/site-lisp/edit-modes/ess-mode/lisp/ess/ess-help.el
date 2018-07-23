@@ -1,6 +1,6 @@
 ;;; ess-help.el --- Support for viewing ESS help files
 
-;; Copyright (C) 1989-1994 Bates, Kademan, Ritter and Smith
+;; Copyright (C) 1989-1994, 2017 Bates, Kademan, Ritter and Smith
 ;; Copyright (C) 1997, A.J. Rossini <rossini@stat.sc.edu>
 ;; Copyright (C) 1998--2001 A.J. Rossini, Martin Maechler, Kurt Hornik and
 ;;      Richard M. Heiberger <rmh@temple.edu>.
@@ -43,9 +43,9 @@
   (require 'ess-inf)
   (require 'info))
 
-(require 'ess)
 (require 'ess-mode)
-(require 'cl)
+;; We can't use cl-lib whilst supporting Emacs <= 24.2 users
+(with-no-warnings (require 'cl))
 
  ; ess-help-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -156,7 +156,8 @@ If COMMAND is suplied, it is used instead of `inferior-ess-help-command'."
 
 (defun ess--flush-help-into-current-buffer (object &optional command dont-ask)
   (ess-write-to-dribble-buffer
-   (format "(ess-help '%s' start  ..\n" (buffer-name (current-buffer))))
+   (format "(ess-help '%s' start (command: '%s') \n"
+           (buffer-name (current-buffer)) command))
 
   ;; Ask the corresponding ESS process for the help file:
   (if buffer-read-only (setq buffer-read-only nil))
@@ -219,7 +220,8 @@ If COMMAND is suplied, it is used instead of `inferior-ess-help-command'."
             (ess-command (format com-html-help  ess-help-object))
           (require 'browse-url)
           (if com-get-file-path
-              (browse-url (car (ess-get-words-from-vector (format com-get-file-path ess-help-object))))
+              (browse-url (car (ess-get-words-from-vector
+                                (format com-get-file-path ess-help-object))))
             (when (functionp fun-get-file-path)
               (browse-url (funcall fun-get-file-path ess-help-object)))))))))
 
@@ -388,17 +390,23 @@ if necessary.  It is bound to RET and C-m in R-index pages."
     (ess-eval-linewise command)
     (ess-switch-to-end-of-ESS)))
 
-(defun ess-display-vignettes ()
-  "Display vignettes if available for the current dialect."
-  (interactive)
+(defun ess-display-vignettes (&optional all)
+  "Display vignettes if available for the current dialect.
+With (prefix) ALL non-nil, use `vignette(*, all=TRUE)`, i.e., from all installed
+ packages, which can be *very* slow."
+  (interactive "P")
   (cond
-   ((equal ess-dialect "R") (ess-R-display-vignettes))
+   ((equal ess-dialect "R") (ess-R-display-vignettes all))
    (t (message "Sorry, not implemented for %s" ess-dialect))))
 
-(defun ess-R-display-vignettes ()
-  "Display R vignettes in ess-help-like buffer."
-  (interactive)
-  (let* ((vslist (with-current-buffer (ess-command ".ess_vignettes()\n")
+(defun ess-R-display-vignettes (&optional all)
+  "Display R vignettes in ess-help-like buffer..
+With (prefix) ALL non-nil, use `vignette(*, all=TRUE)`, i.e., from all installed
+ packages, which can be *very* slow."
+  (interactive "P")
+  (let* ((vslist (with-current-buffer
+                     (ess-command
+                      (format ".ess_vignettes(%s)\n" (if all "TRUE" "")))
                    (goto-char (point-min))
                    (when (re-search-forward "(list" nil t)
                      (goto-char (match-beginning 0))
@@ -425,8 +433,6 @@ if necessary.  It is bound to RET and C-m in R-index pages."
                             (with-parsed-tramp-file-name default-directory nil
                               (tramp-make-tramp-file-name method user host (nth 1 el2)))
                           (nth 1 el2))))
-              ;; (if xemacs-p
-              ;;     (insert (format "Dir: %s \t%s\n" (concat path "/doc/") (nth 2 el2)))
               (insert-text-button "Pdf"
                                   'mouse-face 'highlight
                                   'action (if remote
@@ -570,7 +576,9 @@ For internal use. Used in `ess-display-help-on-object',
   (let ((map (make-keymap))); Full keymap, in order to
     (suppress-keymap map)   ; suppress all usual "printing" characters
     (when (boundp 'special-mode-map)
-      (set-keymap-parent map special-mode-map))
+      (set-keymap-parent map (make-composed-keymap
+                              button-buffer-map
+                              special-mode-map)))
     (define-key map "q" 'quit-window)
     (define-key map "\C-m" 'next-line)
     ;; (define-key map "s" ess-help-sec-map)
@@ -682,6 +690,8 @@ Other keybindings are as follows:
   ;; section headings.
 
   (setq ess-help-sec-map (make-sparse-keymap))
+  (setq-local show-trailing-whitespace nil)
+
   (dolist (pair ess-help-sec-keys-alist)
     (define-key ess-help-sec-map (char-to-string (car pair))
       'ess-skip-to-help-section))
@@ -703,8 +713,7 @@ to see which keystrokes find which sections."
   (let ((old-point (point))
         (case-fold-search nil))
     (goto-char (point-min))
-    (let ((the-sec (cdr (assoc (if (featurep 'xemacs) last-command-char last-command-event)
-                               ess-help-sec-keys-alist))))
+    (let ((the-sec (cdr (assoc last-command-event ess-help-sec-keys-alist))))
       (if (not the-sec) (error "Invalid section key: %c"
                                last-command-event)
         (if (re-search-forward (concat "^" the-sec) nil t)
@@ -850,9 +859,10 @@ Stata or XLispStat for additional information."
              ;; \b_
              (delete-region (1- (point)) (1+ (point)))))))
   (goto-char (point-min))
-  (while (re-search-forward "URL:" nil t)
-    ;; quick fix for C-x f confusiong
-    (delete-region (match-beginning 0) (match-end 0)))
+  (let ((case-fold-search nil)); 'URL' != 'url' ('libcurl: ' on ?capabilities)
+    (while (re-search-forward "\\bURL: " nil t); test with ?rtags
+      ;; quick fix for C-x f confusion (getting into tramp)
+      (delete-region (match-beginning 0) (match-end 0))))
   ;; Crunch blank lines
   (goto-char (point-min))
   (while (re-search-forward "\n\n\n\n*" nil t)
@@ -905,7 +915,7 @@ electric *ess-describe* buffer. Use `other-window' to switch to
 Customize `ess-describe-at-point-method' if you wan to display
 the description in a tooltip.
 
-See also `ess-R-describe-object-at-point-commands' (and similar
+See also `ess-r-describe-object-at-point-commands' (and similar
 option for other dialects)."
   (interactive)
   (if (not ess-describe-object-at-point-commands)
@@ -914,7 +924,7 @@ option for other dialects)."
     (let ((map (make-sparse-keymap))
           (objname (or (and (use-region-p)
                             (buffer-substring-no-properties (point) (mark)))
-                       (symbol-at-point)))
+                       (ess-symbol-at-point)))
           bs ess--descr-o-a-p-commands) ;; used in ess--describe-object-at-point
       (unless objname (error "No object at point "))
       (define-key map (vector last-command-event) 'ess--describe-object-at-point)

@@ -32,7 +32,8 @@
 
 ;;; Code:
 
-(require 'ess-s-l)
+(require 'ess-s-lang)
+(require 'ess-utils)
 
 (autoload 'inferior-ess "ess-inf" "Run an ESS process.")
 (autoload 'ess-mode     "ess-mode" "Edit an ESS process.")
@@ -106,7 +107,7 @@ return new alist whose car is the new pair and cdr is ALIST.
          (dialect (or dialect
                       (ess-completing-read "Dialect" dialects nil t))))
     (cond
-     ((string= dialect "julia") julia-customize-alist)
+     ((string= dialect "julia") ess-julia-customize-alist)
      ((string= dialect "arc")   ARC-customize-alist)
      ((string= dialect "vst")   VST-customize-alist)
      ((string= dialect "omg")   OMG-customize-alist)

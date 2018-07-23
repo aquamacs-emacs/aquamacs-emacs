@@ -1,3 +1,7 @@
+
+## Without this def. roxygen (i.e.  C-c C-o C-t or C-c C-o C-r)  will fail
+setGeneric("slplot", function(object, ...) { plot(object, ...) })
+
 ##' \code{loadings(object)} and then design your own plotting method.
 ##' @title Side by side scores and loadings plot
 ##' @usage slplot(object, pcs=c(1,2), scoresLoadings=c(TRUE, TRUE),
@@ -18,12 +22,12 @@ setMethod("slplot", "pcaRes",
 ##' .. content for \description{} (no empty lines) ..
 ##'
 ##' .. content for \details{} ..
-##' @title
-##' @param a
-##' @param b
-##' @param d
-##' @param asd
-##' @return
+##' @title Must have a title
+##' @param a any
+##' @param b any
+##' @param d any
+##' @param asd any
+##' @return invisible
 ##' @author Henning Redestig
 trickyInArgsComments <- function(a,#comment
                                  b,#hejhopp trams
@@ -33,12 +37,11 @@ trickyInArgsComments <- function(a,#comment
 
 ##' .. content for \description{} (no empty lines) ..
 ##'
-##' .. content for \details{} ..
-##' @title
-##' @param a
-##' @param b
+##' @title Function example where arguments have defaults
+##' @param a any
+##' @param b string
 ##' @param cc
-##' @return
+##' @return invisible
 ##' @author Henning Redestig
 withdef <- function(a, b=c("asd","ffd", "asd", "ffd",
                          "asd",

@@ -35,10 +35,8 @@
 
 ;;; Code:
 
-;; We can't use cl-lib whilst supporting Emacs 23 users who don't use
-;; ELPA.
-(with-no-warnings
-  (require 'cl)) ;; incf, decf, plusp
+;; We can't use cl-lib whilst supporting Emacs <= 24.2 users
+(with-no-warnings (require 'cl)) ;; incf, decf, plusp
 
 (defvar julia-mode-hook nil)
 
