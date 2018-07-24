@@ -106,7 +106,9 @@ from earlier versions of the distribution."
 			  (error ;; this code is from startup.el
 			   (let ((message-log-max nil))
 			     (with-current-buffer (get-buffer-create "*Messages*")
-			       (insert "\n\n"
+                               (setq buffer-read-only nil)
+                               (insert (propertize ;; unclear why propertize does not work.
+                                (concat "\n\n"
 				       (format "An error has occurred while loading `%s.el (or .elc)':\n\n"
 					       user-init-file)
 				       (format "%s%s%s"
@@ -116,7 +118,8 @@ from earlier versions of the distribution."
 				       "\n\n"
 				       "To ensure normal operation, you should investigate and remove the\n"
 				       "cause of the error in your initialization file.  Start Emacs with\n"
-				       "the `--debug-init' option to view a complete error backtrace.\n\n"))
+				       "the `--debug-init' option to view a complete error backtrace.\n\n \n")
+                                'face 'font-lock-warning-face)))
 			     (message "Error in init file: %s%s%s"
 				      (get (car error) 'error-message)
 				      (if (cdr error) ": " "")
