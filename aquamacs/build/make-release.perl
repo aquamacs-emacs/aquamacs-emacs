@@ -6,7 +6,7 @@
 # then run this. 
 
 $PROJECT_DIR = '/Users/dr/Projects/Aquamacs';
-$REPO_DIR = '/Users/dr/emacs';
+$REPO_DIR = '/Users/dr/aquamacs-emacs';
 
 $BINARY = '/Applications/Aquamacs.app';
 
