@@ -1238,7 +1238,7 @@ please check its value")
 		      ;; into user-init-file.
 		      (setq user-init-file t)
 		      (load user-init-file-1 t t)
-		      (if (fboundp 'aquamacs-load-preferences) 
+		      (if (fboundp 'aquamacs-load-preferences)
 			  (aquamacs-load-preferences))
 
 		      (when (eq user-init-file t)

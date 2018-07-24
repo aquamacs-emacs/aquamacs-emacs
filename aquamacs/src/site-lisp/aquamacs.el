@@ -33,7 +33,7 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
-;; Copyright (C) 2005-2016: David Reitter
+;; Copyright (C) 2005-2018: David Reitter
 
 
 (require 'aquamacs-tools)
@@ -357,7 +357,7 @@ un-Mac-like way when you select text and copy&paste it.")))
        'face (list :family "Lucida Grande" :height 140))
      ;;The GPL stipulates that the following message is shown.
      (propertize
-      (substitute-command-keys " It is Free Software: you can improve and redistribute it under the GNU General Public License, version 3 or later. (C) 2016
+      (substitute-command-keys " It is Free Software: you can improve and redistribute it under the GNU General Public License, version 3 or later. (C) 2018
 Free Software Foundation, and D. Reitter. No Warranty.")
       'face (list :family "Lucida Grande" :height 110))))
 

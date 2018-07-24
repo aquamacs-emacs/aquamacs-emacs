@@ -29,7 +29,8 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
  
-;; Copyright (C) 2005, 2006,2007,2008,2010,2014 David Reitter
+;; Copyright (C) 2005, 2006,2007,2008,2010,2014,2018
+;; David Reitter
 
  
 ; remaining issues
